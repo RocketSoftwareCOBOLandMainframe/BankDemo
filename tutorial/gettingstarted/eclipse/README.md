@@ -1,11 +1,11 @@
 # Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
 
 ## Overview
-This set of tutorials guides you through the use of Rocket Enterprise Developer for Eclipse. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through the use of Rocket&reg; Enterprise Developer for Eclipse. They provide a basic understanding of how the product operates.
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Eclipse Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Eclipse to develop and maintain both simple COBOL and mainframe subsystem applications.
 
-Other tutorials, which are designed for Administrators, are available.
+Other tutorials, which are designed for Administrators, are also available.
 
 * [Starting the Eclipse Integrated Development Environment (IDE)](#starting-the-eclipse-integrated-development-environment-ide)
 * [Creating a Project and Adding the Source Files](#creating-a-project-and-adding-the-source-files)
@@ -16,9 +16,9 @@ Other tutorials, which are designed for Administrators, are available.
 * [Debugging the Batch Application](#debugging-the-batch-application)
 * [Debugging the Online Application](#debugging-the-online-application)
 
-**Download the demonstration application**
+**Download the Demonstration Application**
 
-A preconfigured, fully executing application, BankDemo, is available from the Rocket GitHub repository - [*click here*](https://github.com/RocketSoftware/BankDemo). Download the sample's sources as follows:
+A preconfigured, fully executing application, BankDemo, is available from the Rocket Software GitHub repository - [*click here*](https://github.com/RocketSoftware/BankDemo). Download the sample's sources as follows:
 
 1.  In the GitHub repository for the BankDemo demonstration, click **Releases** in the right-hand side part of the page.
 2.  In the list of releases, locate and click the one that corresponds to the Enterprise Developer product release you have installed.
@@ -27,7 +27,7 @@ A preconfigured, fully executing application, BankDemo, is available from the Ro
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
-![](images/080f42a3aadf5eea7bced48e38d755cd.png)**Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **c:\\MFETDUSER\\datafiles** folder, etc.
+![](images/080f42a3aadf5eea7bced48e38d755cd.png)**Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **C:\\MFETDUSER\\datafiles** folder, etc.
 
 As part of this tutorials, you use the supplied standard Eclipse COBOL project in the sample to set up a development environment for this application. The tutorials show how you can:
 
@@ -40,10 +40,10 @@ As part of this tutorials, you use the supplied standard Eclipse COBOL project i
 
 You must have the following software installed:
 
--   Rocket Enterprise Developer for Eclipse. [*Click here*](https://www.microfocus.com/documentation/enterprise-developer/) to access the product Help and the release notes of Enterprise Developer.
+-   Rocket Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=enterprise_developer_11.0&rpp=10&sort.field=last_uploaded&sort.value=desc) to access the documentation for Enterprise Developer.
 -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
-**Using a remote enterprise server instance for the tutorials**
+**Using a Remote Enterprise Server Instance for the Tutorials**
 
 If you have an active firewall on the machine that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
 
@@ -51,16 +51,16 @@ For example, Directory Server is configured, by default, to use port 86. Your mu
 
 We recommend that, if you want remote users to access Enterprise Server functionality through the firewall, you use fixed port values so that you can control access via these.
 
-## Enterprise Server security
+## Enterprise Server Security
 
-In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
+In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
 
-### Disable the default Enterprise Server security configuration
+### Disable the Default Enterprise Server Security Configuration
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. You will see a series of messages as the script disables default security.
-2. Restart MFDS and ESCWA to pick up the configuration changes. You will now be able to use ESCWA without having to log in.
+2. Restart the MFDS and ESCWA services to pick up the configuration changes. You will now be able to use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
 
 
@@ -68,7 +68,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
 [Back to Top](#overview)
 
-1.  To start the Eclipse IDE, click **Start \> All Programs \> Micro Focus Enterprise Developer \> Enterprise Developer for Eclipse** on Windows 10. 
+1.  To start the Eclipse IDE, click **Start \> All Programs \> Rocket Enterprise Developer \> Enterprise Developer for Eclipse** on Windows 10. 
 
     If you need instructions to get Enterprise Developer started on your local machine, see *To start Enterprise Developer* in the product Help for Enterprise Developer.
 
@@ -80,7 +80,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
     If the **Welcome page** is not opened, click **Window** \> **Perspective** \> **Open Perspective** \> **Other**, select the **Team Developer (default)**, and click **Open**.
 
-    The views you see open in Eclipse and their layout depend on whether you have used Eclipse before. You can move, resize and minimize views which is why they might not look exactly as described here. If this is the first time you have used Eclipse, you should see the following views in the IDE, although most of the views are currently empty:
+    The views you see open in Eclipse and their layout depend on whether you have used Eclipse before. You can move, resize, and minimize views which is why they might not look exactly as described here. If this is the first time you have used Eclipse, you should see the following views in the IDE, although most of the views are currently empty:
 
     ![](images/193c427ccb6cc1309873215dbef81d43.png)
 
@@ -97,14 +97,14 @@ In this release, the Enterprise Server security features are enabled by default.
 2.  If you close a view, click **Window** \> **Show View** \> **View Name** to restore it.
 3.  At any time, you can reset the complete layout of the Team Developer Perspective to its default using **Window \> Perspective \> Reset Perspective**.
 
-### Connect to the default ESCWA server
+### Connect to the Default ESCWA Server
 
 Ensure that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Note that existing workspaces may already have this connection.
 
 1. In the **Server Explorer** view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
 
     The **New Enterprise Server Common Web Administration Connection** dialog box is displayed.
-2. In the **Name** field, type **Local**.
+2. In the **Name** field, type **LocalLocal**.
 3. In the **Server address** field, type **localhost**.
 4. In the **Server port** field, leave as the default 10086.
 5. If the server connection is TLS-enabled, select **TLS Enabled**, and then click **Browse** and select the appropriate certificate.
@@ -120,7 +120,7 @@ You are going to use the project supplied with the BankDemo sample as a template
 
 The source files of the demonstration application are stored in subfolders named after the file type (for example, **bms**, **cobol**, **copybook**, **jcl**) in the **C:\\MFETDUSER\\sources** directory. The data files are in **C:\\MFETDUSER\\datafiles**.
 
-**Creating the project for the Bankdemo application**
+**Creating the Project for the Bankdemo Application**
 
 You use the Bankdemo project supplied with the sample to create your project in the Eclipse workspace that has the same settings as the sample project:
 
@@ -143,26 +143,26 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
     ![](images/3306875a7cc8200841b4c6c316763222.jpg)
 
-**The Bankdemo project**
+**The Bankdemo Project**
 
 Your project is pre-configured so that the build process creates the output files in a location that is used by the Enterprise Server logical server. To check which folder will include the built files:
 
 1.  In the Application Explorer view, right-click the Bankdemo project, and click **Properties**.
-2.  Expand **Micro Focus**, **Build Configurations**, and then click **Link**.
+2.  Expand **Rocket Software \> Build Configurations**, and then click **Link**.
 
     The project comes with a predefined configuration called **loadlib**.
 
 3.  Note that the **Output path** field points to the loadlib directory which will be created in the project directory at build time.
-4.  You can cancel the project properties dialog box.
+4.  You can click **Cancel** on the project properties dialog box.
 
-**Adding the demo source files**
+**Adding the Demo Source Files**
 
 In most cases, to add files to an Eclipse project, you use the **Import** command. This creates local copies of file sources in the workspace. Optionally, you can leave the source files in the original location and create links to them which is what you are going to do in this tutorial.
 
 To add the sample's copybooks to the project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project, and click **New** \> **Folder\> Folder**.
-2.  Click **Advanced**, and check **Link to alternate location (Linked Folder)**.
+2.  Click **Advanced**, and select **Link to alternate location (Linked Folder)**.
 3.  Browse to **C:\\MFETDUSER\\sources\\copybook**, and click **Select Folder**.
 4.  Click **Finish**.
 
@@ -173,7 +173,7 @@ To add the sample's copybooks to the project:
 To add the other source files to the Bankdemo project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project, and click **New** \> **Folder\> Folder**.
-2.  Click **Advanced**, and check **Link to alternate location (Linked Folder)**.
+2.  Click **Advanced**, and select **Link to alternate location (Linked Folder)**.
 3.  Browse to **C:\\MFETDUSER\\sources\\cobol**, and click **Select Folder**.
 4.  Click **Finish**.
 
@@ -192,14 +192,14 @@ To add the other source files to the Bankdemo project:
 Next, you need to specify the copybook paths for the project in order for the copybook dependencies to be resolved:
 
 1.  In Application Explorer view, right-click the Bankdemo project, and click **Properties**.
-2.  Expand **Micro Focus**, and then click **Build Path**.
+2.  Expand **Rocket Software**, and then click **Build Path**.
 3.  Click the **Dependency Paths** tab, and ensure **Type** is set to **COBOL Copybook Paths**.
-4.  Enable the checkbox in front of **Bankdemo/copybook**.
+4.  Select the check box in front of **Bankdemo/copybook**.
 5.  Click the **Build Precedence** tab, and click **Deselect All** in the right-hand side of the dialog box.
 
-    You do not need to compile all source files for this demonstration so you only need to enable some of the folders on this page.
+    You do not need to compile all source files for this demonstration, so you only need to enable some of the folders on this page.
 
-6.  Enable the checkboxes for the following folders:
+6.  Select the check boxes for the following folders:
     -   **Bankdemo/bms/cobol**
     -   **Bankdemo/cobol/core** 
     -   **Bankdemo/cobol/data/vsam**
@@ -218,7 +218,7 @@ You now need to perform a scan of the COBOL programs in your project to determin
 
     ![](images/2795bd96591744946bf6d7eb80c8704e.jpg)
 
-2.  Click **OK** to set the directives.
+2.  Click **Apply** to set the directives.
 
     If you are prompted to delete some user files, choose **No**.
 
@@ -256,7 +256,7 @@ This topic describes the editing features for the various file types (COBOL, JCL
 
 You are going to explore some of the COBOL editing features using the **ZBNKPRT1.cbl** program which produces a report from a sequential data file.
 
-1.  In the Application Explorer view, double-click **ZBNKPRT1.cbl** in the **cobol/core** folder of the project.
+1.  In the Application Explorer view, in the **cobol/core** folder of the project, double-click **ZBNKPRT1.cbl**.
 
     This opens the file in the COBOL editor in Eclipse. Next, you are going to enable the line numbers in the editor.
 
@@ -282,7 +282,7 @@ By expanding a source file node in the Application Explorer view, you can see a 
 
 ![](images/f7aea1f7a650338e844d566fbe894c8e.jpg)
 
-Use the Copybook Dependency view to show where in the source file's structure the COPY statements appear, and which copybooks they reference. If the Copybook Dependency view is not displayed in the Team Developer perspective, to open this view click **Window \> Show View \> Other \> Micro Focus \> Copybook Dependency**.
+Use the Copybook Dependency view to show where in the source file's structure the COPY statements appear, and which copybooks they reference. If the Copybook Dependency view is not displayed in the Team Developer perspective, to open this view click **Window \> Show View \> Other \> Rocket Software \> Copybook Dependency**.
 
 ![](images/e3aa258b24ae86229c1a4afc86334e5e.jpg)
 
@@ -351,14 +351,14 @@ You can use rename refactoring to rename all occurrences of a variable:
 
 5.  Click **Cancel** as you are not going to apply these changes for this demo.
 
-    You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this, go to **Window \> Preferences \> Micro Focus \> COBOL \> Editor**, and uncheck **Rename in editor without dialog**.
+    You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this, go to **Window \> Preferences \> Rocket Software \> COBOL \> Editor**, and uncheck **Rename in editor without dialog**.
 
 
 **Smart editing**
 
 Next, we are going to look at the smart editing feature with background COBOL parsing. First you'll check the IDE preferences for suggestions that Content Assist offers you in the editor:
 
-1.  Click **Window \> Preferences \> Micro Focus \> COBOL \> Editor \> Content Assist**.
+1.  Click **Window \> Preferences \> Rocket Software \> COBOL \> Editor \> Content Assist**.
 2.  Check **Enable auto activation** then click **Apply and Close**.
 3.  Scroll down to line 258 in the code and start typing the following, starting in area A of the code, one character at a time:
     
@@ -383,7 +383,7 @@ You can use the commands **Renumber** and **Unnumber** to insert and remove line
 
 If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here's how you can do this:                                                      |
 
-1.  Click **Window \> Preferences \> Micro Focus \> COBOL \> Editor \> Line Numbering**.
+1.  Click **Window \> Preferences \> Rocket Software \> COBOL \> Editor \> Line Numbering**.
 2.  Ensure that only the **COBOL (left-hand margin)** option is enabled.
 3.  Click **Apply and Close**.
 
@@ -644,7 +644,7 @@ Before you proceed, ensure that the default settings are applied to the Director
 
 2.  In Eclipse, click the Server Explorer view.
 
-   If the window is not visible, click **Window** \> **Show View** \> **Other**, then expand **Micro Focus**, click **Server Explorer**, and click **Open**.
+   If the window is not visible, click **Window** \> **Show View** \> **Other**, then expand **Rocket Software**, click **Server Explorer**, and click **Open**.
 
 3.  Click **Default [127.0.0.1:86]** and in the Properties pane, check the value of the directory server field. If it does not say Default, right-click the value and select **Restore Default Value**.
 
@@ -682,7 +682,7 @@ You need to associate your application with the BANKDEMO server. This ensures th
 Configure the IDE to start the associated BANKDEMO server automatically as follows:
 
 1.  Click **Window** \> **Preferences**.
-2.  Expand **Micro Focus**, and click **Enterprise Server**.
+2.  Expand **Rocket Software**, and click **Enterprise Server**.
 3.  Set the following options on this page to **Always** in order to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
 
     - **Automatically start the associated server** - this ensures the IDE will start the server if it is not running when you execute the application.
@@ -786,7 +786,7 @@ The CICS application requires that you use a 3270 terminal emulator. This tutori
 To check the IDE preferences for the TN3270 emulator:
 
 1.  In the IDE, click **Window \> Preferences**.
-2.  Expand **Micro Focus \> Enterprise Server**, and click **TN3270**.
+2.  Expand **Rocket Software \> Enterprise Server**, and click **TN3270**.
 3.  Ensure that **Enable display**, **Host Access for the Cloud** and **Connect automatically** are all selected.
 4.  Click **Apply and Close**.
 
@@ -841,7 +841,7 @@ If the enterprise server is not yet started, you need to start it as follows:
 
 1.  Open the **Server Explorer** view.
 
-    If the view is not visible, click **Window** \> **Show View** \> **Other**. Select **Micro Focus** \> **Server Explorer** and then click **OK**.
+    If the view is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software** \> **Server Explorer** and then click **OK**.
 
 2.  In Server Explorer, right-click the BANKDEMO server, and then click **Start**.
 
@@ -999,7 +999,7 @@ If the enterprise server is not yet started, you should start it as follows:
 
 1.  Click the Server Explorer tab in the bottom right pane of the IDE.
 
-    If the tab is not visible, click **Window** \> **Show View** \> **Other**. Select **Micro Focus COBOL \> Server Explorer** and then click **OK**.
+    If the tab is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software COBOL \> Server Explorer** and then click **OK**.
 
 2.  In Server Explorer, right-click the BANKDEMO server, and then click **Start**.
 
