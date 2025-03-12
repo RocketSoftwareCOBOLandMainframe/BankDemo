@@ -1,8 +1,8 @@
-# Getting started with Rocket Enterprise Developer for Visual Studio 2022
+# Getting started with Rocket® Enterprise Developer for Visual Studio 2022
 
 ## Overview
 
-This set of tutorials guides you through the use of Rocket Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through the use of Rocket® Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio 2022 to develop and maintain both simple COBOL and mainframe subsystem applications.
 
@@ -40,8 +40,8 @@ A preconfigured, fully executing application, BankDemo, is available from the Ro
 
     You must have the following software installed:
 
-    -   Rocket Enterprise Developer for Visual Studio 2022. [*Click here*](https://www.microfocus.com/documentation/enterprise-developer/) to access the product Help and the release notes of Enterprise Developer.
-    -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+    -   Rocket® Enterprise Developer for Visual Studio 2022. [*Click here*](https://www.microfocus.com/documentation/enterprise-developer/) to access the product Help and the release notes of Enterprise Developer.
+    -   A TN3270 terminal emulator to run the IBM® CICS® application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 **Using a remote enterprise server instance for the tutorials**
 
