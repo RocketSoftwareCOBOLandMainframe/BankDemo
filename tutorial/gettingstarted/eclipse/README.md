@@ -857,7 +857,7 @@ The project has two pre-configured debug configurations: a CICS Debug and a JCL 
 1.  In the Application Explorer view, select the BANKDEMO project and click **Run** \> **Debug Configurations**.
 2.  In the left- pane of the **Debug Configurations** dialog box, expand **COBOL Enterprise Server**.
 3.  Click **CICS Debug**.
-4.  Click the different tabs in the rightpane to see what debug settings are enabled for this configuration. Note that this configuration will be used with the BANKDEMO server.
+4.  Click the different tabs in the right pane to see what debug settings are enabled for this configuration. Note that this configuration will be used with the BANKDEMO server.
 5.  Click **JCL Debug** under **COBOL Enterprise Server**.
 6.  Click the different tabs in the right pane to see what debug settings are enabled for this configuration.
 7.  Click **Close** to close the **Debug Configurations** dialog box without saving any changes.
