@@ -2,7 +2,7 @@
 
 ## Overview
 
-This set of tutorials guides you through the use of Rocket&reg; Enterprise Developer for Eclipse. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through Rocket&reg; Enterprise Developer for Eclipse. They provide you with a basic understanding of how the product operates.
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Eclipse Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Eclipse to develop and maintain both simple COBOL and mainframe subsystem applications.
 
@@ -354,7 +354,7 @@ You can change your Eclipse preferences and rename without the **Rename COBOL El
 
 **Smart Editing**
 
-Next, we are going to look at the smart editing feature with background COBOL parsing. First, you'll check the IDE preferences for suggestions that Content Assist offers you in the editor:
+Next, we are going to look at the smart editing feature with background COBOL parsing. First, you will check the IDE preferences for suggestions that Content Assist offers you in the editor:
 
 1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Content Assist**.
 2.  Select **Enable auto activation** and click **Apply and Close**.
@@ -382,7 +382,7 @@ Next, we are going to look at the smart editing feature with background COBOL pa
 
 You can use the commands **Renumber** and **Unnumber** to insert and remove line numbers from your code. 
 
-If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here's how you can do this:
+If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here is how you can do this:
 
 
 1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Line Numbering**.
@@ -539,7 +539,7 @@ The BMS Compiler produces the following two types of files:
 | .mod - BMS executable | A file created by the BMS Compiler which is the executable module relating to the BMS source. |
 | .cpy - copybook       | A copybook that contains the BMS mapping for use in a COBOL program.                          |
 
-**Producing a Compiler lListing**
+**Producing a Compiler Listing**
 
 You can configure the IDE to create a fully expanded Compiler listing file during the build. The following is also an example of setting a directive at component level:
 
@@ -614,7 +614,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
 [Back to Top](#overview)
 
-The first thing you need to do is check that the Bankdemo application is executing correctly.
+The first thing you need to do is to check that the Bankdemo application is executing correctly.
 
 To execute the JCL, you need to run the application in an instance of the Rocket Enterprise Server (sometimes abbreviated to Enterprise Server). This demonstration includes a pre-configured enterprise server instance called BANKDEMO which you need to import in Enterprise Server and start before you execute the Bankdemo application.
 

@@ -1,7 +1,7 @@
 # Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
 
 ## Overview
-This set of tutorials guides you through the use of Rocket&reg; Enterprise Developer for Eclipse. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through Rocket&reg; Enterprise Developer for Eclipse. They provide you with a basic understanding of how the product operates.
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Eclipse Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Eclipse to develop and maintain both simple COBOL and mainframe subsystem applications.
 
@@ -357,7 +357,7 @@ You can use rename refactoring to rename all occurrences of a variable:
 
 **Smart Editing**
 
-Next, we are going to look at the smart editing feature with background COBOL parsing. First, you'll check the IDE preferences for suggestions that Content Assist offers you in the editor:
+Next, we are going to look at the smart editing feature with background COBOL parsing. First, you will check the IDE preferences for suggestions that Content Assist offers you in the editor:
 
 1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Content Assist**.
 2.  Select **Enable auto activation** and click **Apply and Close**.
@@ -382,7 +382,7 @@ Next, we are going to look at the smart editing feature with background COBOL pa
 
 You can use the commands **Renumber** and **Unnumber** to insert and remove line numbers from your code. 
 
-If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here's how you can do this:
+If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here is how you can do this:
 
 1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Line Numbering**.
 2.  Ensure that only the **COBOL (left-hand margin)** option is enabled.
