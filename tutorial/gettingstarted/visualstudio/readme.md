@@ -40,7 +40,7 @@ A preconfigured, fully executing application, BankDemo, is available from the Ro
 
     You must have the following software installed:
 
-    -   Rocket® Enterprise Developer for Visual Studio 2022. [*Click here*](https://www.microfocus.com/documentation/enterprise-developer/) to access the product Help and the release notes of Enterprise Developer.
+    -   Rocket® Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
     -   A TN3270 terminal emulator to run the IBM® CICS® application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 **Using a remote enterprise server instance for the tutorials**
@@ -120,7 +120,7 @@ The source files of the demonstration application are stored in subfolders named
 
 | **Folder Name**       | **Use**                                                                                                                                             |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| system                | Contains some resource definition data for CICS – this has been exported from the Mainframe and converted into a suitable form for the workstation. |
+| system                | Contains some resource definition data for IBM CICS – this has been exported from the Mainframe and converted into a suitable form for the workstation. |
 | system\\catalog       | Stores the catalog.                                                                                                                                 |
 | system\\catalog\\data | Stores the data files.                                                                                                                              |
 | system\\logs          | Contain various log files indicating the progress of your application execution.                                                                    |
@@ -133,7 +133,7 @@ By default, the IDE is configured to automatically scan any new source files you
 To check what directives will be set:
 
 1.  In Visual Studio, click **Tools** \> **Options**.
-2.  Scroll down to and expand **Micro Focus Tools**, expand **Directives**, and click **COBOL**.
+2.  Scroll down to and expand **Rocket Software Tools**, expand **Directives**, and click **COBOL**.
 
     ![](images/21e1a697eadb5fb5daf621dcf65d4d54.png)This page enables you to configure what directives are set on the COBOL files that you add to your project. The directives scanning determines the dialect, what EXEC CICS and EXEC SQL statements are used in the COBOL source files and sets directives as detailed on this page.
 
