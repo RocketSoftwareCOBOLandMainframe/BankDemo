@@ -22,7 +22,7 @@ A preconfigured, fully executing application, BankDemo, is available from the Ro
 
 1.  In the GitHub repository for the BankDemo demonstration, click **Releases** in the right-hand side part of the page.
 2.  In the list of releases, locate and click the one that corresponds to the Enterprise Developer product release you have installed.
-3.  Expand the **Assets** section, and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample's sources.
+3.  Expand the **Assets** section and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample's sources.
 4.  Expand the archive on your machine.
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
@@ -74,7 +74,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
     This opens the **Eclipse Launcher** which enables you to choose a location for Eclipse to store your projects.
 
-2.  For example, specify **C:\\MFETDUSER\\tutorial\\workspace** in the **Workspace** field, and click **Launch**.
+2.  For example, specify **C:\\MFETDUSER\\tutorial\\workspace** in the **Workspace** field and click **Launch**.
 
     If this is the first time you start Enterprise Developer, you are presented with the Eclipse **Welcome page**. Click **Open Team Developer Perspective** to close the Welcome page and see the main Eclipse window.
 
@@ -107,7 +107,7 @@ Ensure that **Server Explorer** contains a connection to the default Enterprise 
 2. In the **Name** field, type **LocalLocal**.
 3. In the **Server address** field, type **localhost**.
 4. In the **Server port** field, leave as the default 10086.
-5. If the server connection is TLS-enabled, select **TLS Enabled**, and then click **Browse** and select the appropriate certificate.
+5. If the server connection is TLS-enabled, select **TLS Enabled**, click **Browse**, and select the appropriate certificate.
 >**Note**: If **TLS Enabled** is selected, but you do not specify a certificate, the default Java keystore is searched for a valid one.
 6. Click **Finish**.
 The new ESCWA connection is displayed at the top level, in the **Server Explorer**.
@@ -132,8 +132,8 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
     ![](images/2023b448364bdc76a9a0830175899e49.jpg)
 
-4.  Browse to the **C:\\MFETDUSER\\tutorial\\projects\\Eclipse\\cobol\\Bankdemo** folder, and click **Select Folder**.
-5.  Type Bankdemo in the project name field, and click **OK**.
+4.  Browse to the **C:\\MFETDUSER\\tutorial\\projects\\Eclipse\\cobol\\Bankdemo** folder and click **Select Folder**.
+5.  Type Bankdemo in the project name field and click **OK**.
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the Application Explorer view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
 
@@ -147,8 +147,8 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
 Your project is pre-configured so that the build process creates the output files in a location that is used by the Enterprise Server logical server. To check which folder will include the built files:
 
-1.  In the Application Explorer view, right-click the Bankdemo project, and click **Properties**.
-2.  Expand **Rocket Software \> Build Configurations**, and then click **Link**.
+1.  In the Application Explorer view, right-click the Bankdemo project and click **Properties**.
+2.  Expand **Rocket Software \> Build Configurations** and then click **Link**.
 
     The project comes with a predefined configuration called **loadlib**.
 
@@ -161,9 +161,9 @@ In most cases, to add files to an Eclipse project, you use the **Import** comman
 
 To add the sample's copybooks to the project:
 
-1.  In Application Explorer view, right-click the **Bankdemo** project, and click **New** \> **Folder\> Folder**.
-2.  Click **Advanced**, and select **Link to alternate location (Linked Folder)**.
-3.  Browse to **C:\\MFETDUSER\\sources\\copybook**, and click **Select Folder**.
+1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
+2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
+3.  Browse to **C:\\MFETDUSER\\sources\\copybook** and click **Select Folder**.
 4.  Click **Finish**.
 
     This adds the folder storing the copybooks to your project as a linked resource.
@@ -172,9 +172,9 @@ To add the sample's copybooks to the project:
 
 To add the other source files to the Bankdemo project:
 
-1.  In Application Explorer view, right-click the **Bankdemo** project, and click **New** \> **Folder\> Folder**.
-2.  Click **Advanced**, and select **Link to alternate location (Linked Folder)**.
-3.  Browse to **C:\\MFETDUSER\\sources\\cobol**, and click **Select Folder**.
+1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
+2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
+3.  Browse to **C:\\MFETDUSER\\sources\\cobol** and click **Select Folder**.
 4.  Click **Finish**.
 
     This adds the folders storing the source files to your project as linked resources:
@@ -191,11 +191,11 @@ To add the other source files to the Bankdemo project:
 
 Next, you need to specify the copybook paths for the project in order for the copybook dependencies to be resolved:
 
-1.  In Application Explorer view, right-click the Bankdemo project, and click **Properties**.
-2.  Expand **Rocket Software**, and then click **Build Path**.
-3.  Click the **Dependency Paths** tab, and ensure **Type** is set to **COBOL Copybook Paths**.
+1.  In Application Explorer view, right-click the Bankdemo project and click **Properties**.
+2.  Expand **Rocket Software** and then click **Build Path**.
+3.  Click the **Dependency Paths** tab and ensure **Type** is set to **COBOL Copybook Paths**.
 4.  Select the check box in front of **Bankdemo/copybook**.
-5.  Click the **Build Precedence** tab, and click **Deselect All** in the right-hand side of the dialog box.
+5.  Click the **Build Precedence** tab and click **Deselect All** in the right-hand side of the dialog box.
 
     You do not need to compile all source files for this demonstration, so you only need to enable some of the folders on this page.
 
@@ -212,7 +212,7 @@ Next, you need to specify the copybook paths for the project in order for the co
 
 You now need to perform a scan of the COBOL programs in your project to determine and set the appropriate Compiler directives:
 
-1.  Right-click the **Bankdemo** project, and click **Determine Directives**.
+1.  Right-click the **Bankdemo** project and click **Determine Directives**.
 
     The IDE performs a scan of the files and shows a report of which directives for dialect and for CICS must be set on the programs in your project in order for them to compile cleanly.
 
@@ -231,7 +231,7 @@ The demonstration application includes a number of data files used. To see how y
 1.  In the Application Explorer view, right-click the Bankdemo project, and click **New** \> **File** \> **Other File**.
 2.  Click **Advanced**, and check **Link to file in the file system**.
 3.  Browse to the **C:\\MFETDUSER\\datafiles** folder.
-4. Select **MFI01V.MFIDEMO.BNKACC.dat**, and then click **Open**.
+4. Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
 5.  Click **Finish**.
 
     This adds the file to the Bankdemo project and also automatically opens it in the Rocket Data Files Tools utility. You can close the utility for now.
@@ -261,8 +261,8 @@ You are going to explore some of the COBOL editing features using the **ZBNKPRT1
     This opens the file in the COBOL editor in Eclipse. Next, you are going to enable the line numbers in the editor.
 
 2.  Click **Window \> Preferences** to open the Eclipse preferences.
-3.  Expand **General \> Editors**, and click **Text Editors**.
-4.  Check **Show Line Numbers**, and click **Apply and Close**.
+3.  Expand **General \> Editors** and click **Text Editors**.
+4.  Select **Show Line Numbers** and click **Apply and Close**.
 
 **Copybooks** 
     
@@ -288,17 +288,17 @@ Use the Copybook Dependency view to show where in the source file's structure th
 
 Click a copybook reference in the Copybook Dependency view to locate the associated COPY statemen the appropriate line in the source code.
 
-**Unused data**
+**Unused Data**
 
 Notice that some data items in the Data Division are crossed out. This is because they are not referenced in the Procedure Division.
 
 
-**Program outline**
+**Program Outline**
 
-1. Right-click anywhere in the COBOL editor, and click **Quick Outline**. This opens a pop-up with the outline of the program similar to what the Outline view shows. 
+1. Right-click anywhere in the COBOL editor, and from the context menu select **Quick Outline**. This opens a pop-up with the outline of the program similar to what the Outline view shows. 
 2. Press **Ctrl+O** in the pop-up to see a more detailed outline similar to the Program Outline view. 
-3. Double-click an item in the outline to see how the cursor positions itself on the line of code that this outline item refers to. 
-4. Click on the permanent Outline view.
+3. Double-click an item in the outline to see how the cursor positions itself on the line of code that this outline item refers to. <!-- Double clicking items closes the pop-up.-->
+4. Click in the permanent Outline view.
 
 
 ![](images/0a83561f1813ee83b9864c7ff1316134.jpg)
@@ -316,7 +316,7 @@ Notice that some data items in the Data Division are crossed out. This is becaus
 ![](images/ee28df1588527730d234f113d53f4745.png)
 3. Click one of the hyperlinks to position the cursor on the definition of the respective data item or paragraph.                                                                             
 
-**Viewing data definitions**
+**Viewing Data Definitions**
 
 1. Hover over a data item in the Procedure Division to see information about the data item and how many times it is used in the program. 
 2. Double-click a data item or paragraph name to see the IDE highlights all their occurrences in the code.
@@ -329,7 +329,7 @@ The ![](images/65bc336b21e1ecd824bc6e2a37508068.jpg) (**Toggle Context Breadcrum
 2. Click the arrow to the right of the program name to see a list of copybooks the program uses.
 3. Click one of these copybooks to load it in a new tab in the editor.
 
-**Marking text and block mode**
+**Marking Text and Block Mode**
 
 You can either use the mouse to mark a block of text or click ![](images/2a6ec092a713afe86e854b35e22548db.jpg) (**Toggle Block Selection Mode**) and select square blocks of text. When a selection is made, you can cut or copy it. 
 
@@ -337,7 +337,8 @@ You can either use the mouse to mark a block of text or click ![](images/2a6ec09
 
 You can use rename refactoring to rename all occurrences of a variable:
 
-1.  Scroll down to line 228 in the file.
+1.  Scroll down to line 228 in the **ZBNKPRT1.cbl** file.
+<!--included the file name, because a cpy file is also opened-->
 2.  Click WS-EXEC-PARM-LL in the editor, right-click it, and click **Refactor \> Rename**.
 
     A pop-up is displayed prompting you to enter a new name for the variable.
@@ -351,15 +352,15 @@ You can use rename refactoring to rename all occurrences of a variable:
 
 5.  Click **Cancel** as you are not going to apply these changes for this demo.
 
-    You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this, go to **Window \> Preferences \> Rocket Software \> COBOL \> Editor**, and uncheck **Rename in editor without dialog**.
+    You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this, go to **Window \> Preferences**, navigate to **Rocket Software \> COBOL \> Editor**, and deselect the **Rename in editor without dialog** check box.
 
 
-**Smart editing**
+**Smart Editing**
 
-Next, we are going to look at the smart editing feature with background COBOL parsing. First you'll check the IDE preferences for suggestions that Content Assist offers you in the editor:
+Next, we are going to look at the smart editing feature with background COBOL parsing. First, you'll check the IDE preferences for suggestions that Content Assist offers you in the editor:
 
-1.  Click **Window \> Preferences \> Rocket Software \> COBOL \> Editor \> Content Assist**.
-2.  Check **Enable auto activation** then click **Apply and Close**.
+1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Content Assist**.
+2.  Select **Enable auto activation** and click **Apply and Close**.
 3.  Scroll down to line 258 in the code and start typing the following, starting in area A of the code, one character at a time:
     
     ```
@@ -367,7 +368,7 @@ Next, we are going to look at the smart editing feature with background COBOL pa
     ```
     Notice how the words you type change in the editor. Once a word is recognized as a reserved word or a data item, its color changes. If a line of code contains invalid COBOL syntax, a red cross appears to the left of the line and the word is underlined with a wavy red line.
 
-    Also, Content Assist automatically displays a pop-up with suggested keywords and names of data items appears as you type.
+    Also, Content Assist automatically displays a pop-up with suggested keywords and names of data items appear as you type.
 
 4.  Change the line to:
     ```
@@ -377,21 +378,21 @@ Next, we are going to look at the smart editing feature with background COBOL pa
 
 5. Finally, if you have changed this COBOL program, copy the backup version back in again.
 
-**Renumbering the COBOL sources**
+**Renumbering the COBOL Sources**
 
 You can use the commands **Renumber** and **Unnumber** to insert and remove line numbers from your code. 
 
 If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here's how you can do this:                                                      |
 
-1.  Click **Window \> Preferences \> Rocket Software \> COBOL \> Editor \> Line Numbering**.
+1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Line Numbering**.
 2.  Ensure that only the **COBOL (left-hand margin)** option is enabled.
 3.  Click **Apply and Close**.
 
 To insert the line numbers in your code:
 
-1.  Right-click the **ZBNKPRT1.cbl** file in the editor, and click **Source** \> **Renumber**.
+1.  Right-click the **ZBNKPRT1.cbl** file in the editor and select **Source** \> **Renumber**.
 
-    Alternatively, click ![](images/c71f72ff318550a468b3b5878582d585.jpg) in the Eclipse toolbar.
+    Alternatively, on the Eclipse toolbar, click ![](images/c71f72ff318550a468b3b5878582d585.jpg).
 
 2.  Click **Yes** to confirm.
 
@@ -401,18 +402,18 @@ To insert the line numbers in your code:
 
 You can now remove the line numbers from your code:
 
-1.  Right-click the **ZBNKPRT1.cbl** file in the editor, and click **Source** \> **Unnumber**. 
+1.  Right-click the **ZBNKPRT1.cbl** file in the editor and select **Source** \> **Unnumber**. 
 
-    Alternatively, click ![](images/eaac043737cf3683ab448f9500013cf5.jpg) in the Eclipse toolbar.
+    Alternatively, on the Eclipse toolbar, click ![](images/eaac043737cf3683ab448f9500013cf5.jpg).
 2.  Click **Yes** to confirm.
 
     This removes the line numbers from the COBOL sequence area.
 
 To insert line numbers beyond the end of area B:
 
-1.  In the IDE preferences for line numbering, check **Standard (right-hand margin)**.
+1.  In the IDE preferences for line numbering, select **Standard (right-hand margin)**.
 2.  Click **Apply and Close**.
-3.  Right-click the **ZBNKPRT1.cbl** file in the editor, and click **Source** \> **Renumber**.
+3.  Right-click the **ZBNKPRT1.cbl** file in the editor and select **Source** \> **Renumber**.
 4.  Click **Yes** to confirm.
 
     You should now see line numbers running down both sides of the source code:
@@ -420,28 +421,28 @@ To insert line numbers beyond the end of area B:
 
 5.  Click **Edit \> Undo Typing** as necessary to revert your changes to the file.
 
-**JCL editing**
+**JCL Editing**
 
 **1.** Double-click the **ZBNKSTMT.jcl** file in the Bankdemo project to open it in the associated editor.
 
 The editor supports background parsing, syntax checking, content assist and an outline view like the COBOL Editor does.
-
+<!-- The screenshot needs to be updated when we have the files updated with the Rocket Software Copyright-->
 ![](images/79827921bedc1a53ada598f23aa23084.jpg)
 
-**BMS editing**
+**BMS Editing**
 
-There are two ways to edit BMS files. The first one is to use a BMS text editor available in the IDE. The other is to use a WYSIWYG version, the Rocket BMS Painter, which is available as a separate utility installed with this product.
+There are two ways to edit BMS files. The first one is to use a BMS text editor available in the IDE. The other is to use a WYSIWYG version, the Rocket&reg; BMS Painter, which is available as a separate utility installed with this product.
 
 To open the BMS file in the text editor inside Eclipse:
 
-**1.** In the Application Explorer view, right-click **MBANK10.bms** in the **bms\\cobol** folder of your project, and click **Open With** \> **BMS Text Editor**.
+**1.** In the Application Explorer view, go to the **bms\\cobol** folder of your project, right-click **MBANK10.bms** and select **Open With** \> **BMS Text Editor**.
 
 Although you can use this basic text editor to make small changes, it is quite difficult to edit BMS files in text view.
 
 A much more suitable and less error-prone way to edit BMS files is to use the BMS Painter.
 
 1.  Close the BMS text editor.
-2.  In the Application Explorer view, **right-click MBANK10.bms** in the **bms\\cobol** folder of your project, and click **Open With** \> **BMS Paint**.
+2.  In the Application Explorer view, go to the **bms\\cobol** folder of your project, right-click **MBANK10.bms** and select **Open With** \> **BMS Paint**.
 
     ![](images/ad53b86263c5a5de6c2f308fe5433ac3.png)
     This starts the external Rocket BMS Painter.
@@ -460,8 +461,8 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 You can also explore your BMS maps and mapsets in the BMS Preview view:
 
-1.  Make sure that **MBANK10.bms** is opened in the BMS text editor.
-2.  Click ![](images/671083db9c345da1b32e928a8c5deac8.jpg) (**Toggle the BMS previewer view**) in the Eclipse toolbar to start the **BMS Preview** view.
+1.  Open **MBANK10.bms** in the BMS text editor.
+2.  On the Eclipse toolbar, click ![](images/671083db9c345da1b32e928a8c5deac8.jpg) (**Toggle the BMS previewer view**) to start the **BMS Preview** view.
 
 ![](images/32cea1fc29f1a87cf5b77477ac7d2668.png)
 
@@ -471,28 +472,28 @@ You can also explore your BMS maps and mapsets in the BMS Preview view:
 
 4.  Experiment by double-clicking on various fields in the BMS file in the text editor.
 
-    Notice how the respective fields are highlighted in the **BMS Preview**, and in the **Outline** view.
+    Notice how the respective fields are highlighted in the **BMS Preview** and in the **Outline** view.
 
-    For more about the **BMS Preview** view, check your product Help.
+    For more information about the **BMS Preview** view, check your product Help.
 
-**Editing data files**
+**Editing Data Files**
 
 Next, you can edit the data file using the Rocket Data Tools Editor:
 
-1.  In the Application Explorer view, right-click the **.dat** file, and click **Open With** \> **Data File Tools**.
+1.  In the Application Explorer view, right-click the **.dat** file, and select **Open With** \> **Data File Tools**.
 
     This starts the **Data File Editor** and loads the **.dat** file in the **Open Data File** dialog box.
 
 2.  Click **Open Exclusive** to load the file.
 3.  **Data File Editor** loads the data file and shows two views:
     -   The left-hand pane shows the raw form of the file. Because many of the field are COMP-3 fields, the data in these fields is presented in an ASCII view.
-    -   The right-hand pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a much better, editable form.
+    -   The right-hand pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a user-friendly, editable form.
 
     ![](images/8c0d85bdc39b8b3345a5d25fe46699ac.png)
 
 4.  Change the value of BAC-REC-BALANCE from 91.14 to 132.76 as follows: 
 
-    a. Click the line for BAC-REC-BALANCE in the right pane, and then click ![](images/4fc0d64d1ee24b2a6869937b20ba5685.jpg), **Edit Record**.
+    a. In the right ane, click the line for BAC-REC-BALANCE, and then click ![](images/4fc0d64d1ee24b2a6869937b20ba5685.jpg) **Edit Record**.
 
     This highlights the record.
 
@@ -532,15 +533,15 @@ The build in this case checks for any files that have changed and does two thing
 Turn the automatic build on:
 -   Click **Project** and enable **Build Automatically**.
 
-**COBOL Compiler control**
+**COBOL Compiler Control**
 
-The Rocket COBOL compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains EXEC CICS or EXEC SQL statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
+The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains EXEC CICS or EXEC SQL statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
 
 Often the directives can be set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you need to compile with different directives. In this case, you can set the directives at the component level which overrides the project settings.
 
 For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the respective COBOL programs.
 
-The Bankdemo application already has the required Compiler directives set on the files. At build time, the IDE invokes the COBOL compiler to compile the sources and create a number of files. These "built" files can vary, but each COBOL program in the Bankdemo application compiles to produce the following three types of file:
+The Bankdemo application already has the required Compiler directives set on the files. At build time, the IDE invokes the COBOL Compiler to compile the sources and create a number of files. These "built" files can vary, but each COBOL program in the Bankdemo application compiles to produce the following three types of file:
 
 | **File type**               | **Function**                                                             |
 |-----------------------------|--------------------------------------------------------------------------|
@@ -548,7 +549,7 @@ The Bankdemo application already has the required Compiler directives set on the
 | .idy - debugger information | The file created by the Compiler which allows debugging of the module.   |
 | .obj - object file          | A temporary file the Compiler creates while producing the .dll file.     |
 
-**BMS Compiler control**
+**BMS Compiler Control**
 
 In the same way as for COBOL, the BMS compilation is controlled both at project and at component level.
 
@@ -556,27 +557,27 @@ The BMS Compiler produces the following two types of file:
 
 | **File type**         | **Function**                                                                                  |
 |-----------------------|-----------------------------------------------------------------------------------------------|
-| .mod - BMS executable | A file created by the BMS compiler which is the executable module relating to the BMS source. |
+| .mod - BMS executable | A file created by the BMS Compiler which is the executable module relating to the BMS source. |
 | .cpy - copybook       | A copybook that contains the BMS mapping for use in a COBOL program.                          |
 
-**Producing a Compiler listing**
+**Producing a Compiler Listing**
 
 You can configure the IDE to create a fully expanded Compiler listing file during the build. The following is also an example of setting a directive at component level:
 
 1.  In the Application Explorer view, right-click **ZBNKPRT1.cbl**, and click **Properties**.
-2.  Click **COBOL** in the left-hand pane and check **Enable file specific settings**.
-3.  Set **Generate listing file** to **Yes**, and then click **Apply and Close**.
+2.  Click **COBOL** in the left-hand pane and select **Enable file specific settings**.
+3.  Set **Generate listing file** to **Yes** and then click **Apply and Close**.
 
 During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a Listing subfolder in the project directory (**C:\\MFETDUSER\\tutorial\\workspace\\Bankdemo\\Listing** in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks.
 
 You can view this listing from within the IDE: double-click the **.lst** file in the Listing folder of your project.
 
-**Example of compiling a COBOL program with errors**
+**Example of Compiling a COBOL Program with Errors**
 
 You can introduce some Compiler errors into one of the programs to see how the Compiler handles them:
 
 1.  In the Application Explorer view, double-click **ZBNKPRT1.cbl**.
-2.  Page down the program a few pages to the start of the Procedure Division around line 224.
+2.  Scroll down the program a few pages to the start of the Procedure Division around line 224.
 3.  Introduce a few syntax errors as follows:
 
     - On line 226 change RUN-TIME to RUN-TME
@@ -597,7 +598,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     If it is hidden you can open it by clicking **Window** \> **Show View** \> **Problems**.
 
-    **Tip:** Click the column headings to sort the list into an appropriate order; for example, click the **Program** heading to order the errors by program.
+    **Tip:** Click the column headings to sort the list into an appropriate order. For example, click the **Program** heading to order the errors by program.
 
 7.  Double-click an error in the list to position the cursor on the line of code that contains the error.
 8.  To fix the copybook error:
@@ -608,7 +609,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
      The Quick Fix window appears.
 
-    c.  Select **Enable copybook path...**, then click **OK**.
+    c.  Select **Enable copybook path...** and click **OK**.
 
        This displays a message that the directory containing the copybook is not on the copybook path for the project.
 
@@ -640,27 +641,29 @@ To execute the JCL, you need to run the application in an instance of the Rocket
 
 Before you proceed, ensure that the default settings are applied to the Directory Sever:
 
-1.  Click the Start menu and open the Services application. Navigate to Rocket Directory Server to view its status and set it to **Running** if it is not already started.
-
+1.  From the Windos **Start** menu, open the Services application. Navigate to Rocket Directory Server service to view its status and set it to **Running** if it is not already started.
+<!-- Rocket Directory Server service is still called Micro Focus Directory Server-->
 2.  In Eclipse, click the Server Explorer view.
 
    If the window is not visible, click **Window** \> **Show View** \> **Other**, then expand **Rocket Software**, click **Server Explorer**, and click **Open**.
 
 3.  Click **Default [127.0.0.1:86]** and in the Properties pane, check the value of the directory server field. If it does not say Default, right-click the value and select **Restore Default Value**.
 
-**Importing the Bankdemo server**
+**Importing the Bankdemo Server**
 
 This sample provides a PowerShell script that creates the region definition to use in this tutorial:
 
 1.  Open File Explorer, and navigate to the **C:\\MFETDUSER\\tutorial** folder.
 2.  Right-click **createdefinition.ps1**, and click **Run with PowerShell**. Allow the script to execute, and specify **A** to allow the execution policies.
 
+<!-- This doesn't work, because running scripts is disabled. I had to opn PowerShell, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser and after that navigate to the folder and run the script.-->
+
     This executes the script and creates the Enterprise Server region definition file, **BANKDEMO.xml**, in the same folder. The file is configured for the location in which you saved the sample files.
 
 Now you can import the definition of the BANKDEMO logical server (LSER) in Enterprise Server:
 
 1.  In Eclipse, click the Server Explorer view.
-2.  Right-click **Default [127.0.0.1:86]**, and click **Import Server**.
+2.  Right-click **Default [127.0.0.1:86]** and click **Import Server**.
 3.  In the **Import Server** dialog box, click **Browse** for **Import file**.
 4.  Set the file extension field to **.xml**.
 5.  Browse to the **C:\\MFETDUSER\\tutorial** folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
@@ -669,20 +672,20 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 
     ![](images/94b448624765e5e546bb4b4851b5b56e.jpg)
 
-**Associate the BANKDEMO Enterprise Server with your project**
+**Associate the BANKDEMO Enterprise Server with Your Project**
 
 You need to associate your application with the BANKDEMO server. This ensures that the project's **loadlib** directory is used by the BANKDEMO enterprise server. BANKDEMO is configured to use the \$IDE_LOADLIB environment variable as the first location in the search path and, when the IDE starts the server, then \$IDE_LOADLIB is set to the output directories of any project associated with the server.
 
-1. Right-click the BANKDEMO server, point to **Associate with project**, then click **Bankdemo**.
+1. Right-click the BANKDEMO server and select **Associate with project \> Bankdemo**.
 
    ![](images/8fa1cc05cf3c9081809c785e2c53ce42.jpg)
 
-**Configure the IDE settings for Enterprise Server**
+**Configure the IDE Settings for Enterprise Server**
 
 Configure the IDE to start the associated BANKDEMO server automatically as follows:
 
 1.  Click **Window** \> **Preferences**.
-2.  Expand **Rocket Software**, and click **Enterprise Server**.
+2.  Expand **Rocket Software** and click **Enterprise Server**.
 3.  Set the following options on this page to **Always** in order to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
 
     - **Automatically start the associated server** - this ensures the IDE will start the server if it is not running when you execute the application.
@@ -720,7 +723,7 @@ These are the steps to start the server manually, and are included for completen
 The JCL provided in your demo causes the COBOL application to read a file, sort the data and produce a report. The JCL file, **ZBNKSTMT.jcl**, is in the **Sources \> jcl** folder of the project. To submit this job:
 
 1.  In the Application Explorer view, expand the**jcl** folder.
-2.  Right-click **ZBNKSTMT.jcl**, and click **Submit JCL to associated Server**.
+2.  Right-click **ZBNKSTMT.jcl** and select **Submit JCL to associated Server**.
 
     **Note:** If you have not started the BANKDEMO server yet, since you configured the IDE to start the server automatically, you receive a notification that the server will be started. Click **Yes** to confirm this.
 
@@ -735,7 +738,7 @@ You can open the catalog and the spool directly from Server Explorer.
 
 To view the catalog:
 
-1.  In Server Explorer, right-click the BANKDEMO server, and click **Show Catalog**.
+1.  In Server Explorer, right-click the BANKDEMO server and select **Show Catalog**.
 
     This opens the catalog:
 
@@ -745,8 +748,8 @@ To view the catalog:
 
 To view the spool:
 
-1.  In Server Explorer, right-click the BANKDEMO server, and click **Show Spool**.
-2.  Double-click on the name of one of the jobs in the list to open the details in a new tab.
+1.  In Server Explorer, right-click the BANKDEMO server and select **Show Spool**.
+2.  Double-click the name of one of the jobs in the list to open the details in a new tab.
 ![](images/ea36d8374884cc2250e25160fa077a34.png)
 3.  Details of the job are displayed in their own appropriate sections; expand these sections to view the details.
 ![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
@@ -756,7 +759,7 @@ To view the spool:
     -   Two **SYSOUT** results (one for the EXTRACT and one for the SORT). Click these and see the **SYSOUT Details** section:
     -   The **PRINTOUT** is the final printed results created by your job. Click **PRINTOUT** in the **DD Entries** section to see the results:
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
-
+<!-- Instead I see one SYSTSPRT, 1 SYSOUT, and 1 PRINTOUT result. Maybe the screenshot and the above text should be updated?-->
 You can now start to look at how to run the online application.
 
 ## Unit Testing the Online Application
@@ -769,15 +772,14 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
 
-Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is running:
+Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is running:<!-- Service name still isn't changed from Micro Focus-->
+1. From the Windows **Start** menu open the Services application.
 
-1. Go the the Start menu and open the Services application.
-
-2. Navigate to the HA Cloud service and check that its status is set to **Running**.
+2. Navigate to the HA Cloud service and check whether its status is set to **Running**.
 
 3. If it is not running, right-click and click **Start**.
 
-**Executing the CICS application**
+**Executing the CICS Application**
 
 The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 
@@ -786,13 +788,14 @@ The CICS application requires that you use a 3270 terminal emulator. This tutori
 To check the IDE preferences for the TN3270 emulator:
 
 1.  In the IDE, click **Window \> Preferences**.
-2.  Expand **Rocket Software \> Enterprise Server**, and click **TN3270**.
+2.  Expand **Rocket Software \> Enterprise Server** and click **TN3270**.
 3.  Ensure that **Enable display**, **Host Access for the Cloud** and **Connect automatically** are all selected.
+<!-- There's no Connect automatically option-->
 4.  Click **Apply and Close**.
 
-**Starting the terminal emulator**
+**Starting the Terminal Emulator**
 
-1.  Right-click the BANKDEMO server in Server Explorer, and click **Show TN3270 Display**.
+1.  In Server Explorer, right-click the BANKDEMO server and select **Show TN3270 Display**.
 
     This opens **Host Access for the Cloud** in your default browser and automatically establishes a 3270 terminal connection to the BANKDEMO server. You can see the starting page of the ES/MTO region BANKDEMO.
 
@@ -815,13 +818,13 @@ To check the IDE preferences for the TN3270 emulator:
 If HACloud disconnects from the server, you can connect again manually as follows:
 
 1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HACloud window.
-2.  In the **Available Sessions** dialog box, click on the BANKDEMO server.    
+2.  In the **Available Sessions** dialog box, click the BANKDEMO server.    
 
     This connects the display to the BANKDEMO server and loads the start screen of the application.
 
 3.  Follow the steps described earlier in this topic to execute the application in the HACloud view.
 
-**Stopping the enterprise server**
+**Stopping the Enterprise Server**
 
 You can stop the BANKDEMO server from within Server Explorer. You can leave it running though, if you wish to continue this tutorial.
 
@@ -835,7 +838,7 @@ You are going to debug the batch Bankdemo application.
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to debug applications as this feature is not supported in Enterprise Developer Connect.
 
-**Starting the server**
+**Starting the Server**
 
 If the enterprise server is not yet started, you need to start it as follows:
 
@@ -847,11 +850,11 @@ If the enterprise server is not yet started, you need to start it as follows:
 
     Wait until the server has started. If, in the list of servers in Server Explorer, BANKDEMO still has a red square next to it, this is a refresh delay.
 
-**Viewing the debug configurations**
+**Viewing the Debug Configurations**
 
-The project has two pre-configured debug configurations; a CICS Debug and a JCL Debug one, that you will use to debug the batch and the online application.
+The project has two pre-configured debug configurations: a CICS Debug and a JCL Debug one. You will use these configurations to debug the batch and the online application.
 
-1.  In the Application Explorer view, select the BANKDEMO project, and then click **Run** \> **Debug Configurations**.
+1.  In the Application Explorer view, select the BANKDEMO project and click **Run** \> **Debug Configurations**.
 2.  In the left-hand pane of the **Debug Configurations** dialog box, expand **COBOL Enterprise Server**.
 3.  Click **CICS Debug**.
 4.  Click the different tabs in the right-hand pane to see what debug settings are enabled for this configuration. Note that this configuration will be used with the BANKDEMO server.
@@ -859,12 +862,12 @@ The project has two pre-configured debug configurations; a CICS Debug and a JCL 
 6.  Click the different tabs in the right-hand pane to see what debug settings are enabled for this configuration.
 7.  Click **Close** to close the **Debug Configurations** dialog box without saving any changes.
 
-**Starting the debugger**
+**Starting the Debugger**
 
 You can now start the debugger. It starts in the background until a program which is debuggable is triggered. To start the debugger:
 
-1.  In the Application Explorer view, select the BANKDEMO project, and then select **Run** \> **Debug Configurations** from the menu bar.
-2.  In the left-hand pane of the Debug Configurations dialog expand **COBOL Enterprise Server**.
+1.  In the Application Explorer view, select the BANKDEMO project and from the menu bar click **Run** \> **Debug Configurations**.
+2.  In the left-hand pane of the Debug Configurations dialog, expand **COBOL Enterprise Server**.
 3.  Click **JCL Debug**, and then click **Debug**.
 4.  You might receive a message about opening the Debug perspective when it launches. If you do, click **Yes**.
 
@@ -881,13 +884,13 @@ You can now start the debugger. It starts in the background until a program whic
 
     The application is now waiting for an event that will trigger debugging.
 
-**Simple debugging**
+**Simple Debugging**
 
 You are going to look at some simple features inside the debugger. Start by submitting the JCL job:
 
 1.  In the Application Explorer view, expand the **jcl** folder in your project.
-2.  Right-click **ZBNKSTMT.jcl**, and click **Submit JCL to associated Server**.
-3.  Depending on what you have done before, you may receive a message to **Confirm Perspective Switch**. If you receive it, check **Remember my decision**, and click **Yes**. If Eclipse does not switch to
+2.  Right-click **ZBNKSTMT.jcl** and select **Submit JCL to associated Server**.
+3.  Depending on what you have done before, you may receive a message to **Confirm Perspective Switch**. If you receive it, select **Remember my decision**, and click **Yes**. If Eclipse does not switch to
 
     the Debug perspective automatically, click the **Debug** button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), in the right upper corner of the main Eclipse window to switch the perspective.
 
@@ -899,7 +902,7 @@ If you need to display the line numbers in the editor:
 
 • Right-click in the left-most gray area of the editor, and click **Show Line Numbers**.
 
-**Stepping through the code**
+**Stepping Through the Code**
 
 The highlighted line of code is the one the IDE will execute next.
 
@@ -911,10 +914,10 @@ The highlighted line of code is the one the IDE will execute next.
 
     ![](images/e17c83ba64e31c1ddeb3848a76aade4f.jpg)
 
-**Looking at data values**
+**Looking at Data Values**
 
 1.  Scroll to line 283 of **ZBNKEXT1.cbl**.
-2.  Hover the WS-RECORD-COUNTER2 data item.
+2.  Hover over the WS-RECORD-COUNTER2 data item.
 
     This provides you with details of the location, the size, the format, the number of times the field is used in the program, and the current value of the data item.
 
@@ -937,12 +940,12 @@ The highlighted line of code is the one the IDE will execute next.
 
     The new value is used from this point.
 
-**Running CSI queries**
+**Running CSI Queries**
 
 You can use the COBOL Source Information (CSI) functionality and its **Quick Browse** dialog to obtain information about your program when you are debugging it. This example shows details for data items starting WS-, such as the name, definition, and amount of times each item occurs in the program.
 
 1.  Click the **Quick Browse** button (![](images/6380a28bfad2e4cf713e31a148af5a87.png)) on the toolbar to start the **Quick Browse** dialog box.
-2.  Enter a simple query such as WS-\*.
+2.  Enter a simple query such as WS-\*. 
 
     ![](images/35218b26fdce3807aec247d09bf805e5.jpg)
 
@@ -954,12 +957,12 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
     To see more examples of CSI queries, start the Quick Browse dialog box again, and press **F1** to open the product help.
 
-**Setting a simple breakpoint**
+**Setting a Simple Breakpoint**
 
 Check the Breakpoints view at the top right of the screen. Currently, there are no breakpoints set in the program. To set a simple breakpoint:
 
 1.  Scroll down the code to line 171.
-2.  Double-click in the grey area to the left of this line or right-click in the same place, and click **Toggle Breakpoint**.
+2.  Double-click in the grey area to the left of this line or right-click in the same place, and select **Toggle Breakpoint**.
 
     ![](images/878abd2c21b3ea7a1828d0ce903ac9ad.jpg)
 
@@ -979,7 +982,7 @@ Check the Breakpoints view at the top right of the screen. Currently, there are 
 
     This program executes to completion and the job completes.
 
-**Stop debugging**
+**Stop Debugging**
 
 Although the job has completed, the debugger is still waiting for the next event. To stop debugging:
 
@@ -993,11 +996,11 @@ Although the job has completed, the debugger is still waiting for the next event
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to debug applications as this feature is not supported in Enterprise Developer Connect.
 
-**Starting the server**
+**Starting the Server**
 
 If the enterprise server is not yet started, you should start it as follows:
 
-1.  Click the Server Explorer tab in the bottom right pane of the IDE.
+1.  Click the Server Explorer tab in the IDE.
 
     If the tab is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software COBOL \> Server Explorer** and then click **OK**.
 
@@ -1005,7 +1008,7 @@ If the enterprise server is not yet started, you should start it as follows:
 
     Wait until the server has started. If in the list of servers in Server Explorer BANKDEMO still has a red square next to it, right-click it, and click **Refresh**.
 
-**Starting the debugger**
+**Starting the Debugger**
 
 You can now start the debugger. It starts in the background until a program which is debuggable is triggered. 
 
@@ -1013,7 +1016,7 @@ To start the debugger:
 
 1.  In the Application Explorer view, select the BANKDEMO project and then select **Run** \> **Debug Configurations** from the menu bar.
 2.  In the left-hand pane of the Debug Configurations dialog box, expand **COBOL Enterprise Server**.
-3.  Click **CICS Debug**, and then click **Debug**.
+3.  Click **CICS Debug** and then click **Debug**.
 4.  You might receive a message about opening the Debug perspective. Click **Yes**.
 
     This opens a new **Debug** pane, showing the debugger that is waiting for an attachment:
@@ -1041,7 +1044,7 @@ To start the debugger:
 
     ![](images/54911ac5e6d160089daf1d8df139abe1.jpg)
 
-**Simple debugging**
+**Simple Debugging**
 
 You use the same features as previously to debug the application.
 
@@ -1050,7 +1053,7 @@ You use the same features as previously to debug the application.
 
     ![](images/fba7fdf555abc0992dca3f8e96fce07d.jpg)
 
-**Stopping debugging**
+**Stopping Debugging**
 
 1. Click **Run** \> **Terminate** or click the terminate button, ![](images/TerminateDebugging.png), in the debugger toolbar to stop debugging.
 
