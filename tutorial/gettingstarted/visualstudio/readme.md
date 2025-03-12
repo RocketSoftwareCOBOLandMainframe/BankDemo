@@ -49,7 +49,7 @@ A preconfigured, fully executing application, BankDemo, is available from the Ro
     
    For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
 
-   We recommend that, if you want remote users to access Enterprise Server functionality through the firewall, you use fixed port values so that you can control access via these.
+   If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values so that you can control access via these.
 
 ## Enterprise Server security
 
