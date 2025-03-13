@@ -41,7 +41,7 @@ As part of this tutorials, you use the supplied standard Eclipse COBOL project i
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -136,7 +136,6 @@ You use the Bankdemo project supplied with the sample to create your project in 
 5.  Type Bankdemo in the project name field and click **OK**.
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the Application Explorer view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
-
 
 
 6.  Expand the Bankdemo project in the Application Explorer view.
@@ -772,12 +771,12 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
 
-Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is running:<!-- Service name still isn't changed from Micro Focus-->
+Before you proceed, ensure that the Host Access for the Cloud (HACloud) service is running:<!-- Service name still isn't changed from Micro Focus-->
 1. From the Windows **Start** menu open the Services application.
 
 2. Navigate to the HA Cloud service and check whether its status is set to **Running**.
 
-3. If it is not running, right-click and click **Start**.
+3. If it is not running, right-click the service and click **Start**.
 
 **Executing the CICS Application**
 

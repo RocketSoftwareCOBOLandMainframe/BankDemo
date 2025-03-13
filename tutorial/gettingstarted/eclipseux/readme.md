@@ -42,7 +42,7 @@ As part of this tutorial, you use the supplied standard Eclipse COBOL project in
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse (Linux). [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
