@@ -269,13 +269,13 @@ There is a variety of options and settings that can be configured within Visual 
 3.  In the **Options** dialog box, expand **Environment**, and click **Fonts and Colors**.
 4.  Ensure **Show settings for** is set to **Text Editor**.
 5.  Look in the list in the **Display Items** pane and note the COBOL, BMS, and JCL items whose font and color you can change.
-6.  In the **Options** dialog box, expand **Text Editor**, and then expand **Micro Focus COBOL**.
+6.  In the **Options** dialog box, expand **Text Editor**, and then expand **COBOL**.
 
     You can use the settings in this section to configure features of the editor such as tab size, COBOL margins, some syntax checking rules, and others.
 
     From the **Quick Actions** page for the editor properties, you can manage what quick actions will be enabled in the editor.
 
-    From the **Advanced** page you can fine tune the behavior of some features of the editor such as background syntax checking and outlining. You can also disable features that are not necessary which could be useful if you are working with a large code base.
+    From the **Advanced** page you can fine tune the behavior of some features of the editor such as background syntax checking and outlining. You can also disable features that are not necessary, which could be useful if you are working with a large code base.
 
 **Configuring the COBOL editor**
 
@@ -283,7 +283,7 @@ You can configure how the editor wraps the code around the margins, or how it in
 
 You can now experiment by changing the following settings:
 
--   Click **Tools \> Options \> Text Editor \> Micro Focus COBOL \> Margins** - modify the settings for the **Smart edit mode** which controls the word wrapping and the indentation in the different COBOL areas.
+-   Click **Tools \> Options \> Text Editor \> COBOL \> Margins** - modify the settings for the **Smart edit mode** which controls the word wrapping and the indentation in the different COBOL areas.
 
     When there is a COBOL file opened in the editor, you can use ![](images/a46c3bb37b9bde291170ad8fe2accbc2.jpg), **Toggle COBOL Smart Edit Mode**, in the COBOL toolbar to turn on or off the smart editing mode. To open the COBOL toolbar, click **View \> Toolbars \> COBOL**.
 
