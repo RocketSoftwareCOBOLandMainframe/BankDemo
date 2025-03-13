@@ -285,7 +285,7 @@ You can now experiment by changing the following settings:
 
 -   Click **Tools \> Options \> Text Editor \> COBOL \> Margins** - modify the settings for the **Smart edit mode** which controls the word wrapping and the indentation in the different COBOL areas.
 
-    When there is a COBOL file opened in the editor, you can use ![](images/a46c3bb37b9bde291170ad8fe2accbc2.jpg), **Toggle COBOL Smart Edit Mode**, in the COBOL toolbar to turn on or off the smart editing mode. To open the COBOL toolbar, click **View \> Toolbars \> COBOL**.
+    When there is a COBOL file opened in the editor, you can use **Toggle COBOL Smart Edit Mode**, ![](images/a46c3bb37b9bde291170ad8fe2accbc2.jpg), in the COBOL toolbar to turn on or off the smart editing mode. To open the COBOL toolbar, click **View \> Toolbars \> COBOL**.
 
 -   On the same page in the IDE options, change the behavior of the **Home** and **End** keys.
 -   On the same page in the IDE options, check **Show the ruler** and check **Mainframe style**.
@@ -359,7 +359,7 @@ You are going to explore some of the COBOL editing features using the **ZBNKPRT1
 
     This opens the file in the COBOL editor in Visual Studio.
 
-2.  To enable the line numbers in the editor, click **Tools \> Options \> Text Editor \> Micro Focus COBOL \> General**, and check **Line numbers**.
+2.  To enable the line numbers in the editor, click **Tools \> Options \> Text Editor \> COBOL \> General**, and check **Line numbers**.
 
 3. Click **OK**.            
 
@@ -378,11 +378,12 @@ You are going to explore some of the COBOL editing features using the **ZBNKPRT1
 
 4. Right-click in the expanded copybook, and click **Hide "CDATED.CPY"**. 
 
-5. Close the file. The changes you made to the expanded view were applied to the source of the copybook so now you click **No**.
+5. Close the file. The changes you made to the expanded view were applied to the source of the copybook, so when you are prompted to save your changes, click **No**.
 
 **Unused data**
 
-Notice that some data items in the Data Division are greyed out. This is because they are not referenced in the Procedure Division.                                                                                             
+Notice that some data items in the Data Division are greyed out. This is because they are not referenced in the Procedure Division.                                                                                        
+
 **Class View** 
 
 You can view the objects and the members defined in your projects in the standard Class View located in right of the IDE:
