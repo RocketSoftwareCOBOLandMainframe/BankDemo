@@ -21,7 +21,9 @@ The project demonstrates a selection of the capabilities of Rocket Enterprise Se
 It demonstrates applications running on-premise and also includes introductory tutorials for the use of
 the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
 
-In the simplest configuration, it demonstrates a CICS/JCL COBOL application that accesses banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
+In the simplest configuration, it demonstrates an IBM&reg; CICS&reg; and an JCL COBOL applications that access banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
+
+The Rocket Enterprise Suite supports IBM&reg; technologies including IBM&reg; MVS&trade;, IBM&reg; COBOL, IBM&reg; Enterprise PL/I for z/OS&reg;, IBM&reg; Assembler, IBM&reg; CICS&reg;, IBM&reg; IMS&trade;, IBM&reg; JCL, IBM&reg; DB2&reg;, IBM&reg; z/OS&reg;, IBM&reg; WebSphere MQ&trade;, and IBM&reg; zEnterprise&reg;, all of which are trademarks of International Business Machines Corporation, registered in various jurisdictions worldwide.
 
 ## <a name="license"></a>License
 
@@ -53,9 +55,9 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Open PL/I Bankdemo Application in Enterprise Developer for Eclipse](tutorial/gettingstarted/eclipse/PLIDemo.md)
         - [Open PL/I Bankdemo Application in Enterprise Development for Visual Studio](tutorial/gettingstarted/visualstudio/PLIDemo.md)
     - Requirements: 
-        - The Rocket Directory Server (mfds) service must be running
+        - The Directory Server (mfds) service must be running
         <!-- The service is still called Microfocus Directory Server-->
-        - Enterprise Server Common Web Administration (ESCWA) must be running and listening on the default localhost port - 10086.
+        - The Enterprise Server Common Web Administration (ESCWA) service must be running and listening on the default localhost port - 10086.
 
 2. <a name="onprem"></a> Demonstrations of the Rocket Enterprise Server capabilities in "on-premise" scenarios:
     - Prerequisite software: 
@@ -68,7 +70,7 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Deploying and running Bankdemo with VSAM stored in PostgreSQL using MFDBFH](demos/onprem/psqlmfdbfh/README.md) 
         - [Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL](demos/onprem/psqlpac/README.md) 
     - Requirements: 
-        - The Rocket Directory Server (mfds) service must be running
-        - Enterprise Server Common Web Administration (ESCWA) must be running and listening on the default localhost port - 10086.
+        - The Directory Server (mfds) service must be running
+        - The Enterprise Server Common Web Administration (ESCWA) service must be running and listening on the default localhost port - 10086.
 
 Use the **Issues** tab to report issues, or to raise questions.

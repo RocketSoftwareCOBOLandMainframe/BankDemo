@@ -1,22 +1,22 @@
-# Demonstrations of Rocket Enterprise Server capabilities "on-premise"
+# Demonstrations of Rocket Enterprise Server Capabilities "on-premise"
 - Prerequisite software: 
-    - Enterprise Server or Enterprise Developer
+    - Rocket&reg; Enterprise Server or Rocket&reg; Enterprise Developer
     - Python 3 with `requests` and for the PostgreSQL demonstration `psycopg2-binary` packages (e.g. `python3 -m pip install requests psycopg2-binary`)
     - See specific demonstration instructions for any additional requirements
 - Prerequisites: 
-    - Rocket Directory Server (mfds) is running
-    - Enterprise Server Common Web Administration (escwa) is running and listening on the default localhost port 10086
+    - The Directory Server (mfds) service must be running
+    - The Enterprise Server Common Web Administration (escwa) service must be running and listening on the default localhost port 10086
 - Available demonstrations:
-    - [Deploying and running Bankdemo with VSAM data](vsam/README.md)
+    - [Deploying and Running Bankdemo with VSAM data](vsam/README.md)
         - Data stored in indexed sequential disk files accessed using COBOL verbs (READ/WRITE etc)
        - Application built if Enterprise Developer is installed
-     - [Deploying and running Bankdemo with Postgres SQL](psql/README.md) 
+     - [Deploying and Running Bankdemo with PostgreSQL](psql/README.md) 
         - Data stored in a SQL database accessed using EXEC SQL statements
         - Application built if Enterprise Developer is installed
-    - [Deploying and running Bankdemo with Postgres VSAM](psqlmfdbfh/README.md) 
+    - [Deploying and Running Bankdemo with PostgreSQL VSAM](psqlmfdbfh/README.md) 
         - Data stored in a SQL database but accessed using COBOL verbs (READ/WRITE etc)
         - Application built if Enterprise Developer is installed
-    - [Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL](psqlpac/README.md) 
+    - [Deploying and Running Bankdemo in a Performance and Availability Cluster with PostgreSQL](psqlpac/README.md) 
       - Performance and Availability Cluster (PAC) consisting of two Enterprise Server instances
         - Data stored in a SQL database but accessed using COBOL verbs (READ/WRITE etc)
         - Scale-out repository data stored in Redis

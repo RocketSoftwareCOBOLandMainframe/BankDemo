@@ -1,4 +1,5 @@
 # Bankdemo Application with PostgreSQL
+
 This demonstration configures the Bankdemo application to store banking data in a PostgreSQL database. The database is accessed from COBOL programs using `EXEC SQL` statements. These COBOL programs are stored in the `sources/cobol/data/sql` directory of this project.
 
 The SQL database is populated with bank account data.
