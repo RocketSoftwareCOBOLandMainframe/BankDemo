@@ -115,7 +115,7 @@ In this release, the Enterprise Server security features are enabled by default.
     Visual Studio debugging starts again so you can debug through the SBANK10P program.         
 7. Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.         
   
-    As this application is psuedo-conversational, debugging will start and end with the invocation and completion of each transaction in the application. Since this is a small demo, all of the CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
+    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application. Since this is a small demo, all of the CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
 8.  Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.          
 9.  You can now disconnect your TN3270 terminal to end the demo.          
 

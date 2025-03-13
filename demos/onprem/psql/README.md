@@ -51,7 +51,7 @@ The demonstration also includes some instructions how to build the application f
 
    Ensure that there is no `BANKSQL` subdirectory in the location in which you extracted the archive. If there is one, delete it.
 
-2. In a web browse, open the ESCWA UI by entering http://localhost:10086. 
+2. In a web browser, open the ESCWA UI by entering http://localhost:10086. 
 
    a. In the ESCWA UI, click **Native**, expand **Directory Servers**, and in the left pane click **Default**.
 
@@ -61,7 +61,7 @@ The demonstration also includes some instructions how to build the application f
 
 4. Start a command prompt as an administrator (Windows) or a terminal for a user under which Enterprise Servers run (Linux).
 
-   **Note:** You need administrator privileges to configure the ODBC data source on Windows. On Linux it are created in the user `.odbc.ini` file.
+   **Note:** You need administrator privileges to configure the ODBC data source on Windows. On Linux it is created in the user `.odbc.ini` file.
 
 5. Navigate to the `scripts` directory in the demonstration.
 6. Edit the file `scripts/options/sql_postgres.json` with a text editor: 
@@ -71,7 +71,7 @@ The demonstration also includes some instructions how to build the application f
        
        For example, `"product"="EDz"` indicates you are going to build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
 
-7. Run the following python script from the `scripts` directory with the specified option to create the enterprise eerver instance, and to deploy the application:
+7. Run the following python script from the `scripts` directory with the specified option to create the enterprise server instance, and to deploy the application:
 
    ```
    python MF_Provision_Region.py sql_postgres

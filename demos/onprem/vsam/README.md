@@ -32,7 +32,7 @@ The demonstration also includes some instructions to build the application from 
 1. Extract the demonstration archive on your machine.
  
    Ensure that there is no `BANKVSAM` subdirectory in the location in which you extracted the archive. If there is one, you must delete it.
-2. In a web browse, open the ESCWA UI by entering http://localhost:10086.  
+2. In a web browser, open the ESCWA UI by entering http://localhost:10086.  
 
    a. In the ESCWA UI, click **Native**, expand **Directory Servers**, and in the left pane click **Default**.
 
