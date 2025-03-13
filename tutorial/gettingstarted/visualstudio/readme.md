@@ -399,10 +399,10 @@ Apart from scrolling down the code in the editor, you can use the following feat
 
         ![](images/4eb0d2e0b64aa37e7ae6197ac9483430.jpg)
 
-   -   In Solution Explorer double-click on **SBANK00P.cbl** to open the file, and then click on **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
+   -   In Solution Explorer, open the **SBANK00P.cbl** file and click **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
     ![](images/15aVSGoToLine.png)
    
-   -   Click ![](images/16VSlocatedefinition.png), Locate Definition, in the COBOL toolbar and start typing a search term: 
+   -   Click **Locate Definition**, ![](images/16VSlocatedefinition.png), in the COBOL toolbar and start typing a search term: 
    ![](images/7a99e5f18fa00915aa26a8ede9697d21.jpg)
 
  **Exploring data in editing mode** 
