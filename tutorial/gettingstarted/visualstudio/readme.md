@@ -402,7 +402,7 @@ Apart from scrolling down the code in the editor, you can use the following feat
    -   In Solution Explorer, open the **SBANK00P.cbl** file and click **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
     ![](images/15aVSGoToLine.png)
    
-   -   Click **Locate Definition**, ![](images/16VSlocatedefinition.png), in the COBOL toolbar and start typing a search term: 
+   -   Click **Locate Definition**, ![](images/16VSlocatedefinition.png), in the COBOL toolbar and start typing a search term. 
    ![](images/7a99e5f18fa00915aa26a8ede9697d21.jpg)
 
  **Exploring data in editing mode** 
@@ -451,7 +451,7 @@ You can use the mouse to mark the text. To make a block selection of the code:
 **Rename items in the code**   
   Try and see how rename refactoring works in the IDE:
 
-1. Click ![](images/d471eb4d279d6d6c4bb02406349ccf43.jpg), **Go To Procedure Division**, in the COBOL toolbar to go to the Procedure Division in the **ZVBNKPRT1.cbl** file. 
+1. Click **Go To Procedure Division**, ![](images/d471eb4d279d6d6c4bb02406349ccf43.jpg), in the COBOL toolbar to go to the Procedure Division in the **ZBNKPRT1.cbl** file. 
 2. Scroll down to line 228. 
 3. Right-click WS-EXEC-PARM-LL, and click **Rename**. 
     
