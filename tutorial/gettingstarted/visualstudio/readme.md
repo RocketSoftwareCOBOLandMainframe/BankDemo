@@ -555,9 +555,9 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 You can edit data files using one of two available Rocket Data File Editor tools.
 
-By default, Visual Studio is configured to use the new Data File Tools utility. To check where this is enabled:
+By default, Visual Studio is configured to use the new Data File Tools utility. To check whether this is enabled:
 
-1.  Click **Tools \> Options \> Micro Focus Tools \> Data File Tools**.
+1.  Click **Tools \> Options \> Rocket Software Tools \> Data File Tools**.
 2.  Ensure **Use New Data File Tools for supported options** is selected, and click **OK**.
 
     To edit the **.dat** file:
@@ -585,6 +585,7 @@ By default, Visual Studio is configured to use the new Data File Tools utility. 
     d. Type 132.76 then click ![](images/d333b67a20f0bf3c03f1b166d0c952ab.jpg), **Save Record**.
 
     e.  Confirm that you want to save the changes to this record.
+   
     f.  Using the same method, restore the previous value of BAC-REC-BALANCE.
 7.  Close the Data File Tools utility.
 
