@@ -652,12 +652,12 @@ Before you proceed, ensure that the default settings are applied to the Director
 
 This sample provides a PowerShell script that creates the region definition to use in this tutorial:
 
-1.  Open File Explorer, and navigate to the `C:\MFETDUSER\tutorial` folder.
-2.  Right-click **createdefinition.ps1**, and click **Run with PowerShell**. Allow the script to execute, and specify **A** to allow the execution policies.
+1.  Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
+2.  Right-click **createdefinition.ps1** and click **Run with PowerShell**. Allow the script to execute and specify **A** to allow the execution policies.
 
-<!-- This doesn't work, because running scripts is disabled. I had to open PowerShell, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser and after that navigate to the folder and run the script.-->
+<!-- This doesn't work, because running scripts is disabled. I had to open PowerShell, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser and after that navigate to the folder and run the script. Another way to run the script is to: Right-click the script, select Properties, select the Unblock check box. Afterwards right-clicking the file and clicking **Run with PowerShell** will create the XML file (in all cases there's no need to specify **A** to allow execution policies).-->
 
-    This executes the script and creates the Enterprise Server region definition file, **BANKDEMO.xml**, in the same folder. The file is configured for the location in which you saved the sample files.
+    This executes the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
 
 Now you can import the definition of the BANKDEMO logical server (LSER) in Enterprise Server:
 
