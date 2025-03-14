@@ -23,11 +23,11 @@ A preconfigured, fully executing application, BankDemo, is available from the Ro
 1.  In the GitHub repository for the BankDemo demonstration, click **Releases** in the right side part of the page.
 2.  In the list of releases, locate and click the one that corresponds to the Enterprise Developer product release you have installed.
 3.  Expand the **Assets** section and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample's sources.
-4.  Expand the archive on your machine.
+4.  Open the archive on your machine.
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
-![](images/080f42a3aadf5eea7bced48e38d755cd.png)**Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **C:\\MFETDUSER\\datafiles** folder, etc.
+![](images/080f42a3aadf5eea7bced48e38d755cd.png)**Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a `C:\MFETDUSER\datafiles` folder, etc.
 
 As part of this tutorials, you use the supplied standard Eclipse COBOL project in the sample to set up a development environment for this application. The tutorials show how you can:
 
@@ -74,7 +74,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
     This opens the **Eclipse Launcher** which enables you to choose a location for Eclipse to store your projects.
 
-2.  For example, specify **C:\\MFETDUSER\\tutorial\\workspace** in the **Workspace** field and click **Launch**.
+2.  For example, specify `C:\MFETDUSER\tutorial\workspace` in the **Workspace** field and click **Launch**.
 
     If this is the first time you start Enterprise Developer, you are presented with the Eclipse **Welcome page**. Click **Open Team Developer Perspective** to close the Welcome page and see the main Eclipse window.
 
@@ -99,9 +99,9 @@ In this release, the Enterprise Server security features are enabled by default.
 
 ### Connect to the Default ESCWA Server
 
-Ensure that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Note that existing workspaces may already have this connection.
+Ensure that Server Explorer contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Note that existing workspaces may already have this connection.
 
-1. In the **Server Explorer** view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
+1. In the Server Explorer view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
 
     The **New Enterprise Server Common Web Administration Connection** dialog box is displayed.
 2. In the **Name** field, type **Local**.
@@ -110,7 +110,7 @@ Ensure that **Server Explorer** contains a connection to the default Enterprise 
 5. If the server connection is TLS-enabled, select **TLS Enabled**, click **Browse**, and select the appropriate certificate.
 >**Note**: If **TLS Enabled** is selected, but you do not specify a certificate, the default Java keystore is searched for a valid one.
 6. Click **Finish**.
-The new ESCWA connection is displayed at the top level, in the **Server Explorer**.
+The new ESCWA connection is displayed at the top level, in the Server Explorer.
 
 ## Creating a Project and Adding the Source Files
 
@@ -118,7 +118,7 @@ The new ESCWA connection is displayed at the top level, in the **Server Explorer
 
 You are going to use the project supplied with the BankDemo sample as a template to create a project for this demonstration. You will then add the source files to the projects to be able to build, develop and test the application.
 
-The source files of the demonstration application are stored in subfolders named after the file type (for example, **bms**, **cobol**, **copybook**, **jcl**) in the **C:\\MFETDUSER\\sources** directory. The data files are in **C:\\MFETDUSER\\datafiles**.
+The source files of the demonstration application are stored in subfolders named after the file type (for example, `bms`, `cobol`, `copybook`, `jcl`) in the `C:\MFETDUSER\sources` directory. The data files are in `C:\MFETDUSER\datafiles`.
 
 **Creating the Project for the Bankdemo Application**
 
@@ -132,7 +132,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
     ![](images/2023b448364bdc76a9a0830175899e49.jpg)
 
-4.  Browse to the **C:\\MFETDUSER\\tutorial\\projects\\Eclipse\\cobol\\Bankdemo** folder and click **Select Folder**.
+4.  Browse to the `C:\MFETDUSER\tutorial\projects\Eclipse\cobol\Bankdemo` folder and click **Select Folder**.
 5.  Type Bankdemo in the project name field and click **OK**.
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the Application Explorer view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
@@ -162,7 +162,7 @@ To add the sample's copybooks to the project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
 2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
-3.  Browse to **C:\\MFETDUSER\\sources\\copybook** and click **Select Folder**.
+3.  Browse to `C:\MFETDUSER\sources\copybook` and click **Select Folder**.
 4.  Click **Finish**.
 
     This adds the folder storing the copybooks to your project as a linked resource.
@@ -173,7 +173,7 @@ To add the other source files to the Bankdemo project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
 2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
-3.  Browse to **C:\\MFETDUSER\\sources\\cobol** and click **Select Folder**.
+3.  Browse to `C:\MFETDUSER\sources\cobol` and click **Select Folder**.
 4.  Click **Finish**.
 
     This adds the folders storing the source files to your project as linked resources:
@@ -184,7 +184,7 @@ To add the other source files to the Bankdemo project:
 
     Check the **Console** and **Problems** views and see that some of the programs failed to compile. In the Application Explorer view, you can select a program and check the error and warning count property in the **Properties** view to indicate that there are compilation problems. The errors are due to the correct copybook paths not being specified in the project's properties.
 
-5.  Repeat the steps above to add the files from the **C:\\MFETDUSER\\sources\\bms** and the **C:\\MFETDUSER\\sources\\jcl** folders as linked resources.
+5.  Repeat the steps above to add the files from the `C:\MFETDUSER\sources\bms` and the `C:\MFETDUSER\sources\jcl` folders as linked resources.
 
 **Specifying the Copybook Paths for the Bankdemo Project**
 
@@ -229,7 +229,7 @@ The demonstration application includes a number of data files used. To see how y
 
 1.  In the Application Explorer view, right-click the Bankdemo project and click **New** \> **File** \> **Other File**.
 2.  Click **Advanced** and select **Link to file in the file system**.
-3.  Browse to the **C:\\MFETDUSER\\datafiles** folder.
+3.  Browse to the `C:\MFETDUSER\datafiles` folder.
 4.  Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
 5.  Click **Finish**.
 
@@ -253,7 +253,7 @@ This topic describes the editing features for the various file types (COBOL, JCL
 
 **Editing COBOL Files**
 
-You are going to explore some of the COBOL editing features using the **ZBNKPRT1.cbl** program which produces a report from a sequential data file.
+You are going to explore some of the COBOL editing features using the `ZBNKPRT1.cbl` program which produces a report from a sequential data file.
 
 1.  In the Application Explorer view, in the **cobol/core** folder of the project, double-click **ZBNKPRT1.cbl**.
 
@@ -336,7 +336,7 @@ You can either use the mouse to mark a block of text or click ![](images/2a6ec09
 
 You can use rename refactoring to rename all occurrences of a variable:
 
-1.  Scroll down to line 228 in the **ZBNKPRT1.cbl** file.
+1.  Scroll down to line 228 in the `ZBNKPRT1.cbl` file.
 <!--included the file name, because a cpy file is also opened-->
 2.  Click WS-EXEC-PARM-LL in the editor, right-click it, and click **Refactor \> Rename**.
 
@@ -567,7 +567,7 @@ You can configure the IDE to create a fully expanded Compiler listing file durin
 2.  Click **COBOL** in the left pane and select **Enable file specific settings**.
 3.  Set **Generate listing file** to **Yes** and then click **Apply and Close**.
 
-During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a Listing subfolder in the project directory (**C:\\MFETDUSER\\tutorial\\workspace\\Bankdemo\\Listing** in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks.
+During the build, the Compiler produces a source listing file, `ZBNKPRT1.lst`, in a Listing subfolder in the project directory (`C:\MFETDUSER\tutorial\workspace\Bankdemo\Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks.
 
 You can view this listing from within the IDE: double-click the **.lst** file in the Listing folder of your project.
 
@@ -616,13 +616,13 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     This triggers a rebuild of the project which now compiles cleanly as it now locates the copybook.
 
-9.  Check the errors in the listing file, **ZBNKPRT1.lst**, as follows:
+9.  Check the errors in the listing file, `ZBNKPRT1.lst`, as follows:
     1.  Double-click the .lst file in the **Listing** folder.
 
         The lines that include syntax errors are marked with asterisks (\*\*).
         ![](images/d088a3026590cf9c0ea87f816326877d.png)
 
-10. In the IDE, fix the errors in **ZBNKPRT1.cbl**, and save the file.
+10. In the IDE, fix the errors in `ZBNKPRT1.cbl`, and save the file.
 
     There should be no errors in the build now.
 
@@ -652,10 +652,10 @@ Before you proceed, ensure that the default settings are applied to the Director
 
 This sample provides a PowerShell script that creates the region definition to use in this tutorial:
 
-1.  Open File Explorer, and navigate to the **C:\\MFETDUSER\\tutorial** folder.
+1.  Open File Explorer, and navigate to the `C:\MFETDUSER\tutorial` folder.
 2.  Right-click **createdefinition.ps1**, and click **Run with PowerShell**. Allow the script to execute, and specify **A** to allow the execution policies.
 
-<!-- This doesn't work, because running scripts is disabled. I had to opn PowerShell, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser and after that navigate to the folder and run the script.-->
+<!-- This doesn't work, because running scripts is disabled. I had to open PowerShell, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser and after that navigate to the folder and run the script.-->
 
     This executes the script and creates the Enterprise Server region definition file, **BANKDEMO.xml**, in the same folder. The file is configured for the location in which you saved the sample files.
 
@@ -665,7 +665,7 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 2.  Right-click **Default [127.0.0.1:86]** and click **Import Server**.
 3.  In the **Import Server** dialog box, click **Browse** for **Import file**.
 4.  Set the file extension field to **.xml**.
-5.  Browse to the **C:\\MFETDUSER\\tutorial** folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
+5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
 
     Check the **Console** view for the results of importing the server. The Server Explorer window should now show a server called BANKDEMO under **Default [127.0.0.1:86]**. If the server is not visible, right-click **Default [127.0.0.1:86]**, and click **Refresh**.
 
@@ -719,7 +719,7 @@ These are the steps to start the server manually, and are included for completen
 
 **Executing JCL**
 
-The JCL provided in your demo causes the COBOL application to read a file, sort the data, and produce a report. The JCL file, **ZBNKSTMT.jcl**, is in the **Sources \> jcl** folder of the project. To submit this job:
+The JCL provided in your demo causes the COBOL application to read a file, sort the data, and produce a report. The JCL file, `ZBNKSTMT.jcl`, is in the **Sources \> jcl** folder of the project. To submit this job:
 
 1.  In the Application Explorer view, expand the **jcl** folder.
 2.  Right-click **ZBNKSTMT.jcl** and select **Submit JCL to associated Server**.
@@ -893,7 +893,7 @@ You are going to look at some simple features inside the debugger. Start by subm
 
     the Debug perspective automatically, click the **Debug** button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), in the right upper corner of the main Eclipse window to switch the perspective.
 
-    This starts the debugger and opens **ZBNKEXT1.cbl** for debugging, with the execution point set on the first line of Procedure Division.
+    This starts the debugger and opens `ZBNKEXT1.cbl` for debugging, with the execution point set on the first line of Procedure Division.
 
     ![](images/70f9ebaf905466c7d4585f32d7e5913b.jpg)
 
@@ -915,7 +915,7 @@ The highlighted line of code is the one the IDE will execute next.
 
 **Looking at Data Values**
 
-1.  Scroll to line 283 of **ZBNKEXT1.cbl**.
+1.  Scroll to line 283 of `ZBNKEXT1.cbl`.
 2.  Hover over the WS-RECORD-COUNTER2 data item.
 
     This provides you with details of the location, the size, the format, the number of times the field is used in the program, and the current value of the data item.
@@ -977,7 +977,7 @@ Check the Breakpoints view at the top right of the screen. Currently, there are 
 
 5.  Press **F8** to resume the execution.
 
-    You can see that **ZBNKEXT1.cbl** finishes and the debugger starts to debug the second program defined in the JCL.
+    You can see that `ZBNKEXT1.cbl` finishes and the debugger starts to debug the second program defined in the JCL.
 
     This program executes to completion and the job completes.
 

@@ -28,7 +28,7 @@ A preconfigured, fully executing application, Bankdemo, is available from the Ro
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
-**Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on your machine such as **/home/*username*/MFETDUSER**. Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **/home/*username*/MFETDUSER/datafiles** folder, etc.
+**Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on your machine such as `/home/*username*/MFETDUSER`. Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a `/home/*username*/MFETDUSER/datafiles` folder, etc.
 
 As part of this tutorial, you use the supplied standard Eclipse COBOL project in the sample to set up a development environment for this application. The tutorial shows how you can:
 
@@ -116,7 +116,7 @@ The new ESCWA connection is displayed at the top level, in the **Server Explorer
 
 You are going to use the project supplied with the Bankdemo sample as a template to create a project for this demonstration. You will then add the source files to the projects to be able to build, develop, and test the application.
 
-The source files of the demonstration application are stored in subfolders named after the file type (for example, **bms**, **cobol**, **copybook**, **jcl**) in the **/home/*username*/MFETDUSER/sources** directory. The data files are in **/home/*username*/MFETDUSER/datafiles**.
+The source files of the demonstration application are stored in subfolders named after the file type (for example, `bms`, `cobol`, `copybook`, `jcl`) in the `/home/*username*/MFETDUSER/sources` directory. The data files are in `/home/*username*/MFETDUSER/datafiles`.
 
 **Creating the Project for the Bankdemo Application**
 
@@ -130,7 +130,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
     ![](images/95baffd8c05a67432bbd581e4eea8216.jpg)
 
-4.  Browse to the **/home/*username*/MFETDUSER/tutorial/projects/Eclipse/cobol/Bankdemo** folder, and click **Open**.
+4.  Browse to the `/home/*username*/MFETDUSER/tutorial/projects/Eclipse/cobol/Bankdemo` folder, and click **Open**.
 5.  Type **Bankdemo** in the project name field, and click **OK**.
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the Application Explorer view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
@@ -158,7 +158,7 @@ To add the sample's copybooks to the project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
 2.  Click **Advanced**, and select **Link to alternate location (Linked Folder)**.
-3.  Browse to **/home/*username*/MFETDUSER/sources/copybook** and click **Open**.
+3.  Browse to `/home/*username*/MFETDUSER/sources/copybook` and click **Open**.
 4.  Click **Finish**.
 
     This adds the folder storing the copybooks to your project as linked resources.
@@ -169,7 +169,7 @@ To add the other source files to the Bankdemo project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
 2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
-3.  Browse to **/home/*username*/MFETDUSER/sources/cobol** and click **Open**.
+3.  Browse to `/home/*username*/MFETDUSER/sources/cobol` and click **Open**.
 4.  Click **Finish**.
 
     This adds the folders storing the source files to your project as linked resources:
@@ -182,7 +182,7 @@ To add the other source files to the Bankdemo project:
 
     The errors are due to the correct copybook paths not being specified in the project's properties. 
 
-5. Repeat the steps above to add the files from the **/home/*username*/MFETDUSER/sources/bms**, and the **/home/*username*/MFETDUSER/sources/jcl** folders as linked resources.
+5. Repeat the steps above to add the files from the `/home/*username*/MFETDUSER/sources/bms`, and the `/home/*username*/MFETDUSER/sources/jcl` folders as linked resources.
 
 **Specifying the Copybook Paths for the Bankdemo Project**
 
@@ -226,7 +226,7 @@ The demonstration application includes a number of data files used. To see how y
 
 1.  In the Application Explorer view, right-click the Bankdemo project and click **New** \> **File** \> **Other File**.
 2.  Click **Advanced** and select **Link to file in the file system**.
-3.  Browse to the **/home/*username*/MFETDUSER/datafiles** folder.
+3.  Browse to the `/home/*username*/MFETDUSER/datafiles` folder.
 4.  Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
 5.  Click **Finish**.
 
@@ -248,9 +248,9 @@ This topic describes the editing features for the various file types (COBOL, JCL
 
 **Editing COBOL Files**
 
-You are going to explore some of the COBOL editing features using the **ZBNKPRT1.cbl** program which produces a report from a sequential data file.
+You are going to explore some of the COBOL editing features using the `ZBNKPRT1.cbl` program which produces a report from a sequential data file.
 
-1.  In the Application Explorer view, in the **cobol/core** folder of the project, double-click **ZBNKPRT1.cbl**.
+1.  In the Application Explorer view, in the `cobol/core` folder of the project, double-click **ZBNKPRT1.cbl**.
 
     This opens the file in the COBOL editor in Eclipse. Next, you are going to enable the line numbers in the editor.
 
@@ -335,7 +335,7 @@ You can either use the mouse to mark a block of text or click ![](images/2a6ec09
 
 You can use rename refactoring to rename all occurrences of a variable:
 
-1.  Scroll down to line 228 in the **ZBNKPRT1.cbl** file.
+1.  Scroll down to line 228 in the `ZBNKPRT1.cbl` file.
 2.  Click the WS-EXEC-PARM-LL in the editor, right-click it, and click **Refactor \> Rename**.
 
     A pop-up is displayed prompting you to enter a new name for the variable.
@@ -547,7 +547,7 @@ You can configure the IDE to create a fully expanded Compiler listing file durin
 2.  Click **COBOL** in the left pane and select **Enable file specific settings**.
 3.  Set **Generate listing file** to **Yes** and then click **Apply and Close**.
 
-During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a Listing subfolder in the project directory (**/home/*username*/MFETDUSER/workspace/Bankdemo/Listing** in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. 
+During the build, the Compiler produces a source listing file, `ZBNKPRT1.lst`, in a Listing subfolder in the project directory (`/home/*username*/MFETDUSER/workspace/Bankdemo/Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. 
     
 You can view this listing from within the IDE: double-click the **.lst** file in the **Listing** folder of your project.
 
@@ -597,14 +597,14 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     This triggers a rebuild of the project which now compiles cleanly as it now locates the copybook.
 
-9.  Check the errors in the listing file, **ZBNKPRT1.lst**, as follows:
+9.  Check the errors in the listing file, `ZBNKPRT1.lst` as follows:
     a.  Double-click the .lst file in the **Listing** folder.
 
     The lines that include syntax errors are marked with asterisks (\*\*).
 
     ![](images/1593cb520fc1b907abb29f19f1957806.png)
 
-10. In the IDE, fix the errors in **ZBNKPRT1.cbl**, and save the file.
+10. In the IDE, fix the errors in `ZBNKPRT1.cbl`, and save the file.
 
     There should be no errors in the build now.
 
@@ -624,7 +624,7 @@ To execute the JCL, you need to run the application in an instance of the Rocket
 
 This sample provides a script that creates the region definition to use in this tutorial:
 
-1.  Navigate to the **/home/*username*/MFETDUSER/tutorial** directory and open a terminal from this location.
+1.  Navigate to the `/home/*username*/MFETDUSER/tutorial` directory and open a terminal from this location.
 2.  Type **./createdefinition.sh** and press **Enter**. 
 
     Note: You might need to give execute permissions to this script. To do this, execute: **chmod +x createdefinition.sh**.
@@ -664,7 +664,7 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 2.  Right-click **Default [127.0.0.1:86]** and click **Import Server**.
 3.  In the **Import Server** dialog box, click **Browse** for **Import file**.
 4.  Set the file extension field to **.xml**.
-5.  Browse to the **/home/*username*/MFETDUSER/tutorial** folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
+5.  Browse to the `/home/*username*/MFETDUSER/tutorial` folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
 
     Check the **Console** view for the results of importing the server. The Server Explorer window should now show a server called BANKDEMO under **Default [127.0.0.1:86]**. If the server is not visible, right-click **Default [127.0.0.1:86]** and click **Refresh**.
 
@@ -716,7 +716,7 @@ These are the steps to start the server manually, and are included for completen
 
 **Executing JCL**
 
-The JCL provided in your demo causes the COBOL application to read a file, sort the data, and produce a report. The JCL file **ZBNKSTMT.jcl** is in the **Sources \> jcl** folder of the project. To submit this job:
+The JCL provided in your demo causes the COBOL application to read a file, sort the data, and produce a report. The JCL file `ZBNKSTMT.jcl` is in the **Sources \> jcl** folder of the project. To submit this job:
 
 1.  In the Application Explorer view, expand the **jcl** folder.
 2.  Right-click **ZBNKSTMT.jcl** and select **Submit JCL to associated Server**.
@@ -903,7 +903,7 @@ You are going to look at some simple features inside the debugger. Start by subm
 
     the Debug perspective automatically, click the **Debug** button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), in the right upper corner of the main Eclipse window to switch the perspective.
 
-    This starts the debugger and opens **ZBNKEXT1.cbl** for debugging, with the execution point set on the first line of Procedure Division.
+    This starts the debugger and opens `ZBNKEXT1.cbl` for debugging, with the execution point set on the first line of Procedure Division.
 
     ![](images/70f9ebaf905466c7d4585f32d7e5913b.jpg)
 
@@ -925,7 +925,7 @@ The highlighted line of code is the one the IDE will execute next.
 
 **Looking at Data Values**
 
-1.  Scroll to line 283 of **ZBNKEXT1.cbl**.
+1.  Scroll to line 283 of `ZBNKEXT1.cbl`.
 2.  Hover over the WS-RECORD-COUNTER2 data item.
 
     This provides you with details of the location, the size, the format, the number of times the field is used in the program, and the current value of the data item.
@@ -970,7 +970,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
 Check the Breakpoints view at the top right of the screen. Currently, there are no breakpoints set in the program. To set a simple breakpoint:
 
-1.  Scroll down the code to line 171 of **ZBNKEXT1.cbl**.
+1.  Scroll down the code to line 171 of `ZBNKEXT1.cbl`.
 2.  Double-click in the grey area to the left of this line or right-click in the same place, and click **Toggle Breakpoint**.
 
     ![](images/878abd2c21b3ea7a1828d0ce903ac9ad.jpg)
@@ -985,7 +985,7 @@ Check the Breakpoints view at the top right of the screen. Currently, there are 
 
 5.  Press **F8** to resume the execution.
 
-    You can see that **ZBNKEXT1.cbl** finishes and the debugger starts to debug the second program defined in the JCL. This program executes to completion and the job completes.
+    You can see that `ZBNKEXT1.cbl` finishes and the debugger starts to debug the second program defined in the JCL. This program executes to completion and the job completes.
 
 **Stop Debugging**
 
