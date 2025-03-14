@@ -507,7 +507,7 @@ You should now see line numbers running down both sides of the source code:
    ![](images/27VSRenumberboth.png)
 
 
-You can remove the line numbers from your code - note that the **Renumber** and **Unnumber** commands copybook view.
+You can remove the line numbers from your code - note that the **Renumber** and **Unnumber** commands are not available in the expanded copybook view.
 
 1. Ensure that **ZBNKPRT1.cbl** is opened in the editor, click the downward arrow next to ![](images/e711062673ff7c4626a662d04d262ad7.jpg) in the COBOL  toolbar, and click **Unnumber Left**. This removes the line numbers from the COBOL sequence area.
 
@@ -705,7 +705,7 @@ Ensure that the default settings are applied to the Directory Sever:
 
     ![](images/03218b9fa5693aaca14ff3cf3aa3dd1b.jpg) **Tip:** Use the Auto Hide button (![](images/bf74b6a329048075497d723393231eba.jpg)) in the Server Explorer toolbar to pin the window to the IDE window.
 
-3.  Right-click **Micro Focus Servers** and select **Directory Server Configuration**. This opens the Rocket Directory Server window. 
+3.  Right-click **Rocket Enterprise Servers** and select **Add Directory Server**. This opens the Rocket Directory Server window. 
 
 4.  Ensure that Host name is localhost and the Port number is 86.
 
@@ -713,7 +713,7 @@ To import the definition of the Bankdemo logical server (LSER) in Enterprise Ser
 
 1.  In Visual Studio, open the Server Explorer window.
 
-2.  Expand **Micro Focus Servers**.
+2.  Expand **Rocket Enterprise Server**.
 
     If you are presented with the **Enterprise Server Sign On** dialog box, click **OK**.
 
