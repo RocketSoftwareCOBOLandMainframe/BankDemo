@@ -13,7 +13,7 @@ This demonstration shows how you can compile, link, and debug an Open PL/I BANK 
 
 This demonstration requires:
 - Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
-- A TN3270 terminal emulator to run the CICS application. 
+- A TN3270 terminal emulator to run the IBM CICS application. 
 
 **Note:**
 This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
@@ -70,7 +70,7 @@ In this release, the Enterprise Server security features are enabled by default.
 4. On the **General** page of the server, note that the **PL/I enabled** check box is already selected.
 5. From the **CICS** drop-down menu, select **Configuration**.
 6. Change **System Initialization Table** from **CBLVSAM** to **PLIVSAM**, and click **Apply**. 
-    This configures the server to use some PL/I CICS resources (BMS maps and programs).
+    This configures the server to use some PL/I IBM CICS resources (BMS maps and programs).
 
 ### Build the application:</description>
 
@@ -103,7 +103,7 @@ In this release, the Enterprise Server security features are enabled by default.
 3.  Check the **Output** window to see the progress of starting the server.
     Starting the server launches the **Enterprise Server Console Daemon** window which also provides information about the server start-up.
 
-### Execute the bankmain CICS Application 
+### Execute the bankmain IBM CICS Application 
 
 1.  To start debugging in Visual Studio, press **F5** to put the IDE in wait mode for the BANK application to start.
 2.  Open a TN3270 emulation program such as Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.
@@ -115,13 +115,13 @@ In this release, the Enterprise Server security features are enabled by default.
     Visual Studio debugging starts again so you can debug through the SBANK10P program.         
 7. Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.         
   
-    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application. Since this is a small demo, all of the CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
+    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application. Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
 8.  Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.          
 9.  You can now disconnect your TN3270 terminal to end the demo.          
 
 ### Stop the BANKDEMO Enterprise Server
 
-Now that you have finished running the CICS demo, you can stop the associated  BANKDEMO enterprise server. To do this:
+Now that you have finished running the demo, you can stop the associated  BANKDEMO enterprise server. To do this:
  
 1.  In Server Explorer, right-click the **BANKDEMO** server, and click **Stop**.
 2.  Check the **Output** window for messages that the server has been stopped. A number of messages also appear in the **Enterprise Server Console Daemon** window outside of Visual Studio before it closes down.

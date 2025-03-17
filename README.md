@@ -43,7 +43,7 @@ ROCKET SOFTWARE HAVE ANY LIABILITY WHATSOEVER IN CONNECTION
 WITH THIS SOFTWARE.
 
 
-## <a name="using"></a>Using The Bankdemo Application
+## <a name="using"></a>Using the Bankdemo Application
 To use the project, download the **source.zip** or **source.tar.gz** from the [release](https://github.com/RocketSoftware/BankDemo/releases) that matches the product version you want to use, then follow the relevant readme instructions. You can use the project in one of the following ways:
 1. <a name="tutorial"></a> As the basis of the introductory tutorials for the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
     - Prerequisite software: 

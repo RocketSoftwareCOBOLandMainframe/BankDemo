@@ -76,7 +76,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
     If this is the first time you start Enterprise Developer, you are presented with the Eclipse **Welcome page**. Click **Open Team Developer Perspective** to close the Welcome page and see the main Eclipse window.
 
-    If the **Welcome page** is not opened, click **Window** \> **Perspective** \> **Open Perspective** \> **Other**, select the **Team Developer (default)**, and click **Open**.
+    If the **Welcome page** is not opened, click **Window** \> **Perspective** \> **Open Perspective** \> **Other**, select **Team Developer (default)**, and click **Open**.
 
     The views you see open in Eclipse and their layout depends on whether you have used Eclipse before. You can move, resize, and minimize views which is why they might not look exactly as described here. If this is the first time you have used Eclipse, you should see the following views in the IDE, although most of the views are currently empty:
 
@@ -191,12 +191,12 @@ Next, you need to specify the copybook paths for the project in order for the co
 1.  In Application Explorer view, right-click the Bankdemo project and click **Properties**.
 2.  Expand **Rocket Software** and click **Build Path**.
 3.  Click the **Dependency Paths** tab and ensure **Type** is set to **COBOL Copybook Paths**.
-4.  Select the check box in front of **Bankdemo/copybook**.
+4.  Check the check box in front of **Bankdemo/copybook**.
 5.  Click the **Build Precedence** tab and click **Deselect All** in the right side of the dialog box.
 
     You do not need to compile all source files for this demonstration, so you only need to enable some of the folders on this page.
 
-6.  Select the check boxes for the following folders:
+6.  Check the check boxes for the following folders:
     -   **Bankdemo/bms/cobol**
     -   **Bankdemo/cobol/core**
     -   **Bankdemo/cobol/data/vsam**
@@ -210,7 +210,7 @@ You now need to perform a scan of the COBOL programs in your project to determin
 
 1.  Right-click the **Bankdemo** project and click **Determine Directives**.
 
-    The IDE performs a scan of the files and shows a report of which directives for dialect and for CICS must be set on the programs in your project in order for them to compile cleanly.
+    The IDE performs a scan of the files and shows a report of which directives for dialect and for IBM CICS must be set on the programs in your project in order for them to compile cleanly.
 
     ![](images/2795bd96591744946bf6d7eb80c8704e.jpg)
 
@@ -349,7 +349,7 @@ You can use rename refactoring to rename all occurrences of a variable:
 
 5.  Click **Cancel** as you are not going to apply these changes for this demo.
 
-You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this,go to **Window \> Preferences**, navigate to **Rocket Software \> COBOL \> Editor**, and deselect the **Rename in editor without dialog** check box.
+You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this,go to **Window \> Preferences**, navigate to **Rocket Software \> COBOL \> Editor**, and uncheck the **Rename in editor without dialog** check box.
 
 
 **Smart Editing**
@@ -514,7 +514,7 @@ Turn the automatic build on:
 
 **COBOL Compiler control**
 
-The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains EXEC CICS or EXEC SQL statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
+The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains `EXEC CICS` or `EXEC SQL` statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
 
 Often the directives can be set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you need to compile with different directives. In this case, you can set the directives at the component level which overrides the project settings.
 
@@ -773,9 +773,9 @@ As with JCL, execution of the jobs requires a previously configured Rocket enter
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
 
-**Executing the CICS application**
+**Executing the IBM CICS application**
 
-The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 <!-- Service name still isn't changed from Micro Focus-->
 
 **Start the HACloud Session Server**
