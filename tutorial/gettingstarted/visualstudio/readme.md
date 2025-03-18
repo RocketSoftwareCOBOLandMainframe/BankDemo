@@ -722,7 +722,7 @@ To import the definition of the Bankdemo logical server (LSER) in Enterprise Ser
 5.  Browse to the **C:\\MFETDUSER\\tutorial** folder, select **BANKDEMO.xml**, and click **OK** twice.
 
 6. Check the **Output** window for the results of importing the server. 
-The Server Explorer window should now show a server called BANKDEMO under **Micro Focus Servers \> localhost**. If the server is not visible, right-click **Micro Focus Servers**, and click **Refresh**
+The Server Explorer window should now show a server called BANKDEMO under **Rocket Enterprise Server \> localhost**. If the server is not visible, right-click **Rocket Enterprise Server**, and click **Refresh**
 
 **Associate the BANKDEMO Enterprise Server with your project**
 
@@ -742,7 +742,7 @@ Ensure your application is associated with the BANKDEMO server:
 Configure the IDE to start the associated BANKDEMO server automatically as follows:
 
 1.  Click **Tools \> Options**.
-2.  Expand **Micro Focus Tools**, and click **Enterprise Server**.
+2.  Expand **Rocket Software Tools**, and click **Enterprise Server**.
 3.  Check the following options on this page to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
     - **Automatically start the associated server** - this ensures the IDE will start the server if it is not running when you execute the application.
     - **Stop running servers on project/folder close** - this enables the IDE to stop the server when you close the project.
@@ -754,7 +754,7 @@ Configure the IDE to start the associated BANKDEMO server automatically as follo
 
 These are the steps to start the server manually, and are included for completeness. You do not have to start the server manually, as you have configured the IDE to start the server automatically. 
 
-1. In Server Explorer, right-click **BANKDEMO** under **Micro Focus Servers**, then click **Start**.
+1. In Server Explorer, right-click **BANKDEMO** under **Rocket Enterprise Server**, then click **Start**.
 
     **Note:** You might receive an Enterprise Server Sign On dialog prompting you to provide connection details for the BANKDEMO server. This is a standard security dialog. Click **OK** without specifying any sign-on details. Also, you may skip enabling password recovery.
 
@@ -852,7 +852,7 @@ The CICS application requires that you use a 3270 terminal emulator. This tutori
 To check the IDE preferences for a TN3270 display:
 
 1.  In the IDE, click **Tools \> Options**.
-2.  Expand **Micro Focus Tools**, and click **TN3270 Display**.
+2.  Expand **Rocket Software Tools**, and click **TN3270 Display**.
 3.  Ensure that **Host Access for the Cloud** is selected.
 4.  Click **OK**.
 
@@ -893,10 +893,11 @@ You are going to debug the batch Bankdemo application using the JCL debugger.
 
 If the enterprise server is not yet started, you need to start it as follows:
 
-1.  In Server Explorer, right-click **BANKDEMO** under **Micro Focus Servers**, then click **Start**.
-2.  Right-click **Micro Focus Servers** again, and then click **Refresh** to see that the server has started.
+1.  In Server Explorer, right-click **BANKDEMO** under **Rocket Enterprise Server**, then click **Start**.
+2.  Right-click **Rocket Enterprise Server** again, and then click **Refresh** to see that the server has started.
 
-    ![](images/dc47731331e6d29dd8eaeb7ce690c9fa.jpg)
+    ![](images/46895A06-FD3A-4B07-AA02-9752F2870A79.jpeg)
+    
 
 **Starting the debugger**
 
@@ -1041,7 +1042,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
 4.  Press **Enter** to run the query.
 
-    The results are shown in the **Micro Focus Code Analysis** window:
+    The results are shown in the **Enterprise Developer Code Analysis** window:
     ![](images/b6cf3cd6f2a6ec0d1c68d692357e72ab.png)
 
 **Running COBOL reports**
@@ -1049,7 +1050,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
    Enterprise Developer provides a few COBOL reports which you can run against your COBOL programs to help you understand and optimize them. For example, to run a report to identify any code that cannot be reached or executed, you need to run an unreferenced data report:
 1.  With the **SBANK00P.cbl** file still opened in the editor, click the down arrow next to ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar, and click **Unreferenced Data**.
 
-      The IDE shows the results in the **Micro Focus Code Analysis** window:
+      The IDE shows the results in the **Enterprise Developer Code Analysis** window:
     ![](images/b0fb87ceb26d629e529f05fc723ab530.png)
 
     2.  Expand any of the lines in the report and double-click a line in the result to highlight the lines of code that include unreferenced data.
