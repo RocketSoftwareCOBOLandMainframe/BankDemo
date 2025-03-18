@@ -809,9 +809,10 @@ To view the spool:
 
     Alternatively, in Solution Explorer, right-click the Bankdemo project, and click **Enterprise Server \> Show Spool**. This might still show the details of the submitted JCL job.
 
-5.  Close the tab for the job when you have reviewed the details.
-6.  Click ![](images/SpoolFilterVS.png) (**Filter**) on the Home page of the Spool window to set some filters.
-![](images/e1b080a897a4bd65512369587fdded78.jpg)
+2.  Close the tab for the job when you have reviewed the details.
+3.  Click ![](images/SpoolFilterVS.png) (**Filter**) on the Home page of the Spool window to set some filters.
+
+      ![](images/e1b080a897a4bd65512369587fdded78.jpg)
 7.  Click the **Complete** button and also check **Descending** next to **Job ID** to see a list of all jobs in the completed queue, then click **Apply**. Your job is at the top of the list.
 8.  Click the job you want to see in the list.
 
@@ -1078,11 +1079,11 @@ If the enterprise server is not yet stated, you need to start it as follows:
 
     Wait until the server has started. In the list of servers in Server Explorer, BANKDEMO still has a red square next to it. This is a refresh delay.
 
-3.  In Server Explorer window, right-click **Micro Focus Servers**, and click **Refresh** to confirm the server has started.
+3.  In Server Explorer window, right-click **Rocket Enterprise Server**, and click **Refresh** to confirm the server has started.
 
 **Starting the debugger**
 
-The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the CICS debugger. You are going to use this to debug the online Bankdemo application:
+The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS debugger. You are going to use this to debug the online Bankdemo application:
 
 1.  In Solution Explorer, right-click the **Bankdemo** project, and click **Properties**.
 2.  Click the **Debug** tab in the properties.
@@ -1094,7 +1095,7 @@ To start the debugger:
 
 1.  Click **Debug** \> **Step Into**.
 
-    Visual Studio enters debug mode and a few new windows open in the IDE. HACloud starts outside of Visual Studio but does not show the sign-on application screen yet.
+    Visual Studio enters debug mode and a few new windows open in the IDE. HA Cloud starts outside of Visual Studio but does not show the sign-on application screen yet.
 
     The program SBANK00P starts to execute and execution stops on the first EXEC CICS statement in the code.
 
