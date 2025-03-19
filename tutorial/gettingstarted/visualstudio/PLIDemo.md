@@ -68,6 +68,7 @@ In this release, the Enterprise Server security features are enabled by default.
 2. On the Home page of ESCWA, click **Native** in the top taskbar.
 3. On the **Native** tab, expand **Directory Servers >  Default** and click **BANKDEMO**.
 4. On the **General** page of the server, note that the **PL/I enabled** check box is already selected.
+<!--This option does not exist in the UI-->
 5. From the **CICS** drop-down menu, select **Configuration**.
 6. Change **System Initialization Table** from **CBLVSAM** to **PLIVSAM**, and click **Apply**. 
     This configures the server to use some PL/I IBM CICS resources (BMS maps and programs).
@@ -76,7 +77,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
 1. In Visual Studio:
      a.  Click **File > Open > Project/Solution**.
-     b.  Navigate to the `tutorial\projects\Studio\pli` folder.
+     b.  Navigate to the `C:\MFEDTDUSER\tutorial\projects\Studio\pli` folder.
      c.  Select **bankdemo.sln**, and then click **Open**.
 2. Check the project's active configuration:
     a.  Right-click the **bankdemo** solution in Solution Explorer and click **Properties**.
@@ -99,9 +100,9 @@ In this release, the Enterprise Server security features are enabled by default.
 ### Start the BANKDEMO Enterprise Server 
 
 1.  In Server Explorer, right-click **BANKDEMO**, and click **Start**.
-2.  Click **OK** in the **Enterprise Server Sign On** dialog box, and leave the fields blank.
+2.  (Optional) Click **OK** in the **Enterprise Server Sign On** dialog box, and leave the fields blank.
 3.  Check the **Output** window to see the progress of starting the server.
-    Starting the server launches the **Enterprise Server Console Daemon** window which also provides information about the server start-up.
+    <!--Starting the server launches the **Enterprise Server Console Daemon** window which also provides information about the server start-up.-->
 
 ### Execute the bankmain IBM CICS Application 
 
@@ -110,9 +111,9 @@ In this release, the Enterprise Server security features are enabled by default.
 3.  Visual Studio should automatically open the `SBANK00P.PLI` source file with the **SBANK00P PROC** line highlighted as the current line of execution.
 4.  Next, you can step through the SBANK00P program, set any breakpoints, and evaluate variables.  
 5.  Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.
-6.  In the TN3270 window, type the user id, for example B0001 and any string for the password, and press **Enter**.
+6.  In the TN3270 window, type the user id, for example **b0001** and any string for the password, and press **Enter**.
 
-    Visual Studio debugging starts again so you can debug through the SBANK10P program.         
+    Visual Studio debugging starts again so you can debug through the `SBANK10P` program.         
 7. Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.         
   
     As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application. Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
