@@ -71,14 +71,14 @@ In this release, the Enterprise Server security features are enabled by default.
 
     **On Windows 10**: From your Windows desktop, click **Start \> Visual Studio 2022**.
 
-    **On Windows 11**: Click the **Start** button in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio 2022**.
+    **On Windows 11**: Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio 2022**.
 
-    If this is the first time you have started Visual Studio on your machine, you are prompted to specify default environment settings. Set **Development Settings** to **General**.
+    If this is the first time you have started Visual Studio on your system, you are prompted to specify default environment settings. Set **Development Settings** to **General**.
 
 2. You then see the Visual Studio start screen - click **Continue without code**:
 
 
-The windows you see open in Visual Studio and their layout depend on whether you have used the IDE before and on the edition of Visual Studio that you might have installed on your machine. You can move, resize and minimize windows which is why they may not look exactly like described here.
+The windows you see open in Visual Studio and their layout depend on whether you have used the IDE before and on the edition of Visual Studio that you have installed. You can move, resize and minimize windows which is why they may not look exactly like described here.
 ![](images/6534d4dbc16deb9b9458c08eec09a619.png)
 
 You can see:
@@ -93,7 +93,7 @@ You can see:
 -   **Error List** window - displays details about any errors that might be present in the code.
 -   Project Details window which gives a logical view of your COBOL application.
 -   The main activity window at the top the IDE, the Editor, is where you edit or debug the sources. This window is currently empty.
--   Apart from the menus, there are a number of buttons in the toolbar, which vary depending on what you are currently doing with the IDE.
+-   Apart from the menus, there are a number of buttons in the toolbar which vary depending on what you are doing with the IDE.
 
 3. Experiment with resizing, minimizing and restoring the windows.
 
@@ -103,7 +103,7 @@ You can see:
 
       **Note:** If you close a window, you can restore if from the **View** menu.
 
-    - If you wish to restore the default windows layout of the IDE, click **Window** \> **Reset Window Layout**.
+    - If you want to restore the default windows layout of the IDE, click **Window** \> **Reset Window Layout**.
 
  **Open the Bankdemo solution**
 
