@@ -571,7 +571,7 @@ By default, Visual Studio is configured to use the new Data File Tools utility. 
 
     The **Data File Editor** loads the data file and shows two views:
     -   The left-hand pane shows the raw form of the file. Because many of the field are COMP-3 fields, the data in these fields is presented in an ASCII view.
-    
+
       ![](images\datafiletoolsscreengrabmarch2025.png)
     - The right-hand pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a much better, editable form.
 6.  Change the value of BAC-REC-BALANCE from 91.14 to 132.76 as follows: 
@@ -844,9 +844,9 @@ Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is ru
 
 3. If it is not running, right-click and click **Start**.
 
-**Executing the CICS application**
+**Executing the IBM CICS application**
 
-The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 
 **Configuring the TN3270 settings in the IDE** 
 
