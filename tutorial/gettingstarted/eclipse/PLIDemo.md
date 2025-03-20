@@ -84,17 +84,18 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 ### Disable the default Enterprise Server security configuration
 
-In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
+The Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To recreate the Default Enterprise Server Security Configuration* in the product documentation. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. A series of messages appear as the script disables default security.
 2. Restart MFDS and ESCWA to pick up the configuration changes. You can now use ESCWA without having to log in.
-3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions no longer require credentials for starting/stopping and other actions.
+3. Restart any running enterprise server regions so that they pick up the configuration changes. 
+   Regions no longer require credentials for starting/stopping and other actions.
 
 ### Connect to the default ESCWA server
 
-Ensure that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Existing workspaces might already have this connection.
+Verify that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Existing workspaces might already have this connection.
 
 1. In the **Server Explorer** view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
 
