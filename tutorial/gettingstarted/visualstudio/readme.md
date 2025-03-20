@@ -774,7 +774,7 @@ The JCL provided in your demo causes the COBOL application to read a file, sort 
 
 1.  In Solution Explorer, select the JCL file in the project, and then drag it across to Server Explorer, and drop it onto the BANKDEMO server.
 
-    Alternatively, you can right-click the file in Solution Explorer, and select **Submit JCL**
+    Alternatively, you can right-click the file in Solution Explorer, and select **Submit JCL**.
 
     **Note:** If you have not started the BANKDEMO server yet, since you configured the IDE to start the server automatically, you receive a notification that the server will be started. Click **OK** to confirm this.
 
