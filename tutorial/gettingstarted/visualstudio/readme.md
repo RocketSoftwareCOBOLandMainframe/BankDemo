@@ -20,36 +20,36 @@ Other tutorials, which are designed for Administrators, are available.
 
 **Download the demonstration application**
 
-A preconfigured, fully executing application, BankDemo, is available from the Rocket Software GitHub repository - [*click here*](https://github.com/RocketSoftware/BankDemo). Download the sample's sources as follows:
+A preconfigured, fully executing application, BankDemo is available from the Rocket Software GitHub repository - [*click here*](https://github.com/RocketSoftware/BankDemo). Download the sample sources as follows:
 
 1.  In the GitHub repository for the BankDemo demonstration, click **Releases** in the right-hand side part of the page.
 2.  In the list of releases, locate and click the one that corresponds to the Enterprise Developer product release you have installed.
 3.  Expand the **Assets** section, and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample's sources.
-4.  Expand the archive on your machine.
+4.  Expand the archive on your computer.
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
-    ![](images/080f42a3aadf5eea7bced48e38d755cd.png) **Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **c:\\MFETDUSER\\datafiles** folder, etc.
+    ![](images/080f42a3aadf5eea7bced48e38d755cd.png) **Important:** Before attempting this tutorial, create a directory on your computer for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **c:\\MFETDUSER\\datafiles** folder, etc.
 
     As part of this tutorials, you use the supplied standard Visual Studio project for Mainframe Subsystem Applications to set up a development environment for this application. The tutorials show how you can:
     -   Edit the source files
     -   Compile the source code
-    -   Execute and debug the application
+    -   Run and debug the application
 
     **Prerequisites**
 
     You must have the following software installed:
 
     -   Rocket® Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
-    -   A TN3270 terminal emulator to run the IBM® CICS® application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+    -   A TN3270 terminal emulator to run the IBM® CICS® application. This tutorial uses Rocket Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 **Using a remote enterprise server instance for the tutorials**
 
-   If you have an active firewall on the machine that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
+   If you have an active firewall on the system that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
     
-   For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
+   For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
 
-   If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values so that you can control access via these.
+   If you want remote users to access Enterprise Server functionality through the firewall, you can use fixed port values so that you can control access through them.
 
 ## Enterprise Server security
 
@@ -57,11 +57,11 @@ In this release, the Enterprise Server security features are enabled by default.
 
 ### Disable the default Enterprise Server security configuration
 
-> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
+> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To re-create the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
-1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. You will see a series of messages as the script disables default security.
-2. Restart MFDS and ESCWA to pick up the configuration changes. You will now be able to use ESCWA without having to log in.
-3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
+1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. A series of messages appear as the script disables default security.
+2. Restart MFDS and ESCWA to pick up the configuration changes. Now, you can use ESCWA without having to log in.
+3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions no longer require credentials for starting/stopping and other actions.
 
 ## Starting the Visual Studio Integrated Development Environment
 
@@ -902,7 +902,7 @@ If the enterprise server is not yet started, you need to start it as follows:
 
 **Starting the debugger**
 
-The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the CICS Debugger. You need to select the JCL debugger to debug the batch Bankdemo application:
+The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS Debugger. You need to select the JCL debugger to debug the batch Bankdemo application:
 
 1.  In Solution Explorer, right-click the **BankDemo** project and click **Properties**.
 4.  Click the **Debug** tab in the properties.
