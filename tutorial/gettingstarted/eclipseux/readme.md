@@ -60,8 +60,8 @@ In this release, the Enterprise Server security features are enabled by default.
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
-1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.sh`. You will see a series of messages as the script disables default security.
-2. Restart the Directory Server and Enterprise Server Common Web Administration services to pick up the configuration changes. You will now be able to use ESCWA without having to log in.
+1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.sh`. You see a series of messages as the script disables default security.
+2. Restart the Directory Server and Enterprise Server Common Web Administration services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
 
 ## Starting the Eclipse Integrated Development Environment (IDE)
@@ -114,7 +114,7 @@ The new ESCWA connection is displayed at the top level, in the **Server Explorer
 
 [Back to Top](#overview)
 
-You are going to use the project supplied with the Bankdemo sample as a template to create a project for this demonstration. You will then add the source files to the projects to be able to build, develop, and test the application.
+You will use the project supplied with the Bankdemo sample as a template to create a project for this demonstration. You will then add the source files to the projects to be able to build, develop, and test the application.
 
 The source files of the demonstration application are stored in subfolders named after the file type (for example, `bms`, `cobol`, `copybook`, `jcl`) in the `/home/*username*/MFETDUSER/sources` directory. The data files are in `/home/*username*/MFETDUSER/datafiles`.
 
@@ -141,7 +141,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
 **The Bankdemo Project**
 
-Your project is pre-configured so that the build process creates the output files in a location that is used by the Enterprise Server logical server. To check which folder will include the built files:
+Your project is preconfigured so that the build process creates the output files in a location that is used by the Enterprise Server logical server. To check which folder will include the built files:
 
 1.  In the Application Explorer view, right-click the Bankdemo project and click **Properties**.
 2.  Expand **Rocket Software \> Build Configurations** and then click **Link**.
@@ -186,17 +186,17 @@ To add the other source files to the Bankdemo project:
 
 **Specifying the Copybook Paths for the Bankdemo Project**
 
-Next, you need to specify the copybook paths for the project in order for the copybook dependencies to be resolved:
+Next, specify the copybook paths for the project so that the copybook dependencies get resolved:
 
 1.  In Application Explorer view, right-click the Bankdemo project and click **Properties**.
 2.  Expand **Rocket Software** and click **Build Path**.
 3.  Click the **Dependency Paths** tab and ensure **Type** is set to **COBOL Copybook Paths**.
-4.  Check the check box in front of **Bankdemo/copybook**.
+4.  Select the check box in front of **Bankdemo/copybook**.
 5.  Click the **Build Precedence** tab and click **Deselect All** in the right side of the dialog box.
 
-    You do not need to compile all source files for this demonstration, so you only need to enable some of the folders on this page.
+    You do not have to compile all source files for this demonstration, so you only have to enable some of the folders on this page.
 
-6.  Check the check boxes for the following folders:
+6.  Select the check boxes for the following folders:
     -   **Bankdemo/bms/cobol**
     -   **Bankdemo/cobol/core**
     -   **Bankdemo/cobol/data/vsam**
@@ -206,11 +206,11 @@ Next, you need to specify the copybook paths for the project in order for the co
 
 **Setting Compiler Directives**
 
-You now need to perform a scan of the COBOL programs in your project to determine and set the appropriate Compiler directives:
+You now must perform a scan of the COBOL programs in your project to determine and set the appropriate Compiler directives:
 
 1.  Right-click the **Bankdemo** project and click **Determine Directives**.
 
-    The IDE performs a scan of the files and shows a report of which directives for dialect and for IBM CICS must be set on the programs in your project in order for them to compile cleanly.
+    The IDE performs a scan of the files and shows a report of which directives for dialect and for IBM CICS must be set on the programs in your project so that they to compile cleanly.
 
     ![](images/2795bd96591744946bf6d7eb80c8704e.jpg)
 
@@ -222,7 +222,7 @@ You now need to perform a scan of the COBOL programs in your project to determin
 
 **Adding Data Files**
 
-The demonstration application includes a number of data files used. To see how you can edit data files, you only need to look at one of these files, so you do not need to add a folder for it to the project. To add the data file to your project:
+The demonstration application includes a number of data files used. To see how you can edit data files, you can only look at one of these files, so there is no need to add a folder for it in the project. To add the data file to your project:
 
 1.  In the Application Explorer view, right-click the Bankdemo project and click **New** \> **File** \> **Other File**.
 2.  Click **Advanced** and select **Link to file in the file system**.
@@ -256,7 +256,7 @@ You are going to explore some of the COBOL editing features using the `ZBNKPRT1.
 
 2.  Click **Window \> Preferences** to open the Eclipse preferences.
 3.  Expand **General \> Editors** and click **Text Editors**.
-4.  Check **Show Line Numbers** and click **Apply and Close**.
+4.  Select the **Show Line Numbers** check box and click **Apply and Close**.
 
 **Copybooks**
 
@@ -279,7 +279,7 @@ By expanding a source file node in the Application Explorer view, you can see a 
 
 ![](images/f7aea1f7a650338e844d566fbe894c8e.jpg)
 
-Use the Copybook Dependency view to show where in the source file's structure the COPY statements appear, and which copybooks they reference. If the Copybook Dependency view is not displayed in the Team Developer perspective, to open this view click **Window \> Show View \> Other \> Rocket Software \> Copybook Dependency**.
+Use the Copybook Dependency view to show where in the source file's structure the COPY statements are located, and which copybooks they reference. If the Copybook Dependency view is not displayed in the Team Developer perspective, to open this view click **Window \> Show View \> Other \> Rocket Software \> Copybook Dependency**.
 
 ![](images/e3aa258b24ae86229c1a4afc86334e5e.jpg)
 
@@ -349,7 +349,7 @@ You can use rename refactoring to rename all occurrences of a variable:
 
 5.  Click **Cancel** as you are not going to apply these changes for this demo.
 
-You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this,go to **Window \> Preferences**, navigate to **Rocket Software \> COBOL \> Editor**, and uncheck the **Rename in editor without dialog** check box.
+You can change your Eclipse preferences and rename without the **Rename COBOL Element** dialog box. To do this,go to **Window \> Preferences**, navigate to **Rocket Software \> COBOL \> Editor**, and deselect the **Rename in editor without dialog** check box.
 
 
 **Smart Editing**
@@ -366,7 +366,7 @@ Next, we are going to look at the smart editing feature with background COBOL pa
 
     Notice how the words you type change in the editor. Once a word is recognized as a reserved word or a data item, its color changes. If a line of code contains invalid COBOL syntax, a red cross appears to the left of the line and the word is underlined with a wavy red line.
 
-    Also, Content Assist automatically displays a pop-up with suggested keywords and names of data items appears as you type.
+    Also, Content Assist automatically displays a pop-up with suggested keywords and names of data items as you type.
 
 4.  Change the line to:
 
@@ -382,7 +382,7 @@ Next, we are going to look at the smart editing feature with background COBOL pa
 
 You can use the commands **Renumber** and **Unnumber** to insert and remove line numbers from your code. 
 
-If your sources include any comments beyond column 73, you need to configure the line numbering in order to ensure you only apply changes to the COBOL sequence area. Here is how you can do this:
+If your sources include any comments beyond column 73, you must configure the line numbering to ensure that you only apply changes to the COBOL sequence area. Here is how you can do this:
 
 
 1.  Click **Window \> Preferences** and navigate to **Rocket Software \> COBOL \> Editor \> Line Numbering**.
@@ -516,7 +516,7 @@ Turn the automatic build on:
 
 The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains `EXEC CICS` or `EXEC SQL` statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
 
-Often the directives can be set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you need to compile with different directives. In this case, you can set the directives at the component level which overrides the project settings.
+Often the directives can be set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you must compile with different directives. In this case, you can set the directives at the component level which overrides the project settings.
 
 For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the respective COBOL programs.
 
@@ -567,7 +567,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     * Move one of the copybooks, **CTIMERD.cpy**, from the copybook folder to the **jcl** folder - right-click the file in Application Explorer, click **Move**, select the folder to move this to, and click **OK**.
 
-    This triggers a build of the project which will also update the listing file. The messages in the **Console** view indicate that there are build errors.
+    This triggers a build of the project also updates the listing file. The messages in the **Console** view indicate that there are build errors.
 
     The errors are underlined with red wavy lines and a colored bar is added to the left of each line that includes an error.
 
@@ -586,7 +586,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     b.  Right-click the line with the error message in the **Problems** view and select **Quick Fix**.
 
-       The Quick Fix window appears.
+       The Quick Fix window opens.
 
     c.  Click **Enable copybook path...**, then click **Finish**.
     <!-- This: entry for directory containing CTIMERD doesn't seem to be correct as we're not giving a concrete example here.-->
@@ -614,9 +614,9 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
 [Back to Top](#overview)
 
-The first thing you need to do is to check that the Bankdemo application is executing correctly.
+The first thing you must do is to check that the Bankdemo application is executing correctly.
 
-To execute the JCL, you need to run the application in an instance of the Rocket Enterprise Server (sometimes abbreviated to Enterprise Server). This demonstration includes a pre-configured enterprise server instance called BANKDEMO which you need to import in Enterprise Server and start before you execute the Bankdemo application.
+To execute the JCL, run the application in an instance of the Rocket Enterprise Server (sometimes abbreviated to Enterprise Server). This demonstration includes a preconfigured enterprise server instance called BANKDEMO which you must import in Enterprise Server and start before you execute the Bankdemo application.
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
 
@@ -627,19 +627,19 @@ This sample provides a script that creates the region definition to use in this 
 1.  Navigate to the `/home/*username*/MFETDUSER/tutorial` directory and open a terminal from this location.
 2.  Type **./createdefinition.sh** and press **Enter**. 
 
-    Note: You might need to give execute permissions to this script. To do this, execute: **chmod +x createdefinition.sh**.
+    Note: You might have to give execute permissions to this script. To do this, run: **chmod +x createdefinition.sh**.
 
     This executes the script and creates the Enterprise Server region definition file, BANKDEMO.xml, in the same folder. The file is configured for the location in which you saved the sample files.
 
 Next, ensure that the following two services are running on your machine:
 
-   -   Enterprise Server Common Administration (ESCWA) - execute the following from a terminal that has the COBOL environment set if you need to start this:
+   -   Enterprise Server Common Administration (ESCWA) - run the following from a terminal that has the COBOL environment set if you must start this:
 
         ```
         nohup escwa < /dev/null > escwa.out 2>&1 &
         ```
 
-   -   Directory Server - from a terminal that has the COBOL environment set, execute the following as root if you need to start this:
+   -   Directory Server - from a terminal that has the COBOL environment set, run the following as root if you must start this:
 
         ```
         mfds64 &
@@ -672,7 +672,7 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 
 **Associate the BANKDEMO Enterprise Server with Your Project**
 
-You need to associate your application with the BANKDEMO server. This ensures that the project's **loadlib** directory is used by the BANKDEMO enterprise server. BANKDEMO is configured to use the \$IDE_LOADLIB environment variable as the first location in the search path and, when the IDE starts the server, then \$IDE_LOADLIB is set to the output directories of any project associated with the server.
+You must associate your application with the BANKDEMO server. This ensures that the project's **loadlib** directory is used by the BANKDEMO enterprise server. BANKDEMO is configured to use the \$IDE_LOADLIB environment variable as the first location in the search path and, when the IDE starts the server, then \$IDE_LOADLIB is set to the output directories of any project associated with the server.
 
 **1.** Right-click the BANKDEMO server and select **Associate with project \> Bankdemo**.
 
@@ -684,7 +684,7 @@ Configure the IDE to start the associated BANKDEMO server automatically as follo
 
 1.  Click **Window** \> **Preferences**.
 2.  Expand **Rocket Software** and click **Enterprise Server**.
-3.  Set the following options on this page to **Always** in order to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
+3.  Set the following options on this page to **Always** to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
 
     - **Automatically start the associated server** - this ensures the IDE will start the server if it is not running when you execute the application.
 
@@ -780,7 +780,7 @@ The IBM CICS application requires that you use a 3270 terminal emulator. This tu
 
 **Start the HACloud Session Server**
 
-You need to start the HACloud session server before you can use the HACloud TN3270 emulator. To do this you need to run `startsessionserver.sh` script as follows:
+You must start the HACloud session server before you can use the HACloud TN3270 emulator. To do this you must run `startsessionserver.sh` script as follows:
 
 1. Ensure that the installed Java is added to the PATH environment variable.
 2. Open a terminal and set up the COBOL environment in it.
@@ -849,7 +849,7 @@ You are going to debug the batch Bankdemo application.
 
 **Starting the Server**
 
-If the enterprise server is not yet started, you need to start it as follows:
+If the enterprise server is not yet started:
 
 1.  Open the **Server Explorer** view.
 
@@ -861,7 +861,7 @@ If the enterprise server is not yet started, you need to start it as follows:
 
 **Viewing the Debug Configurations**
 
-The project has two pre-configured debug configurations: a CICS Debug and a JCL Debug one. You will use these to debug the batch and the online application.
+The project has two preconfigured debug configurations: a CICS Debug and a JCL Debug one. You will use these to debug the batch and the online application.
 
 1.  In the Application Explorer view, select the BANKDEMO project and click **Run** \> **Debug Configurations**.
 2.  In the left pane of the **Debug Configurations** dialog box, expand **COBOL Enterprise Server**.
@@ -907,7 +907,7 @@ You are going to look at some simple features inside the debugger. Start by subm
 
     ![](images/70f9ebaf905466c7d4585f32d7e5913b.jpg)
 
-If you need to display the line numbers in the editor:
+To display the line numbers in the editor:
 
 1. Right-click in the left-most gray area of the editor, and click **Show Line Numbers**.
 
@@ -1037,7 +1037,7 @@ You can now start the debugger. It starts in the background until a program whic
 
 6.  In the toolbar, click the downward arrow next to the debug ![](images/24d5d6d43ac43436a7327b3d6837e46f.jpg) icon.
 
-    You can see that the pre-configured CICS and JCL debug configurations have now appeared in the menu.
+    You can see that the preconfigured CICS and JCL debug configurations are now listed in the menu.
 
 10. In the HACloud view, press **Ctrl + F2** to clear the screen of the emulator.
 11. Enter transaction id BANK, and press **Enter**.

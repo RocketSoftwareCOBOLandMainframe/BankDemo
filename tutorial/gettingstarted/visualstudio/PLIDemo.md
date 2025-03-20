@@ -34,7 +34,7 @@ This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is ins
 
 ### Start the HACloud Session Server
 
-You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this you need to start the respective Windows service.
+You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this you must start the respective Windows service.
 
 1. Ensure you have a 64-bit Java installed and added to the PATH environment variable.
 2. From the Windows **Start** menu open the Services application.
@@ -56,8 +56,8 @@ In this release, the Enterprise Server security features are enabled by default.
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
-1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. You will see a series of messages as the script disables default security.
-2. Restart the Directory Server and Enterprise Server Common Web Administration services to pick up the configuration changes. You will now be able to use ESCWA without having to log in.
+1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. You see a series of messages as the script disables default security.
+2. Restart the Directory Server and Enterprise Server Common Web Administration services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
 
 
@@ -116,7 +116,7 @@ In this release, the Enterprise Server security features are enabled by default.
     Visual Studio debugging starts again so you can debug through the `SBANK10P` program.         
 7. Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.         
   
-    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application. Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
+    As this application is pseudo-conversational, debugging starts and ends with the invocation and completion of each transaction in the application. Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
 8.  Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.          
 9.  You can now disconnect your TN3270 terminal to end the demo.          
 

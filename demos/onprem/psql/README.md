@@ -70,7 +70,7 @@ The demonstration also includes some instructions how to build the application f
     2. If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration:
        - Change the `is64bit` and/or the `product` options as required. 
        
-       For example, `"product"="EDz"` indicates you are going to build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
+       For example, `"product"="EDz"` indicates you will build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
 
 7. Run the following python script from the `scripts` directory with the specified option to create the enterprise server instance, and to deploy the application:
 

@@ -40,13 +40,13 @@ The demonstration also includes some instructions to build the application from 
 
 3. Verify that there are no other demonstration servers running. This is to ensure that no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones other servers in this repository might use.
 4. Start a command prompt (Windows) or a terminal (Linux), and navigate to the `scripts` directory of the demonstration folder.
-5. If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you need to change the configuration first:
+5. If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration first:
     
     a. Open the `scripts/options/vsam.json` file in a text editor.
     
     b. Change the `is64bit` and/or the `product` options as required. 
     
-    For example, `"product"="EDz"` indicates you are going to build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
+    For example, `"product"="EDz"` indicates you will build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
 5. Run the following command at the command prompt or the terminal. 
 
     ```
