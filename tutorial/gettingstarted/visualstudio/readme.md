@@ -135,7 +135,7 @@ To check what directives will be set:
 1.  In Visual Studio, click **Tools** \> **Options**.
 2.  Scroll down to and expand **Rocket Software Tools**, expand **Directives**, and click **COBOL**.
 
-    ![](images/21e1a697eadb5fb5daf621dcf65d4d54.png)This page enables you to configure what directives are set on the COBOL files that you add to your project. The directives scanning determines the dialect, what EXEC CICS and EXEC SQL statements are used in the COBOL source files and sets directives as detailed on this page.
+    ![](images\7FAE6822-8BD0-4B54-A83E-B43E3B90F8F6.png)This page enables you to configure what directives are set on the COBOL files that you add to your project. The directives scanning determines the dialect, what EXEC CICS and EXEC SQL statements are used in the COBOL source files and sets directives as detailed on this page.
 
 3.  Ensure all options are selected.
 
@@ -368,7 +368,7 @@ You are going to explore some of the COBOL editing features using the **ZBNKPRT1
  1. Scroll down the file to line 61 and see some COPY statements. 
  2. Right-click the line for COPY CDATED, and click **Show "CDATED.CPY"**. This expands the copybook directly in the code of **ZBNKPRT1.cbl**. 
 
-    ![](images/96a84c25adce3137dc24e29c11862efd.png)
+    ![](images\showcopybook754.png)
 
 3. You can edit the code of the copybook in the expanded view so introduce an error in the code now.
 
@@ -516,7 +516,6 @@ You can remove the line numbers from your code - note that the **Renumber** and 
 **JCL editing**
 
 1. Double-click the **ZBNKSTMT.jcl** file in Solution Explorer to open it in the JCL editor.
-![](images/52305b947e344ca4dbe5ddcef8a20d07.jpg)
 
 The editor enables you to edit JCL files in text view and offers a basic level of colorization for items such as reserved words and comments. The JCL editor does not support background parsing or syntax checking.
 
@@ -537,7 +536,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 2.  In Solution Explorer, right-click **MBANK10.bms** in the **bms** folder, and click **Open BMS Painter**.
 
     This starts the external Rocket BMS Painter.
-    ![](images/bc3927fe772d2feba8915dd3c18e2c45.png)
+    ![](images\1962FA41-8CB1-4DD1-A1A5-1707F00D6509.png)
 
 3.  In BMS Painter, you can click fields and move them by dragging.
 
@@ -671,7 +670,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     The lines that include syntax errors are marked with asterisks (\*\*).
 
-    ![](images/6903355b6c46ff24bd954072e2755d03.jpg)
+    ![](images\29930242-CCA4-471C-A535-6CD24F12A117.png)
 
 9. In the IDE, fix the errors in **ZBNKPRT.cbl**, save the file, and rebuild the solution.
 
