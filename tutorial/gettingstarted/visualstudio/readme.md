@@ -77,7 +77,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
 2. You then see the Visual Studio start screen - click **Continue without code**:
 
-    ![](images/6326f32b7e2e120f01660f66c878a104.png)
+
 The windows you see open in Visual Studio and their layout depend on whether you have used the IDE before and on the edition of Visual Studio that you might have installed on your machine. You can move, resize and minimize windows which is why they may not look exactly like described here.
 ![](images/6534d4dbc16deb9b9458c08eec09a619.png)
 
@@ -764,7 +764,7 @@ These are the steps to start the server manually, and are included for completen
     ![](images/3b9dcb9098ce66eb406d4451fe59e8c6.png)
     See the **Output** window for the messages from the server log that show that the server has started.
 
-3.  Right-click **Micro Focus Servers** again, and then click **Refresh** to see that the server has started.
+3.  Right-click **Rocket Enterprise Server** again, and then click **Refresh** to see that the server has started.
 
     You are now ready to execute the JCL job.
 
