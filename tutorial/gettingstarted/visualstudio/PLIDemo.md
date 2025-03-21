@@ -85,12 +85,16 @@ This option does not exist in the UI-->
 1. In Visual Studio:
 
      a.  Click **File > Open > Project/Solution**.
+
      b.  Navigate to the `C:\MFEDTDUSER\tutorial\projects\Studio\pli` folder.
+
      c.  Select **bankdemo.sln**, and then click **Open**.
 2. Check the project's active configuration:
 
     a.  Right-click the **bankdemo** solution in Solution Explorer and click **Properties**.
+
     b.  Click **Configuration Properties** and then click  **Configuration**. 
+    
         You see that currently, this demo is designed to run only in 64-bit mode. If you make any changes to the default configuration or platform that you want to keep, click **OK** to close the dialog box.  
 
 3. Click **Build > Build Solution**.
