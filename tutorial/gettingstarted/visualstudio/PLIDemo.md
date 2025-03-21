@@ -95,7 +95,7 @@ This option does not exist in the UI-->
 
     b.  Click **Configuration Properties** and then click  **Configuration**. 
     
-        You see that currently, this demo is designed to run only in 64-bit mode. If you make any changes to the default configuration or platform that you want to keep, click **OK** to close the dialog box.  
+    You see that currently, this demo is designed to run only in 64-bit mode. If you make any changes to the default configuration or platform that you want to keep, click **OK** to close the dialog box.  
 
 3. Click **Build > Build Solution**.
 4. Check the **Output** window near the bottom of the IDE to verify that the solution has built successfully. The last line in the log typically looks like this: 
