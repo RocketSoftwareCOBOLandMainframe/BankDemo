@@ -19,6 +19,18 @@ Before running this demo remotely, verify that you have an RDO and MFDS agent al
 
 ## How to Run the Demonstration
 
+### Disable the default Enterprise Server security configuration
+
+The Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
+
+> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To recreate the Default Enterprise Server Security Configuration* in the product documentation. 
+
+1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. A series of messages appear as the script disables default security.
+2. Restart MFDS and ESCWA to pick up the configuration changes. You can now use ESCWA without having to log in.
+3. Restart any running enterprise server regions so that they pick up the configuration changes. 
+   Regions no longer require credentials for starting/stopping and other actions.
+
+
 ### Connect to the default ESCWA server
 
 Ensure that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Existing workspaces might already have this connection.
@@ -73,7 +85,7 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 1. After opening Enterprise Developer for Eclipse, either create a new workspace or open an existing one.
 2. If it's not already open, open the PL/I perspective in the Eclipse IDE by clicking **Window > Perspective > Open Perspective > Other > PL/I**.
-3. Start the project import process by selecting **Import** from the **File** menu or right clicking in the **PL/I Explorer** tab, and selecting **Import > Import**
+3.To start the project import process, open the **File** menu and select **Import** or righ-click in the **PL/I Explorer** tab, and select **Import > Import**.
 4. On the import pop-up window, expand **General**, select **Existing Projects into Workspace**, and click **Next**.
 5. In **Select root directory**, click **Browse** to navigate to the location of the `tutorial\projects\Eclipse\pli` directory, select it, and click **Select Folder**.
 6. The **BANKMAIN**, **FETCHABLES** and **INCLUDES** projects should now be visible on the **Projects** list.
@@ -82,31 +94,6 @@ You must start the HACloud session server before attempting to use the HACloud T
 9. Verify that the active build configuration is 'x64' in the project properties before continuing, as this demo is designed to run only in 64-bit mode.
 10.  Ensure the project has been built (either because Auto-build is enabled) or by clicking **Build** on the **Project** menu.
 
-### Disable the default Enterprise Server security configuration
-
-The Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
-
-> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To recreate the Default Enterprise Server Security Configuration* in the product documentation. 
-
-1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. A series of messages appear as the script disables default security.
-2. Restart MFDS and ESCWA to pick up the configuration changes. You can now use ESCWA without having to log in.
-3. Restart any running enterprise server regions so that they pick up the configuration changes. 
-   Regions no longer require credentials for starting/stopping and other actions.
-
-### Connect to the default ESCWA server
-
-Verify that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Existing workspaces might already have this connection.
-
-1. In the **Server Explorer** view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
-
-    The **New Enterprise Server Common Web Administration Connection** dialog box is displayed.
-2. In the **Name** field, type **Local**.
-3. In the **Server address** field, type **localhost**.
-4. In the **Server port** field, leave as the default 10086.
-5. If the server connection is TLS-enabled, select **TLS Enabled**, and then click **Browse** and select the appropriate certificate.
->**Note**: If **TLS Enabled** is selected, but you do not specify a certificate, the default Java keystore is searched for a valid one.
-6. Click **Finish**.
-The new ESCWA connection is displayed at the top level, in the **Server Explorer**.
 
 ### Configure the BANKDEMO enterprise server for PL/I:
 
@@ -140,9 +127,9 @@ Making these associations before you start the server enables the executables bu
 10. In the TN3270 emulator window, type a User id of **b0001**, and anything for the password, and press **Enter**.
     
     Eclipse restarts debugging so you can debug through the SBANK10P program.          
-12. Once you are ready to run the program to completion, select **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.      
+12. Once you are ready to run the program to completion, click **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.      
 
-    As this application is psuedo-conversational, debugging will start and end with the invocation and completion of each transaction in the application.  Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
+    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application.  Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
 13. Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.
 14. You can now disconnect your TN3270 terminal to end the demo.
 
