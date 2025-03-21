@@ -151,7 +151,7 @@ Your project is preconfigured so that the build process creates the output files
 
     The project comes with a predefined configuration called **loadlib**.
 
-3.  Note that the **Output path** field points to the loadlib directory which will be created in the project directory at build time.
+3.  Note that the **Output path** field points to the `loadlib` directory which will be created in the project directory at build time.
 4.  You can click **Cancel** on the project properties dialog box.
 
 **Adding the Demo Source Files**
@@ -444,6 +444,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 2.  In the Application Explorer view, go to the **bms\\cobol** folder of your project, right-click **MBANK10.bms** and select **Open With** \> **BMS Paint**.
 
     ![](images/ad53b86263c5a5de6c2f308fe5433ac3.png)
+    
     This starts the external Rocket BMS Painter.
 
 3.  In BMS Painter, you can click fields and move them by dragging.

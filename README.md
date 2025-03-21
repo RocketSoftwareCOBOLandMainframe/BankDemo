@@ -14,11 +14,11 @@ To use these materials, download the assets of the project [release](https://git
 ## <a name="intro"></a>Introduction
 
 The Bankdemo application is a simplified mainframe "green screen" banking application which runs under Rocket
-Enterprise Server. This project provides demonstrations and tutorials of various ways you can configure or modify the application
+Enterprise Server. This project provides demonstrations and tutorials of several ways you can configure or modify the application
 to suit differing requirements which could then be used as a template for running and configuring your own application.
 
 The project demonstrates a selection of the capabilities of Rocket Enterprise Server and these options will be extended over time. 
-It demonstrates applications running on-premise and also includes introductory tutorials for the use of
+It demonstrates applications running on premises and includes introductory tutorials for the use of
 the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
 
 In the simplest configuration, it demonstrates an IBM&reg; CICS&reg; and an JCL COBOL applications that access banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
@@ -55,11 +55,11 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Open PL/I Bankdemo Application in Enterprise Developer for Eclipse](tutorial/gettingstarted/eclipse/PLIDemo.md)
         - [Open PL/I Bankdemo Application in Enterprise Development for Visual Studio](tutorial/gettingstarted/visualstudio/PLIDemo.md)
     - Requirements: 
-        - The Directory Server (mfds) service must be running
+        - Ensure that the Directory Server (mfds) service is running
         <!-- The service is still called Microfocus Directory Server-->
-        - The Enterprise Server Common Web Administration (ESCWA) service must be running and listening on the default localhost port - 10086.
+        - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
 
-2. <a name="onprem"></a> Demonstrations of the Rocket Enterprise Server capabilities in "on-premise" scenarios:
+2. <a name="onprem"></a> Demonstrations of the Rocket Enterprise Server capabilities in "on premises" scenarios:
     - Prerequisite software: 
         - Rocket Enterprise Server or Enterprise Developer on Windows or on a supported Linux distribution.
         - Python 3 with the `requests` and for the PostgreSQL demo `psycopg2-binary` packages (use the following command to install the packages: `python -m pip install requests psycopg2-binary`)
@@ -70,7 +70,7 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Deploying and running Bankdemo with VSAM stored in PostgreSQL using MFDBFH](demos/onprem/psqlmfdbfh/README.md) 
         - [Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL](demos/onprem/psqlpac/README.md) 
     - Requirements: 
-        - The Directory Server (mfds) service must be running
-        - The Enterprise Server Common Web Administration (ESCWA) service must be running and listening on the default localhost port - 10086.
+        - Ensure that the Directory Server (mfds) service is running
+        - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
 
 Use the **Issues** tab to report issues, or to raise questions.
