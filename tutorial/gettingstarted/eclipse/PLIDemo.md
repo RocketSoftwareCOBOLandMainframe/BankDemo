@@ -10,12 +10,12 @@ If you decide to use the remote debug instructions, check with your system admin
 
 You must have the following software installed:
 
-- Rocket® Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
+- Rocket® Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the Enterprise Developer release notes.
 - A TN3270 terminal emulator to run the IBM CICS application.
+ 
+     **Note:** A license for Rocket® Host Access for the Cloud (HACloud) Session Server TN3270 emulator is included with Enterprise Developer. 
 
-**Note:** A license for Rocket® Host Access for the Cloud (HACloud) Session Server TN3270 emulator is included with Enterprise Developer. 
-
-Before running this demo remotely, verify that you have an RDO and MFDS agent already configured and running on the remote UNIX/Linux system. See the Rocket product documentation for more information.
+Before running this demo remotely, verify that you have an RDO and MFDS agent already configured and running on the remote UNIX/Linux system. For more details, see the Rocket product documentation.
 
 ## How to Run the Demonstration
 
@@ -23,10 +23,10 @@ Before running this demo remotely, verify that you have an RDO and MFDS agent al
 
 The Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
 
-> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To recreate the Default Enterprise Server Security Configuration* in the product documentation. 
+> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials, then this should be performed on a network-isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To Recreate the Default Enterprise Server Security Configuration* in the product documentation. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. A series of messages appear as the script disables default security.
-2. Restart MFDS and ESCWA to pick up the configuration changes. You can now use ESCWA without having to log in.
+2. Restart the Directory server (MFDS) and ESCWA services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions so that they pick up the configuration changes. 
    Regions no longer require credentials for starting/stopping and other actions.
 
@@ -61,7 +61,7 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 **Windows**
 
-1. Ensure you have a 64-bit Java installed and added to the PATH environment variable.
+1. Ensure you have a 64-bit Java installed and added to the PATH environment variable. <!-- adding JAVA to the PATH environment variable resulted in the emulator not opening as expected when running the demo. When I attempted to go through it a second time, I did not configure this and the emulator opened on its own. -->
 2. Open the Windows Service Manager.
 3. Go to **Rocket HA Cloud** and click **Start the service**. 
 4. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
