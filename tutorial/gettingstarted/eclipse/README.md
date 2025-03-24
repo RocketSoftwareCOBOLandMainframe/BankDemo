@@ -141,9 +141,11 @@ You use the Bankdemo project supplied with the sample to create your project in 
     ![](images/13b0e3acb759b42320f73adb22983474.png)
 
 3.  Enter the template parameters:
-    1.  Click **Retrieve** next to **Template Path**.
-    2.  Browse to the `C:\MFETDUSER\tutorial\projects\Eclipse\cobol\Bankdemo` folder and click **Select Folder**.
-    3.  Type Bankdemo in the project name field and click **OK**.
+    a.  Click **Retrieve** next to **Template Path**.
+
+    b.  Browse to the `C:\MFETDUSER\tutorial\projects\Eclipse\cobol\Bankdemo` folder and click **Select Folder**.
+    
+    c.  Type Bankdemo in the project name field and click **OK**.
 
     ![](images/2023b448364bdc76a9a0830175899e49.jpg)
 
