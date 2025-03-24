@@ -1031,7 +1031,7 @@ COBOL watchpoints enable you to watch the memory associated with data items. You
 
 You can use the COBOL Source Information (CSI) functionality and its **Quick Browse** dialog to obtain information about your program when you are debugging it.
 
-1.  Open the **SBANK00P.cbl** file in the editor.
+1.  Open the `SBANK00P.cbl` file in the editor.
 2.  Click ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar to start the CSI query control.
 
     See *COBOL toolbar* in the product help for more information.
@@ -1043,6 +1043,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 4.  Press **Enter** to run the query.
 
     The results are shown in the **Enterprise Developer Code Analysis** window:
+
     ![](images\1758A9F5-4C16-40DF-BFED-E4DF19932E46.jpeg)
 
 **Running COBOL reports**
@@ -1051,6 +1052,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 1.  With the `SBANK00P.cbl` file still opened in the editor, click the down arrow next to ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar, and click **Unreferenced Data**.
 
       The IDE shows the results in the **Enterprise Developer Code Analysis** window:
+
     ![](images\924799F6-F6F8-4189-B7C5-B69139EF7F97.png)
 
     2.  Expand any of the lines in the report and double-click a line in the result to highlight the lines of code that include unreferenced data.
