@@ -29,7 +29,7 @@ A preconfigured, fully executing application, BankDemo is available from the Roc
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
-    ![](images/080f42a3aadf5eea7bced48e38d755cd.png) **Important:** Before attempting this tutorial, create a directory on your computer for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a **c:\\MFETDUSER\\datafiles** folder, etc.
+    ![](images/080f42a3aadf5eea7bced48e38d755cd.png) **Important:** Before attempting this tutorial, create a directory on your computer for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a `c:\\MFETDUSER\\datafiles` folder, etc.
 
     As part of this tutorials, you use the supplied standard Visual Studio project for Mainframe Subsystem Applications to set up a development environment for this application. The tutorials show how you can:
     -   Edit the source files
@@ -60,7 +60,7 @@ In this release, the Enterprise Server security features are enabled by default.
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To re-create the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. A series of messages appear as the script disables default security.
-2. Restart MFDS and ESCWA to pick up the configuration changes. Now, you can use ESCWA without having to log in.
+2. Restart the Directory Servger (MFDS) service and the ESCWA service to pick up the configuration changes. Now, you can use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions no longer require credentials for starting/stopping and other actions.
 
 ## Starting the Visual Studio Integrated Development Environment
@@ -79,7 +79,6 @@ In this release, the Enterprise Server security features are enabled by default.
 
 
 The windows you see open in Visual Studio and their layout depend on whether you have used the IDE before and on the edition of Visual Studio that you have installed. You can move, resize and minimize windows which is why they may not look exactly like described here.
-![](images/6534d4dbc16deb9b9458c08eec09a619.png)
 
 You can see:
 
@@ -108,7 +107,7 @@ You can see:
  **Open the Bankdemo solution**
 
 1.  Click **File** \> **Open** \> **Project/Solution**.
-2.  Navigate to the **C:\\MFETDUSER\\tutorial\\projects\\Studio\\cobol** folder, select **Bankdemo.sln**, and click **Open**.
+2.  Navigate to the `C:\MFETDUSER\tutorial\projects\Studio\cobol` folder, select `Bankdemo.sln`, and click **Open**.
 
     This opens the solution in the Solution Explorer window.
 
@@ -116,15 +115,15 @@ You can see:
 
 [Back to Top](#overview)
 
-The source files of the demonstration application are stored in subfolders named after the file type (for example, **bms**, **cobol**, **copybook**, **jcl**) in the **C:\\MFETDUSER\\sources** directory. The Visual Studio project is in the **C:\\MFETDUSER\\tutorial\\projects\\Studio\\cobol** folder. You will be adding the source files to the Visual Studio project. The other folders that are not so obvious are:
+The source files of the demonstration application are stored in subfolders named after the file type (for example, `bms`, `cobol`, `copybook`, `jcl`) in the `C:\MFETDUSER\sources` directory. The Visual Studio project is in the `C:\MFETDUSER\tutorial\projects\Studio\cobol` folder. You will be adding the source files to the Visual Studio project. The other folders that are not so obvious are:
 
 | **Folder Name**       | **Use**                                                                                                                                             |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| system                | Contains some resource definition data for IBM CICS – this has been exported from the Mainframe and converted into a suitable form for the workstation. |
-| system\\catalog       | Stores the catalog.                                                                                                                                 |
-| system\\catalog\\data | Stores the data files.                                                                                                                              |
-| system\\logs          | Contain various log files indicating the progress of your application execution.                                                                    |
-| system\\rdef          | Contains the resource definition files for the BANKDEMO Enterprise Server region.                                                                   |
+| `system`                | Contains some resource definition data for IBM CICS – this has been exported from the Mainframe and converted into a suitable form for the workstation. |
+| `system\catalog`       | Stores the catalog.                                                                                                                                 |
+| `system\catalog\data` | Stores the data files.                                                                                                                              |
+| `system\logs`          | Contain various log files indicating the progress of your application execution.                                                                    |
+| `system\rdef`          | Contains the resource definition files for the BANKDEMO enterprise server region.                                                                   |
 
 **Configuring directives scanning**
 
@@ -148,7 +147,7 @@ To check what directives will be set:
 To add the COBOL programs to your project:
 
 1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
-2.  Browse to **C:\\MFETDUSER\\sources\\cobol\\core**.
+2.  Browse to `C:\MFETDUSER\sources\cobol\core`.
 
     By default, the file type filter is set to **Enterprise Files (\*.cbl; \*.cpp; \*.cob, ...)**. 
 
@@ -174,7 +173,7 @@ To add the COBOL programs to your project:
 
 **Adding the copybook files**
 
-The copybook files in the **C:\\MFETDUSER\\sources\\copybook** folder are used by the COBOL programs in the project. Your project is preconfigured to look for the copybook files in that location so the compilation will not fail. To see where this is set:
+The copybook files in the `C:\MFETDUSER\sources\copybook` folder are used by the COBOL programs in the project. Your project is preconfigured to look for the copybook files in that location so the compilation will not fail. To see where this is set:
 
 1.  Click **Project** \> **BankDemo Properties** to open the project properties.
 2.  Click the **Dependency Paths** tab, and ensure **Type** is set to **COBOL Copybook Paths**. The folder that is listed on that page is the folder that includes the copybook files.
@@ -186,7 +185,7 @@ The copybook files in the **C:\\MFETDUSER\\sources\\copybook** folder are used b
 You need to add the demonstration's BMS file to the project. To do this:
 
 1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
-2.  Browse to **C:\\MFETDUSER\\sources\\bms\\cobol** folder.
+2.  Browse to `C:\MFETDUSER\sources\bms\cobol` folder.
 3.  The file extension filter should be set to **Enterprise Files** but, as an exercise, you can set it to **BMS Files (\*.bms)**.
 
     ![](images/d6d3d2c642cb1e9bc255d62083768252.jpg)
@@ -200,7 +199,7 @@ You need to add the demonstration's BMS file to the project. To do this:
 To add the JCL file to your project:
 
 1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
-2.  Browse to **C:\\MFETDUSER\\sources\\jcl** folder.
+2.  Browse to `C:\MFETDUSER\sources\jcl` folder.
 3.  Set the file type filter to **JCL/VSE Files (\*.jcl; \*.vse)**.
 4.  Select **ZBNKSTMT.jcl**, and click **Add**.
 
@@ -211,7 +210,7 @@ To add the JCL file to your project:
 The demonstration application includes a number of data files. To see how you can edit data files, you only need to look at one of these files so you do not need to add a folder for it to the project. To add the data file to your project:
 
 1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
-2.  Browse to **C:\\MFETDUSER\\datafiles**.
+2.  Browse to `C:\MFETDUSER\datafiles`.
 3.  Set the file type filter to **All Files (\*.\*)**.
 4.  Select the **MFI01V.MFIDEMO.BNKACC.dat**, and **MFI01V.MFIDEMO.BNKACC.str** files, and then click **Add**.
 
@@ -300,21 +299,21 @@ The properties you set at project level apply to all files in the project. Here'
 
 2.  Click the **Dependency Paths** tab.
 
-    **Type** should be set to **COBOL Copybook Paths**. Note that this is already set to **..\\..\\..\\..\\..\\sources\\copybook** set. This is the folder in the sample where the IDE is going to look for the copybook files required by this project and is relative to the project file.
+    **Type** should be set to **COBOL Copybook Paths**. Note that this is already set to `..\..\..\..\..\sources\copybook` set. This is the folder in the sample where the IDE is going to look for the copybook files required by this project and is relative to the project file.
 
     ![](images/1180afcfd2ee8ac9ddfe40bd62dcd34d.jpg)
 
 3.  Click the **BMS** tab.
 4.  Note the following paths in the **Output** section:
 
-    **.\\generated** in the **Copybook Output Path** field
+    **.\generated** in the **Copybook Output Path** field
 
     This is the path for the copybooks that will be produced from the BMS files during the build.
 
 5.  Click the **COBOL** tab.
     -   Note that the **COBOL dialect** is set to **Enterprise COBOL for z/OS** for the entire project.
     -   Note that **Character set** is set to **ASCII**. You may need to scroll the **COBOL** property page to the right or expand the IDE to see the setting.
-    -   Note that the **Output path** is set to **.\\bin\\x64\\Debug\\**. This is where the build will produce the application executables.
+    -   Note that the **Output path** is set to `.\bin\x64\Debug\`. This is where the build will produce the application executables.
     -   See what other directives have been set in the **Additional Directives** field.
     -   **Build Settings** is a read-only field that shows all directives that are set on the project.
 
@@ -353,7 +352,7 @@ This topic describes the editing features for the various file types used in you
 
 **Editing COBOL Files**
 
-You are going to explore some of the COBOL editing features using the **ZBNKPRT1.cbl** program which produces a report from a sequential data file.
+You are going to explore some of the COBOL editing features using the `ZBNKPRT1.cbl` program which produces a report from a sequential data file.
 
 1.  In Solution Explorer, double-click **ZBNKPRT1.cbl**.
 
@@ -366,7 +365,7 @@ You are going to explore some of the COBOL editing features using the **ZBNKPRT1
 **Expanded** **Copybook** **View**
 
  1. Scroll down the file to line 61 and see some COPY statements. 
- 2. Right-click the line for COPY CDATED, and click **Show "CDATED.CPY"**. This expands the copybook directly in the code of **ZBNKPRT1.cbl**. 
+ 2. Right-click the line for COPY CDATED, and click **Show "CDATED.CPY"**. This expands the copybook directly in the code of `ZBNKPRT1.cbl`. 
 
     ![](images\showcopybook754.png)
 
@@ -399,7 +398,7 @@ Apart from scrolling down the code in the editor, you can use the following feat
 
         ![](images/4eb0d2e0b64aa37e7ae6197ac9483430.jpg)
 
-   -   In Solution Explorer, open the **SBANK00P.cbl** file and click **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
+   -   In Solution Explorer, open the `SBANK00P.cbl` file and click **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
     ![](images/15aVSGoToLine.png)
    
    -   Click **Locate Definition**, ![](images/16VSlocatedefinition.png), in the COBOL toolbar and start typing a search term. 
@@ -451,7 +450,7 @@ You can use the mouse to mark the text. To make a block selection of the code:
 **Rename items in the code**   
   Try and see how rename refactoring works in the IDE:
 
-1. Click **Go To Procedure Division**, ![](images/d471eb4d279d6d6c4bb02406349ccf43.jpg), in the COBOL toolbar to go to the Procedure Division in the **ZBNKPRT1.cbl** file. 
+1. Click **Go To Procedure Division**, ![](images/d471eb4d279d6d6c4bb02406349ccf43.jpg), in the COBOL toolbar to go to the Procedure Division in the `ZBNKPRT1.cbl` file. 
 2. Scroll down to line 228. 
 3. Right-click WS-EXEC-PARM-LL, and click **Rename**. 
     
@@ -477,7 +476,7 @@ You can use the mouse to mark the text. To make a block selection of the code:
     
 Let's look at how Smart Editing works with background COBOL parsing:
 
-1.  Scroll down to line 259 in the ZBNKPRT1.cbl file and start typing the following, starting in area A of the COBOL editor, one character at a time:
+1.  Scroll down to line 259 in the `ZBNKPRT1.cbl` file and start typing the following, starting in area A of the COBOL editor, one character at a time:
 
         MOVE W TO
 
@@ -509,7 +508,7 @@ You should now see line numbers running down both sides of the source code:
 
 You can remove the line numbers from your code - note that the **Renumber** and **Unnumber** commands are not available in the expanded copybook view.
 
-1. Ensure that **ZBNKPRT1.cbl** is opened in the editor, click the downward arrow next to ![](images/e711062673ff7c4626a662d04d262ad7.jpg) in the COBOL  toolbar, and click **Unnumber Left**. This removes the line numbers from the COBOL sequence area.
+1. Ensure that `ZBNKPRT1.cbl` is opened in the editor, click the downward arrow next to ![](images/e711062673ff7c4626a662d04d262ad7.jpg) in the COBOL  toolbar, and click **Unnumber Left**. This removes the line numbers from the COBOL sequence area.
 
    ![](images/28VSUnnumberleft.png)
 
@@ -540,7 +539,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 3.  In BMS Painter, you can click fields and move them by dragging.
 
-    For example, double-click the data field immediately following the text “User Id” and move it to a different position on the map.
+    For example, double-click the data field immediately following the text `User Id` and move it to a different position on the map.
 
 4.  To add a field, click in the desired place in the window and start typing.
 5.  To change a field's properties, right-click it and select **Properties**.
@@ -559,13 +558,13 @@ By default, Visual Studio is configured to use the new Data File Tools utility. 
 1.  Click **Tools \> Options \> Rocket Software Tools \> Data File Tools**.
 2.  Ensure **Use New Data File Tools for supported options** is selected, and click **OK**.
 
-    To edit the **.dat** file:
+    To edit the `.dat` file:
 
-3.  In Solution Explorer, right-click the .dat file and click **Open with Data File Tools**.
+3.  In Solution Explorer, right-click the **.dat** file and click **Open with Data File Tools**.
 
     ![](images/ffa0da317626763eb89bfb00bd291439.jpg)
 
-    This starts the **Data File Editor** and loads the **.dat** file in the **Open Data File** dialog box.
+    This starts the **Data File Editor** and loads the `.dat` file in the **Open Data File** dialog box.
 
 4.  Click **Open Exclusive** to load the file.
 
@@ -574,19 +573,19 @@ By default, Visual Studio is configured to use the new Data File Tools utility. 
 
       ![](images\datafiletoolsscreengrabmarch2025.png)
     - The right-hand pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a much better, editable form.
-6.  Change the value of BAC-REC-BALANCE from 91.14 to 132.76 as follows: 
+6.  Change the value of `BAC-REC-BALANCE` from `91.14` to `132.76` as follows: 
 
-    a. Click the line for BAC-REC-BALANCE in the right pane and then click ![](images/4fc0d64d1ee24b2a6869937b20ba5685.jpg), **Edit Record**. This highlights the record.
+    a. Click the line for `BAC-REC-BALANCE` in the right pane and then click ![](images/4fc0d64d1ee24b2a6869937b20ba5685.jpg), **Edit Record**. This highlights the record.
 
-    b.  Double-click in the **Value** field for BAC-REC-BALANCE.
+    b.  Double-click in the **Value** field for `BAC-REC-BALANCE`.
     
     c.  Use the arrow keys to move the cursor inside the **Value** field.
     
-    d. Type 132.76 then click ![](images/d333b67a20f0bf3c03f1b166d0c952ab.jpg), **Save Record**.
+    d. Type `132.76` then click ![](images/d333b67a20f0bf3c03f1b166d0c952ab.jpg), **Save Record**.
 
     e.  Confirm that you want to save the changes to this record.
    
-    f.  Using the same method, restore the previous value of BAC-REC-BALANCE.
+    f.  Using the same method, restore the previous value of `BAC-REC-BALANCE`.
 7.  Close the Data File Tools utility.
 
 ## Compiling the Source Code
@@ -601,7 +600,7 @@ To compile the application:
 
     The Output window displays information about the progress of the build result
 
-2.  If there are any problems, check the Error List window. Double-click on a line for an error number to position the cursor on it.
+2.  If there are any problems, check the Error List window. Double-click a line for an error number to position the cursor on it.
 
     The build checks for any files that have changed and does two things:
 
@@ -620,9 +619,9 @@ The Bankdemo application already has the required Compiler directives set on the
 
 | **File type**               | **Function**                                                                                |
 |-----------------------------|---------------------------------------------------------------------------------------------|
-| .dll - dynamic link library | Effectively the executable module the Compiler creates for each program.                    |
-| .idy - debugger information | The file created by the Compiler which allows debugging of the module.                      |
-| .obj - object file          | A temporary file the Compiler creates while producing the .dll. You can delete these files. |
+| `.dll` - dynamic link library | Effectively the executable module the Compiler creates for each program.                    |
+| `.idy` - debugger information | The file created by the Compiler which allows debugging of the module.                      |
+| `.obj` - object file          | A temporary file the Compiler creates while producing the .dll. You can delete these files. |
 
 **BMS Compiler control**
 
@@ -632,8 +631,8 @@ The BMS Compiler produces the following two types of file:
 
 | **File type**         | **Function**                                                                                  |
 |-----------------------|-----------------------------------------------------------------------------------------------|
-| .mod - BMS executable | A file created by the BMS compiler which is the executable module relating to the BMS source. |
-| .cpy - copybook       | A copybook that contains the BMS mapping for use in a COBOL program.                          |
+| `.mod` - BMS executable | A file created by the BMS compiler which is the executable module relating to the BMS source. |
+| `.cpy` - copybook       | A copybook that contains the BMS mapping for use in a COBOL program.                          |
 
 **Producing a Compiler listing**
 
@@ -646,7 +645,7 @@ You can configure the IDE to create a fully expanded Compiler listing file durin
 
     During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a Listing subfolder in
 
-    the project directory (**C:\\MFETDUSER\\tutorial\\projects\\Studio\\cobol\\Bankdemo\\Listing** in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. From File Explorer, you can open the file in a text editor such as Microsoft's Notepad and view its contents.
+    the project directory (`C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. From File Explorer, you can open the file in a text editor such as Microsoft's Notepad and view its contents.
 
 **Example of compiling a COBOL program with errors**
 
@@ -655,9 +654,9 @@ You can introduce some Compiler errors into one of the programs to see how the C
 1.  In Solution Explorer, double-click **ZBNKPRT1.cbl**.
 2.  Page down the program a few pages to the start of the Procedure Division around line 224.
 3.  Introduce a few syntax errors as follows:
-    - On line 226 change RUN-TIME to RUN-TME
-    - On line 229 change SPACES to SPOCES
-    - On line 237 place a period after the END-IF
+    - On line 226 change `RUN-TIME` to `RUN-TME`
+    - On line 229 change `SPACES` to `SPOCES`
+    - On line 237 place a period after the `END-IF`
 
      The errors are underlined with red wavy lines and a colored bar is added to the left of each line that includes an error.
 
@@ -665,15 +664,15 @@ You can introduce some Compiler errors into one of the programs to see how the C
 4.  Save the program, and build your solution.
 6. Check the **Error List** window to view the list of errors.
 7. Double-click an error in the list to position the cursor on the line of code that contains the error.
-8. Check the errors in the listing file, **ZBNKPRT.lst** as follows:
+8. Check the errors in the listing file, `ZBNKPRT.lst` as follows:
 
-    **a.** In File Explorer, navigate to **C:\\MFETDUSER\\tutorial\\projects\\Studio\\cobol\\Bankdemo\\Listing**, and open the file in a text editor.
+    In File Explorer, navigate to `C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing`, and open the file in a text editor.
 
     The lines that include syntax errors are marked with asterisks (\*\*).
 
     ![](images\29930242-CCA4-471C-A535-6CD24F12A117.png)
 
-9. In the IDE, fix the errors in **ZBNKPRT.cbl**, save the file, and rebuild the solution.
+9. In the IDE, fix the errors in `ZBNKPRT.cbl`, save the file, and rebuild the solution.
 
     There should be no errors in the build now.
 
@@ -689,11 +688,11 @@ To execute the JCL, you need to run the application in an instance of the Rocket
 
 This sample provides a PowerShell script that creates the region definition to use in this tutorial:
 
-1.  Open File Explorer, and navigate to the **C:\\MFETDUSER\\tutorial** folder.
+1.  Open File Explorer, and navigate to the `C:\MFETDUSER\tutorial` folder.
 2.  Right-click **createdefinition.ps1**, and click **Run with PowerShell**.
-3. Type **A** when prompted for permissions in the PowerShell window.
+3. Type `A` when prompted for permissions in the PowerShell window.
 
-    This executes the script and creates the Enterprise Server region definition file, **BANKDEMO.xml**, in the same folder. The file is configured for the location in which you have saved the sample files.
+    This executes the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you have saved the sample files.
 
 Ensure that the default settings are applied to the Directory Sever:
 
@@ -707,7 +706,7 @@ Ensure that the default settings are applied to the Directory Sever:
 
 3.  Right-click **Rocket Enterprise Servers** and select **Add Directory Server**. This opens the Rocket Directory Server window. 
 
-4.  Ensure that Host name is localhost and the Port number is 86.
+4.  Ensure that Host name is `localhost` and the Port number is `86`.
 
 To import the definition of the Bankdemo logical server (LSER) in Enterprise Server:
 
@@ -719,7 +718,7 @@ To import the definition of the Bankdemo logical server (LSER) in Enterprise Ser
 
 3.  Right-click **localhost**, and click **Import**.
 4.  In the **Import Server** dialog box, click **...** on the line for **Import server definition file**.
-5.  Browse to the **C:\\MFETDUSER\\tutorial** folder, select **BANKDEMO.xml**, and click **OK** twice.
+5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, and click **OK** twice.
 
 6. Check the **Output** window for the results of importing the server. 
 The Server Explorer window should now show a server called BANKDEMO under **Rocket Enterprise Server \> localhost**. If the server is not visible, right-click **Rocket Enterprise Server**, and click **Refresh**
@@ -771,7 +770,7 @@ These are the steps to start the server manually, and are included for completen
 
 **Executing JCL**
 
-The JCL provided in your demo causes the COBOL application to read a file, sort the data and produce a report. The **.jcl** file, **ZBNKSTMT.jcl**, is in the **Bankdemo** project. To submit this job:
+The JCL provided in your demo causes the COBOL application to read a file, sort the data and produce a report. The `.jcl` file, `ZBNKSTMT.jcl`, is in the **Bankdemo** project. To submit this job:
 
 1.  In Solution Explorer, select the JCL file in the project, and then drag it across to Server Explorer, and drop it onto the BANKDEMO server.
 
@@ -866,7 +865,7 @@ This opens the **Host Access for the Cloud** in your default browser and automat
 **Executing the Enterprise Server Demonstration**
 
 1.  Type your logon details, and press **Enter**.
-A suitable **User Id** is b0001. You can type anything as a **Password** - the field must not be empty though.
+A suitable `User Id` is `b0001`. You can type anything as a `Password` - the field must not be empty though.
 
     ![](images/Bankdemo_001.png)
 
@@ -962,7 +961,7 @@ Shows the values of the data items on the current line you have stepped into:
 This window shows the values of data items you have added to the watch list. To set a watch on a data item:
 
 1.  Scroll up to line 67 in **ZBNKEXT1.cbl**.
-2.  Right-click WS-RECORD-COUNTER1 and click **Add Watch**.
+2.  Right-click `WS-RECORD-COUNTER1` and click **Add Watch**.
 
     This adds the item to the Watch window so you can see how it changes as you step through the code.
 
@@ -981,8 +980,8 @@ There are some additional windows you can use as well. To open them:
 
 While debugging, you can preview the values of data items in the current context as follows:
 
-1.  Open the **ZBNKEXT1.cbl** file and scroll down the code to line 227.
-2.  Hover over the WS-RECORD-COUNTER2 data item.
+1.  Open the `ZBNKEXT1.cbl` file and scroll down the code to line 227.
+2.  Hover over the `WS-RECORD-COUNTER2` data item.
 
     This opens a pop-up with the value of the item in the current context:
 
@@ -994,7 +993,7 @@ While debugging, you can preview the values of data items in the current context
 
 Open the Breakpoints window - currently, there are no breakpoints set in the program. You can set a simple breakpoint as follows:
 
-1.  Scroll up the code to line 171 of the **ZBNKEXT1.cbl** file.
+1.  Scroll up the code to line 171 of the `ZBNKEXT1.cbl` file.
 2.  Double-click in the grey area to the left of this line or right-click the line, and click **Breakpoint** \> **Insert Breakpoint**.
 
     ![](images/12d08bc77f0ed11c2dfa4f56b88619f2.jpg)
@@ -1011,14 +1010,14 @@ Open the Breakpoints window - currently, there are no breakpoints set in the pro
 
 5.  Press **F5** to resume the execution.
 
-    You can see that **ZBNKEXT1.cbl** finishes and the debugger starts to debug the second program defined in the JCL.
+    You can see that `ZBNKEXT1.cbl` finishes and the debugger starts to debug the second program defined in the JCL.
 
 **Setting a COBOL watchpoint**
 
 COBOL watchpoints enable you to watch the memory associated with data items. You can add a COBOL watchpoint as follows:
 
-1.  Scroll to line 99 in the code of **ZBNKEXT1.cbl** file.
-2.  Right-click WS-EXEC-PARM-LL, and click **Add COBOL Watchpoint**.
+1.  Scroll to line 99 in the code of `ZBNKEXT1.cbl` file.
+2.  Right-click `WS-EXEC-PARM-LL`, and click **Add COBOL Watchpoint**.
 
     This adds the item to the COBOL Watchpoints window.
 
@@ -1037,7 +1036,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
     See *COBOL toolbar* in the product help for more information.
 
-3.  Enter a simple query such as WS-\*.
+3.  Enter a simple query such as `WS-\*`.
 
     ![](images/165a1e5e420417cd978e4f4b7f82c3ca.jpg)
 
@@ -1049,7 +1048,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 **Running COBOL reports**
 
    Enterprise Developer provides a few COBOL reports which you can run against your COBOL programs to help you understand and optimize them. For example, to run a report to identify any code that cannot be reached or executed, you need to run an unreferenced data report:
-1.  With the **SBANK00P.cbl** file still opened in the editor, click the down arrow next to ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar, and click **Unreferenced Data**.
+1.  With the `SBANK00P.cbl` file still opened in the editor, click the down arrow next to ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar, and click **Unreferenced Data**.
 
       The IDE shows the results in the **Enterprise Developer Code Analysis** window:
     ![](images\924799F6-F6F8-4189-B7C5-B69139EF7F97.png)
@@ -1097,7 +1096,7 @@ To start the debugger:
 
     Visual Studio enters debug mode and a few new windows open in the IDE. HA Cloud starts outside of Visual Studio but does not show the sign-on application screen yet.
 
-    The program SBANK00P starts to execute and execution stops on the first EXEC CICS statement in the code.
+    The program `SBANK00P` starts to execute and execution stops on the first `EXEC CICS` statement in the code.
 
     ![](images/bdf646e57fcb173a8b3704810770b0d9.jpg)
 
