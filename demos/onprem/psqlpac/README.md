@@ -1,40 +1,39 @@
 # Bankdemo Performance and Availability Cluster
-This demonstration configures the Bankdemo application to run in Performance and Availability Cluster (PAC), storing banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. The cluster is formed of two Enterprise Server instances running on the same machine.
+This demonstration configures the Bankdemo application to run in a Performance and Availability Cluster (PAC), storing banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. The cluster is composed of two Enterprise Server instances that are running on the same machine.
 
 The COBOL modules used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk and when not running in a PAC.
 
 The Rocket Secrets Vault is used to store the database credentials.
 
 ## Prerequisites
-- Rocket Enterprise Developer or Enterprise Server
-- A TN3270 terminal emulator:
-   - The Rocket Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
-- The Rocket Directory Server (mfds) must be running and listening on the default port (86)
-- The Enterprise Server Common Web Administration (ESCWA) service must be running and listening on the default port (10086).
-- A Redis server is installed and running
-   - The Rocket Enterprise Developer products on Windows include AdoptRedis which is suitable for testing and demonstration purposes 
-- PostgreSQL version 12 or later must be installed and running
-- PostgreSQL `psql` command needs to be available on the PATH
-- PostgreSQL ODBC driver: 
+- Rocket® Enterprise Developer or Rocket® Enterprise Server.
+- A TN3270 terminal emulator. The Rocket® Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
+- Ensure that the Rocket Directory Server (mfds) is running and listening on the default port (86).
+- Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
+- Ensure that a Redis server is installed and running.
+   - The Rocket Enterprise Developer products on Windows include AdoptRedis which is suitable for testing and demonstration purposes. 
+- Verify that a PostgreSQL version 12 or later is installed and running.
+- Ensure that the PostgreSQL `psql` command is available on the PATH.
+- Install and configure a PostgreSQL ODBC driver: 
    - Windows: [install appropriate driver](https://www.postgresql.org/ftp/odbc/versions/msi/)
    - Ubuntu: sudo apt-get install unixodbc unixodbc-dev odbc-postgresql
    - RedHat: sudo yum install unixODBC postgresql-odbc
    - Amazon Linux 2: sudo yum install unixODBC postgresql-odbc
    - SuSE: sudo zypper install unixODBC psqlODBC
-- Python 3.*n* and the `requests` package. You can install the package after installing Python with the following command: 
+- Ensure that you installed Python 3.*n* and the `requests` package. You can install the package after installing Python with the following command: 
   ```
   python -m pip install requests
   ```
 
 ## Demonstration overview
-This demonstration shows a simple COBOL CICS "green screen" application accessing VSAM data using EXEC CICS statements where that data is actually stored in a PostreSQL database.
-A Performance and Availability Cluster (PAC) is created containing two Enterprise Server instances.
+This demonstration shows a simple COBOL IBM® CICS® "green screen" application accessing VSAM data using `EXEC CICS` statements where that data is actually stored in a PostgreSQL database.
+A Performance and Availability Cluster (PAC) is created containing two enterprise server instances.
 
-The demonstration includes a Python script that helps create the Enterprise Server instances which are:
+The demonstration includes a Python script that helps create the enterprise server instances which are:
 
    - Created in the `BANKPAC1` and `BANKPAC2` subdirectories of this project
    - Created (almost exclusively) using the ESCWA Admin API
-   - A single command-line utility, `caspcrd`, is used to create the default CICS resource definition file
+   - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file
    - Configured for use with JCL and the VSAM datasets are catalogued 
    - Configured as a 64-bit server and can be reconfigured to deploy a 32-bit server (see the next section)
    - Uses pre-built application modules
