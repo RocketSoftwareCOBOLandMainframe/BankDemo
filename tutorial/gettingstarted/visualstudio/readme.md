@@ -29,7 +29,7 @@ A preconfigured, fully executing application, BankDemo is available from the Roc
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
-    ![](images/080f42a3aadf5eea7bced48e38d755cd.png) **Important:** Before attempting this tutorial, create a directory on your computer for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a `c:\\MFETDUSER\\datafiles` folder, etc.
+    ![](images/080f42a3aadf5eea7bced48e38d755cd.png) **Important:** Before attempting this tutorial, create a directory on your computer for the sample files - for example, create a MFETDUSER directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a `c:\MFETDUSER\datafiles` folder, etc.
 
     As part of this tutorials, you use the supplied standard Visual Studio project for Mainframe Subsystem Applications to set up a development environment for this application. The tutorials show how you can:
     -   Edit the source files
