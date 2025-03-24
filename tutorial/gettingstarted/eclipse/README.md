@@ -60,7 +60,7 @@ In this release, the Enterprise Server security features are enabled by default.
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. You see a series of messages as the script disables default security.
-2. Restart the Directory Server and Enterprise Server Common Web Administration services to pick up the configuration changes. You can now use ESCWA without having to log in.
+2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
 
 
@@ -68,13 +68,20 @@ In this release, the Enterprise Server security features are enabled by default.
 
 [Back to Top](#overview)
 
-1.  To start the Eclipse IDE, click **Start \> All Programs \> Rocket Enterprise Developer \> Enterprise Developer for Eclipse** on Windows 10. 
+1. To start Enterprise Developer.
+
+    **Windows 10**
+
+    - Click **Start \> All Programs \> Rocket Enterprise Developer \> Enterprise Developer for Eclipse** . 
+    **Windows 10**
+    
+    - Click the **Start** button in the Task Bar. Use the search field in the Start menu to find and start **Micro Focus Enterprise Developer > Micro Focus Enterprise Developer for Eclipse**.
 
     If you need instructions to get Enterprise Developer started on your local machine, see *To Start Enterprise Developer* in the product Help for Enterprise Developer.
 
     This opens the **Eclipse Launcher** which enables you to choose a location for Eclipse to store your projects.
 
-2.  For example, specify `C:\MFETDUSER\tutorial\workspace` in the **Workspace** field and click **Launch**.
+2.  Specify the workspace folder, for example, specify `C:\MFETDUSER\tutorial\workspace` in the **Workspace** field and click **Launch**.
 
     If this is the first time you start Enterprise Developer, you are presented with the Eclipse **Welcome page**. Click **Open Team Developer Perspective** to close the Welcome page and see the main Eclipse window.
 
@@ -93,9 +100,10 @@ In this release, the Enterprise Server security features are enabled by default.
     -   The Remote Systems view is used to connect to the mainframe system z/OS and provides access to all mainframe resources like MVS or USS files and MVS jobs. This view is displayed as a tab in the upper right part of the IDE.
     -   The main activity window in the top middle part of the IDE, the editor, is where you edit or debug the sources.
     -   Apart from the Eclipse menus, there are a number of buttons on the toolbar, which vary depending on what you are currently doing with Eclipse.
-1.  Experiment with resizing, minimizing, and restoring the views.
-2.  If you close a view, click **Window** \> **Show View** \> **View Name** to restore it.
-3.  At any time, you can reset the complete layout of the Team Developer Perspective to its default using **Window \> Perspective \> Reset Perspective**.
+
+3.  Experiment with resizing, minimizing, and restoring the views.
+4.  If you close a view, click **Window** \> **Show View** \> **View Name** to restore it.
+5.  At any time, you can reset the complete layout of the Team Developer Perspective to its default using **Window \> Perspective \> Reset Perspective**.
 
 ### Connect to the Default ESCWA Server
 
@@ -103,7 +111,7 @@ Ensure that Server Explorer contains a connection to the default Enterprise Serv
 
 1. In the Server Explorer view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
 
-    The **New Enterprise Server Common Web Administration Connection** dialog box is displayed.
+  The **New Enterprise Server Common Web Administration Connection** dialog box opens.
 2. In the **Name** field, type **Local**.
 3. In the **Server address** field, type **localhost**.
 4. In the **Server port** field, leave the default 10086.
@@ -146,7 +154,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
 Your project is preconfigured so that the build process creates the output files in a location that is used by the Enterprise Server logical server. To check which folder will include the built files:
 
-1.  In the Application Explorer view, right-click the Bankdemo project and click **Properties**.
+1.  In the Application Explorer view, right-click the **Bankdemo** project and click **Properties**.
 2.  Expand **Rocket Software \> Build Configurations** and then click **Link**.
 
     The project comes with a predefined configuration called **loadlib**.
@@ -158,7 +166,7 @@ Your project is preconfigured so that the build process creates the output files
 
 In most cases, to add files to an Eclipse project, you use the **Import** command. This creates local copies of file sources in the workspace. Optionally, you can leave the source files in the original location and create links to them which is what you are going to do in this tutorial.
 
-To add the sample's copybooks to the project:
+To add the sample copybooks to the project:
 
 1.  In Application Explorer view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
 2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
@@ -190,7 +198,7 @@ To add the other source files to the Bankdemo project:
 
 Next, specify the copybook paths for the project so that the copybook dependencies get resolved:
 
-1.  In Application Explorer view, right-click the Bankdemo project and click **Properties**.
+1.  In Application Explorer view, right-click the **Bankdemo** project and click **Properties**.
 2.  Expand **Rocket Software** and then click **Build Path**.
 3.  Click the **Dependency Paths** tab and ensure **Type** is set to **COBOL Copybook Paths**.
 4.  Select the check box in front of **Bankdemo/copybook**.
@@ -607,9 +615,9 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     b.  Right-click the line for the error and select **Quick Fix**.
 
-     The Quick Fix window opens.
+     The **Quick Fix** window opens.
 
-    c.  Select **Enable copybook path...** and click **OK**.
+    c.  Select **Enable copybook path...**, click **Finish**.
 
        This displays a message that the directory containing the copybook is not on the copybook path for the project.
 
@@ -656,9 +664,9 @@ This sample provides a PowerShell script that creates the region definition to u
 1.  Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
 2.  Right-click **createdefinition.ps1** and click **Run with PowerShell**. 
 
-<!-- This doesn't work, because running scripts is disabled. I had to open PowerShell, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser and after that navigate to the folder and run the script. Another way to run the script is to: Right-click the script, select Properties, select the Unblock check box. Afterwards right-clicking the file and clicking **Run with PowerShell** will create the XML file (in all cases there's no need to specify **A** to allow execution policies).-->
+<!-- This doesn't work, because running scripts is disabled. I had to open PowerShell, navigate to the folder, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser (select A) and after that run the script. Since in the VM the script was still blocked, I also had to: Right-click the script, select Properties, select the Unblock check box. Then running the script from the PowerShell prompt will create the XML file (in all cases there's no need to specify **A** to allow execution policies).-->
 
-    This runs the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
+This runs the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
 
 Now you can import the definition of the BANKDEMO logical server (LSER) in Enterprise Server:
 
@@ -668,15 +676,19 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 4.  Set the file extension field to **.xml**.
 5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
 
-    Check the **Console** view for the results of importing the server. The Server Explorer window should now show a server called BANKDEMO under **Default [127.0.0.1:86]**. If the server is not visible, right-click **Default [127.0.0.1:86]**, and click **Refresh**.
-
+    Check the **Console** view for the results of importing the server. 
+    
     ![](images/94b448624765e5e546bb4b4851b5b56e.jpg)
+
+    In the Server Explorer, under **Default [127.0.0.1:86]**, you should now see a server called BANKDEMO. If the server is not visible, right-click **Default [127.0.0.1:86]**, and click **Refresh**.
+
+     
 
 **Associate the BANKDEMO Enterprise Server with Your Project**
 
 You must associate your application with the BANKDEMO server. This ensures that the project's **loadlib** directory is used by the BANKDEMO enterprise server. BANKDEMO is configured to use the \$IDE_LOADLIB environment variable as the first location in the search path and, when the IDE starts the server, then \$IDE_LOADLIB is set to the output directories of any project associated with the server.
 
-1. Right-click the BANKDEMO server and select **Associate with project \> Bankdemo**.
+1. Right-click the **BANKDEMO** server and select **Associate with project \> Bankdemo**.
 
    ![](images/8fa1cc05cf3c9081809c785e2c53ce42.jpg)
 
@@ -772,16 +784,16 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
 
-Before you proceed, ensure that the Host Access for the Cloud (HACloud) service is running:<!-- Service name still isn't changed from Micro Focus-->
+Before you proceed, ensure that the Host Access for the Cloud (HA Cloud) service is running:<!-- Service name still isn't changed from Micro Focus-->
 1. From the Windows **Start** menu open the Services application.
 
 2. Navigate to the HA Cloud service and check whether its status is set to **Running**.
 
-3. If it is not running, right-click the service and click **Start**.
+3. If it is not running, right-click the service and select **Start**.
 
 **Executing the IBM CICS Application**
 
-The application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The application requires that you use a 3270 terminal emulator. This tutorial uses Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 
 **Configuring the TN3270 Settings in the IDE**
 
@@ -803,7 +815,7 @@ To check the IDE preferences for the TN3270 emulator:
 
 1.  Type your login details, and press **Enter**.
 
-    A suitable **User Id** is b0001. You can type anything as a **Password** - the field must not be empty though.
+    A suitable **User Id** is `b0001`. You can type anything as a **Password** - the field must not be empty though.
 
     ![](images/Bankdemo_001.png)
 
@@ -815,18 +827,18 @@ To check the IDE preferences for the TN3270 emulator:
 
 3.  You can explore this application further if you wish, or press **Ctrl + F2** to clear the screen and conclude the session.
 
-If HACloud disconnects from the server, you can connect again manually as follows:
+If HA Cloud disconnects from the server, you can connect again manually as follows:
 
-1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HACloud window.
+1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HA Cloud window.
 2.  In the **Available Sessions** dialog box, click the BANKDEMO server.    
 
     This connects the display to the BANKDEMO server and loads the start screen of the application.
 
-3.  Follow the steps described earlier in this topic to execute the application in the HACloud view.
+3.  Follow the steps described earlier in this topic to execute the application in the HA Cloud view.
 
 **Stopping the Enterprise Server**
 
-You can stop the BANKDEMO server from within Server Explorer. You can leave it running if you want to continue this tutorial. To stop the server, right-click the Bankdemo server and select **Stop**.
+You can stop the BANKDEMO server from within Server Explorer. You can leave it running if you want to continue this tutorial. To stop the server, right-click the **BANKDEMO** server and select **Stop**.
 
 **Note:** In production, enterprise servers are long-running processes that are usually run for many months without stopping and starting.
 
@@ -846,7 +858,7 @@ If the enterprise server is not yet started:
 
     If the view is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software** \> **Server Explorer** and then click **OK**.
 
-2.  In Server Explorer, right-click the BANKDEMO server and then click **Start**.
+2.  In Server Explorer, right-click the **BANKDEMO** server and then click **Start**.
 
     Wait until the server has started. If, in the list of servers in Server Explorer, BANKDEMO still has a red square next to it, this is a refresh delay.
 
@@ -854,8 +866,8 @@ If the enterprise server is not yet started:
 
 The project has two preconfigured debug configurations: a CICS Debug and a JCL Debug one. You will use these configurations to debug the batch and the online application.
 
-1.  In the Application Explorer view, select the BANKDEMO project and click **Run** \> **Debug Configurations**.
-2.  In the left- pane of the **Debug Configurations** dialog box, expand **COBOL Enterprise Server**.
+1.  In the Application Explorer view, select the **Bankdemo** project and click **Run** \> **Debug Configurations**.
+2.  In the left pane of the **Debug Configurations** dialog box, expand **COBOL Enterprise Server**.
 3.  Click **CICS Debug**.
 4.  Click the different tabs in the right pane to see what debug settings are enabled for this configuration. Note that this configuration will be used with the BANKDEMO server.
 5.  Click **JCL Debug** under **COBOL Enterprise Server**.
@@ -910,7 +922,7 @@ The highlighted line of code is the one the IDE will execute next.
 
     The PERFORM statement executes and takes you to the line starting with IF TIMER. You can also see that a Variables view is now open in the IDE showing the current value of a data item on the line of code which is about to be executed.
 
-2.  Press **F5** slowly a few more times until you reach line 574. Watch the code as you step through it and notice how the values of the variables change inside the Variables view.
+2.  Press **F5** slowly a few more times until you reach line 574<!--638-->. Watch the code as you step through it and notice how the values of the variables change inside the Variables view.
 
     ![](images/e17c83ba64e31c1ddeb3848a76aade4f.jpg)
 
@@ -1004,7 +1016,7 @@ If the enterprise server is not yet started, you should start it as follows:
 
     If the tab is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software COBOL \> Server Explorer** and then click **OK**.
 
-2.  In Server Explorer, right-click the BANKDEMO server, and then click **Start**.
+2.  In Server Explorer, right-click the **BANKDEMO** server and select **Start**.
 
     Wait until the server has started. If in the list of servers in Server Explorer BANKDEMO still has a red square next to it, right-click it, and click **Refresh**.
 
@@ -1014,7 +1026,7 @@ You can now start the debugger. It starts in the background until a program whic
 
 To start the debugger:
 
-1.  In the Application Explorer view, select the BANKDEMO project and then select **Run** \> **Debug Configurations** from the menu bar.
+1.  In the Application Explorer view, select the **Bankdemo** project and from the menu bar, select **Run** \> **Debug Configurations**.
 2.  In the left pane of the Debug Configurations dialog box, expand **COBOL Enterprise Server**.
 3.  Click **CICS Debug** and then click **Debug**.
 4.  You might receive a message about opening the Debug perspective. Click **Yes**.
@@ -1029,7 +1041,7 @@ To start the debugger:
 
 5.  Click **Connect** to accept the connection details.
 
-    This opens the HACloud terminal emulator, connects the display to the BANKDEMO enterprise server, and loads the start screen of the application.
+    This opens the HA Cloud terminal emulator, connects the display to the BANKDEMO enterprise server, and loads the start screen of the application.
 
     Your Eclipse application is now waiting for an event to happen that will trigger the debugging.
 
@@ -1037,7 +1049,7 @@ To start the debugger:
 
     You can see that the preconfigured CICS and JCL debug configurations are now listed in the menu.
 
-10. In the HACloud view, press **Ctrl + F2** to clear the screen of the emulator.
+10. In the HA Cloud view, press **Ctrl + F2** to clear the screen of the emulator.
 11. Enter transaction id BANK, and press **Enter**.
 
     The program SBANK00P starts to execute on line 105.

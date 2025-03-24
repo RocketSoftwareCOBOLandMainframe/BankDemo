@@ -9,7 +9,7 @@ The SQL database is populated with bank account data.
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server.
 - A TN3270 terminal emulator. 
    You can use the Rocket&reg; Host Access for the Cloud session server and TN3270 emulator included with both Enterprise Developer and Enterprise Server.
-- Ensure that the Directory Server service (mfds) is running and listening on the default port (86).
+- Ensure that the Directory Server service (MFDS) is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - PostgreSQL version 12 or later.
 - Ensure that you add the PostgreSQL bin directory path to the PATH environmental variable, so that you can use `psql`.
@@ -81,10 +81,10 @@ The demonstration also includes some instructions how to build the application f
 
    The Bankdemo application login screen loads.
 
-7. Enter a valid user-id - a suitable user-id is B0001 with any characters for the password as the password is not validated.
+7. Enter a valid user ID, for example, `b0001` with any characters for the password as the password is not validated.
 
-8. In the ESCWA UI, under **Directory Servers > Default**, select the BANKSQL server. 
+8. In the ESCWA UI, under **Directory Servers > Default**, select the BANKSQL server and explore the options on the **General** tab.
 
-   See the options on the **General** tab. Click the **General** menu, and select any option from the menu to explore the server configuration.
+   Click the **General** menu, and select any option from the menu to explore the server configuration.
     
 9. You can use the `sources\jcl\ZBNKSTMS.jcl` file to run a JCL batch job by using the **JES**, **Control** ESCWA UI drop-down menu.

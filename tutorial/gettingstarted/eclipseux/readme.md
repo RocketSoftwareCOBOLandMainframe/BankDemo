@@ -42,7 +42,7 @@ As part of this tutorial, you use the supplied standard Eclipse COBOL project in
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse (Linux). [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HA Cloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -61,7 +61,7 @@ In this release, the Enterprise Server security features are enabled by default.
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.sh`. You see a series of messages as the script disables default security.
-2. Restart the Directory Server and Enterprise Server Common Web Administration services to pick up the configuration changes. You can now use ESCWA without having to log in.
+2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
 
 ## Starting the Eclipse Integrated Development Environment (IDE)
@@ -135,7 +135,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the Application Explorer view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
 
-6.  Expand the Bankdemo project in the Application Explorer view.
+6.  Expand the **Bankdemo** project in the Application Explorer view.
 
     ![](images/3306875a7cc8200841b4c6c316763222.jpg)
 
@@ -188,7 +188,7 @@ To add the other source files to the Bankdemo project:
 
 Next, specify the copybook paths for the project so that the copybook dependencies get resolved:
 
-1.  In Application Explorer view, right-click the Bankdemo project and click **Properties**.
+1.  In Application Explorer view, right-click the **Bankdemo** project and click **Properties**.
 2.  Expand **Rocket Software** and click **Build Path**.
 3.  Click the **Dependency Paths** tab and ensure **Type** is set to **COBOL Copybook Paths**.
 4.  Select the check box in front of **Bankdemo/copybook**.
@@ -224,7 +224,7 @@ You now must perform a scan of the COBOL programs in your project to determine a
 
 The demonstration application includes a number of data files used. To see how you can edit data files, you can only look at one of these files, so there is no need to add a folder for it in the project. To add the data file to your project:
 
-1.  In the Application Explorer view, right-click the Bankdemo project and click **New** \> **File** \> **Other File**.
+1.  In the Application Explorer view, right-click the **Bankdemo** project and click **New** \> **File** \> **Other File**.
 2.  Click **Advanced** and select **Link to file in the file system**.
 3.  Browse to the `/home/*username*/MFETDUSER/datafiles` folder.
 4.  Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
@@ -629,7 +629,7 @@ This sample provides a script that creates the region definition to use in this 
 
     Note: You might have to give execute permissions to this script. To do this, run: **chmod +x createdefinition.sh**.
 
-    This executes the script and creates the Enterprise Server region definition file, BANKDEMO.xml, in the same folder. The file is configured for the location in which you saved the sample files.
+    This executes the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
 
 Next, ensure that the following two services are running on your machine:
 
@@ -674,7 +674,7 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 
 You must associate your application with the BANKDEMO server. This ensures that the project's **loadlib** directory is used by the BANKDEMO enterprise server. BANKDEMO is configured to use the \$IDE_LOADLIB environment variable as the first location in the search path and, when the IDE starts the server, then \$IDE_LOADLIB is set to the output directories of any project associated with the server.
 
-**1.** Right-click the BANKDEMO server and select **Associate with project \> Bankdemo**.
+- Right-click the **BANKDEMO** server and select **Associate with project \> Bankdemo**.
 
 ![](images/8fa1cc05cf3c9081809c785e2c53ce42.jpg)
 
@@ -704,13 +704,13 @@ These are the steps to start the server manually, and are included for completen
 
     You can check the **Console** view to ensure that the BANKDEMO server has started successfully.
 
-2.  In Server Explorer, right-click the BANKDEMO server and click **Show Console Log**.
+2.  In Server Explorer, right-click the **BANKDEMO** server and click **Show Console Log**.
 
     Check the **Console** view as it now shows the messages from the server log:
 
     ![](images/58c31e6d41d97041cfcca5cfa00fa7d8.jpg)
 
-3.  Right-click the BANKDEMO server again, and then click **Refresh** to see that the server has started.
+3.  Right-click the **BANKDEMO** server again, and then click **Refresh** to see that the server has started.
 
     You are now ready to execute the JCL job.
 
@@ -735,7 +735,7 @@ You can open the catalog and the spool directly from Server Explorer.
 
 To view the catalog:
 
-1.  In Server Explorer, right-click the BANKDEMO server and select **Show Catalog**.
+1.  In Server Explorer, right-click the **BANKDEMO** server and select **Show Catalog**.
 
     This opens the catalog:
 
@@ -745,7 +745,7 @@ To view the catalog:
 
 To view the spool:
 
-1.  In Server Explorer, right-click the BANKDEMO server and click **Show Spool**.
+1.  In Server Explorer, right-click the **BANKDEMO** server and click **Show Spool**.
 2.  Double-click the name of one of the jobs in the list to open the details in a new tab.
 
     ![](images/00cd8757e37d31aaf294d49f3bff8251.png)
@@ -775,12 +775,12 @@ As with JCL, execution of the jobs requires a previously configured Rocket enter
 
 **Executing the IBM CICS application**
 
-The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 <!-- Service name still isn't changed from Micro Focus-->
 
-**Start the HACloud Session Server**
+**Start the HA Cloud Session Server**
 
-You must start the HACloud session server before you can use the HACloud TN3270 emulator. To do this you must run `startsessionserver.sh` script as follows:
+You must start the HA Cloud session server before you can use the HA Cloud TN3270 emulator. To do this you must run `startsessionserver.sh` script as follows:
 
 1. Ensure that the installed Java is added to the PATH environment variable.
 2. Open a terminal and set up the COBOL environment in it.
@@ -790,7 +790,7 @@ You must start the HACloud session server before you can use the HACloud TN3270 
        startsessionserver.sh
     ```
     
-4. Check the terminal for the messages that the HACloud Session Server has started.
+4. Check the terminal for the messages that the HA Cloud Session Server has started.
 
 **Configuring the TN3270 Settings in the IDE**
 
@@ -804,7 +804,7 @@ To check the IDE preferences for the TN3270 emulator:
 
 **Starting the Terminal Emulator**
 
-1.  In Server Explorer, right-click the BANKDEMO server and select **Show TN3270 Display**.
+1.  In Server Explorer, right-click the **BANKDEMO** server and select **Show TN3270 Display**.
 
     This opens **Host Access for the Cloud** in your default browser and automatically establishes a 3270 terminal connection to the BANKDEMO server. You can see the starting page of the ES/MTO region BANKDEMO.
 
@@ -824,18 +824,18 @@ To check the IDE preferences for the TN3270 emulator:
 
 3.  You can explore this application further if you wish or press **Ctrl + F2** to clear the screen and conclude the session.
 
-If HACloud disconnects from the server, you can connect again manually as follows:
+If HA Cloud disconnects from the server, you can connect again manually as follows:
 
-1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HACloud window.
-2.  In the **Available cs aplps** dialog box, click on the BANKDEMO server.    
+1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HA Cloud window.
+2.  In the **Available cs aplps** dialog box, click the **BANKDEMO** server.    
 <!-- Check whether "cs aplps" is really in the name of the dialog box-->
     This connects the display to the BANKDEMO server and loads the start screen of the application.
 
-3.  Follow the steps described earlier in this topic to execute the application in the HACloud view.
+3.  Follow the steps described earlier in this topic to execute the application in the HA Cloud view.
 
 **Stopping the Enterprise Server**
 
-You can stop the BANKDEMO server from within Server Explorer. You can leave it running if you want to continue this tutorial. To stop the server, right-click the BANKDEMO server and select **Stop**.
+You can stop the BANKDEMO server from within Server Explorer. You can leave it running if you want to continue this tutorial. To stop the server, right-click the **BANKDEMO** server and select **Stop**.
 
 **Note:** In production, enterprise servers are long-running processes that are usually run for many months without stopping and starting.
 
@@ -855,7 +855,7 @@ If the enterprise server is not yet started:
 
     If the view is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software** \> **Server Explorer** and then click **OK**.
 
-2.  In Server Explorer, right-click the BANKDEMO server and then click **Start**.
+2.  In Server Explorer, right-click the **BANKDEMO** server and then click **Start**.
 
     Wait until the server has started. In the list of servers in Server Explorer, BANKDEMO still has a red square next to it. This is a refresh delay.
 
@@ -863,7 +863,7 @@ If the enterprise server is not yet started:
 
 The project has two preconfigured debug configurations: a CICS Debug and a JCL Debug one. You will use these to debug the batch and the online application.
 
-1.  In the Application Explorer view, select the BANKDEMO project and click **Run** \> **Debug Configurations**.
+1.  In the Application Explorer view, select the **Bankdemo** project and click **Run** \> **Debug Configurations**.
 2.  In the left pane of the **Debug Configurations** dialog box, expand **COBOL Enterprise Server**.
 3.  Click **CICS Debug**.
 4.  Click the different tabs in the right pane to see what debug settings are enabled for this configuration. Note that this configuration will be used with the BANKDEMO server.
@@ -875,7 +875,7 @@ The project has two preconfigured debug configurations: a CICS Debug and a JCL D
 
 You can now start the debugger. It starts in the background until a program which is debuggable is triggered. To start the debugger:
 
-1.  In the Application Explorer view, select the BANKDEMO project, and then select **Run** \> **Debug Configurations** from the menu bar.
+1.  In the Application Explorer view, select the  **Bankdemo** project, and then select **Run** \> **Debug Configurations** from the menu bar.
 2.  In the left pane of the Debug Configurations dialog expand **COBOL Enterprise Server**.
 3.  Click **JCL Debug**, and then click **Debug**.
 4.  You might receive a message about opening the Debug perspective when it launches. If you do, click **Yes**.
@@ -889,7 +889,7 @@ You can now start the debugger. It starts in the background until a program whic
     Click the respective icon to switch between the two perspectives.
 
 5.  Click the **Team Developer** icon for now.
-6.  In Server Explorer, right-click the BANKDEMO enterprise server, and click **Refresh**.
+6.  In Server Explorer, right-click the **BANKDEMO** enterprise server, and click **Refresh**.
 
     The application is now waiting for an event that will trigger debugging.
 
@@ -1006,7 +1006,7 @@ Although the job has completed, the debugger is still waiting for the next event
 
     If the tab is not visible, click **Window** \> **Show View** \> **Other**. Select **Rocket Software COBOL \> Server Explorer** and then click **OK**.
 
-2.  In Server Explorer, right-click the BANKDEMO server, and then click **Start**.
+2.  In Server Explorer, right-click the **BANKDEMO** server, and then click **Start**.
 
     Wait until the server has started. If in the list of servers in Server Explorer BANKDEMO still has a red square next to it, right-click it, and click **Refresh**.
 
@@ -1014,9 +1014,9 @@ Although the job has completed, the debugger is still waiting for the next event
 
 You can now start the debugger. It starts in the background until a program which is debuggable is triggered. The demonstration application includes around 60 programs and just eight of them, the ones which are included in the project, are debuggable. To start the debugger:
 
-1.  In the Application Explorer view, select the BANKDEMO project and then select **Run** \> **Debug Configurations** from the menu bar.
+1.  In the Application Explorer view, select the  **Bankdemo** project and from the menu bar, select **Run** \> **Debug Configurations**.
 2.  In the left pane of the Debug Configurations dialog box, expand **COBOL Enterprise Server**.
-3.  Click **CICS Debug**, and then click **Debug**.
+3.  Click **CICS Debug** and click **Debug**.
 4.  You might receive a message about opening the Debug perspective. Click **Yes**.
 
     This opens a new **Debug** pane, showing that the debugger is waiting for an attachment:
@@ -1031,7 +1031,7 @@ You can now start the debugger. It starts in the background until a program whic
 
 5.  Click **Connect** to accept the connection details.
 
-    This opens the HACloud terminal emulator, connects the display to the BANKDEMO enterprise server, and loads the start screen of the application.
+    This opens the HA Cloud terminal emulator, connects the display to the BANKDEMO enterprise server, and loads the start screen of the application.
 
     Your Eclipse application is now waiting for an event to happen that will trigger the debugging.
 
@@ -1039,7 +1039,7 @@ You can now start the debugger. It starts in the background until a program whic
 
     You can see that the preconfigured CICS and JCL debug configurations are now listed in the menu.
 
-10. In the HACloud view, press **Ctrl + F2** to clear the screen of the emulator.
+10. In the HA Cloud view, press **Ctrl + F2** to clear the screen of the emulator.
 11. Enter transaction id BANK, and press **Enter**.
 
     The program SBANK00P starts to execute on line 105.
