@@ -38,9 +38,9 @@ Ensure that **Server Explorer** contains a connection to the default Enterprise 
 1. In the **Server Explorer** view, right-click and select **New > Enterprise Server Common Web Administration Connection**.
 
     The **New Enterprise Server Common Web Administration Connection** dialog box opens.
-2. In the **Name** field, type **Local**.
-3. In the **Server address** field, type **localhost**.
-4. In the **Server port** field, leave as the default 10086.
+2. In the **Name** field, type `Local`.
+3. In the **Server address** field, type `localhost`.
+4. In the **Server port** field, leave as the default `10086`.
 5. If the server connection is TLS-enabled, select **TLS Enabled**, and then click **Browse** and select the appropriate certificate.
 >**Note**: If you select **TLS Enabled**, but you do not specify a certificate, the default Java keystore is searched for a valid one.
 6. Click **Finish**.
@@ -99,7 +99,7 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 1. In the **Server Explorer** tab, right-click on **BANKDEMO** under **Local**, and click **Open Administration Page**. This opens the **Enterprise Server Common Web Administration** (ESCWA for short)  page outside of Eclipse.
 2. Click the **CICS** drop-down list, and select **Configuration**.
-3. Change the **System Initialization Table** from **CBLVSAM** to **PLIVSAM**, and click **Apply**. This configures the server to use some PL/I IBM CICS resources.
+3. Change the **System Initialization Table** from `CBLVSAM` to `PLIVSAM`, and click **Apply**. This configures the server to use some PL/I IBM CICS resources.
 
 ### Associate the projects with the BANKDEMO enterprise server:
 
@@ -117,16 +117,16 @@ Making these associations before you start the server enables the executables bu
 
 1. To prepare for debugging in Eclipse, create a debug configuration by selecting **Debug Configurations** from the **Run** menu.
 2. On the Debug Configurations dialog, right-click **PL/I Enterprise Server**, and click **New Configuration**.
-3. Change the **Name** from **New_configuration** to something meaningful like **BANK**.
-4. Type **BANKMAIN** in PL/I project, enter **Local** in **ESCWA**, **Default** in **Directory Server**, and **BANKDEMO** in **Region**. Click **Apply** and then click **Debug**.
-5. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.
+3. Change the **Name** from `New_configuration` to something meaningful, such as `BANK`.
+4. Type `BANKMAIN` in PL/I project, enter `Local` in **ESCWA**, `Default` in **Directory Server**, and `BANKDEMO` in **Region**. Click **Apply** and then click **Debug**.
+5. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.  <!-- I am not sure how to do that. During my first attempt to go through the demo, I couldn't do this at all, during the second - the emulator opened on its own after I clicked `Debug`. -->
 6. If you receive a dialog asking whether to automatically switch to the debug perspective, select **Remember my decision**, and click **Yes**.
-7. Eclipse should automatically open the `SBANK00P.PLI` source file with the SBANK00P PROC line highlighted as the current line of execution.
+7. Eclipse should automatically open the `SBANK00P.PLI` source file with the `SBANK00P PROC` line highlighted as the current line of execution.
 8. If line numbers are not turned on in the source window, right-click in the left-hand column of the source pane, and click **Show Line Numbers**.
-9. You can step through the SBANK00P program, set breakpoints, and evaluate variables.  Once you're ready to run the program to completion, select **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.
-10. In the TN3270 emulator window, type a User id of **b0001**, and anything for the password, and press **Enter**.
+9. You can step through the `SBANK00P` program, set breakpoints, and evaluate variables.  Once you're ready to run the program to completion, select **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.
+10. In the TN3270 emulator window, type a User id of `b0001` and anything for the password, and press **Enter**.
     
-    Eclipse restarts debugging so you can debug through the SBANK10P program.          
+    Eclipse restarts debugging so you can debug through the `SBANK10P` program.          
 12. Once you are ready to run the program to completion, click **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.      
 
     As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application.  Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
