@@ -1,4 +1,4 @@
-# Bankdemo Performance and Availability Cluster
+# Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL
 This demonstration configures the Bankdemo application to run in a Performance and Availability Cluster (PAC), storing banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. The cluster is composed of two Enterprise Server instances that are running on the same machine.
 
 The COBOL modules used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk and when not running in a PAC.
@@ -16,38 +16,36 @@ The Rocket Secrets Vault is used to store the database credentials.
 - Ensure that the PostgreSQL `psql` command is available on the PATH.
 - Install and configure a PostgreSQL ODBC driver: 
    - Windows: [install appropriate driver](https://www.postgresql.org/ftp/odbc/versions/msi/)
-   - Ubuntu: sudo apt-get install unixodbc unixodbc-dev odbc-postgresql
-   - RedHat: sudo yum install unixODBC postgresql-odbc
-   - Amazon Linux 2: sudo yum install unixODBC postgresql-odbc
-   - SuSE: sudo zypper install unixODBC psqlODBC
+   - Ubuntu: `sudo apt-get install unixodbc unixodbc-dev odbc-postgresql`
+   - RedHat: `sudo yum install unixODBC postgresql-odbc`
+   - Amazon Linux 2: `sudo yum install unixODBC postgresql-odbc`
+   - SuSE: `sudo zypper install unixODBC psqlODBC`
 - Ensure that you installed Python 3.*n* and the `requests` package. You can install the package after installing Python with the following command: 
-  ```
-  python -m pip install requests
-  ```
+       `python -m pip install requests`
 
 ## Demonstration overview
 This demonstration shows a simple COBOL IBM® CICS® "green screen" application accessing VSAM data using `EXEC CICS` statements where that data is actually stored in a PostgreSQL database.
 A Performance and Availability Cluster (PAC) is created containing two enterprise server instances.
 
-The demonstration includes a Python script that helps create the enterprise server instances which are:
+The demonstration includes a Python script that helps create the enterprise server instances.
 
-   - Created in the `BANKPAC1` and `BANKPAC2` subdirectories of this project
-   - Created (almost exclusively) using the ESCWA Admin API
-   - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file
-   - Configured for use with JCL and the VSAM datasets are catalogued 
-   - Configured as a 64-bit server and can be reconfigured to deploy a 32-bit server (see the next section)
-   - Uses pre-built application modules
-   - Two ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION` are created
-   - The VSAM data is uploaded to the database using `dbfhdeploy add` commands 
+   - The script creates the enterprise server instances in the `BANKPAC1` and `BANKPAC2` subdirectories of this project.
+   - The script creates the enterprise server instances by using (almost exclusively) the ESCWA Admin API.
+   - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file.
+   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM datasets. 
+   - The enterprise server instances are configured as 64-bit servers and can be reconfigured to deploy a 32-bit server (see the next section).
+   - The enterprise server instances use pre-built application modules.
+   - Two ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION` are created.<!-- Two sources with four names? -->
+   - The VSAM data is uploaded to the database using `dbfhdeploy add` commands.
    - The server instances are configured to use the Rocket Database File Handler (MFDBFH) by:
-       - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command)
-        - Specifying the XA switch module espgsqlxa (its source is in the `src/enterpriseserver/xa` directory of the Enterprise Developer installation location)
-        - The esxaextcfg module provides encrypted credentials to espgsqlxa        
-        - Setting the environment variables MFDBFH_CONFIG and ES_DB_FH
-        - Configuring the `CICS File Path` setting to point use an MFDBFH location (i.e., `sql://...`)
-        - Cataloging the VSAM datasets with MFDBFH locations (i.e. `sql://...`)
-        - Defining a PAC scale-out repository (BANKPSOR) in the Redis server
-        - Configuring the servers to be members of a Performance and Availability Cluster (BANKPAC) using scale-out repository BANKPSOR
+       - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command).
+        - Specifying the XA switch module espgsqlxa (its source is in the `src/enterpriseserver/xa` directory of the Enterprise Developer installation location).
+        - The `esxaextcfg` module provides encrypted credentials to `espgsqlxa`.        
+        - Setting the environment variables `MFDBFH_CONFIG` and `ES_DB_FH`.
+        - Configuring the `CICS File Path` setting to point use an `MFDBFH` location (i.e., `sql://...`).
+        - Cataloguing the VSAM datasets with MFDBFH locations (i.e. `sql:/...`).
+        - Defining a PAC scale-out repository (BANKPSOR) in the Redis server.
+        - Configuring the servers to be members of a Performance and Availability Cluster (BANKPAC) using scale-out repository BANKPSOR. <!-- Are the servers configured to be members of a PAC "by using" a scale out repository or "that uses a scale out repository"? -->
 
 The demonstration also includes some instructions to build the application from the sources (see the next section).
 
