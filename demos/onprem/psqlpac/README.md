@@ -1,13 +1,14 @@
 # Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL
-This demonstration configures the Bankdemo application to run in a Performance and Availability Cluster (PAC), storing banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. The cluster is composed of two Enterprise Server instances that are running on the same machine.
+This demonstration configures the Bankdemo application to run in a Performance and Availability Cluster (PAC). Banking data is recorded in VSAM datasets that are stored in a PostgreSQL database. The database is accessed from COBOL programs by using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. The cluster is composed of two Enterprise Server instances that are running on the same machine.
 
-The COBOL modules used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk and when not running in a PAC.
+The COBOL modules that are used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk and when not running in a PAC.
 
 The Rocket Secrets Vault is used to store the database credentials.
 
 ## Prerequisites
 - Rocket® Enterprise Developer or Rocket® Enterprise Server.
-- A TN3270 terminal emulator. The Rocket® Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
+- A TN3270 terminal emulator.
+   The Rocket® Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
 - Ensure that the Rocket Directory Server (mfds) is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Ensure that a Redis server is installed and running.
@@ -24,7 +25,8 @@ The Rocket Secrets Vault is used to store the database credentials.
        `python -m pip install requests`
 
 ## Demonstration overview
-This demonstration shows a simple COBOL IBM® CICS® "green screen" application accessing VSAM data using `EXEC CICS` statements where that data is actually stored in a PostgreSQL database.
+This demonstration shows a simple COBOL IBM® CICS® "green screen" application that accesses VSAM data by using `EXEC CICS` statements in a scenario where that data is actually stored in a PostgreSQL database.
+
 A Performance and Availability Cluster (PAC) is created containing two enterprise server instances.
 
 The demonstration includes a Python script that helps create the enterprise server instances.
@@ -36,13 +38,13 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The enterprise server instances are configured as 64-bit servers and can be reconfigured to deploy a 32-bit server (see the next section).
    - The enterprise server instances use pre-built application modules.
    - Two ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION` are created.<!-- Two sources with four names? -->
-   - The VSAM data is uploaded to the database using `dbfhdeploy add` commands.
+   - The VSAM data is uploaded to the database by using `dbfhdeploy add` commands.
    - The server instances are configured to use the Rocket Database File Handler (MFDBFH) by:
        - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command).
         - Specifying the XA switch module espgsqlxa (its source is in the `src/enterpriseserver/xa` directory of the Enterprise Developer installation location).
         - The `esxaextcfg` module provides encrypted credentials to `espgsqlxa`.        
         - Setting the environment variables `MFDBFH_CONFIG` and `ES_DB_FH`.
-        - Configuring the `CICS File Path` setting to point use an `MFDBFH` location (i.e., `sql://...`).
+        - Configuring the `CICS File Path` setting to point use an `MFDBFH` location (i.e., `sql:/...`).
         - Cataloguing the VSAM datasets with MFDBFH locations (i.e. `sql:/...`).
         - Defining a PAC scale-out repository (BANKPSOR) in the Redis server.
         - Configuring the servers to be members of a Performance and Availability Cluster (BANKPAC) using scale-out repository BANKPSOR. <!-- Are the servers configured to be members of a PAC "by using" a scale out repository or "that uses a scale out repository"? -->
