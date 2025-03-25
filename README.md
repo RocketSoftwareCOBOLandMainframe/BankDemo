@@ -8,7 +8,7 @@ To use these materials, download the assets of the project [release](https://git
 1. [License](#license)
 1. [Using The Bankdemo Application](#using)
     1. [Enterprise Developer Introductory Tutorial](#tutorial)
-    1. [On Premise Enterprise Server Capabilities](#onprem)
+    1. [On Premises Enterprise Server Capabilities](#onprem)
 
 
 ## <a name="intro"></a>Introduction
