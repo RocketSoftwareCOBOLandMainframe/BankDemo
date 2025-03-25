@@ -35,10 +35,10 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script creates the enterprise server instances in the `BANKPAC1` and `BANKPAC2` subdirectories of this project.
    - The script creates the enterprise server instances by using (almost exclusively) the ESCWA Admin API.
    - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file.
-   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM datasets. 
+   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM datasets. <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
    - The enterprise server instances are configured as 64-bit servers and can be reconfigured to deploy a 32-bit server (see the next section).
    - The enterprise server instances use pre-built application modules.
-   - Two ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION` are created.<!-- Two sources with four names - is some part of the text missing here? -->
+   - ODBC system data sources, called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION`, are created. <!-- In the original sentence, it said Two sources with four names are created - is some part of the text missing here? -->
    - The VSAM data is uploaded to the database by using `dbfhdeploy add` commands.
    - The server instances are configured to use the Rocket Database File Handler (MFDBFH):
         - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command).
@@ -58,13 +58,13 @@ The demonstration also includes some instructions to build the application from 
  
    Ensure that there is no `BANKPAC1` or `BANKPAC2` subdirectory in the location in which you expanded the archive. If there is one, delete it.
 
-2. To open the ESCWA UI, type http://localhost:10086 in a browser. 
+2. To open the ESCWA UI, type `http://localhost:10086` in a browser. 
 
    a. In the ESCWA UI, click **Native**, expand **Directory Servers** and click **Default** in the left pane.
 
    b. Ensure there is no region called **BANKPAC1** or **BANKPAC2** already defined. If there is one, delete it.
 
-3. Ensure that there are no other demonstration servers running. This is to ensure no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones other servers in this repository might use.
+3. verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones other servers in this repository might use.
 
 4. Start an administrator's command prompt (Windows) or a terminal for user under which Enterprise Servers run (Linux).
 
@@ -108,7 +108,7 @@ The demonstration also includes some instructions to build the application from 
 
    The Bankdemo application login screen should load.
 
-11. Enter a valid user-id - a suitable user-id is `B0001`. You can use any character for the password as the password is not validated.
+11. Enter a valid user ID - a suitable one is `B0001`. You can use any character for the password as the password is not validated.
 
 12. In ESCWA, select the BANKPSOR under **SORs**. Expand BANKPAC and note the two Enterprise Server instances BANKPAC1 and BANKPAC2
     
