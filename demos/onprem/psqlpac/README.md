@@ -38,7 +38,7 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM datasets. 
    - The enterprise server instances are configured as 64-bit servers and can be reconfigured to deploy a 32-bit server (see the next section).
    - The enterprise server instances use pre-built application modules.
-   - Two ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION` are created.<!-- Two sources with four names? Is some part of the text missing here? -->
+   - Two ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION` are created.<!-- Two sources with four names - is some part of the text missing here? -->
    - The VSAM data is uploaded to the database by using `dbfhdeploy add` commands.
    - The server instances are configured to use the Rocket Database File Handler (MFDBFH):
         - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command).

@@ -1,34 +1,33 @@
-# Bankdemo Application using MFDBFH with PostgreSQL
-This demonstration configures the Bankdemo application to store banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. 
+# Deploying and running Bankdemo with VSAM stored in PostgreSQL using MFDBFH
+This demonstration configures the Bankdemo application to store banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs by using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. 
 
 The COBOL modules used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk.
 
 The Rocket Secrets Vault is used to store the database credentials.
 
 ## Prerequisites
-- Rocket Enterprise Developer or Enterprise Server
-- A TN3270 terminal emulator:
-   - The Rocket Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
-- The Rocket Directory Server (mfds) must be running and listening on the default port (86)
-- The Enterprise Server Common Web Administration (ESCWA) service must be running and listening on the default port (10086).
-- PostgreSQL version 12 or later must be installed and running
+- Rocket® Enterprise Developer or Rocket® Enterprise Server.
+- A TN3270 terminal emulator.
+   The Rocket® Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
+- Ensure that the Rocket Directory Server (mfds) is running and listening on the default port (86).
+- Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
+- Verify that PostgreSQL version 12 or later is installed and running.
 - PostgreSQL ODBC driver: 
    - Windows: [install appropriate driver](https://www.postgresql.org/ftp/odbc/versions/msi/)
-   - Ubuntu: sudo apt-get install unixodbc unixodbc-dev odbc-postgresql
-   - RedHat: sudo yum install unixODBC postgresql-odbc
-   - Amazon Linux 2: sudo yum install unixODBC postgresql-odbc
-   - SuSE: sudo zypper install unixODBC psqlODBC
-- Python 3.*n* and the `requests` package. You can install the package after installing Python with the following command: 
-  ```
-  python -m pip install requests
-  ```
+   - Ubuntu: `sudo apt-get install unixodbc unixodbc-dev odbc-postgresql`
+   - RedHat: `sudo yum install unixODBC postgresql-odbc`
+   - Amazon Linux 2: `sudo yum install unixODBC postgresql-odbc`
+   - SuSE: `sudo zypper install unixODBC psqlODBC`
+-Ensure that you installed Python 3.*n* and the `requests` package. You can install the package after installing Python with the following command: 
+  
+      ` python -m pip install requests`
 
 ## Demonstration overview
-This demonstration shows a simple COBOL CICS "green screen" application accessing VSAM data using EXEC CICS statements where that data is actually stored in a PostreSQL database. 
+This demonstration shows a simple COBOL IBM® CICS® "green screen" application accessing VSAM data using EXEC CICS statements where that data is actually stored in a PostreSQL database. 
 
-The demonstration includes a Python script that helps create the Enterprise Server instance which is:
+The demonstration includes a Python script that helps create the enterprise server instance. which is:
 
-   - Created in the `BANKMFDB` subdirectory of this project
+   - The script creates the enterprise server instance in the `BANKMFDB` subdirectory of this project.
    - Created (almost exclusively) using the ESCWA Admin API
    - A single command-line utility, `caspcrd`, is used to create the default CICS resource definition file
    - Configured for use with JCL and the VSAM datasets are catalogued 
@@ -36,7 +35,7 @@ The demonstration includes a Python script that helps create the Enterprise Serv
    - Uses pre-built application modules
    - Two ODBC system data sources called `BANKVSAM.MASTER` and `BANKVSAM.VSAM` are created
    - The VSAM data is uploaded to the database using `dbfhdeploy add` commands 
-   - The server instance is configured to use the Database File Handler by:
+   - The server instance is configured to use the Database File Handler:
        - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command)
         - Specifying the XA switch module espgsqlxa (its source is in the `src/enterpriseserver/xa` directory of the Enterprise Developer installation location)
        - The esxaextcfg module provides encrypted credentials to espgsqlxa        
