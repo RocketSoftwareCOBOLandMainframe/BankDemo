@@ -1022,7 +1022,10 @@ Check the Breakpoints view at the top right of the screen. Currently, there are 
 
 Although the job has completed, the debugger is still waiting for the next event. To stop debugging:
 
-1.  Click **Run** \> **Terminate** or click the terminate button, ![](images/8f716087b654affcf7d7ebebb47da828.jpg), on the debugger toolbar.
+1.  Click **Run** \> **Terminate** or click the terminate button, ![](images/TerminateDebugging.png), on the debugger toolbar.
+
+![](images/8f716087b654affcf7d7ebebb47da828.jpg)
+
 2.  Finally, switch back to the Team Developer Perspective.
 
 ## Debugging the Online Application

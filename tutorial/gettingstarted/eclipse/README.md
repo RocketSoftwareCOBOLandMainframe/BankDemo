@@ -939,7 +939,7 @@ The highlighted line of code is the one the IDE will execute next.
 
     The PERFORM statement executes and takes you to the line starting with IF TIMER. You can also see that a Variables view is now open in the IDE showing the current value of a data item on the line of code which is about to be executed.
 
-2.  Press **F5** slowly a few more times until you reach line 574<!--I think it is 638-->. Watch the code as you step through it and notice how the values of the variables change inside the Variables view.
+2.  Press **F5** slowly a few more times until you reach line 638<!--I think it is 638, not 547-->. Watch the code as you step through it and notice how the values of the variables change inside the Variables view.
 
     ![](images/e17c83ba64e31c1ddeb3848a76aade4f.jpg)
 
