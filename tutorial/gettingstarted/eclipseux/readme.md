@@ -139,6 +139,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
     c.  Type **Bankdemo** in the project name field, and click **OK**.
 
     ![](images/95baffd8c05a67432bbd581e4eea8216.jpg)
+    <!--IMHO this is an old screenshot and needs to be updated-->
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the Application Explorer view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
 
@@ -275,7 +276,7 @@ Scroll down the file until you see some COPY statements. Click on line 58 for th
     The COBOL Copy View is read-only, and you cannot edit the code in it. The screen background changes from white to pale yellow.
 
     ![](images/50dd201ae54b8737524aeec72a5a24a4.png)
-    <!--This screenshot needs to be updated. Although I edited the file, the program still shows the old copyright info-->
+    <!--This screenshot needs to be updated. Although I edited the source file, the program still shows the old copyright info when I open the copy view-->
 
 2.  Press **Ctrl+F4** to close the COBOL Copy View.
 3.  To edit a copybook, position the cursor on the COPY statement and press **F3** (**Go To Definition**).

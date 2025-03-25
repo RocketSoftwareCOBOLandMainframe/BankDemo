@@ -12,13 +12,13 @@ The SQL database is populated with bank account data.
 - Ensure that the Directory Server service (MFDS) is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - PostgreSQL version 12 or later.
-- Ensure that you add the PostgreSQL bin directory path to the PATH environmental variable, so that you can use `psql`.
+- Ensure that you add the PostgreSQL `bin` directory path to the PATH environmental variable, so that you can use `psql`.
 - Ensure that you install and configure a PostgreSQL ODBC driver: 
-   - Windows: [install appropriate driver](https://www.postgresql.org/ftp/odbc/releases/)
-   - Ubuntu: `sudo apt-get install unixodbc unixodbc-dev odbc-postgresql`
-   - RedHat: `sudo yum install unixODBC postgresql-odbc`
-   - Amazon Linux 2: `sudo yum install unixODBC postgresql-odbc`
-   - SuSE: `sudo zypper install unixODBC psqlODBC`
+   - Windows: [install the appropriate driver](https://www.postgresql.org/ftp/odbc/releases/)
+   - Ubuntu: run `sudo apt-get install unixodbc unixodbc-dev odbc-postgresql`
+   - RedHat: run `sudo yum install unixODBC postgresql-odbc`
+   - Amazon Linux 2: run `sudo yum install unixODBC postgresql-odbc`
+   - SUSE: run `sudo zypper install unixODBC psqlODBC`
 - Python 3.*n* and the `requests psycopg2-binary` packages. You can install the packages after installing Python with the following command: 
   ```
   python -m pip install requests psycopg2-binary
@@ -43,9 +43,9 @@ The demonstration includes a Python script that helps you create the enterprise 
       - Builds the PostgreSQL RM switch module `esxaextcfg`. By default, the source COBOL file is in:
          - The `src/enterpriseserver/xa` directory of the Enterprise Developer installation location on Linux
          - The `\src\enterpriseserver\xa ` directory of the Enterprise Developer installation location on Windows
-      - The esxaextcfg module provides encrypted credentials to espgsqlxa
+      - The `esxaextcfg` module provides encrypted credentials to espgsqlxa
 
-The demonstration also includes some instructions how to build the application from the sources.
+The demonstration also includes some instructions on how to build the application from the sources.
 
 ## Running the Demonstration
 1. Extract the demonstration archive on your machine.
@@ -62,15 +62,17 @@ The demonstration also includes some instructions how to build the application f
 
 4. Start a command prompt as an administrator (Windows) or a terminal for a user under which Enterprise Servers run (Linux).
 
-   > **Note:** You need administrator privileges to configure the ODBC data source on Windows. On Linux it is created in the user `.odbc.ini` file.
+   > **Note:** You must have administrator privileges to configure the ODBC data source on Windows. On Linux the ODBC data source is created in the user `.odbc.ini` file.
 
 5. Navigate to the `scripts` directory in the demonstration.
 6. Edit the file `scripts/options/sql_postgres.json` with a text editor: 
-    1. Verify and, if required, modify the values within the `database_connection` section to match the setting of the database you are using.
-    2. If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration:
-       - Change the `is64bit` and/or the `product` options as required. 
+    a.  Verify and, if required, modify the values within the `database_connection` section to match the setting of the database you are using.
+
+    b.  If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration:
        
-       For example, `"product"="EDz"` indicates you will build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
+       Change the `is64bit` and/or the `product` options as required. 
+       
+       For example, `"product"="EDz"` indicates that you will build the application from the sources and `"product"="ES"` indicates that the pre-built programs will be used.
 
 7. Run the following python script from the `scripts` directory with the specified option to create the enterprise server instance, and to deploy the application:
 
