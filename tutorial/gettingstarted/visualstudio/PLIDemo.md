@@ -15,12 +15,11 @@ This demonstration requires:
 - Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the IBM CICS application. 
 
-**Note:**
-This tutorial uses the Host Access for the Cloud (HA Cloud) service, which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+> **Note:** This tutorial uses the Host Access for the Cloud (HA Cloud) service, which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 ## Requirements
 
-**Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio 2022](..\README.md)" tutorial, and HA Cloud service is running, you can skip these steps.
+> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio 2022](..\README.md)" tutorial, and HA Cloud service is running, you can skip these steps.
 
 ### Disable the Default Enterprise Server Security
 

@@ -62,7 +62,7 @@ The demonstration also includes some instructions how to build the application f
 
 4. Start a command prompt as an administrator (Windows) or a terminal for a user under which Enterprise Servers run (Linux).
 
-   **Note:** You need administrator privileges to configure the ODBC data source on Windows. On Linux it is created in the user `.odbc.ini` file.
+   > **Note:** You need administrator privileges to configure the ODBC data source on Windows. On Linux it is created in the user `.odbc.ini` file.
 
 5. Navigate to the `scripts` directory in the demonstration.
 6. Edit the file `scripts/options/sql_postgres.json` with a text editor: 
