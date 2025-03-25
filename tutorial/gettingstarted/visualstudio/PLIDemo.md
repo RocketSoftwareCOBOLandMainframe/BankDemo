@@ -15,11 +15,11 @@ This demonstration requires:
 - Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the IBM CICS application. 
 
-> **Note:** This tutorial uses the Host Access for the Cloud (HA Cloud) service, which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+> **Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
 
 ## Requirements
 
-> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio 2022](..\README.md)" tutorial, and HA Cloud service is running, you can skip these steps.
+> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio 2022](..\README.md)" tutorial, and HACloud service is running, you can skip these steps.
 
 ### Disable the Default Enterprise Server Security
 
@@ -43,9 +43,9 @@ In this release, the Enterprise Server security features are enabled by default.
     
    The BANKDEMO server should appear in Server Explorer under **Local**.
 
-### Start the HA Cloud Session Server
+### Start the HACloud Session Server
 
-You must start the HA Cloud session server before attempting to use the HA Cloud TN3270 terminal emulator. To do this you must start the respective Windows service.
+You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this you must start the respective Windows service.
 
 <!--1. Ensure you have a 64-bit Java installed and added to the PATH environment variable.
 
@@ -53,7 +53,7 @@ If i do this step, the emulator won't start at all-->
 
 1. From the Windows **Start** menu open the **Services** application.
 
-2. Navigate to the HA Cloud service and check whether its status is set to **Running**. If it is not running:
+2. Navigate to the HACloud service and check whether its status is set to **Running**. If it is not running:
 
    - Right-click the service and click **Start**.
    - Alternatively, you can start the service by opening a command prompt as an administrator and running the following command:
