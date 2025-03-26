@@ -55,7 +55,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
 ### Disable the Default Enterprise Server Security Configuration
 
-> **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To re-create the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
+ **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To re-create the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`.
 
