@@ -37,11 +37,11 @@ In this release, the Enterprise Server security features are enabled by default.
     
 1. Run the `tutorial\createdefinition.ps1` PowerShell script to create the **BANKDEMO.xml** region definition file. 
     
-2. In Visual Studio, open Server Explorer, right-click **Local**, and click **Import**. 
+2. In Visual Studio, open **Server Explorer**, right-click **Local**, and click **Import**. 
     
 3. Click **Import server definition file**, select the **tutorial\BANKDEMO.xml** file, and click **OK**.
     
-   The BANKDEMO server should appear in Server Explorer under **Local**.
+   The BANKDEMO server should appear in **Server Explorer** under **Local**.
 
 ### Start the HACloud Session Server
 
@@ -66,7 +66,7 @@ If i do this step, the emulator won't start at all-->
 
 ### Configure the BANKDEMO Enterprise Server for PL/I:
     
-1. In Visual Studio, in Server Explorer, right-click **Rocket Enterprise Server**, and select **Administration**.
+1. In Visual Studio, in **Server Explorer**, right-click **Rocket Enterprise Server**, and select **Administration**.
     
      This opens the Home page of **Enterprise Server Common Web Administration** in a web browser outside of the IDE.
      
@@ -104,7 +104,7 @@ This option does not exist in the UI-->
 
 ### Associate the Projects with the Enterprise Server Region:
 
-1. In Visual Studio, in Server Explorer, right-click **BANKDEMO > Associate with Project**, and select **bankmain**.
+1. In Visual Studio, in **Server Explorer**, right-click **BANKDEMO > Associate with Project**, and select **bankmain**.
 
 2. Repeat the step above for the **fetchables** project.
 
@@ -112,7 +112,7 @@ This option does not exist in the UI-->
 
 ### Start the BANKDEMO Enterprise Server 
 
-1.  In Server Explorer, right-click **BANKDEMO**, and click **Start**.
+1.  In **Server Explorer**, right-click **BANKDEMO**, and click **Start**.
 2.  (Optional) Click **OK** in the **Enterprise Server Sign On** dialog box, and leave the fields blank.
 3.  Check the **Output** window to see the progress of starting the server.
     <!--Starting the server launches the **Enterprise Server Console Daemon** window which also provides information about the server start-up.-->
@@ -126,20 +126,20 @@ This option does not exist in the UI-->
 
 3.  Step through the `SBANK00P` program, set any breakpoints, and evaluate variables.  
 4.  Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.
-5.  In the TN3270 window, type the user id, for example `b0001` and any string for the password, and press **Enter**.
+5.  In the **TN3270** window, type the user ID, for example `b0001` and any string for the password, and press **Enter**.
 
     Visual Studio debugging starts again so you can debug through the `SBANK10P` program.         
 6. Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.         
   
     As this application is pseudo-conversational, debugging starts and ends with the invocation and completion of each transaction in the application. Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
-7.  Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.          
+7.  Once you are ready to leave the application, press **F3** to end the application in the **TN3270** window.          
 8.  You can now disconnect your TN3270 terminal to end the demo.          
 
 ### Stop the BANKDEMO Enterprise Server
 
 Now that you have finished running the demo, you can stop the associated BANKDEMO enterprise server. To do this:
  
-1.  In Server Explorer, right-click the **BANKDEMO** server, and click **Stop**.
+1.  In **Server Explorer**, right-click the **BANKDEMO** server, and click **Stop**.
 2.  Check the **Output** window for messages that the server has been stopped successfully. 
 
     <!--A number of messages also appear in the **Enterprise Server Console Daemon** window outside of Visual Studio before it closes down.-->
