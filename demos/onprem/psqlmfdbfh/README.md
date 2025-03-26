@@ -22,7 +22,7 @@ The Rocket Secrets Vault is used to store the database credentials.
   
       ` python -m pip install requests`
 
-## Demonstration overview
+## Demonstration Overview
 This demonstration shows a simple COBOL IBM® CICS® "green screen" application accessing VSAM data using `EXEC CICS` statements where that data is actually stored in a PostreSQL database. 
 
 The demonstration includes a Python script that helps create the enterprise server instance.
@@ -46,7 +46,7 @@ The demonstration includes a Python script that helps create the enterprise serv
 The demonstration also includes some instructions to build the application from the sources (see the next section).
 
 
-## Running the demonstration
+## Running the Demonstration
 1. Expand the demonstration archive on your machine.
  
    Ensure that there is no `BANKMFDB` subdirectory in the location in which you expanded the archive. If there is one, you must delete it.
@@ -56,7 +56,7 @@ The demonstration also includes some instructions to build the application from 
 
    b. Ensure there is no region called **BANKMFDB** already defined. If there is one, delete it.
 
-3. Verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones other servers in this repository might use.
+3. Verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones that other servers in this repository might use.
 
 4. Start an administrator's command prompt (Windows) or a terminal for user under which Enterprise Servers run (Linux).
 
@@ -79,10 +79,10 @@ The demonstration also includes some instructions to build the application from 
 
 8. Start a TN3270 terminal emulator, and connect to port 9023. 
 
-   The Bankdemo application login screen should load.
+   The Bankdemo application login screen loads.
 
-9. Enter a valid user ID - a suitable one is `B0001`. You can use any character for the password as the password is not validated.
+9. Enter a valid user ID - a suitable one is `B0001`. You can use any character for the password because the password is not validated.
 
 10. In ESCWA, select the BANKMFDB server under **Directory Servers > Default**. See the options on the **General** tab. Also, click the downwards arrow next to **General** and click any of the menu items to explore the server configuration.
     
-11. The `sources\jcl\ZBNKSTMT.jcl` file can be used to run a JCL batch job via the **JES**, **Control** ESCWA dropdown menu.
+11. The `sources\jcl\ZBNKSTMT.jcl` file can be used to run a JCL batch job via the **JES**, **Control** ESCWA drop-down menu.
