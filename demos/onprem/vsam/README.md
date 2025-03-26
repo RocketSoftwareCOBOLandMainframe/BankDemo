@@ -1,4 +1,4 @@
-# Bankdemo Application Using Disk Files
+# Deploying and Running Bankdemo with VSAM Data
 
 This demonstration shows how to configure the Bankdemo application to store banking data in VSAM datasets on disk. You access the datasets from COBOL programs using `EXEC CICS` statements such as `STARTBR FILE`, `READ FILE`, `WRITE FILE`. The COBOL modules are stored in the `sources/cobol/data/vsam` directory of this project.
 

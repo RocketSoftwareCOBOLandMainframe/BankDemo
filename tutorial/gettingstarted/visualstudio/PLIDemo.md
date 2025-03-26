@@ -1,4 +1,4 @@
-# Open PL/I Development using Enterprise Developer for Visual Studio 2022
+# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio 202
 
 ## Contents
 - [Overview](#overview)

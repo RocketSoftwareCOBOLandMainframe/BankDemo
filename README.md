@@ -65,10 +65,10 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - Python 3 with the `requests` and for the PostgreSQL demo `psycopg2-binary` packages (use the following command to install the packages: `python -m pip install requests psycopg2-binary`)
         - Check the tutorial or demonstration instruction for any additional requirements
     - Available demonstrations:
-        - [Deploying and running Bankdemo with VSAM data](demos/onprem/vsam/README.md) 
-        - [Deploying and running Bankdemo with PostgreSQL](demos/onprem/psql/README.md) 
-        - [Deploying and running Bankdemo with VSAM stored in PostgreSQL using MFDBFH](demos/onprem/psqlmfdbfh/README.md) 
-        - [Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL](demos/onprem/psqlpac/README.md) 
+        - [Deploying and Running Bankdemo with VSAM Data](demos/onprem/vsam/README.md) 
+        - [Deploying and Running Bankdemo with PostgreSQL](demos/onprem/psql/README.md) 
+        - [Deploying and Running Bankdemo with VSAM stored in PostgreSQL using MFDBFH](demos/onprem/psqlmfdbfh/README.md) 
+        - [Deploying and Running Bankdemo in a Performance and Availability Cluster with PostgreSQL](demos/onprem/psqlpac/README.md) 
     - Requirements: 
         - Ensure that the Directory Server (mfds) service is running
         - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
