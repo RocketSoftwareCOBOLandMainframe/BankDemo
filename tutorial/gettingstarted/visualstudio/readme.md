@@ -620,11 +620,11 @@ To compile the application:
 
 **COBOL Compiler Control**
 
-The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains EXEC CICS or EXEC SQL statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
+The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains `EXEC CICS` or `EXEC SQL` statements. The Compiler is controlled through a series of directives which are passed to the Compiler at build time. You can set directives at either a project or a component level.
 
-Often the directives can be set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you need to compile with different directives. In this case, you can set the directives at the component level which overrides the project settings.
+Often the directives are set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you need to compile with different directives. In this case, you can set the directives at the component level, which overrides the project settings.
 
-For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the respective COBOL programs.
+For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the level of the respective COBOL programs.
 
 The Bankdemo application already has the required Compiler directives set on the files. At build time, the IDE invokes the COBOL compiler to compile the sources and create a number of files. These "built" files can vary, but each COBOL program in the Bankdemo application compiles to produce the following three types of file:
 
@@ -654,25 +654,24 @@ You can configure the IDE to create a fully expanded Compiler listing file durin
 3.  Set the **Generate listing file** field to **Yes**, and save your changes.
 4.  Click **Build** \> **Build Solution**.
 
-    During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a Listing subfolder in
-
-    the project directory (`C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. From File Explorer, you can open the file in a text editor such as Microsoft's Notepad and view its contents.
+    During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a `Listing` subfolder in
+    the project directory (`C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. From File Explorer, you can open the file in a text editor, such as Microsoft's Notepad, and view its contents.
 
 **Example of Compiling a COBOL Program with Errors**
 
 You can introduce some Compiler errors into one of the programs to see how the Compiler handles them:
 
-1.  In Solution Explorer, double-click **ZBNKPRT1.cbl**.
-2.  Page down the program a few pages to the start of the Procedure Division around line 224.
-3.  Introduce a few syntax errors as follows:
-    - On line 226 change `RUN-TIME` to `RUN-TME`
-    - On line 229 change `SPACES` to `SPOCES`
-    - On line 237 place a period after the `END-IF`
+1. In Solution Explorer, double-click **ZBNKPRT1.cbl**.
+2. Page down the program a few pages to the start of the Procedure Division around line 224.
+3. Introduce a few syntax errors as follows:
+    - On line 226, change `RUN-TIME` to `RUN-TME`
+    - On line 229, change `SPACES` to `SPOCES`
+    - On line 237, place a period after the `END-IF`.
 
      The errors are underlined with red wavy lines and a colored bar is added to the left of each line that includes an error.
 
-4.  Hover over an underlined item to view a pop-up with an explanation of what the error is.
-4.  Save the program, and build your solution.
+4. Hover over an underlined item to view a pop-up with an explanation of what the error is.
+4. Save the program and build your solution.
 6. Check the **Error List** window to view the list of errors.
 7. Double-click an error in the list to position the cursor on the line of code that contains the error.
 8. Check the errors in the listing file, `ZBNKPRT.lst` as follows:
@@ -683,7 +682,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     ![](images\29930242-CCA4-471C-A535-6CD24F12A117.png)
 
-9. In the IDE, fix the errors in `ZBNKPRT.cbl`, save the file, and rebuild the solution.
+9. In the IDE, fix the errors in `ZBNKPRT.cbl`, save the file and rebuild the solution.
 
     There should be no errors in the build now.
 
@@ -717,7 +716,7 @@ Ensure that the default settings are applied to the Directory Sever:
 
 3.  Right-click **Rocket Enterprise Servers** and select **Add Directory Server**. This opens the Rocket Directory Server window. 
 
-4.  Ensure that Host name is `localhost` and the Port number is `86`.
+4.  Ensure that the host name is `localhost` and the port number is `86`.
 
 To import the definition of the Bankdemo logical server (LSER) in Enterprise Server:
 
@@ -727,12 +726,12 @@ To import the definition of the Bankdemo logical server (LSER) in Enterprise Ser
 
     If you are presented with the **Enterprise Server Sign On** dialog box, click **OK**.
 
-3.  Right-click **localhost**, and click **Import**.
+3.  Right-click **localhost** and click **Import**.
 4.  In the **Import Server** dialog box, click **...** on the line for **Import server definition file**.
-5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, and click **OK** twice.
+5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml** and click **OK** twice.
 
 6. Check the **Output** window for the results of importing the server. 
-The Server Explorer window should now show a server called BANKDEMO under **Rocket Enterprise Server \> localhost**. If the server is not visible, right-click **Rocket Enterprise Server**, and click **Refresh**
+The Server Explorer window should now show a server called BANKDEMO under **Rocket Enterprise Server \> localhost**. If the server is not visible, right-click **Rocket Enterprise Server** and click **Refresh**.
 
 **Associate the BANKDEMO Enterprise Server with Your Project**
 
@@ -752,8 +751,8 @@ Ensure your application is associated with the BANKDEMO server:
 Configure the IDE to start the associated BANKDEMO server automatically as follows:
 
 1.  Click **Tools \> Options**.
-2.  Expand **Rocket Software Tools**, and click **Enterprise Server**.
-3.  Check the following options on this page to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
+2.  Expand **Rocket Software Tools** and click **Enterprise Server**.
+3.  Select the following options on this page to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
     - **Automatically start the associated server** - this ensures the IDE will start the server if it is not running when you execute the application.
     - **Stop running servers on project/folder close** - this enables the IDE to stop the server when you close the project.
     - **Automatically enable dynamic debugging** - this ensures the IDE will check whether the server has dynamic debugging enabled and, if it is not, will enable it when you start debugging.
@@ -764,13 +763,13 @@ Configure the IDE to start the associated BANKDEMO server automatically as follo
 
 These are the steps to start the server manually, and are included for completeness. You do not have to start the server manually, as you have configured the IDE to start the server automatically. 
 
-1. In Server Explorer, right-click **BANKDEMO** under **Rocket Enterprise Server**, then click **Start**.
+1. In Server Explorer, right-click **BANKDEMO** under **Rocket Enterprise Server** and click **Start**.
 
-    **Note:** You might receive an Enterprise Server Sign On dialog prompting you to provide connection details for the BANKDEMO server. This is a standard security dialog. Click **OK** without specifying any sign-on details. Also, you may skip enabling password recovery.
+    **Note:** You might receive an Enterprise Server Sign On dialog prompting you to provide connection details for the BANKDEMO server. This is a standard security dialog. Click **OK** without specifying any sign-on details. Also, you might skip enabling password recovery.
 
     You might receive a **Windows Security Alert** blocking the **MF Communications** process. Click **Allow access**.
 
-2.  Right-click the BANKDEMO server in Server Explorer, and click **Show Console Log**.
+2.  Right-click the BANKDEMO server in Server Explorer and click **Show Console Log**.
 
     ![](images/3b9dcb9098ce66eb406d4451fe59e8c6.png)
     See the **Output** window for the messages from the server log that show that the server has started.
@@ -783,11 +782,11 @@ These are the steps to start the server manually, and are included for completen
 
 The JCL provided in your demo causes the COBOL application to read a file, sort the data and produce a report. The `.jcl` file, `ZBNKSTMT.jcl`, is in the **Bankdemo** project. To submit this job:
 
-1.  In Solution Explorer, select the JCL file in the project, and then drag it across to Server Explorer, and drop it onto the BANKDEMO server.
+1.  In Solution Explorer, select the JCL file in the project, drag it across to Server Explorer, and drop it onto the BANKDEMO server.
 
-    Alternatively, you can right-click the file in Solution Explorer, and select **Submit JCL**.
+    Alternatively, you can right-click the file in Solution Explorer and select **Submit JCL**.
 
-    **Note:** If you have not started the BANKDEMO server yet, since you configured the IDE to start the server automatically, you receive a notification that the server will be started. Click **OK** to confirm this.
+    **Note:** If you have not started the BANKDEMO server yet, since you configured the IDE to start the server automatically, you receive a notification that the server will be started. Click **OK** to confirm.
 
 2.  Check the **Output** window to see that the job has been submitted and that the job has completed.
 
@@ -803,19 +802,19 @@ You can open the catalog and the spool directly from Server Explorer.
 
 To view the catalog:
 
-1.  In Server Explorer, right-click the BANKDEMO server, and click **Show Catalog**.
+1.  In Server Explorer, right-click the BANKDEMO server and click **Show Catalog**.
 
-    Alternatively, in Solution Explorer, right-click the BankDemo project, and click **Enterprise Server \> Show Catalog**.
+    Alternatively, in Solution Explorer, right-click the BankDemo project and click **Enterprise Server \> Show Catalog**.
 
     This opens the catalog:
 ![](images/3c6f3d18d838a553e016f22a1d3a4ab2.png)
 
-2.  Click a file name (for example, **MFI01V.MFIDEMO.BNKACC**) in the list in the left-hand pane. This displays the DCB information for this catalog item.
+2.  Click a file name (for example, **MFI01V.MFIDEMO.BNKACC**) in the list in the left pane. This displays the DCB information for this catalog item.
 3.  Expand the **Display** section to preview the contents of the file.
 
 To view the spool:
 
-1.  In Server Explorer, right-click the BANKDEMO server, and click **Show Spool**.
+1.  In Server Explorer, right-click the BANKDEMO server and click **Show Spool**.
 
     Alternatively, in Solution Explorer, right-click the Bankdemo project, and click **Enterprise Server \> Show Spool**. This might still show the details of the submitted JCL job.
 
@@ -826,7 +825,7 @@ To view the spool:
 7.  Click the **Complete** button and also check **Descending** next to **Job ID** to see a list of all jobs in the completed queue, then click **Apply**. Your job is at the top of the list.
 8.  Click the job you want to see in the list.
 
-    This opens a page with a variety of information for the job progress, showing return condition code (**Cond.**) of 0000:
+    This opens a page with information for the job progress, showing return condition code (**Cond.**) of 0000:
 
     ![](images/2528f694ecb567aa162db6d1de959fdc.jpg)
 
@@ -844,7 +843,7 @@ To view the spool:
 
 In the previous step, Unit Testing the Batch Application, you used the BANKDEMO enterprise server. You are going to use it again for online testing.
 
-As with JCL, execution of the jobs requires a previously configured enterprise server.
+As with JCL, execution of the jobs requires a previously configured enterprise server instance.
 
 Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is running:
 
@@ -856,7 +855,7 @@ Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is ru
 
 **Executing the IBM CICS application**
 
-The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you can adapt the tutorial to suit your terminal emulator of choice. 
 
 **Configuring the TN3270 Settings in the IDE** 
 
@@ -876,7 +875,7 @@ This opens the **Host Access for the Cloud** in your default browser and automat
 **Executing the Enterprise Server Demonstration**
 
 1.  Type your logon details, and press **Enter**.
-A suitable `User Id` is `b0001`. You can type anything as a `Password` - the field must not be empty though.
+A suitable `User Id` is `b0001`. You can type anything as a `Password`, but you cannot leave the field empty.
 
     ![](images/Bankdemo_001.png)
 
@@ -892,7 +891,7 @@ A suitable `User Id` is `b0001`. You can type anything as a `Password` - the fie
 
 You can stop the Bankdemo server from within Server Explorer. You can leave it running though, if you wish to continue this tutorial.
 
-**Note:** In production, enterprise servers are long-running processes that are usually run for many months without stopping and starting.
+**Note:** In production, enterprise servers are long-running processes that usually run for many months without stopping and starting.
 
 ## Debugging the Batch Application
 
@@ -931,9 +930,9 @@ To start the debugger:
 
 You can now look at some simple features inside the debugger. To submit the JCL job:
 
-1.  In Solution Explorer, right-click **ZBNKSTMT.jcl**, and click **Submit JCL**.
+1.  In Solution Explorer, right-click **ZBNKSTMT.jcl** and click **Submit JCL**.
 
-    The debugger starts, and the IDE opens **ZBNKEXT1.cbl** for debugging, with the execution point set on the first line of Procedure Division.
+    The debugger starts and the IDE opens **ZBNKEXT1.cbl** for debugging, with the execution point set on the first line of Procedure Division.
 
     ![](images/e8d8a4263157b617ed680be5ac7dfb40.jpg)
 
@@ -946,7 +945,7 @@ The highlighted line of code is the one the IDE will execute next.
 
 1.  Press **F11** (Step Into) to execute the highlighted line.
 
-    The PERFORM statement executes and takes you to the line starting with IF TIMER-START.
+    The `PERFORM` statement executes and takes you to the line starting with `IF TIMER-START`.
 
 2.  Press **F11** slowly a few more times until you reach line 160.
 
@@ -955,7 +954,7 @@ The highlighted line of code is the one the IDE will execute next.
 1.  Scroll down the file and position the cursor on a line further down the code.
 2.  Right-click the line in the editor, and click **Run To Cursor**.
 
-    The application runs and executes the instructions till the line you selected.
+    The application runs and executes the instructions until the line you selected.
 
 **Using the Debug Windows**
 
@@ -1028,7 +1027,7 @@ Open the Breakpoints window - currently, there are no breakpoints set in the pro
 COBOL watchpoints enable you to watch the memory associated with data items. You can add a COBOL watchpoint as follows:
 
 1.  Scroll to line 99 in the code of `ZBNKEXT1.cbl` file.
-2.  Right-click `WS-EXEC-PARM-LL`, and click **Add COBOL Watchpoint**.
+2.  Right-click `WS-EXEC-PARM-LL` and click **Add COBOL Watchpoint**.
 
     This adds the item to the COBOL Watchpoints window.
 
@@ -1060,7 +1059,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 **Running COBOL Reports**
 
    Enterprise Developer provides a few COBOL reports which you can run against your COBOL programs to help you understand and optimize them. For example, to run a report to identify any code that cannot be reached or executed, you need to run an unreferenced data report:
-1.  With the `SBANK00P.cbl` file still opened in the editor, click the down arrow next to ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar, and click **Unreferenced Data**.
+1.  With the `SBANK00P.cbl` file still opened in the editor, click the down arrow next to ![](images/3119773a06873ff858290267b7dc7e43.jpg), **Quick Browse**, in the COBOL toolbar and click **Unreferenced Data**.
 
       The IDE shows the results in the **Enterprise Developer Code Analysis** window:
 
@@ -1087,17 +1086,17 @@ If the enterprise server is not yet stated, you need to start it as follows:
 
     If the window is not visible, click **View** \> **Server Explorer** (or **View** \> **Other Windows** \> **Server Explorer**).
 
-2.  In Server Explorer, right-click the BANKDEMO server, and then click **Start**.
+2.  In Server Explorer, right-click the BANKDEMO server and click **Start**.
 
     Wait until the server has started. In the list of servers in Server Explorer, BANKDEMO still has a red square next to it. This is a refresh delay.
 
-3.  In Server Explorer window, right-click **Rocket Enterprise Server**, and click **Refresh** to confirm the server has started.
+3.  In Server Explorer window, right-click **Rocket Enterprise Server** and click **Refresh** to confirm the server has started.
 
 **Starting the Debugger**
 
-The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS debugger. You are going to use this to debug the online Bankdemo application:
+The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS debugger. You are going to use this to debug the online Bankdemo application.
 
-1.  In Solution Explorer, right-click the **Bankdemo** project, and click **Properties**.
+1.  In Solution Explorer, right-click the **Bankdemo** project and click **Properties**.
 2.  Click the **Debug** tab in the properties.
 3.  Set **Launch** to **CICS**.
 4.  Type **BANK** in the **Transaction** field.
