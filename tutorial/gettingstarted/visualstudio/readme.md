@@ -66,7 +66,7 @@ In this release, the Enterprise Server security features are enabled by default.
     Now, you can use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. 
 
-    Regions no longer require credentials for starting/stopping and other actions.
+    Regions no longer require credentials for starting, stopping and other actions.
 
 
 
