@@ -1,4 +1,4 @@
-# Open PL/I Development using Enterprise Developer for Eclipse
+# Open PL/I Development by Using Enterprise Developer for Eclipse
 ## Contents
 - [Overview](#overview)
 - [How to Run this Demonstration](#how-to-run-the-demonstration)
@@ -19,7 +19,7 @@ Before running this demo remotely, verify that you have an RDO and MFDS agent al
 
 ## How to Run the Demonstration
 
-### Disable the default Enterprise Server security configuration
+### Disable the Default Enterprise Server Security Configuration
 
 The Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information. <!-- There was some discussion about this part of the instructions. Should we change the guidance for disabling ES security in any way? -->
 
@@ -37,7 +37,7 @@ The Enterprise Server security features are enabled by default. However, tutoria
    Regions no longer require credentials for starting/stopping and other actions.
 
 
-### Connect to the default ESCWA server
+### Connect to the Default ESCWA Server
 
 Ensure that **Server Explorer** contains a connection to the default Enterprise Server Common Web Administration (ESCWA) server. Existing workspaces might already have this connection.
 
@@ -52,7 +52,7 @@ Ensure that **Server Explorer** contains a connection to the default Enterprise 
 6. Click **Finish**.
 The new connection appears at the top level, in **Server Explorer**.
 
-### Import the supplied BANKDEMO enterprise server
+### Import the BANKDEMO Enterprise Server
 
 **Note:** If you have already imported the BANKDEMO enterprise server region for the IDE Getting Started tutorial, you scan skip these steps.
 
@@ -61,7 +61,7 @@ The new connection appears at the top level, in **Server Explorer**.
 4. Click **Browse**, select the `tutorial/BANKDEMO.xml` file and click **Finish**.
     The BANKDEMO server appears under **Local** in Server Explorer.
 
-### Start the HACloud session server
+### Start the HACloud Session Server
 
 You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this, start the Windows service (Windows) or the `startsessionserver.sh` script (UNIX).
 
@@ -87,7 +87,7 @@ You must start the HACloud session server before attempting to use the HACloud T
     startsessionserver.sh
     ```
 
-### Import the INCLUDES, FETCHABLES, and BANKMAIN projects into an Eclipse workspace:
+### Import the INCLUDES, FETCHABLES, and BANKMAIN Projects into an Eclipse Workspace
 
 1. After opening Enterprise Developer for Eclipse, either create a new workspace or open an existing one.
 2. If it's not already open, open the PL/I perspective in the Eclipse IDE by clicking **Window > Perspective > Open Perspective > Other > PL/I**.
@@ -101,7 +101,7 @@ You must start the HACloud session server before attempting to use the HACloud T
 9.  Ensure the project has been built (either because Auto-build is enabled) or by clicking **Build** on the **Project** menu.
 
 
-### Configure the BANKDEMO enterprise server for PL/I:
+### Configure the BANKDEMO Enterprise Server for PL/I
 
 1. In the **Server Explorer** tab, right-click on **BANKDEMO** under **Local** and click **Open Administration Page**. 
 This opens the **Enterprise Server Common Web Administration** (ESCWA)  page outside of Eclipse.
@@ -110,19 +110,19 @@ This opens the **Enterprise Server Common Web Administration** (ESCWA)  page out
 
       This configures the server to use some PL/I IBM CICS resources.
 
-### Associate the projects with the BANKDEMO enterprise server:
+### Associate the Projects with the BANKDEMO Enterprise Server
 
 1. In the **Server Explorer** tab, right-click the **BANKDEMO** server, select **Associate with Project**, and click **BANKMAIN**.
 2. Repeat the process for the **FETCHABLES** project. 
 
 Making these associations before you start the server enables the executables built by the projects to be used.
 
-### Start the BANKDEMO enterprise server:
+### Start the BANKDEMO Enterprise Server
 
 1. On the **Server Explorer** tab, right-click the **BANKDEMO** server and click **Start**.
 2. Click **OK** in the **Enterprise Server Sign On** dialog (you can leave the fields blank). You can check the **Output** view to see the progress of starting the server. This also starts the **Enterprise Server Console Daemon** window which also provides information about the server start-up.
 
-### Execute the BANKDEMO application:
+### Execute the BANKDEMO Application
 
 1. To prepare for debugging in Eclipse, create a debug configuration by selecting **Debug Configurations** from the **Run** menu.
 2. On the Debug Configurations dialog, right-click **PL/I Enterprise Server** and click **New Configuration**.
@@ -142,7 +142,7 @@ Making these associations before you start the server enables the executables bu
 13. Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.
 14. You can now disconnect your TN3270 terminal to end the demo.
 
-### Stop the enterprise server:
+### Stop the Enterprise Server
 When you have finished running the demo, you can stop the associated enterprise server instance:
 
 1. In Eclipse, right-click the **BANKDEMO** server in **Server Explorer** and click **Stop**.
