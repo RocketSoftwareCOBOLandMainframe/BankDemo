@@ -30,7 +30,7 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script creates the enterprise server instance in the `BANKMFDB` subdirectory of this project.
    - The script creates the instance by using (almost exclusively) the ESCWA Admin API.
    - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file.
-   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM datasets.  <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
+   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets.  <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
    - The enterprise server instance is configured as a 64-bit server and can be reconfigured to deploy a 32-bit server (see the next section).
    - The enterprise server instance uses pre-built application modules.
    - Two ODBC system data sources, called `BANKVSAM.MASTER` and `BANKVSAM.VSAM`, are created.
