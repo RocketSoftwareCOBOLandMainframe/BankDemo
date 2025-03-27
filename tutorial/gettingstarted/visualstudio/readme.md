@@ -142,7 +142,7 @@ To see what directives are set:
 1.  In Visual Studio, click **Tools** \> **Options**.
 2.  Scroll down to and expand **Rocket Software Tools**, expand **Directives** and click **COBOL**.
 
-    ![](images\7FAE6822-8BD0-4B54-A83E-B43E3B90F8F6.png)
+    ![](images/7FAE6822-8BD0-4B54-A83E-B43E3B90F8F6.png)
     
     This page enables you to configure what directives are set on the COBOL files that you add to your project. The directives scanning determines the dialect, what `EXEC CICS` and `EXEC SQL` statements are used in the COBOL source files and sets directives as detailed on this page.
 
