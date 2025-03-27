@@ -140,7 +140,7 @@ By default, the IDE is configured to automatically scan any new source files tha
 To see what directives are set:
 
 1.  In Visual Studio, click **Tools** \> **Options**.
-2.  Scroll down to and expand **Rocket Software Tools**, expand **Directives** and click **COBOL**.
+2.  Scroll down to and expand **Rocket Tools**, expand **Directives** and click **COBOL**.
 
     ![](images/7FAE6822-8BD0-4B54-A83E-B43E3B90F8F6.png)
     
@@ -569,7 +569,7 @@ You can edit data files using one of two available Rocket Data File Editor tools
 
 By default, Visual Studio is configured to use the new Data File Tools utility. To check whether this is enabled:
 
-1.  Click **Tools \> Options \> Rocket Software Tools \> Data File Tools**.
+1.  Click **Tools \> Options \> Rocket Tools \> Data File Tools**.
 2.  Ensure **Use New Data File Tools for supported options** is selected, and click **OK**.
 3.  To edit the `.dat` file, in Solution Explorer, right-click the **.dat** file and click **Open with Data File Tools**.
 
@@ -751,7 +751,7 @@ Ensure your application is associated with the BANKDEMO server:
 Configure the IDE to start the associated BANKDEMO server automatically as follows:
 
 1.  Click **Tools \> Options**.
-2.  Expand **Rocket Software Tools** and click **Enterprise Server**.
+2.  Expand **Rocket Tools** and click **Enterprise Server**.
 3.  Select the following options on this page to enable the IDE to start or stop the associated server, and to enable dynamic debugging, for when it is not enabled in the server:
     - **Automatically start the associated server** - this ensures the IDE will start the server if it is not running when you execute the application.
     - **Stop running servers on project/folder close** - this enables the IDE to stop the server when you close the project.
@@ -862,7 +862,7 @@ The IBM CICS application requires that you use a 3270 terminal emulator. This tu
 To check the IDE preferences for a TN3270 display:
 
 1.  In the IDE, click **Tools \> Options**.
-2.  Expand **Rocket Software Tools**, and click **TN3270 Display**.
+2.  Expand **Rocket Tools**, and click **TN3270 Display**.
 3.  Ensure that **Host Access for the Cloud** is selected.
 4.  Click **OK**.
 
