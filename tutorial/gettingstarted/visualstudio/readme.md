@@ -549,7 +549,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 2.  In Solution Explorer, right-click **MBANK10.bms** in the **bms** folder and click **Open BMS Painter**.
 
     This starts the external Rocket BMS Painter.
-    ![](images\1962FA41-8CB1-4DD1-A1A5-1707F00D6509.png)
+    ![](images/1962FA41-8CB1-4DD1-A1A5-1707F00D6509.png)
 
 3.  In BMS Painter, you can click fields and move them by dragging.
 
@@ -582,7 +582,7 @@ By default, Visual Studio is configured to use the new Data File Tools utility. 
     The **Data File Editor** loads the data file and shows two views:
     -   The left pane shows the raw form of the file. Because many of the field are COMP-3 fields, the data in these fields is presented in an ASCII view.
 
-      ![](images\datafiletoolsscreengrabmarch2025.png)
+      ![](images/datafiletoolsscreengrabmarch2025.png)
     - The right pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in an easier to read, editable form.
 
 6.  Change the value of `BAC-REC-BALANCE` from `91.14` to `132.76` as follows: 
@@ -680,7 +680,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     The lines that include syntax errors are marked with asterisks (\*\*).
 
-    ![](images\29930242-CCA4-471C-A535-6CD24F12A117.png)
+    ![](images/29930242-CCA4-471C-A535-6CD24F12A117.png)
 
 9. In the IDE, fix the errors in `ZBNKPRT.cbl`, save the file and rebuild the solution.
 
@@ -1054,7 +1054,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
     The results are shown in the **Enterprise Developer Code Analysis** window:
 
-    ![](images\1758A9F5-4C16-40DF-BFED-E4DF19932E46.jpeg)
+    ![](images/1758A9F5-4C16-40DF-BFED-E4DF19932E46.jpeg)
 
 **Running COBOL Reports**
 
@@ -1063,7 +1063,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
       The IDE shows the results in the **Enterprise Developer Code Analysis** window:
 
-    ![](images\924799F6-F6F8-4189-B7C5-B69139EF7F97.png)
+    ![](images/924799F6-F6F8-4189-B7C5-B69139EF7F97.png)
 
     2.  Expand any of the lines in the report and double-click a line in the result to highlight the lines of code that include unreferenced data.
     3.  Use the rest of the commands available from the down arrow next to ![](images/95f4e27be11786c150a0ba4f07a661ae.jpg), **Quick Browse**, in the COBOL toolbar to run any of the other available reports.
