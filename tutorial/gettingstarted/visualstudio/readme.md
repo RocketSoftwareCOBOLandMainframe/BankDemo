@@ -380,7 +380,7 @@ You are going to explore some of the COBOL editing features by using the `ZBNKPR
  1. Scroll down the file to line 61 and see some `COPY` statements. 
  2. Right-click the line for `COPY CDATED` and click **Show "CDATED.CPY"**. This expands the copybook directly in the code of `ZBNKPRT1.cbl`. 
 
-    ![](images\showcopybook754.png)
+    ![](images/showcopybook754.png)
 
 3. You can edit the code of the copybook in the expanded view, so introduce an error in the code now.
 
