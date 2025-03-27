@@ -6,7 +6,7 @@ This set of tutorials guides you through Rocket&reg; Enterprise Developer for Ec
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Eclipse Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Eclipse to develop and maintain both simple COBOL and mainframe subsystem applications.
 
-Other tutorials, which are designed for Administrators, are available.
+Other tutorials, which are designed for Administrators, are also available.
 
 * [Starting the Eclipse Integrated Development Environment (IDE)](#starting-the-eclipse-integrated-development-environment-ide)
 * [Creating a Project and Adding the Source Files](#creating-a-project-and-adding-the-source-files)
@@ -19,12 +19,12 @@ Other tutorials, which are designed for Administrators, are available.
 
 **Download the Demonstration Application**
 
-A preconfigured, fully executing application, Bankdemo, is available from the Rocket Software GitHub repository - [*click here*](https://github.com/RocketSoftware/BankDemo). Download the sample's sources as follows:
+A preconfigured, fully executable application, Bankdemo, is available from the Rocket Software GitHub repository - [*click here*](https://github.com/RocketSoftware/BankDemo). Download the sample sources as follows:
 
 1.  In the GitHub repository for the Bankdemo demonstration, click **Releases** in the right side part of the page.
 2.  In the list of releases, locate and click the one that corresponds to the Enterprise Developer product release you have installed.
-3.  Expand the **Assets** section, and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample's sources.
-4.  Expand the archive on your machine.
+3.  Expand the **Assets** section, and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample sources.
+4.  Expand the archive on your computer.
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
 
@@ -42,7 +42,7 @@ As part of this tutorial, you use the supplied standard Eclipse COBOL project in
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse (Linux). [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -60,9 +60,17 @@ In this release, the Enterprise Server security features are enabled by default.
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
-1. In an Enterprise Developer Command Prompt, run the command `DisableESDefaultSecurity.sh`. You see a series of messages as the script disables default security.
-2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
-3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting or stopping and other actions.
+1. In an Enterprise Developer Command Prompt, run the command `DisableESDefaultSecurity.sh`. 
+
+    You see a series of messages as the script disables default security.
+
+2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. 
+
+    You can now use ESCWA without having to log in.
+
+3. Restart any running enterprise server regions to have them pick up the configuration changes. 
+
+    Regions will no longer require credentials for starting or stopping and other actions.
 
 ## Starting the Eclipse Integrated Development Environment (IDE)
 
@@ -239,7 +247,7 @@ The demonstration application includes a number of data files. To see how you ca
 4.  Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
 5.  Click **Finish**.
 
-    This adds the file to the Bankdemo project and also automatically opens it in the Rocket Data Files Tools utility. You can close the utility for now.
+    This adds the file to the Bankdemo project and also automatically opens it in the Rocket&reg; Data File Tools utility. You can close the utility for now.
 
 6.  Repeat steps 1 to 5 to add the `MFI01V.MFIDEMO.BNKACC.str` file to the project.
 
@@ -526,21 +534,21 @@ The build in this case checks for any files that have changed and does two thing
 Turn the automatic build on:
 -   Click **Project** and enable **Build Automatically**.
 
-**COBOL Compiler control**
+**COBOL Compiler Control**
 
 The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains `EXEC CICS` or `EXEC SQL` statements. The Compiler is controlled through a series of "directives" which are passed to the Compiler at build time. You can set directives at either a project or component level.
 
 Often the directives can be set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you must compile with different directives. In this case, you can set the directives at the component level which overrides the project settings.
 
-For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the respective COBOL programs.
+For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the respective COBOL programs levels.
 
 The Bankdemo application already has the required Compiler directives set on the files. At build time, the IDE invokes the COBOL Compiler to compile the sources and create a number of files. These "built" files can vary, but each COBOL program in the Bankdemo application compiles to produce the following three types of files:
 
 | **File type**               | **Function**                                                             |
 |-----------------------------|--------------------------------------------------------------------------|
-| .so - shared object         | Effectively the executable module the Compiler creates for each program. |
-| .idy - debugger information | The file created by the Compiler which allows debugging of the module.   |
-| .o - object file            | A temporary file the Compiler creates while producing the .so file.      |
+| `.so` - shared object         | Effectively the executable module the Compiler creates for each program. |
+| `.idy` - debugger information | The file created by the Compiler which allows debugging of the module.   |
+| `.o` - object file            | A temporary file the Compiler creates while producing the .so file.      |
 
 **BMS Compiler Control**
 
@@ -550,8 +558,8 @@ The BMS Compiler produces the following two types of files:
 
 | **File type**         | **Function**                                                                                  |
 |-----------------------|-----------------------------------------------------------------------------------------------|
-| .mod - BMS executable | A file created by the BMS Compiler which is the executable module relating to the BMS source. |
-| .cpy - copybook       | A copybook that contains the BMS mapping for use in a COBOL program.                          |
+| `.mod` - BMS executable | A file created by the BMS Compiler which is the executable module relating to the BMS source. |
+| `.cpy` - copybook       | A copybook that contains the BMS mapping for use in a COBOL program.                          |
 
 **Producing a Compiler Listing**
 
@@ -600,11 +608,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
     b.  Right-click the line with the error message in the **Problems** view and select **Quick Fix**.
 
-       The Quick Fix window opens.
-
-    c.  Click **Enable copybook path entry for directory containing CTIMERD** and click **Finish**.
-    
-        This displays a message that the directory containing the copybook is not on the copybook path for the project.
+    c.  In the **Quick Fix** window, click **Enable copybook path entry for directory containing CTIMERD**, and click **Finish**. You see a message that the directory containing the copybook is not on the copybook path for the project.
 
     d.  Click **Yes** to add the `Bankdemo > jcl` folder where you moved the copybook to the copybook path of the project.
 
@@ -631,7 +635,7 @@ The first thing you must do is to check that the Bankdemo application is executi
 
 To execute the JCL, run the application in an instance of the Rocket Enterprise Server (sometimes abbreviated to Enterprise Server). This demonstration includes a preconfigured enterprise server instance called BANKDEMO which you must import in Enterprise Server and start before you execute the Bankdemo application.
 
-> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
+> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
 **Importing the Bankdemo Server**
 
@@ -797,7 +801,7 @@ In the previous step, Unit Testing the Batch Application, you used the BANKDEMO 
 
 As with JCL, execution of the jobs requires a previously configured enterprise server.
 
-> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application as running applications is not supported in Enterprise Developer Connect.
+> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
 **Executing the IBM CICS Application**
 
@@ -848,7 +852,7 @@ To check the IDE preferences for the TN3270 emulator:
 
     ![](images/Bankdemo_002.png)
 
-3.  Press **Enter** to see the details for this customer
+3.  Press **Enter** to see the details for this customer.
 
     ![](images/Bankdemo_003.png)
 
@@ -875,7 +879,7 @@ You can stop the BANKDEMO server from within **Server Explorer**. You can leave 
 
 You are going to debug the batch Bankdemo application.
 
-> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to debug applications as this feature is not supported in Enterprise Developer Connect.
+> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
 **Starting the Server**
 
@@ -929,15 +933,15 @@ You are going to look at some simple features inside the debugger. Start by subm
 
 1.  In the **Application Explorer** view, expand the **jcl** folder in your project.
 2.  Right-click **ZBNKSTMT.jcl** and select **Submit JCL to associated Server**.
-3.  Depending on what you have done before, you may receive a message to **Confirm Perspective Switch**. If you receive it, select **Remember my decision**, and click **Yes**. If Eclipse does not switch to
+3.  Depending on what you have done before, you may receive a message to **Confirm Perspective Switch**. If you receive it, select **Remember my decision**, and click **Yes**. 
 
-    the Debug perspective automatically, click the **Debug** button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), in the right upper corner of the main Eclipse window to switch the perspective.
+    If Eclipse does not switch to the Debug perspective automatically, click the **Debug** button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), in the right upper corner of the main Eclipse window to switch the perspective.
 
     This starts the debugger and opens `ZBNKEXT1.cbl` for debugging, with the execution point set on the first line of Procedure Division.
 
     ![](images/70f9ebaf905466c7d4585f32d7e5913b.jpg)
 
-To display the line numbers in the editor:
+If you want to display the line numbers in the editor:
 
 -  Right-click in the left-most gray area of the editor, and click **Show Line Numbers**.
 
@@ -1033,7 +1037,7 @@ Although the job has completed, the debugger is still waiting for the next event
 
 [Back to Top](#overview)
 
-> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to debug applications as this feature is not supported in Enterprise Developer Connect.
+> **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
 **Starting the Server**
 

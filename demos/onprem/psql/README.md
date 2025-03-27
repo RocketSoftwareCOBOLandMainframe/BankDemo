@@ -34,7 +34,7 @@ The demonstration includes a Python script that helps you create the enterprise 
    - Creates the enterprise server instance by using the ESCWA Admin API (almost exclusively).
    - Uses a single command-line utility, `caspcrd`, to create the default IBM CICS resource definition file. 
    - Configures the enterprise server instance for use with JCL and the VSAM datasets are cataloged.
-   - Configures the enterprise server instance as a 64-bit server and can be reconfigured to deploy a 32-bit server (see below).
+   - Configures the enterprise server instance as a 64-bit server. You can change the configuration to deploy a 32-bit server (see *Step 6* in the procedure below).
    - Uses pre-built application modules.
    - Creates an ODBC system data source called `bank`.
    - Populates the database tables with sample data.
@@ -48,6 +48,7 @@ The demonstration includes a Python script that helps you create the enterprise 
 The demonstration also includes some instructions on how to build the application from the sources.
 
 ## Running the Demonstration
+
 1. Extract the demonstration archive on your machine.
 
    Ensure that there is no `BANKSQL` subdirectory in the location in which you extracted the archive. If there is one, delete it.
@@ -66,13 +67,12 @@ The demonstration also includes some instructions on how to build the applicatio
 
 5. Navigate to the `scripts` directory in the demonstration.
 6. Edit the file `scripts/options/sql_postgres.json` with a text editor: 
+
     a.  Verify and, if required, modify the values within the `database_connection` section to match the setting of the database you are using.
 
-    b.  If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration:
+    b.  If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration by updating the `is64bit` and/or the `product` options as required. 
        
-       Change the `is64bit` and/or the `product` options as required. 
-       
-       For example, `"product"="EDz"` indicates that you will build the application from the sources and `"product"="ES"` indicates that the pre-built programs will be used.
+    For example, `"product"="EDz"` indicates that you will build the application from the sources and `"product"="ES"` indicates that the pre-built programs will be used.
 
 7. Run the following python script from the `scripts` directory with the specified option to create the enterprise server instance, and to deploy the application:
 

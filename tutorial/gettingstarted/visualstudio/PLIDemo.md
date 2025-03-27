@@ -1,9 +1,9 @@
-# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio 202
+# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio 2022
 
 ## Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
-- [How to Run this Demonstration](#how-to-run-the-demonstration)
+- [How to Run the Demonstration](#how-to-run-the-demonstration)
 
 
 ## Overview
@@ -15,7 +15,7 @@ This demonstration requires:
 - Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the IBM CICS application. 
 
-> **Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you may use an alternative terminal emulator.
+> **Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 ## Requirements
 
@@ -62,7 +62,7 @@ If i do this step, the emulator won't start at all-->
         net start mfhacloud
         ```
 
-## Run the Demonstration
+## How to Run the Demonstration
 
 ### Configure the BANKDEMO Enterprise Server for PL/I:
     

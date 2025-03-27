@@ -22,7 +22,7 @@ The demonstration includes a Python script that helps you create the enterprise 
    - Creates the enterprise server instance by using the ESCWA Admin API (almost exclusively).
    - Uses a single command-line utility, `caspcrd`, to create the default IBM CICS resource definition file. 
    - Configures the enterprise server instance for use with JCL and the VSAM datasets are cataloged.
-   - Configures the enterprise server instance as a 64-bit server and can be reconfigured to deploy a 32-bit server (see below).
+   - Configures the enterprise server instance as a 64-bit server. You can change the configuration to deploy a 32-bit server (see *Step 5* in the procedure below).
    - Uses pre-built application modules.
 
 The demonstration also includes some instructions to build the application from the sources.
