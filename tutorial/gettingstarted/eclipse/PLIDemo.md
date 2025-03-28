@@ -1,19 +1,21 @@
 # Open PL/I Development by Using Enterprise Developer for Eclipse
 ## Contents
 - [Overview](#overview)
-- [How to Run this Demonstration](#how-to-run-the-demonstration)
+- [Prerequisites](#prerequisites)
+- [How to Run the Demonstration](#how-to-run-the-demonstration)
 
 ## Overview
 This demonstration shows you how to compile, link and debug an Open PL/I BANK IBM® CICS® application by using the Eclipse IDE.  
 The demo instructions assume you already have a basic understanding of how to use Eclipse and some basic familiarity with Enterprise Server.
 If you decide to use the remote debug instructions, check with your system administrator for connection details (computer name, port, connection type, credentials) before starting.
 
+## Prerequisites
+
 You must have the following software installed:
 
-- Rocket® Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the Enterprise Developer release notes.
+- Rocket® Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the IBM CICS application.
- 
-     **Note:** A license for Rocket® Host Access for the Cloud (HACloud) Session Server TN3270 emulator is included with Enterprise Developer. 
+>**Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 Before running this demo remotely, verify that you have an RDO and MFDS agent already configured and running on the remote UNIX/Linux system. For more details, see the Rocket product documentation.
 
@@ -46,8 +48,8 @@ Ensure that **Server Explorer** contains a connection to the default Enterprise 
     The **New Enterprise Server Common Web Administration Connection** dialog box opens.
 2. In the **Name** field, type `Local`.
 3. In the **Server address** field, type `localhost`.
-4. In the **Server port** field, leave as the default `10086`.
-5. If the server connection is TLS-enabled, select **TLS Enabled**, and then click **Browse** and select the appropriate certificate.
+4. In the **Server port** field, leave the default `10086`.
+5. If the server connection is TLS-enabled, select **TLS Enabled**, click **Browse** and select the appropriate certificate.
 >**Note**: If you select **TLS Enabled**, but you do not specify a certificate, the default Java keystore is searched for a valid one.
 6. Click **Finish**.
 The new connection appears at the top level, in **Server Explorer**.
@@ -67,10 +69,11 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 **Windows**
 
-1. Ensure you have a 64-bit Java installed and added to the PATH environment variable. <!-- adding JAVA to the PATH environment variable resulted in the emulator not opening as expected when running the demo (step 5 in Execute the BANKDEMO application). When I attempted to go through it a second time, I did not configure this and the emulator opened on its own. -->
-2. Open the Windows Service Manager.
-3. Go to **Rocket HA Cloud** and click **Start the service**. 
-4. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
+<!-- 1. Ensure you have a 64-bit Java installed and added to the PATH environment variable.  
+adding JAVA to the PATH environment variable resulted in the emulator not opening as expected when running the demo (step 5 in Execute the BANKDEMO application). When I attempted to go through it a second time, I did not configure this and the emulator opened on its own. -->
+1. Open the Windows Service Manager.
+2. Go to **Rocket HA Cloud**, right-click it, and click **Start**. 
+3. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
 
     ```
     net start mfhacloud
@@ -78,7 +81,8 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 **UNIX**
 
-1. Ensure that the installed Java is added to the PATH environment variable.
+1. Ensure that the installed Java is added to the PATH environment variable. <!-- do we need this here? --> 
+adding JAVA to the PATH environment variable resulted in the emulator not opening as expected when running the demo (step 5 in Execute the BANKDEMO application). When I attempted to go through it a second time, I did not configure this and the emulator opened on its own. -->
 2. Start the enterprise server region that runs the application you want to connect to.
 3. Open a terminal and set up the COBOL environment in it.
 4. Run the following to start the session server:
