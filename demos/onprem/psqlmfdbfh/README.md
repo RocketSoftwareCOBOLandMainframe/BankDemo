@@ -1,4 +1,4 @@
-# Deploying and running Bankdemo with VSAM stored in PostgreSQL using MFDBFH
+# Deploying and Running Bankdemo with VSAM Stored in PostgreSQL using MFDBFH
 This demonstration configures the Bankdemo application to store banking data in VSAM datasets stored within a PostgreSQL database. The database is accessed from COBOL programs by using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. 
 
 The COBOL modules used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk.
@@ -13,7 +13,7 @@ The Rocket Secrets Vault is used to store the database credentials.
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Verify that PostgreSQL version 12 or later is installed and running.
 - PostgreSQL ODBC driver: 
-   - Windows: [Install the appropriate driver](https://www.postgresql.org/ftp/odbc/versions/msi/)
+   - Windows: [Install the appropriate driver](https://www.postgresql.org/ftp/odbc/releases/)
    - Ubuntu: `sudo apt-get install unixodbc unixodbc-dev odbc-postgresql`
    - RedHat: `sudo yum install unixODBC postgresql-odbc`
    - Amazon Linux 2: `sudo yum install unixODBC postgresql-odbc`
@@ -85,4 +85,4 @@ The demonstration also includes some instructions to build the application from 
 
 10. In ESCWA, select the BANKMFDB server under **Directory Servers > Default**. See the options on the **General** tab. Also, click the downwards arrow next to **General** and click any of the menu items to explore the server configuration.
     
-11. The `sources\jcl\ZBNKSTMT.jcl` file can be used to run a JCL batch job via the **JES**, **Control** ESCWA drop-down menu.
+11. You can use the `sources\jcl\ZBNKSTMS.jcl` file (Windows) and `sources/jcl/ZBNKSTMS.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it, click **JES > Control**. <!-- I can't find this in the UI. -->

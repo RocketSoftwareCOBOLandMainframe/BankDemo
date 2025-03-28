@@ -1,4 +1,4 @@
-# Deploying and running Bankdemo in a Performance and Availability Cluster with PostgreSQL
+# Deploying and Running Bankdemo in a Performance and Availability Cluster with PostgreSQL
 This demonstration configures the Bankdemo application to run in a Performance and Availability Cluster (PAC). Banking data is recorded in VSAM datasets that are stored in a PostgreSQL database. The database is accessed from COBOL programs by using `EXEC CICS` statements such as: `STARTBR FILE`, `READ FILE`, and `WRITE FILE`. The cluster is composed of two enterprise server instances that are running on the same machine.
 
 The COBOL modules that are used to access the data are stored in the `sources/cobol/data/vsam` directory of this project and are unchanged from when the data is stored in indexed sequential files on disk and when not running in a PAC.
@@ -15,9 +15,9 @@ The Rocket Secrets Vault is used to store the database credentials.
    
     The Rocket Enterprise Developer products on Windows include AdoptRedis which is suitable for testing and demonstration purposes. 
 - Verify that a PostgreSQL version 12 or later is installed and running.
-- Ensure that the PostgreSQL `psql` command is available on the PATH.
+- Ensure that you add the PostgreSQL `bin` directory path to the PATH environmental variable, so that you can use `psql`.
 - Install and configure a PostgreSQL ODBC driver: 
-   - Windows: [install appropriate driver](https://www.postgresql.org/ftp/odbc/versions/msi/)
+   - Windows: [install appropriate driver](https://www.postgresql.org/ftp/odbc/releases/)
    - Ubuntu: `sudo apt-get install unixodbc unixodbc-dev odbc-postgresql`
    - RedHat: `sudo yum install unixODBC postgresql-odbc`
    - Amazon Linux 2: `sudo yum install unixODBC postgresql-odbc`
@@ -64,14 +64,23 @@ The demonstration also includes some instructions to build the application from 
 
    b. Ensure there is no region called **BANKPAC1** or **BANKPAC2** already defined. If there is one, delete it.
 
-3. Verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones that other servers in this repository might use.
+3. Verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports.
 
-4. Start an administrator's command prompt (Windows) or a terminal for user under which Enterprise Servers run (Linux).
+   The server for this demonstration uses a common server definition with many of the same listener ports as the ones that other servers in this repository might use.
+
+4. Start a command prompt as an administrator (Windows) or a terminal for user under which Enterprise Servers run (Linux).
 
    **Note:** You need administrator's rights to configure the ODBC data source on Windows. On Linux they are created in the user `.odbc.ini` file.
 
 5. Navigate to the `scripts` directory in the demonstration files.
-6. Edit the file `scripts/options/vsam_postgres_pac1.json` with a text editor:
+
+   For example, if you have created a `C:\MFETDUSER directory` (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
+
+   Windows: `C:\MFETDUSER\scripts`
+   
+   Linux: `/home/username/MFETDUSER/scripts`
+
+6. Edit the file `scripts/options/vsam_postgres_pac1.json` with a text editor. 
 
     - Verify and, if required, modify the values within the `database_connection` section to match the setting of the database that you are using.
     - Verify and, if required, modify the values within the `PAC` section to match the setting of the Redis server that you are using.
@@ -107,8 +116,8 @@ The demonstration also includes some instructions to build the application from 
 
    The Bankdemo application login screen loads.
 
-11. Enter a valid user ID - a suitable one is `B0001`. You can use any character for the password because the password is not validated.
+11. Enter a valid user ID - a suitable one is `b0001`. You can use any character for the password because the password is not validated.
 
-12. In ESCWA, select the BANKPSOR under **SORs**. Expand BANKPAC and note the two Enterprise Server instances BANKPAC1 and BANKPAC2
+12. In ESCWA, select the BANKPSOR under **SORs**. Expand BANKPAC and note the two Enterprise Server instances BANKPAC1 and BANKPAC2.
     
-13. The `sources\jcl\ZBNKSTMT.jcl` file can be used to run a JCL batch job via the **JES**, **Control** ESCWA drop-down menu.
+13. You can use the `sources\jcl\ZBNKSTMS.jcl` file (Windows) and `sources/jcl/ZBNKSTMS.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it, click **JES > Control**. <!-- I can't find this in the UI. -->
