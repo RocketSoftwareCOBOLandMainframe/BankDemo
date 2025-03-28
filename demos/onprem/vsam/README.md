@@ -1,11 +1,10 @@
 # Deploying and Running Bankdemo with VSAM Data
 
-This demonstration shows how to configure the Bankdemo application to store banking data in VSAM datasets on disk. You access the datasets from COBOL programs using `EXEC CICS` statements such as `STARTBR FILE`, `READ FILE`, `WRITE FILE`. The COBOL modules are stored in the `sources/cobol/data/vsam` directory of this project.
+This demonstration shows how to configure the Bankdemo application to store banking data in VSAM datasets on disk. You access the datasets from COBOL programs using `EXEC CICS` statements such as `STARTBR FILE`, `READ FILE`, `WRITE FILE`. The COBOL modules are stored in the `sources/cobol/data/vsam` (Windows) `sources\cobol\data\vsam` (Linux) directory of this project.
 
 ## Prerequisites
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server
-- A TN3270 terminal emulator. 
-   You can use the Rocket&reg; Host Access for the Cloud session server and TN3270 emulator included with both Enterprise Developer and Enterprise Server.
+- A TN3270 terminal emulator. You can use the Rocket&reg; Host Access for the Cloud session server and TN3270 emulator included with both Enterprise Developer and Enterprise Server.
 - Ensure that the Directory Server service (MFDS) is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Python 3.*n* and the `requests` package from Python.org. You can install the package after installing Python with the following command: 
@@ -14,7 +13,7 @@ This demonstration shows how to configure the Bankdemo application to store bank
   ```
 
 ## Demonstration Overview
-This demonstration shows a simple COBOL IBM&reg; CICS&reg; "green screen" application which accesses VSAM data by using `EXEC CICS` statements where the data is held in indexed sequential files on disk. 
+This demonstration shows a simple COBOL IBM&reg; CICS&reg; "green screen" application which accesses VSAM data by using `EXEC CICS` statements where the data is held in indexed sequential files on a disk. 
 
 The demonstration includes a Python script that helps you create the enterprise server instance. The script:
 
@@ -22,8 +21,8 @@ The demonstration includes a Python script that helps you create the enterprise 
    - Creates the enterprise server instance by using the ESCWA Admin API (almost exclusively).
    - Uses a single command-line utility, `caspcrd`, to create the default IBM CICS resource definition file. 
    - Configures the enterprise server instance for use with JCL and the VSAM datasets are cataloged.
-   - Configures the enterprise server instance as a 64-bit server. You can change the configuration to deploy a 32-bit server (see *Step 5* in the procedure below).
-   - Uses pre-built application modules.
+   - Configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see *Step 5* in the procedure below).
+   - Configures the enterprise server instance to use pre-built application modules.
 
 The demonstration also includes some instructions to build the application from the sources.
 
@@ -32,21 +31,35 @@ The demonstration also includes some instructions to build the application from 
 1. Extract the demonstration archive on your machine.
  
    Ensure that there is no `BANKVSAM` subdirectory in the location in which you extracted the archive. If there is one, you must delete it.
-2. In a web browser, open the ESCWA UI by entering http://localhost:10086.  
+
+2. In a web browser, open the ESCWA UI by entering `http://localhost:10086`.  
 
    a. In the ESCWA UI, click **Native**, expand **Directory Servers**, and in the left pane click **Default**.
 
    b. Ensure that there is no region called **BANKVSAM** already defined. If there is one, delete it.
 
-3. Verify that there are no other demonstration servers running. This is to ensure that no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones other servers in this repository might use.
+3. Verify that there are no other demonstration servers running. This is to ensure that no other servers use the same ports. 
+
+   The server for this demonstration uses a common server definition with many of the same listener ports as the ones other servers in this repository might use.
+
 4. Start a command prompt (Windows) or a terminal (Linux), and navigate to the `scripts` directory of the demonstration folder.
+
+   For example, if you have created a `C:\MFETDUSER` directory (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
+   
+   - Windows: `C:\MFETDUSER\scripts` 
+   - Linux: `/home/username/MFETDUSER/scripts` 
+
 5. If you want to deploy a 32-bit enterprise server instance, or build the application from the source, you must change the configuration first:
     
-    a. Open the `scripts/options/vsam.json` file in a text editor.
-    
+    a. Open the `vsam.json` file in a text editor. The file is located in the `options` subdirectory:
+
+    -  Windows: `C:\MFETDUSER\scripts\options` 
+    - Linux: `/home/username/MFETDUSER/scripts/options`  
+
     b. Change the `is64bit` and/or the `product` options as required. 
     
     For example, `"product"="EDz"` indicates you will build the application from the sources, `"product"="ES"` indicates that the pre-built programs will be used.
+
 5. Run the following command at the command prompt or the terminal. 
 
     ```
@@ -65,4 +78,4 @@ The demonstration also includes some instructions to build the application from 
 
    Click the **General** menu, and select any option from the menu to explore the server configuration.
 
-9. You can use the `sources\jcl\ZBNKSTMS.jcl` file to run a JCL batch job by using the **JES**, **Control** ESCWA UI drop-down menu.
+9. You can use the `sources\jcl\ZBNKSTMS.jcl` file (Windows) and `sources/jcl/ZBNKSTMS.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it click **JES > Control**.
