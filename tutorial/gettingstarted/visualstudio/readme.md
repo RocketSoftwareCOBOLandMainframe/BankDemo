@@ -1,16 +1,16 @@
-# Getting started with Rocket® Enterprise Developer for Visual Studio 2022
+# Getting Started with Rocket® Enterprise Developer for Visual Studio 2022
 
 ## Overview
 
-This set of tutorials guides you through the use of Rocket® Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through Rocket® Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio 2022 to develop and maintain both simple COBOL and mainframe subsystem applications. Other tutorials, which are designed for Administrators, are also available.
 
 - [Starting the Visual Studio Integrated Development Environment](#starting-the-visual-studio-integrated-development-environment)
-- [Adding files to your Visual Studio project](#adding-files-to-your-visual-studio-project)
-- [File, Project and IDE properties and settings](#file-project-and-ide-properties-and-settings)
+- [Adding Files to your Visual Studio Project](#adding-files-to-your-visual-studio-project)
+- [File, Project and IDE Properties and Settings](#file-project-and-ide-properties-and-settings)
 - [Editing COBOL, JCL, BMS, and Data Files](#editing-cobol-jcl-bms-and-data-files)
-- [Compiling the source code](#compiling-the-source-code)
+- [Compiling the Source Code](#compiling-the-source-code)
 - [Unit Testing the Batch Application](#unit-testing-the-batch-application)
 - [Unit Testing the Online Application](#unit-testing-the-online-application)
 - [Debugging the Batch Application](#debugging-the-batch-application)
@@ -22,7 +22,7 @@ The preconfigured and fully executing application BankDemo is available from the
 
 1.  In the GitHub repository for the BankDemo demonstration, click **Releases** in the right side part of the page.
 2.  In the list of releases, locate and click the one that corresponds to the Enterprise Developer product release that you have installed.
-3.  Expand the **Assets** section, and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample's sources.
+3.  Expand the **Assets** section, and click either **Source code (zip)** or **Source code (tar.gz)** to download the archive with the sample sources.
 4.  Expand the archive on your computer.
 
     The demonstration application includes all the source files needed to run it. The application is both a batch and online application which assesses data on a fictitious bank system. The bank data is stored in VSAM files.
@@ -38,7 +38,7 @@ The preconfigured and fully executing application BankDemo is available from the
 
     You must have the following software installed:
 
-    -   Rocket® Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
+    -   Rocket Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
     -   A TN3270 terminal emulator to run the IBM® CICS® application. This tutorial uses Rocket® Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
@@ -51,11 +51,11 @@ The preconfigured and fully executing application BankDemo is available from the
 
 ## Enterprise Server Security
 
-In this release, the Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information.
+In this release, the Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
 
 ### Disable the Default Enterprise Server Security Configuration
 
- **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To re-create the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
+ >**Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *Re-create the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`.
 
@@ -77,30 +77,32 @@ In this release, the Enterprise Server security features are enabled by default.
 
 1. To start the Visual Studio IDE:
 
-    **On Windows 10**: From your Windows desktop, click **Start \> Visual Studio 2022**.
+    **On Windows 10**: 
+    From your Windows desktop, click **Start \> Visual Studio 2022**.
 
-    **On Windows 11**: Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio 2022**.
+    **On Windows 11**:
+    Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio 2022**.
 
     If this is the first time you start Visual Studio on your system, you are prompted to specify default environment settings. Set **Development Settings** to **General**.
 
-2. You then see the Visual Studio start screen - click **Continue without code**:
+2. You then see the Visual Studio start screen. Click **Continue without code**:
 
 
 The windows you see open in Visual Studio and their layout depend on whether you have used the IDE before and on the edition of Visual Studio that you have installed. You can move, resize and minimize windows which is why they might not look exactly as described here.
 
 You can see:
 
--   The **Solution Explorer** window which gives a direct view of what is on disk for your solutions.
+-   The **Solution Explorer** window that gives a direct view of what is on disk for your solutions.
 
     A solution is a holding place for projects that relate to the solution. For example, the solution you are going to work with contains two projects - a batch project and an online project.
 
 
 -   Bottom right is a **Properties** window which shows the properties of the currently selected item in the Solution Explorer when you have a project loaded in it. You can open the window from **View \> Properties**.
--   **Output** window - displays the results of tasks and from compiling your applications.
--   **Error List** window - displays details about any errors that might be present in the code.
--   Project Details window which gives a logical view of your COBOL application.
+-   **Output** window that displays the results of tasks and from compiling your applications.
+-   **Error List** window that displays details about any errors that might be present in the code.
+-   **Project Details** window that gives a logical view of your COBOL application.
 -   The main activity window at the top the IDE, the Editor, is where you edit or debug the sources. This window is currently empty.
--   Apart from the menus, there are a number of UI controls in the toolbar which vary depending on what you are doing with the IDE.
+-   Apart from the menus, there are a number of UI controls on the toolbar that vary depending on what you are doing with the IDE.
 
 3. Experiment with resizing, minimizing and restoring the windows.
 
@@ -108,7 +110,7 @@ You can see:
 
     - Click the title bar of the window. Holding the mouse on the window title, drag the window to the left and down.
 
-      **Note:** If you close a window, you can restore if from the **View** menu.
+     > **Note:** If you close a window, you can restore it from the **View** menu.
 
     - If you want to restore the default windows layout of the IDE, click **Window** \> **Reset Window Layout**.
 
@@ -131,20 +133,20 @@ The source files of the demonstration application are stored in subfolders named
 | `system\catalog`       | Stores the catalog.                                                                                                                                 |
 | `system\catalog\data` | Stores the data files.                                                                                                                              |
 | `system\logs`          | Contain various log files indicating the progress of your application execution.                                                                    |
-| `system\rdef`          | Contains the resource definition files for the BANKDEMO enterprise server region.                                                                   |
+| `system\rdef`          | Contain the resource definition files for the BANKDEMO enterprise server region.                                                                   |
 
 **Configuring Directives Scanning**
 
-By default, the IDE is configured to automatically scan any new source files that you add to the project. It assesses the code, determines what Compiler directives are required and then, by default, offers to set those directives on the files. 
+By default, the Visual Studio IDE is configured to automatically scan any new source files that you add to the project. It assesses the code, determines what Compiler directives are required and then, by default, offers to set those directives on the files. 
 
 To see what directives are set:
 
-1.  In Visual Studio, click **Tools** \> **Options**.
-2.  Scroll down to and expand **Rocket Tools**, expand **Directives** and click **COBOL**.
+1.  Click **Tools** \> **Options**.
+2.  Scroll down and expand **Rocket Tools**, expand **Directives** and click **COBOL**.
 
     ![](images/7FAE6822-8BD0-4B54-A83E-B43E3B90F8F6.png)
     
-    This page enables you to configure what directives are set on the COBOL files that you add to your project. The directives scanning determines the dialect, what `EXEC CICS` and `EXEC SQL` statements are used in the COBOL source files and sets directives as detailed on this page.
+    This page enables you to configure what directives will be set on the COBOL files that you add to your project. The directives scanning determines the dialect, what `EXEC CICS` and `EXEC SQL` statements are used in the COBOL source files and sets directives as detailed on this page.
 
 3.  Ensure that all options are selected.
 
@@ -156,7 +158,7 @@ To see what directives are set:
 
 To add the COBOL programs to your project:
 
-1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
+1.  In **Solution Explorer**, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
 2.  Browse to `C:\MFETDUSER\sources\cobol\core`.
 
     By default, the file type filter is set to **Enterprise Files (\*.cbl; \*.cpp; \*.cob, ...)**. 
@@ -166,12 +168,12 @@ To add the COBOL programs to your project:
     This adds all COBOL programs from the `core` subfolder.
 
     Previously, you ensured the IDE is configured to scan the COBOL files you add into the project and set directives for dialect, `EXEC CICS` statements and SQL. When the files are imported in the project, the IDE scans them for IBM CICS and SQL settings. You can see that the **Output** window shows some messages about scanning the files. At the end of scanning, the IDE shows a **Preview Changes Directive Determination** dialog box to set any missing directives as required. 
+
+     ![](images/2VSscandirs.png)
     
 4. Review the directives and click **Apply**.
 
-   ![](images/2VSscandirs.png)
-
-   **Note:** In most cases, you add the actual COBOL programs to your Visual Studio project. Optionally, you could leave the source files in the original location and create links to them. This might be useful if you have large source files. In such cases, you might use the **Add As Link** command to add the files to your project:
+   >**Note:** In most cases, you add the actual COBOL programs to your Visual Studio project. Optionally, you could leave the source files in the original location and create links to them. This might be useful if you have large source files. In such cases, you might use the **Add As Link** option to add the files to your project:
 
    ![](images/21a3bc2f6389c6fe4189c875358b50a9.jpg)
 
@@ -181,22 +183,22 @@ To add the COBOL programs to your project:
 
     If there are any issues, such as the IDE not being able to determine the dialect because of missing copybooks, these are reported here.
 
-6.  If, at any stage, you need to perform a directives scan of the COBOL sources in the project to set Compiler directives on them, right-click the **BankDemo** project and click **Determine Directives**.
+6.  If, at any stage, you must perform a directives scan of the COBOL sources in the project to set Compiler directives on them, right-click the **Bankdemo** project and click **Determine Directives**.
 
 **Adding the Copybook Files**
 
-The copybook files in the `C:\MFETDUSER\sources\copybook` folder are used by the COBOL programs in the project. Your project is preconfigured to look for the copybook files in that location, so the compilation will not fail. To see where this is set:
+The copybook files in the `C:\MFETDUSER\sources\copybook` folder are used by the COBOL programs in the project. Your project is preconfigured to look for the copybook files in that location, so that the compilation will not fail. To see where this is set:
 
-1.  Click **Project** \> **BankDemo Properties** to open the project properties.
-2.  Click the **Dependency Paths** tab, and ensure **Type** is set to **COBOL Copybook Paths**. The folder that is listed on that page is the folder that includes the copybook files.
+1.  Click **Project** \> **Bankdemo Properties** to open the project properties.
+2.  Click the **Dependency Paths** tab, and ensure that **Type** is set to **COBOL Copybook Paths**. The folder that is listed on that page is the folder that includes the copybook files.
 
     Because the copybook files are not compiled when you build the application, it is not necessary to add them to the project. However, as an exercise, you can add one of the copybooks to the project in the same way you added the COBOL files.
 
 **Adding BMS Source Files to Your Project**
 
-You need to add the demonstration's BMS file to the project.
+You must add the demonstration BMS files to the project.
 
-1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
+1.  In **Solution Explorer**, right-click the **Bankdemo** project and click **Add** \> **Existing Item**.
 2.  Browse to `C:\MFETDUSER\sources\bms\cobol` folder.
 3.  The file extension filter should be set to **Enterprise Files** but, as an exercise, you can set it to **BMS Files (\*.bms)**.
 
@@ -208,9 +210,9 @@ You need to add the demonstration's BMS file to the project.
 
 **Adding JCL Source Files**
 
-To add the JCL file to your project:
+To add a JCL file to your project:
 
-1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
+1.  In **Solution Explorer**, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
 2.  Browse to `C:\MFETDUSER\sources\jcl` folder.
 3.  Set the file type filter to **JCL/VSE Files (\*.jcl; \*.vse)**.
 4.  Select **ZBNKSTMT.jcl** and click **Add**.
@@ -219,9 +221,9 @@ To add the JCL file to your project:
 
 **Adding Data Files**
 
-The demonstration application includes a number of data files. To see how you can edit data files, you only need to look at one of these files, so you do not need to add a folder for it to the project. To add the data file to your project:
+The demonstration application includes a number of data files. To see how you can edit data files, you only must look at one of these files, so you do not have to add a folder for it to the project. To add the data file to your project:
 
-1.  In Solution Explorer, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
+1.  In **Solution Explorer**, right-click the **BankDemo** project and click **Add** \> **Existing Item**.
 2.  Browse to `C:\MFETDUSER\datafiles`.
 3.  Set the file type filter to **All Files (\*.\*)**.
 4.  Select the **MFI01V.MFIDEMO.BNKACC.dat** and **MFI01V.MFIDEMO.BNKACC.str** files.
@@ -231,7 +233,7 @@ The demonstration application includes a number of data files. To see how you ca
 
 The **Project Details** window shows a list of all files in your project or in the entire solution together. You can explore details such as the file type, location, COBOL dialect, number of errors or warnings and whether there are file directives that differ from and override the directives set on project level. This can help you identify problems quickly. To open the window:
 
-1.  Right-click your solution (or the project) in Solution Explorer and click **Project Details**. 
+1.  In **Solution Explorer**, right-click your solution (or the project) and click **Project Details**. 
 
     ![](images/4VSProjDetails.jpg)
 
@@ -239,14 +241,14 @@ The **Project Details** window shows a list of all files in your project or in t
 3.  Click ![](images/d68a42c513ad924eb6872ee2420b1b87.jpg), **Sync with Active Document** to highlight the file that is opened in the editor or is selected in Solution Explorer.
 4.  Right-click a COBOL program in the list to either compile it, access its properties, or adjust its Compiler directives (by using either **Determine Directives** or **Use Project Defaults**).
 
-**Grouping the Files of the Same Type in Solution Explorer**
+**Grouping Files of the Same Type in Solution Explorer**
 
-In Solution Explorer, you can view an actual representation of the files and folders in a project or toggling the Virtual View to sort the files by file type:
+In **Solution Explorer**, you can view an actual representation of the files and folders in a project. You can also toggle the **Virtual View** to sort the files by file type:
 
-1.  In Solution Explorer, click **Bankdemo**.
-2.  Click ![](images/a3d4d6c478d1be66c11c60601f7c040a.jpg) in the Solution Explorer toolbar to toggle Virtual View on or off.
+1.  In **Solution Explorer**, select **Bankdemo**.
+2.  Click the **Virtual View** icon ![](images/a3d4d6c478d1be66c11c60601f7c040a.jpg) in the **Solution Explorer** toolbar to toggle **Solution Explorer** on or off.
 
-    In Virtual View, you see virtual folders in the project for the different file types - COBOL programs, BMS or JCL files:
+    In **Virtual View**, you see virtual folders in the project for the different file types - COBOL programs, BMS or JCL files:
 
     ![](images/d4467853062668a82b82af06c9445442.jpg)
 
@@ -255,9 +257,9 @@ In Solution Explorer, you can view an actual representation of the files and fol
   
   **Viewing the Copybook Dependencies**
 
-    Solution Explorer shows which copybooks are used by your source programs. To view the copybook dependencies of a COBOL program, simply expand the node for that program:
+Solution Explorer shows which copybooks are used by your source programs. To view the copybook dependencies of a COBOL program, simply expand the node for that program:
 
-    ![](images/7b071d935f2c8d050ef60cd113d1304c.jpg)
+  ![](images/7b071d935f2c8d050ef60cd113d1304c.jpg)
 
 **Summary**
 
