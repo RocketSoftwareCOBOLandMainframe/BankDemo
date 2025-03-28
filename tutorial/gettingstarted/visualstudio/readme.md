@@ -1077,6 +1077,7 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
     ![](images/924799F6-F6F8-4189-B7C5-B69139EF7F97.png)
 
     a.  Expand any of the lines in the report and double-click a line in the result to highlight the lines of code that include unreferenced data.
+    
     b.  Use the rest of the commands available from the down arrow next to ![](images/95f4e27be11786c150a0ba4f07a661ae.jpg), **Quick Browse**, in the COBOL toolbar to run any of the other available reports.
 
 **Stop Debugging**
