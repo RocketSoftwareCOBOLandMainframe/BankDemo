@@ -898,7 +898,7 @@ A suitable User Id is `b0001`. You can type anything as a password, but you cann
 
 4.  You can explore this application further if you wish or press **Ctrl + F2** to clear the screen and conclude the session.
 
-**Stopping the Еnterprise Server**
+**Stopping the Enterprise Server**
 
 You can stop the Bankdemo server from within Server Explorer. You can leave it running though, if you wish to continue this tutorial.
 
@@ -914,7 +914,7 @@ You are going to debug the batch Bankdemo application using the JCL debugger.
 
 If the enterprise server is not yet started, you need to start it as follows:
 
-1.  In Server Explorer, right-click **BANKDEMO** under **Rocket Enterprise Server**, then click **Start**.
+1.  In **Server Explorer**, under **Rocket Enterprise Server**, right-click **BANKDEMO** and click **Start**.
 2.  Right-click **Rocket Enterprise Server** again, and then click **Refresh** to see that the server has started.
 
     ![](images/46895A06-FD3A-4B07-AA02-9752F2870A79.jpeg)
@@ -924,8 +924,8 @@ If the enterprise server is not yet started, you need to start it as follows:
 
 The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS Debugger. You need to select the JCL debugger to debug the batch Bankdemo application:
 
-1.  In Solution Explorer, right-click the **BankDemo** project and click **Properties**.
-4.  Click the **Debug** tab in the properties.
+1.  In **Solution Explorer**, right-click the **BankDemo** project and click **Properties**.
+4.  Click the **Debug** option in the **Properties** window.
 5.  Set **Launch** to **JCL**.
 6.  Click **File** \> **Save All** to save your changes.
 
@@ -1015,7 +1015,7 @@ While debugging, you can preview the values of data items in the current context
 Open the Breakpoints window - currently, there are no breakpoints set in the program. You can set a simple breakpoint as follows:
 
 1.  Scroll up the code to line 171 of the `ZBNKEXT1.cbl` file.
-2.  Double-click in the grey area to the left of this line or right-click the line, and click **Breakpoint** \> **Insert Breakpoint**.
+2.  Right-click the line, and click **Breakpoint** \> **Insert Breakpoint**.
 
     ![](images/12d08bc77f0ed11c2dfa4f56b88619f2.jpg)
 
@@ -1076,8 +1076,8 @@ You can use the COBOL Source Information (CSI) functionality and its **Quick Bro
 
     ![](images/924799F6-F6F8-4189-B7C5-B69139EF7F97.png)
 
-    2.  Expand any of the lines in the report and double-click a line in the result to highlight the lines of code that include unreferenced data.
-    3.  Use the rest of the commands available from the down arrow next to ![](images/95f4e27be11786c150a0ba4f07a661ae.jpg), **Quick Browse**, in the COBOL toolbar to run any of the other available reports.
+    a.  Expand any of the lines in the report and double-click a line in the result to highlight the lines of code that include unreferenced data.
+    b.  Use the rest of the commands available from the down arrow next to ![](images/95f4e27be11786c150a0ba4f07a661ae.jpg), **Quick Browse**, in the COBOL toolbar to run any of the other available reports.
 
 **Stop Debugging**
 
@@ -1099,7 +1099,7 @@ If the enterprise server is not yet stated, you need to start it as follows:
 
 2.  In Server Explorer, right-click the BANKDEMO server and click **Start**.
 
-    Wait until the server has started. In the list of servers in Server Explorer, BANKDEMO still has a red square next to it. This is a refresh delay.
+    Wait until the server has started. In the list of servers in Server Explorer, BANKDEMO might still have a red square next to it. This is a refresh delay.
 
 3.  In Server Explorer window, right-click **Rocket Enterprise Server** and click **Refresh** to confirm the server has started.
 
@@ -1140,6 +1140,6 @@ Although the job has completed, the debugger is still waiting for the next event
 
 This concludes this set of tutorials that introduce Rocket Enterprise Developer.
 
-> **Note**: You should re-enable Enterprise Server security if you have not already done so. See *To recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
+> **Note**: You should re-enable Enterprise Server security if you have not already done so. See *Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 [Back to Top](#overview)
