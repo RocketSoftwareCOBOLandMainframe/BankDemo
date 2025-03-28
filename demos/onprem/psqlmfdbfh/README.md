@@ -31,7 +31,7 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script creates the instance by using (almost exclusively) the ESCWA Admin API.
    - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file.
    - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets.  <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
-   - The enterprise server instance is configured as a 64-bit server and can be reconfigured to deploy a 32-bit server (see the next section).
+   - The script configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see Step 6 in the procedure below).
    - The enterprise server instance uses pre-built application modules.
    - Two ODBC system data sources, called `BANKVSAM.MASTER` and `BANKVSAM.VSAM`, are created.
    - The VSAM data is uploaded to the database by using `dbfhdeploy add` commands. 
@@ -56,13 +56,22 @@ The demonstration also includes some instructions to build the application from 
 
    b. Ensure there is no region called **BANKMFDB** already defined. If there is one, delete it.
 
-3. Verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports. The server for this demonstration uses a common server definition with many of the same listener ports as the ones that other servers in this repository might use.
+3. Verify that there are no other demonstration servers running. This is to ensure no other servers use the same ports.
 
-4. Start an administrator's command prompt (Windows) or a terminal for user under which Enterprise Servers run (Linux).
+   The server for this demonstration uses a common server definition with many of the same listener ports as the ones that other servers in this repository might use.
+
+4. Start a command prompt as an administrator (Windows) or a terminal for user under which Enterprise Servers run (Linux).
 
    **Note:** You need administrator's rights to configure the ODBC data source on Windows. On Linux they are created in the user `.odbc.ini` file.
 
 5. Navigate to the `scripts` directory in the demonstration files.
+
+   For example, if you have created a `C:\MFETDUSER directory` (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
+
+   Windows: `C:\MFETDUSER\scripts`
+   
+   Linux: `/home/username/MFETDUSER/scripts`
+
 6. Edit the file `scripts/options/vsam_postgres.json` with a text editor:
 
     - Verify and, if required, modify the values within the `database_connection` section to match the setting of the database that you are using.
@@ -81,7 +90,7 @@ The demonstration also includes some instructions to build the application from 
 
    The Bankdemo application login screen loads.
 
-9. Enter a valid user ID - a suitable one is `B0001`. You can use any character for the password because the password is not validated.
+9. Enter a valid user ID - a suitable one is `b0001`. You can use any character for the password because the password is not validated.
 
 10. In ESCWA, select the BANKMFDB server under **Directory Servers > Default**. See the options on the **General** tab. Also, click the downwards arrow next to **General** and click any of the menu items to explore the server configuration.
     

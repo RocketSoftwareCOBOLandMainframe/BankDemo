@@ -36,11 +36,11 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script creates the enterprise server instances by using (almost exclusively) the ESCWA Admin API.
    - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file.
    - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets. <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
-   - The enterprise server instances are configured as 64-bit servers and can be reconfigured to deploy a 32-bit server (see the next section). <!-- are the servers reconfigured or is the script reconfigured? -->
-   - The enterprise server instances use pre-built application modules.
-   - ODBC system data sources, called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION`, are created. <!-- In the original sentence, it said Two sources with four names are created - is some part of the text missing here? -->
+   - The script configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see Step 6 in the procedure below).
+   - The script uses pre-built application modules.
+   - Creates ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION`. 
    - The VSAM data is uploaded to the database by using `dbfhdeploy add` commands.
-   - The server instances are configured to use the Rocket Database File Handler (MFDBFH):
+   - The script configures the enterprise server instances to use the Rocket Database File Handler (MFDBFH):
         - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command).
         - Specifying the XA switch module `espgsqlxa` (its source is in the `src/enterpriseserver/xa` directory of the Enterprise Developer installation location).
         - The `esxaextcfg` module provides encrypted credentials to `espgsqlxa`.        
