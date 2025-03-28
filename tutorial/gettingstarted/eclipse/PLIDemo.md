@@ -95,20 +95,22 @@ adding JAVA to the PATH environment variable resulted in the emulator not openin
 
 1. After opening Enterprise Developer for Eclipse, either create a new workspace or open an existing one.
 2. If it's not already open, open the PL/I perspective in the Eclipse IDE by clicking **Window > Perspective > Open Perspective > Other > PL/I**.
-3.To start the project import process, open the **File** menu and select **Import**, or righ-click in the **PL/I Explorer** tab and select **Import > Import**.
-4. On the import pop-up window, expand **General**, select **Existing Projects into Workspace**, and click **Next**.
-5. In **Select root directory**, click **Browse** to navigate to the location of the `tutorial\projects\Eclipse\pli` directory, select it, and click **Select Folder**.
+3. To start the project import process, open the **File** menu and select **Import**, or righ-click in the **PL/I Explorer** tab and select **Import > Import**.
+4. In the **Import** pop-up window, expand **General**, select **Existing Projects into Workspace**, and click **Next**.
+5. Next to **Select root directory**, click **Browse**, navigate to the location of the `tutorial\projects\Eclipse\pli` directory, select it, and click **Select Folder**.
  The **BANKMAIN**, **FETCHABLES** and **INCLUDES** projects should now be visible on the **Projects** list.
 6. Verify that **Copy projects into workspace** is not selected and click **Finish**.
-7. Once the import is complete, the **BANKMAIN**, **FETCHABLES**, and **INCLUDES** projects should display in the **PL/I Explorer** tab.
-8. Verify that the active build configuration is 'x64' in the project properties before continuing, as this demo is designed to run only in 64-bit mode.
-9.  Ensure the project has been built (either because Auto-build is enabled) or by clicking **Build** on the **Project** menu.
+  
+    Once the import is complete, the **BANKMAIN**, **FETCHABLES**, and **INCLUDES** projects should display in the **PL/I Explorer** tab.
+7. Click **Project > Properties**, expand **Rocket Software**, click **Build Configurations**, and verify that the active build configuration is set to 'x64'[Active], as this demo is designed to run only in 64-bit mode.
+8.  Ensure the project is built. If Auto-build is enabled, it builds automatically, or you can build it manually by clicking **Project>Build**.
 
 
 ### Configure the BANKDEMO Enterprise Server for PL/I
 
-1. In the **Server Explorer** tab, right-click on **BANKDEMO** under **Local** and click **Open Administration Page**. 
-This opens the **Enterprise Server Common Web Administration** (ESCWA)  page outside of Eclipse.
+1. In the **Server Explorer** tab, expand **Local>Default**, right-click **BANKDEMO**, and click **Open Administration Page**. 
+
+   This opens the **Enterprise Server Common Web Administration** (ESCWA)  page outside of Eclipse.
 2. Click the **CICS** drop-down list, and select **Configuration**.
 3. Change the **System Initialization Table** from `CBLVSAM` to `PLIVSAM` and click **Apply**.
 
@@ -128,16 +130,19 @@ Making these associations before you start the server enables the executables bu
 
 ### Execute the BANKDEMO Application
 
-1. To prepare for debugging in Eclipse, create a debug configuration by selecting **Debug Configurations** from the **Run** menu.
+1. To prepare for debugging in Eclipse, create a debug configuration by clicking **Run>Debug Configurations**.
 2. On the Debug Configurations dialog, right-click **PL/I Enterprise Server** and click **New Configuration**.
-3. Change the **Name** from `New_configuration` to something meaningful, such as `BANK`.
-4. Type `BANKMAIN` in PL/I project, enter `Local` in **ESCWA**, `Default` in **Directory Server**, and `BANKDEMO` in **Region**. Click **Apply** and then click **Debug**.
-5. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.  <!-- I am not sure how to do that. During my first attempt to go through the demo, I couldn't do this at all, during the second - the emulator opened on its own after I clicked `Debug`. -->
-6. If you receive a dialog asking whether to automatically switch to the debug perspective, select **Remember my decision**, and click **Yes**.
-7. Eclipse should automatically open the `SBANK00P.PLI` source file with the `SBANK00P PROC` line highlighted as the current line of execution.
-8. If line numbers are not turned on in the source window, right-click in the left column of the source pane, and click **Show Line Numbers**.
-9. You can step through the `SBANK00P` program, set breakpoints, and evaluate variables.  Once you're ready to run the program, select **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.
-10. In the TN3270 emulator window, type a User id of `b0001` and anything for the password, and press **Enter**.
+3. In the **Name** field, type a meaningful name, for example `BANK`.
+4. In PL/I project, type `BANKMAIN`, in **ESCWA**, enter `Local`, in **Directory Server**, enter `Default`, and in Region, enter `BANKDEMO`.
+5. Click **Apply** and then click **Debug**.
+6. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.  <!-- I am not sure how to do that. During my first attempt to go through the demo, I couldn't do this at all, during the second - the emulator opened on its own after I clicked `Debug`. -->
+7. If you receive a dialog asking whether to automatically switch to the debug perspective, select **Remember my decision**, and click **Yes**.
+8. Eclipse should automatically open the `SBANK00P.PLI` source file with the `SBANK00P PROC` line highlighted as the current line of execution.
+9. If line numbers are not turned on in the source window, right-click in the left column of the source pane, and click **Show Line Numbers**.
+10. You can step through the `SBANK00P` program, set breakpoints, and evaluate variables.
+
+     Once you are ready to run the program, select **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.
+11. In the TN3270 emulator window, type a User id of `b0001` and anything for the password, and press **Enter**.
     
     Eclipse restarts debugging so you can debug through the `SBANK10P` program.          
 12. Once you are ready to run the program, click **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.      
@@ -150,6 +155,8 @@ Making these associations before you start the server enables the executables bu
 When you have finished running the demo, you can stop the associated enterprise server instance:
 
 1. In Eclipse, right-click the **BANKDEMO** server in **Server Explorer** and click **Stop**.
-2. Check the **Output** view for messages that the server has stopped. A number of messages also appear in the **Enterprise Server Console Daemon** window before it closes.
+2. Check the **Output** view for messages that the server has stopped.
 
-> **Note**: You should re-enable Enterprise Server security if you have not already done so. See *To recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
+    A number of messages also appear in the **Enterprise Server Console Daemon** window before it closes.
+
+> **Note**: You should re-enable Enterprise Server security if you have not already done so. See *Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
