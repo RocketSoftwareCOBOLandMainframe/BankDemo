@@ -271,7 +271,7 @@ Solution Explorer shows which copybooks are used by your source programs. To vie
 
 [Back to Top](#overview)
 
-There is a variety of options and settings that can be configured within Visual Studio. You are going to explore a few of them in this tutorial. Do not skip this section, as you are going to make at least one important configuration change in the project's properties.
+There is a variety of options and settings that can be configured within Visual Studio. You will explore a few of them in this tutorial. Do not skip this section, because you are going to make at least one important configuration change in the project's properties.
 
 **Exploring the IDE settings**
 
@@ -289,7 +289,7 @@ There is a variety of options and settings that can be configured within Visual 
 
     You can use the settings in this section to configure features of the editor such as tab size, COBOL margins, some syntax checking rules, and others.
 
-    From the **Quick Actions** page for the editor properties, you can manage what quick actions are enabled in the editor.
+    From the **Quick Actions** page for the COBOL editor properties, you can manage what quick actions are enabled in the editor.
 
     From the **Advanced** page you can fine-tune the behavior of some features of the editor, such as background syntax checking and outlining. You can also disable features that are not necessary. This can be useful if you are working with a large code base.
 
@@ -299,19 +299,20 @@ You can configure how the editor wraps the code around the margins, how it inden
 
 Experiment by changing the following settings:
 
--   Click **Tools \> Options \> Text Editor \> COBOL \> Margins** - modify the settings for the **Smart edit mode** that controls the word wrapping and the indentation in the different COBOL areas.
+1. Click **Tools \> Options \> Text Editor \> COBOL \> Margins**.
+2. Modify the settings for the **Smart edit mode** that controls the word wrapping and the indentation in the different COBOL areas.
 
-    When there is a COBOL file opened in the editor, you can use **Toggle COBOL Smart Edit Mode**, ![](images/a46c3bb37b9bde291170ad8fe2accbc2.jpg), in the COBOL toolbar to turn on or off the smart editing mode.
+    When there is a COBOL file opened in the editor, you can use **Toggle COBOL Smart Edit Mode**, ![](images/a46c3bb37b9bde291170ad8fe2accbc2.jpg), on the COBOL toolbar to turn on or off the smart editing mode.
     
 -   To open the COBOL toolbar, click **View \> Toolbars \> COBOL**.
 -   On the same page in the IDE options, change the behavior of the **Home** and **End** keys.
--   On the same page in the IDE options, check **Show the ruler** and check **Mainframe style**.
+-   On the same page in the IDE options, select **Show the ruler** and select **Mainframe style**.
 
 **Project Properties**
 
 The properties you set at project level apply to all files in the project. Here's how to access them:
 
-1.  Select the **Bankdemo** project in Solution Explorer, and click **Project** \> **Bankdemo Properties**.
+1.  In **Solution Explorer**, select the **Bankdemo** project and click **Project** \> **Bankdemo Properties**.
 
     This opens the tabbed property pages for the project in the main Visual Studio window.
 
@@ -334,13 +335,12 @@ The properties you set at project level apply to all files in the project. Here'
 
         ![](images/79277c5880bae61349262805aa635fd0.jpg)
 
-6.  To save the changes that you made to the project properties, click **File** \> **Save All**.
 
 **File Properties**
 
 The individual source files can have their own local properties which override the project settings. To check a file's properties:
 
-1.  In Solution Explorer, right-click **BBANK10P.cbl**, and click **Properties**.
+1.  In **Solution Explorer**, right-click **BBANK10P.cbl**, and click **Properties**.
 
     This opens the COBOL-specific file properties.
 
@@ -373,14 +373,14 @@ You are going to explore some of the COBOL editing features by using the `ZBNKPR
 
     This opens the file in the COBOL editor in Visual Studio.
 
-2.  To enable the line numbers in the editor, click **Tools \> Options \> Text Editor \> COBOL \> General**, and check **Line numbers**.
+2.  To enable the line numbers in the editor, click **Tools \> Options \> Text Editor \> COBOL \> General**, and select **Line numbers**.
 
 3. Click **OK**.            
 
 **Expanded Copybook View**
 
  1. Scroll down the file to line 61 and see some `COPY` statements. 
- 2. Right-click the line for `COPY CDATED` and click **Show "CDATED.CPY"**. This expands the copybook directly in the code of `ZBNKPRT1.cbl`. 
+ 2. Right-click the line for `COPY CDATED` and click **Show "CDATED.CPY"**. This expands the copybook directly in the code of the  `ZBNKPRT1.cbl` program. 
 
     ![](images/showcopybook754.png)
 
@@ -392,7 +392,9 @@ You are going to explore some of the COBOL editing features by using the `ZBNKPR
 
 4. Right-click in the expanded copybook, and click **Hide "CDATED.CPY"**. 
 
-5. Close the file. The changes you made to the expanded view were applied to the source of the copybook, so when you are prompted to save your changes, click **No**.
+5. Close the file.
+
+    The changes you made to the expanded view were applied to the source of the copybook, so when you are prompted to save your changes, click **No**.
 
 **Unused Data**
 
@@ -400,7 +402,7 @@ Notice that some data items in the Data Division are greyed out. This is because
 
 **Class View** 
 
-You can view the objects and the members defined in your projects in the standard Class View located in right of the IDE:
+You can view the objects and the members defined in your projects in the standard **Class View** that is located in right of the IDE:
 
 ![](images/b8b352065b874ce26e48e1fe18aa66ef.jpg)
 
@@ -413,10 +415,13 @@ Apart from scrolling down the code in the editor, you can use the following feat
 
         ![](images/4eb0d2e0b64aa37e7ae6197ac9483430.jpg)
 
-   -   In Solution Explorer, open the `SBANK00P.cbl` file and click **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
-    ![](images/15aVSGoToLine.png)
+   -   In Solution Explorer, double-click the **SBANK00P.cbl** file, click in it, and on the main IDE toolbar click **Edit** \> **Go To** \> **Go To Line** to specify a line in the code to navigate to.
+
+ ![](images/15aVSGoToLine.png)
    
    -   Click **Locate Definition**, ![](images/16VSlocatedefinition.png), in the COBOL toolbar and start typing a search term. 
+
+
    ![](images/7a99e5f18fa00915aa26a8ede9697d21.jpg)
 
  **Exploring Data in Editing Mode** 
@@ -427,7 +432,8 @@ Apart from scrolling down the code in the editor, you can use the following feat
 
 
 **Data Definitions**
-- Right-click a data item in the Procedure Division and click **Go To Definition**. This positions the cursor on the line of code where the data item is defined. 
+- Right-click a data item in the Procedure Division and click **Go To Definition**.
+ This positions the cursor on the line of code where the data item is defined. 
 
 **Peek Definitions**
 
@@ -438,16 +444,16 @@ Apart from scrolling down the code in the editor, you can use the following feat
 
 You can type in the window, or peek the definition of another data item in it.
 
-**Finding All Lines Where a Data Item is Used** 
+**Finding All Lines Where a Data Item Is Used** 
 
-1. Right-click a data item in the code, and click **Find All References**. This opens the Find Symbol Results window with a list of all occurrences of the data item in the code.
+1. Right-click a data item in the code, and click **Find All References**. This opens the **Find Symbol Results** window with a list of all occurrences of the data item in the code.
 ![](images/6b271da45c96eac2dae62a533c8b3316.png)
 
 **Searching in Copybooks**
 
 You can search for strings in the copybooks as follows: 
 
-1. Click **Edit \> Find and Replace \> Find in Files**. 
+1. In the main IDE toolbar, click **Edit \> Find and Replace \> Find in Files**. 
 
 2. Set the **Look in** to **COBOL Project Copybook Paths**. 
 
@@ -467,7 +473,7 @@ You can use the mouse to mark the text. To make a block selection of the code:
 **Rename Items in the Code**   
   Try and see how rename refactoring works in the IDE:
 
-1. To go to the Procedure Division in the `ZBNKPRT1.cbl` file. click **Go To Procedure Division**, ![](images/d471eb4d279d6d6c4bb02406349ccf43.jpg), in the COBOL toolbar. 
+1. To go to the Procedure Division in the `ZBNKPRT1.cbl` file,  on the COBOL toolbar, click **Go To Procedure Division**, ![](images/d471eb4d279d6d6c4bb02406349ccf43.jpg). 
 2. Scroll down to line 228. 
 3. Right-click `WS-EXEC-PARM-LL` and click **Rename**. 
     
@@ -475,7 +481,7 @@ You can use the mouse to mark the text. To make a block selection of the code:
 
    ![](images/c90f798b1f140453068deb31a74d1010.jpg)
 
-1.  Set **Scope** to **Current COBOL Program**, and check **Preview changes**.
+1.  Set **Scope** to **Current COBOL Program**, and select **Preview changes**.
 2.  Start typing in the editor over the highlighted variable. For example, type `WS-EXEC-PARM`.
 3.  Click **Apply**.
 
@@ -520,7 +526,7 @@ You can choose from a number of **Renumber** and **Unnumber** options available 
 You should now see line numbers running down both sides of the source code:
    ![](images/27VSRenumberboth.png)
 
-You can remove the line numbers from your code - note that the **Renumber** and **Unnumber** commands are not available in the expanded copybook view.
+You can remove the line numbers from your code. Note that the **Renumber** and **Unnumber** options are not available in the expanded copybook view.
 
 3. Ensure that `ZBNKPRT1.cbl` is opened in the editor, click the downward arrow next to ![](images/e711062673ff7c4626a662d04d262ad7.jpg) in the COBOL  toolbar, and then click **Unnumber Left**.
 
@@ -530,13 +536,13 @@ This removes the line numbers from the COBOL sequence area.
 
 **JCL Editing**
 
-1. Double-click the **ZBNKSTMT.jcl** file in Solution Explorer to open it in the JCL editor.
+In **Solution Explorer**, double-click the **ZBNKSTMT.jcl** file to open it in the JCL editor.
 
 The editor enables you to edit JCL files in text view and offers a basic level of colorization for items such as reserved words and comments. The JCL editor does not support background parsing or syntax checking.
 
 **BMS Editing**
 
-There are two ways to edit BMS files. The first one is to use the basic BMS text editor available in the IDE. The other is to use a WYSIWYG version, the Rocket BMS Painter, which is available as a separate utility installed with this product.
+There are two ways to edit BMS files. The first one is to use the basic BMS text editor available in the IDE. The other is to use a WYSIWYG version, the Rocket® BMS Painter, which is available as a separate utility installed with this product.
 
 To open the BMS file in the IDE text view:
 
@@ -567,9 +573,9 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 **Editing Data Files**
 
-You can edit data files using one of two available Rocket Data File Editor tools.
+You can edit data files using one of two available Rocket® Remote Data Tools for Enterprise Server.
 
-By default, Visual Studio is configured to use the new Data File Tools utility. To check whether this is enabled:
+By default, Visual Studio is configured to use the new Remote Data Tools utility. To check whether this is enabled:
 
 1.  Click **Tools \> Options \> Rocket Tools \> Data File Tools**.
 2.  Ensure **Use New Data File Tools for supported options** is selected, and click **OK**.
@@ -624,7 +630,7 @@ To compile the application:
 
 The Rocket COBOL Compiler can compile many different COBOL dialect variations. It can also compile COBOL code that contains `EXEC CICS` or `EXEC SQL` statements. The Compiler is controlled through a series of directives which are passed to the Compiler at build time. You can set directives at either a project or a component level.
 
-Often the directives are set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you need to compile with different directives. In this case, you can set the directives at the component level, which overrides the project settings.
+Often the directives are set only at the project level, which means that all component files in the project use them. Sometimes, you have a component which you must compile with different directives. In this case, you can set the directives at the component level, which overrides the project settings.
 
 For example, most of the programs in your project could be using Enterprise COBOL for z/OS and only a few could use VS COBOL II. In this case, you would set directives for Enterprise COBOL for z/OS at the project level, and VS COBOL II at the level of the respective COBOL programs.
 
@@ -657,14 +663,14 @@ You can configure the IDE to create a fully expanded Compiler listing file durin
 4.  Click **Build** \> **Build Solution**.
 
     During the build, the Compiler produces a source listing file, **ZBNKPRT1.lst**, in a `Listing` subfolder in
-    the project directory (`C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. From File Explorer, you can open the file in a text editor, such as Microsoft's Notepad, and view its contents.
+    the project directory (`C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing` in this case). The listing file includes a fully expanded source file together with some Compiler system information at the start and with any Compiler errors highlighted with asterisks. From File Explorer, you can open the file in a text editor, such as Windows Notepad, and view its contents.
 
 **Example of Compiling a COBOL Program with Errors**
 
 You can introduce some Compiler errors into one of the programs to see how the Compiler handles them:
 
 1. In Solution Explorer, double-click **ZBNKPRT1.cbl**.
-2. Page down the program a few pages to the start of the Procedure Division around line 224.
+2. Scroll down the program to the start of the Procedure Division around line 224.
 3. Introduce a few syntax errors as follows:
     - On line 226, change `RUN-TIME` to `RUN-TME`
     - On line 229, change `SPACES` to `SPOCES`
@@ -676,9 +682,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 4. Save the program and build your solution.
 6. Check the **Error List** window to view the list of errors.
 7. Double-click an error in the list to position the cursor on the line of code that contains the error.
-8. Check the errors in the listing file, `ZBNKPRT.lst` as follows:
-
-    In File Explorer, navigate to `C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing`, and open the file in a text editor.
+8. To check the errors in the listing file, in File Explorer, navigate to `C:\MFETDUSER\tutorial\projects\Studio\cobol\Bankdemo\Listing`, and open the file `ZBNKPRT.lst` in a text editor.
 
     The lines that include syntax errors are marked with asterisks (\*\*).
 
@@ -692,9 +696,9 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
 [Back to Top](#overview)
 
-The first thing you need to do is check that the Bankdemo application is executing correctly.
+The first thing you must do is check that the Bankdemo application is executing correctly.
 
-To execute the JCL, you need to run the application in an instance of the Rocket Enterprise Server (sometimes abbreviated to Enterprise Server). This demonstration includes a pre-configured enterprise server instance called BANKDEMO which you need to import in Enterprise Server and start before you execute the Bankdemo application.
+To execute the JCL, you must run the application in an instance of the Rocket Enterprise Server (sometimes abbreviated to Enterprise Server). This demonstration includes a pre-configured enterprise server instance called BANKDEMO which you must import in Enterprise Server and start before you execute the Bankdemo application.
 
 **Importing the Bankdemo Server**
 
@@ -708,7 +712,7 @@ This sample provides a PowerShell script that creates the region definition to u
 
 Ensure that the default settings are applied to the Directory Sever:
 
-1.  Click the Start menu and open the Services application. Navigate to Rocket Directory Server to view its status and set it to **Running** if it is not already started.
+1.  Click the Start menu and open the Services application. Navigate to Directory Server to view its status and set it to **Running** if it is not already started.
 
 2.  In Visual Studio, open the Server Explorer window.
 
@@ -730,7 +734,7 @@ To import the definition of the Bankdemo logical server (LSER) in Enterprise Ser
 
 3.  Right-click **localhost** and click **Import**.
 4.  In the **Import Server** dialog box, click **...** on the line for **Import server definition file**.
-5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml** and click **OK** twice.
+5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, click **Open**, and click **OK**.
 
 6. Check the **Output** window for the results of importing the server. 
 The Server Explorer window should now show a server called BANKDEMO under **Rocket Enterprise Server \> localhost**. If the server is not visible, right-click **Rocket Enterprise Server** and click **Refresh**.
@@ -740,7 +744,7 @@ The Server Explorer window should now show a server called BANKDEMO under **Rock
 Ensure your application is associated with the BANKDEMO server:
 
 1.  Right-click the BANKDEMO server, and click **Associate With Project**.
-2.  Ensure there is a check before the name of the Bankdemo application.
+2.  Ensure there is a check mark before the name of the Bankdemo application.
 
     ![](images/ac6ffc9a6ab287546d0dfdc00e71414b.jpg)
 
@@ -765,13 +769,13 @@ Configure the IDE to start the associated BANKDEMO server automatically as follo
 
 These are the steps to start the server manually, and are included for completeness. You do not have to start the server manually, as you have configured the IDE to start the server automatically. 
 
-1. In Server Explorer, right-click **BANKDEMO** under **Rocket Enterprise Server** and click **Start**.
+1. In **Server Explorer**, under **Rocket Enterprise Server**, right-click **BANKDEMO** and click **Start**.
 
-    **Note:** You might receive an Enterprise Server Sign On dialog prompting you to provide connection details for the BANKDEMO server. This is a standard security dialog. Click **OK** without specifying any sign-on details. Also, you might skip enabling password recovery.
+    **Note:** You might receive an Enterprise Server Sign On dialog prompting you to provide connection details for the BANKDEMO server. This is a standard security dialog. Click **OK** without specifying any sign in details. Also, you might skip enabling password recovery.
 
     You might receive a **Windows Security Alert** blocking the **MF Communications** process. Click **Allow access**.
 
-2.  Right-click the BANKDEMO server in Server Explorer and click **Show Console Log**.
+2.  Right-click the BANKDEMO server and click **Show Console Log**.
 
     ![](images/3b9dcb9098ce66eb406d4451fe59e8c6.png)
     See the **Output** window for the messages from the server log that show that the server has started.
@@ -806,25 +810,27 @@ To view the catalog:
 
 1.  In Server Explorer, right-click the BANKDEMO server and click **Show Catalog**.
 
-    Alternatively, in Solution Explorer, right-click the BankDemo project and click **Enterprise Server \> Show Catalog**.
+    Alternatively, in Solution Explorer, right-click the Bankdemo project and click **Enterprise Server \> Show Catalog**.
 
     This opens the catalog:
 ![](images/3c6f3d18d838a553e016f22a1d3a4ab2.png)
 
-2.  Click a file name (for example, **MFI01V.MFIDEMO.BNKACC**) in the list in the left pane. This displays the DCB information for this catalog item.
+2.  Click a file name (for example, **MFI01V.MFIDEMO.BNKACC**) in the list in the left pane. 
+
+      This displays the DCB information for this catalog item.
 3.  Expand the **Display** section to preview the contents of the file.
 
 To view the spool:
 
-1.  In Server Explorer, right-click the BANKDEMO server and click **Show Spool**.
+1.  In **Server Explorer**, right-click the BANKDEMO server and click **Show Spool**.
 
     Alternatively, in Solution Explorer, right-click the Bankdemo project, and click **Enterprise Server \> Show Spool**. This might still show the details of the submitted JCL job.
 
 2.  Close the tab for the job when you have reviewed the details.
-3.  Click ![](images/SpoolFilterVS.png) (**Filter**) on the Home page of the Spool window to set some filters.
+3.  Click ![](images/4759DB1A-2DFB-46FC-BFC0-AD44A3D5EF46.png) (**Toggle Filter**) on the Home page of the Spool window to set some filters.
 
       ![](images/e1b080a897a4bd65512369587fdded78.jpg)
-7.  Click the **Complete** button and also check **Descending** next to **Job ID** to see a list of all jobs in the completed queue, then click **Apply**. Your job is at the top of the list.
+7.  Click the **Complete** button, select **Descending** next to **Job ID** to see a list of all jobs in the completed queue, and then click **Apply**. Your job is at the top of the list.
 8.  Click the job you want to see in the list.
 
     This opens a page with information for the job progress, showing return condition code (**Cond.**) of 0000:
@@ -849,11 +855,11 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is running:
 
-1. Go the the Start menu and open the Services application.
+1. From the Windows Start menu, open the Services application.
 
 2. Navigate to the HA Cloud service and check that its status is set to **Running**.
 
-3. If it is not running, right-click and click **Start**.
+3. If it is not running, right-click it and click **Start**.
 
 **Executing the IBM CICS application**
 
@@ -870,24 +876,27 @@ To check the IDE preferences for a TN3270 display:
 
 **Starting the Terminal Emulator**
 
-1. Right-click the BANKDEMO server in Server Explorer, and click **Mainframe TN3270 Display**.
+1. Right-click the BANKDEMO server in **Server Explorer**, and click **Mainframe TN3270 Display**.
 
 This opens the **Host Access for the Cloud** in your default browser and automatically establishes a 3270 terminal connection to the BANKDEMO server. You can see the starting page of the ES/MTO region BANKDEMO.
 
 **Executing the Enterprise Server Demonstration**
 
-1.  Type your logon details, and press **Enter**.
-A suitable `User Id` is `b0001`. You can type anything as a `Password`, but you cannot leave the field empty.
+1.  Type your login details, and press **Enter**.
 
-    ![](images/Bankdemo_001.png)
+A suitable User Id is `b0001`. You can type anything as a password, but you cannot leave the field empty.
 
-2.  Type **/** against **Display your account balances**, and press **Enter** to see the details for this customer.
+![](images/bankdemorocketscreen.png)
 
-    ![](images/Bankdemo_002.jpg)
+2.  Type **/** against **Display your account balances**. 
 
-    ![](images/Bankdemo_003.png)
+![](images/Bankdemo_002.png)
 
-3.  You can explore this application further if you wish or press **Ctrl + F2** to clear the screen and conclude the session.
+3. Press **Enter** to see the details for this customer.
+ 
+![](images/Bankdemo_003.png)
+
+4.  You can explore this application further if you wish or press **Ctrl + F2** to clear the screen and conclude the session.
 
 **Stopping the Еnterprise Server**
 
