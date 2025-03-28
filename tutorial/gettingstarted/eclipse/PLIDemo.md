@@ -19,25 +19,31 @@ You must have the following software installed:
 
 Before running this demo remotely, verify that you have an RDO and MFDS agent already configured and running on the remote UNIX/Linux system. For more details, see the Rocket product documentation.
 
-## How to Run the Demonstration
-
 ### Disable the Default Enterprise Server Security Configuration
+
+>**Note**: If you have already imported the BANKDEMO enterprise server as part of the "Getting started with Rocket Enterprise Developer for Visual Studio 2022" tutorial, and HACloud service is running, you can skip these steps.
 
 The Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information. <!-- There was some discussion about this part of the instructions. Should we change the guidance for disabling ES security in any way? -->
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials, then this should be performed on a network-isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To Recreate the Default Enterprise Server Security Configuration* in the product documentation. 
 
-1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. 
+1. In an Enterprise Developer command prompt, run the command:
 
-      A series of messages appear as the script disables default security.
+    Windows: `DisableESDefaultSecurity.cmd`
+
+    Linux: `DisableESDefaultSecurity.sh`
+      
+ A series of messages appear as the script disables default security.
+
 2. Restart the Directory server (MFDS) and ESCWA services to pick up the configuration changes. 
 
-    You can now use ESCWA without having to log in.
+     You can now use ESCWA without having to log in.
 
 3. Restart any running enterprise server regions so that they pick up the configuration changes. 
  
    Regions no longer require credentials for starting/stopping and other actions.
 
+## How to Run the Demonstration
 
 ### Connect to the Default ESCWA Server
 
