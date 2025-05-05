@@ -707,8 +707,12 @@ This sample provides a PowerShell script that creates the region definition to u
 1.  Open File Explorer, and navigate to the `C:\MFETDUSER\tutorial` folder.
 2.  Right-click **createdefinition.ps1**, and click **Run with PowerShell**.
 3. Type `A` when prompted for permissions in the PowerShell window.
-
     This executes the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you have saved the sample files.
+
+If you encounter issues with running the PowerShell script, you can do the following instead:
+1. Create a `BANKDEMO.xml` file.
+2. Open the file and copy the contents of the `BANKDEMO.template` file to it.
+2. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` to the name of the directory containing the script. If you imported the tutorial files to the `MFETUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`. 
 
 Ensure that the default settings are applied to the Directory Sever:
 
@@ -738,6 +742,8 @@ To import the definition of the Bankdemo logical server (LSER) in Enterprise Ser
 
 6. Check the **Output** window for the results of importing the server. 
 The Server Explorer window should now show a server called BANKDEMO under **Rocket Enterprise Server \> localhost**. If the server is not visible, right-click **Rocket Enterprise Server** and click **Refresh**.
+
+**Note**: If you are having issues with importing the server definition file, open it and check if `BANKROOT` is set to a valid path, such as `C:\MFETDUSER\tutorial/..`. If  not, edit it manually.   
 
 **Associate the BANKDEMO Enterprise Server with Your Project**
 
