@@ -674,12 +674,29 @@ Before you proceed, ensure that the default settings are applied to the Director
 
 This sample provides a PowerShell script that creates the region definition to use in this tutorial.
 
-1.  Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
-2.  Right-click **createdefinition.ps1** and click **Run with PowerShell**. 
+1.  Open Windows PowerShell and navigate to the `C:\MFETDUSER\tutorial` folder.
+2.  Run `set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+3.  (Optional) Unblock the script.
 
-<!-- This doesn't work, because running scripts is disabled. I had to open PowerShell, navigate to the folder, run set-ExecutionPolicy RemoteSigned -Scope CurrentUser (select A) and after that run the script. Since in the VM the script was still blocked, I also had to: Right-click the script, select Properties, select the Unblock check box. Then running the script from the PowerShell prompt will create the XML file (in all cases there's no need to specify **A** to allow execution policies).-->
+    At times, for security reasons, when you have downloaded files by using a browser the files can be blocked and you might not be able to run the script. To unblock the script:
+
+    a. Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
+
+    b. Right-click the **createdefinition.ps1** file and select **Properties**.
+
+    c. Select the **Unblock** check box and click **Apply**. 
+
+4.  Run the PowerShell script provided with the sample: `.\createdefinition.ps1`. 
 
 This runs the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
+
+> **Tip:**  If you cannot use the PowerShell script to create the `BANKDEMO.xml` file, you can create it manually.
+
+1. Create an empty `BANKDEMO.xml` file.
+2. Open the file in a text editor and copy the contents from the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
+3. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the `tutorial` directory. 
+
+   If you imported the tutorial files to the `MFETDUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`.   
 
 Now you can import the definition of the BANKDEMO logical server (LSER) in Enterprise Server:
 
@@ -695,7 +712,8 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 
     In the **Server Explorer**, under **Default [127.0.0.1:86]**, you should now see a server called BANKDEMO. If the server is not visible, right-click **Default [127.0.0.1:86]** and click **Refresh**.
 
-     
+> **Note**: If you encounter issues with importing the server definition file, open the `BANKDEMO.xml` file and check if BANKROOT is set to a valid path, such as `C:\MFETDUSER\tutorial/..`. If not, edit the path manually.
+ 
 
 **Associate the BANKDEMO Enterprise Server with Your Project**
 
