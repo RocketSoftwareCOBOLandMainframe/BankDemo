@@ -692,11 +692,11 @@ This runs the script and creates the Enterprise Server region definition file, `
 
 > **Tip:**  If you cannot use the PowerShell script to create the `BANKDEMO.xml` file, you can create it manually.
 
-1. Create an empty `BANKDEMO.xml` file.
-2. Open the file in a text editor and copy the contents from the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
-3. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the `tutorial` directory. 
+    1. Create an empty `BANKDEMO.xml` file.
+    2. Open the file in a text editor and copy the contents from the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
+    3. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the `tutorial` directory. 
 
-   If you imported the tutorial files to the `MFETDUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`.   
+     If you imported the tutorial files to the `MFETDUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`.   
 
 Now you can import the definition of the BANKDEMO logical server (LSER) in Enterprise Server:
 
