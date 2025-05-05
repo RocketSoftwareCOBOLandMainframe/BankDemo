@@ -709,10 +709,11 @@ This sample provides a PowerShell script that creates the region definition to u
 3. Type `A` when prompted for permissions in the PowerShell window.
     This executes the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you have saved the sample files.
 
-If you encounter issues with running the PowerShell script, you can do the following instead:
-1. Create a `BANKDEMO.xml` file.
-2. Open the file and copy the contents of the `BANKDEMO.template` file to it.
-2. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` to the name of the directory containing the script. If you imported the tutorial files to the `MFETUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`. 
+If you cannot use the PowerShell script to create the BANKDEMO.xml file, you can create it manually:
+1. Create an empty `BANKDEMO.xml` file.
+2. Open the filein a text editor and copy the contents of the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
+2. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the tutorial directory.
+If you imported the tutorial files to the `MFETUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`. 
 
 Ensure that the default settings are applied to the Directory Sever:
 
@@ -728,7 +729,7 @@ Ensure that the default settings are applied to the Directory Sever:
 
 4.  Ensure that the host name is `localhost` and the port number is `86`.
 
-To import the definition of the Bankdemo logical server (LSER) in Enterprise Server:
+Now you can import the definition of the Bankdemo logical server (LSER) in Enterprise Server:
 
 1.  In Visual Studio, open the Server Explorer window.
 
