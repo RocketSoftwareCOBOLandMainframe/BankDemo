@@ -257,8 +257,7 @@ def create_region(main_configfile):
             dfhdrdat = os.path.join(rdef, 'dfhdrdat')
             shutil.chown(dfhdrdat, esuid, esuid)
             write_log ('Set owner of {} to {}'.format(dfhdrdat, esuid))
-            create_db_vault_secrets(os_type, main_config, esuid)
-
+        create_db_vault_secrets(os_type, main_config, esuid)
     
     base_config = os.path.join(config_dir, base_config)
     update_config = os.path.join(config_dir, update_config)
