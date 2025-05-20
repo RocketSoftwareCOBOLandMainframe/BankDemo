@@ -185,7 +185,7 @@ def create_region(main_configfile):
                 write_log('ERROR: PostgreSQL ODBC driver not found')
                 sys.exit(1)
  
-    #determine te individual component configuration files to be used
+    #determine the individual component configuration files to be used
     configuration_files = main_config["configuration_files"]
 
     #base_config is used for settings to create the base region definition
