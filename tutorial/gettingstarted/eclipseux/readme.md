@@ -479,7 +479,7 @@ You can also explore your BMS maps and mapsets in the **BMS Preview** view:
 
 **Editing Data Files**
 
-Next, you can edit the data file using the Rocket&reg; Data Tools Editor:
+Next, you can edit the data file using the Rocket&reg; Software Data Tools:
 
 1.  In the **Application Explorer** view, right-click the **.dat** file and select **Open With \> Data File Tools**.
 
@@ -805,7 +805,7 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 **Executing the IBM CICS Application**
 
-The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 <!-- Service name still isn't changed from Micro Focus-->
 
 **Start the HACloud Session Server**
@@ -830,7 +830,7 @@ To check the IDE preferences for the TN3270 emulator:
 
 1.  In the IDE, click **Window \> Preferences**.
 2.  Expand **Rocket Software \> Enterprise Server** and click **TN3270**.
-3.  Ensure that **Enable display**, **Host Access for the Cloud** and **Connect automatically** are all selected.
+3.  Ensure that **Enable display** and **Host Access for the Cloud** are selected.
 <!-- There's no Connect automatically option-->
 4.  Click **Apply and Close**.
 
@@ -953,7 +953,7 @@ The highlighted line of code is the one the IDE will execute next.
 
     The PERFORM statement executes and takes you to the line starting with IF TIMER. You can also see that a **Variables** view is now open in the IDE showing the current value of a data item on the line of code which is about to be executed.
 
-2.  Press **F5** slowly a few more times until you reach line 638. Watch the code as you step through it and notice how the values of the variables change inside the **Variables** view.
+2.  Press **F5** slowly a few more times until you reach line 574. Watch the code as you step through it and notice how the values of the variables change inside the **Variables** view.
 
     ![](images/e17c83ba64e31c1ddeb3848a76aade4f.jpg)
 

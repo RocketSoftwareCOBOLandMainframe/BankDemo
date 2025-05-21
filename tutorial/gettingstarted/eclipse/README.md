@@ -30,7 +30,7 @@ A preconfigured, fully executable application, BankDemo, is available from the R
 
 > **Important:** Before attempting this tutorial, create a directory on your machine for the sample files - for example, create a `MFETDUSER` directory on the root of your local drive (C:). Copy the entire contents from the expanded folder into the newly created directory. For example, you should have a `C:\MFETDUSER\datafiles` folder, etc.
 
-As part of this tutorials, you use the supplied standard Eclipse COBOL project in the sample to set up a development environment for this application. The tutorials show how you can:
+As part of this tutorial, you use the supplied standard Eclipse COBOL project in the sample to set up a development environment for this application. The tutorials show how you can:
 
 -   Create a project for your application
 -   Edit the source files
@@ -73,11 +73,11 @@ In this release, the Enterprise Server security features are enabled by default.
 
     **Windows 10**
 
-    - Click **Start \> All Programs \> Rocket Enterprise Developer \> Enterprise Developer for Eclipse** . 
+    - Click **Start \> All Programs \> Rocket Enterprise Developer \> Enterprise Developer for Eclipse**. 
     
     **Windows 11**
     
-    - Click the **Start** button in the Task Bar. Use the search field in the Start menu to find and start **Micro Focus Enterprise Developer > Micro Focus Enterprise Developer for Eclipse**.
+    - Click the **Start** button in the Task Bar. Use the search field in the Start menu to find and start **Rocket Enterprise Developer > Enterprise Developer for Eclipse**.
 
     If you need instructions to get Enterprise Developer started on your local machine, see *To Start Enterprise Developer* in the product Help for Enterprise Developer.
 
@@ -501,7 +501,7 @@ You can also explore your BMS maps and mapsets in the **BMS Preview** view:
 
 **Editing Data Files**
 
-Next, you can edit the data file using the Rocket&reg; Data Tools Editor:
+Next, you can edit the data file using the Rocket&reg; Software Data File Tools:
 
 1.  In the **Application Explorer** view, right-click the **.dat** file and select **Open With** \> **Data File Tools**.
 
@@ -678,7 +678,7 @@ This sample provides a PowerShell script that creates the region definition to u
 2.  Run `set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
 3.  (Optional) Unblock the script.
 
-    At times, for security reasons, when you have downloaded files by using a browser the files can be blocked and you might not be able to run the script. To unblock the script:
+    At times, for security reasons, when you have downloaded files by using a browser, the files can be blocked and you might not be able to run the script. To unblock the script:
 
     a. Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
 
@@ -802,7 +802,7 @@ To view the spool:
     -   Two **SYSOUT** results (one for the EXTRACT and one for the SORT). Click these and see the **SYSOUT Details** section.
     -   The **PRINTOUT** is the final printed results created by your job. Click **PRINTOUT** in the **DD Entries** section to see the results.
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
-<!-- Instead I see one SYSTSPRT, 1 SYSOUT, and 1 PRINTOUT result. Maybe the screenshot and the above text should be updated?-->
+
 You can now start to look at how to run the online application.
 
 ## Unit Testing the Online Application
@@ -815,10 +815,10 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 > **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
-Before you proceed, ensure that the Host Access for the Cloud (HACloud) service is running:<!-- Service name still isn't changed from Micro Focus-->
+Before you proceed, ensure that the Host Access for the Cloud (HA Cloud) service is running:<!-- Service name still isn't changed from Micro Focus-->
 1. From the Windows **Start** menu open the Services application.
 
-2. Navigate to the HACloud service and check whether its status is set to **Running**.
+2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**.
 
 3. If it is not running, right-click the service and select **Start**.
 
@@ -832,7 +832,7 @@ To check the IDE preferences for the TN3270 emulator:
 
 1.  In the IDE, click **Window \> Preferences**.
 2.  Expand **Rocket Software \> Enterprise Server** and click **TN3270**.
-3.  Ensure that **Enable display**, **Host Access for the Cloud** and **Connect automatically** are all selected.
+3.  Ensure that **Enable display** and **Host Access for the Cloud** are selected.
 <!-- There's no Connect automatically option-->
 4.  Click **Apply and Close**.
 
@@ -955,7 +955,7 @@ The highlighted line of code is the one the IDE will execute next.
 
     The PERFORM statement executes and takes you to the line starting with IF TIMER. You can also see that a **Variables** view is now open in the IDE showing the current value of a data item on the line of code which is about to be executed.
 
-2.  Press **F5** slowly a few more times until you reach line 638<!--I think it is 638, not 547-->. Watch the code as you step through it and notice how the values of the variables change inside the **Variables** view.
+2.  Press **F5** slowly a few more times until you reach line 574 in the `ZBNKEXT1.cbl`. Watch the code as you step through it and notice how the values of the variables change inside the **Variables** view.
 
     ![](images/e17c83ba64e31c1ddeb3848a76aade4f.jpg)
 
