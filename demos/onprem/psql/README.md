@@ -58,7 +58,7 @@ The demonstration also includes some instructions on how to build the applicatio
 
 2. In a web browser, open the ESCWA UI by entering `http://localhost:10086`. 
 
-   a. In the ESCWA UI, click **Native**, expand **Directory Servers**, and in the left pane click **Default**.
+   a. In the ESCWA UI, click **Operation**, expand **Directory Servers**, and in the left pane click **Default**.
 
    b. Ensure that there is no region called **BANKSQL** already defined. If there is one, delete it.
 
