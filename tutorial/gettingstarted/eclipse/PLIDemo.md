@@ -1,11 +1,14 @@
 # Open PL/I Development by Using Enterprise Developer for Eclipse
+
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+
 ## Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [How to Run the Demonstration](#how-to-run-the-demonstration)
 
 ## Overview
-This demonstration shows you how to compile, link and debug an Open PL/I BANK IBM® CICS® application by using the Eclipse IDE.  
+This demonstration shows you how to compile, link and debug an Open PL/I BANK CICS application by using the Eclipse IDE.  
 The demo instructions assume you already have a basic understanding of how to use Eclipse and some basic familiarity with Enterprise Server.
 If you decide to use the remote debug instructions, check with your system administrator for connection details (computer name, port, connection type, credentials) before starting.
 
@@ -14,7 +17,7 @@ If you decide to use the remote debug instructions, check with your system admin
 You must have the following software installed:
 
 - Rocket® Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
-- A TN3270 terminal emulator to run the IBM CICS application.
+- A TN3270 terminal emulator to run the CICS application.
 >**Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 Before running this demo remotely, verify that you have an RDO and MFDS agent already configured and running on the remote UNIX/Linux system. For more details, see the Rocket product documentation.
@@ -120,7 +123,7 @@ adding JAVA to the PATH environment variable resulted in the emulator not openin
 2. Click the **CICS** drop-down list, and select **Configuration**.
 3. Change the **System Initialization Table** from `CBLVSAM` to `PLIVSAM` and click **Apply**.
 
-      This configures the server to use some PL/I IBM CICS resources.
+      This configures the server to use some PL/I CICS resources.
 
 ### Associate the Projects with the BANKDEMO Enterprise Server
 
@@ -153,7 +156,7 @@ Making these associations before you start the server enables the executables bu
     Eclipse restarts debugging so you can debug through the `SBANK10P` program.          
 12. Once you are ready to run the program, click **Resume/&lt;F8&gt;** as many times as necessary to run the program to completion.      
 
-    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application.  Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debugging and the sources are not provided.
+    As this application is pseudo-conversational, debugging will start and end with the invocation and completion of each transaction in the application.  Since this is a small demo, all of the CICS programs after the Banking main options screen are not built for debugging and the sources are not provided.
 13. Once you are ready to leave the application, press **F3** to end the application in the TN3270 window.
 14. You can now disconnect your TN3270 terminal to end the demo.
 

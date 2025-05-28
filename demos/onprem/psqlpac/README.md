@@ -5,11 +5,14 @@ The COBOL modules that are used to access the data are stored in the `sources/co
 
 The Rocket Secrets Vault is used to store the database credentials.
 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM.
+
+
 ## Prerequisites
-- Rocket® Enterprise Developer or Rocket® Enterprise Server.
+- Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server.
 - A TN3270 terminal emulator.
-   The Rocket® Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
-- Ensure that the Rocket Directory Server (mfds) is running and listening on the default port (86).
+   The Rocket&reg; Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
+- Ensure that the Directory Server (mfds) service is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Ensure that a Redis server is installed and running.
    
@@ -26,7 +29,7 @@ The Rocket Secrets Vault is used to store the database credentials.
        `python -m pip install requests`
 
 ## Demonstration Overview
-This demonstration shows a simple COBOL IBM® CICS® "green screen" application that accesses VSAM data by using `EXEC CICS` statements in a scenario where that data is stored in a PostgreSQL database.
+This demonstration shows a simple COBOL CICS "green screen" application that accesses VSAM data by using `EXEC CICS` statements in a scenario where that data is stored in a PostgreSQL database.
 
 A Performance and Availability Cluster (PAC) is created containing two enterprise server instances.
 
@@ -34,7 +37,7 @@ The demonstration includes a Python script that helps create the enterprise serv
 
    - The script creates the enterprise server instances in the `BANKPAC1` and `BANKPAC2` subdirectories of this project.
    - The script creates the enterprise server instances by using (almost exclusively) the ESCWA Admin API.
-   - A single command-line utility, `caspcrd`, is used to create the default IBM CICS resource definition file.
+   - A single command-line utility, `caspcrd`, is used to create the default CICS resource definition file.
    - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets. <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
    - The script configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see Step 6 in the procedure below).
    - The script uses pre-built application modules.
@@ -60,7 +63,7 @@ The demonstration also includes some instructions to build the application from 
 
 2. To open the ESCWA UI, type `http://localhost:10086` in a browser. 
 
-   a. In the ESCWA UI, click **Native**, expand **Directory Servers** and click **Default** in the left pane.
+   a. In the ESCWA UI, click **Operation**, expand **Directory Servers** and click **Default** in the left pane.
 
    b. Ensure there is no region called **BANKPAC1** or **BANKPAC2** already defined. If there is one, delete it.
 

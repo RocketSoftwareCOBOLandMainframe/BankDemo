@@ -1,8 +1,10 @@
-# Getting Started with Rocket® Enterprise Developer for Visual Studio 2022
+# Getting Started with Rocket&reg; Enterprise Developer for Visual Studio 2022
+
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
 ## Overview
 
-This set of tutorials guides you through Rocket® Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through Rocket&reg; Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
 
 These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio 2022 to develop and maintain both simple COBOL and mainframe subsystem applications. Other tutorials, which are designed for Administrators, are also available.
 
@@ -39,7 +41,7 @@ The preconfigured and fully executing application BankDemo is available from the
     You must have the following software installed:
 
     -   Rocket Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
-    -   A TN3270 terminal emulator to run the IBM® CICS® application. This tutorial uses Rocket® Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
+    -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -129,7 +131,7 @@ The source files of the demonstration application are stored in subfolders named
 
 | **Folder Name**       | **Use**                                                                                                                                             |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `system`                | Contains some resource definition data for IBM CICS – this has been exported from the Mainframe and converted into a suitable form for the workstation. |
+| `system`                | Contains some resource definition data for CICS – this has been exported from the Mainframe and converted into a suitable form for the workstation. |
 | `system\catalog`       | Stores the catalog.                                                                                                                                 |
 | `system\catalog\data` | Stores the data files.                                                                                                                              |
 | `system\logs`          | Contain various log files indicating the progress of your application execution.                                                                    |
@@ -167,7 +169,7 @@ To add the COBOL programs to your project:
 
     This adds all COBOL programs from the `core` subfolder.
 
-    Previously, you ensured the IDE is configured to scan the COBOL files you add into the project and set directives for dialect, `EXEC CICS` statements and SQL. When the files are imported in the project, the IDE scans them for IBM CICS and SQL settings. You can see that the **Output** window shows some messages about scanning the files. At the end of scanning, the IDE shows a **Preview Changes Directive Determination** dialog box to set any missing directives as required. 
+    Previously, you ensured the IDE is configured to scan the COBOL files you add into the project and set directives for dialect, `EXEC CICS` statements and SQL. When the files are imported in the project, the IDE scans them for CICS and SQL settings. You can see that the **Output** window shows some messages about scanning the files. At the end of scanning, the IDE shows a **Preview Changes Directive Determination** dialog box to set any missing directives as required. 
 
      ![](images/2VSscandirs.png)
     
@@ -499,7 +501,7 @@ You can use the mouse to mark the text. To make a block selection of the code:
     
 Let's look at how Smart Editing works with background COBOL parsing:
 
-1.  Scroll down to line 259 in the `ZBNKPRT1.cbl` file and start typing the following, starting in area A of the COBOL editor, one character at a time:
+1.  Scroll down to line 258 in the `ZBNKPRT1.cbl` file and start typing the following, starting in area A of the COBOL editor, one character at a time:
 
         MOVE W TO
 
@@ -702,18 +704,31 @@ To execute the JCL, you must run the application in an instance of the Rocket En
 
 **Importing the Bankdemo Server**
 
-This sample provides a PowerShell script that creates the region definition to use in this tutorial:
+.
 
-1.  Open File Explorer, and navigate to the `C:\MFETDUSER\tutorial` folder.
-2.  Right-click **createdefinition.ps1**, and click **Run with PowerShell**.
-3. Type `A` when prompted for permissions in the PowerShell window.
-    This executes the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you have saved the sample files.
+1.  Open Windows PowerShell and navigate to the `C:\MFETDUSER\tutorial` folder.
+2.  Run `set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+3.  (Optional) Unblock the script.
 
-If you cannot use the PowerShell script to create the BANKDEMO.xml file, you can create it manually:
+    At times, for security reasons, when you have downloaded files by using a browser, the files can be blocked and you might not be able to run the script. To unblock the script:
+
+    a. Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
+
+    b. Right-click the **createdefinition.ps1** file and select **Properties**.
+
+    c. Select the **Unblock** check box and click **Apply**. 
+
+4.  Run the PowerShell script provided with the sample: `.\createdefinition.ps1`. 
+
+This runs the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
+
+If you cannot use the PowerShell script to create the `BANKDEMO.xml` file, you can create it manually.
+
 1. Create an empty `BANKDEMO.xml` file.
-2. Open the filein a text editor and copy the contents of the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
-2. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the tutorial directory.
-If you imported the tutorial files to the `MFETUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`. 
+2. Open the file in a text editor and copy the contents from the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
+3. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the `tutorial` directory. 
+
+   If you imported the tutorial files to the `MFETDUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`. 
 
 Ensure that the default settings are applied to the Directory Sever:
 
@@ -868,9 +883,9 @@ Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is ru
 
 3. If it is not running, right-click it and click **Start**.
 
-**Executing the IBM CICS application**
+**Executing the CICS application**
 
-The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you can adapt the tutorial to suit your terminal emulator of choice. 
+The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you can adapt the tutorial to suit your terminal emulator of choice. 
 
 **Configuring the TN3270 Settings in the IDE** 
 
@@ -929,7 +944,7 @@ If the enterprise server is not yet started, you need to start it as follows:
 
 **Starting the Debugger**
 
-The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS Debugger. You need to select the JCL debugger to debug the batch Bankdemo application:
+The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the CICS Debugger. You need to select the JCL debugger to debug the batch Bankdemo application:
 
 1.  In **Solution Explorer**, right-click the **BankDemo** project and click **Properties**.
 4.  Click the **Debug** option in the **Properties** window.
@@ -1113,7 +1128,7 @@ If the enterprise server is not yet stated, you need to start it as follows:
 
 **Starting the Debugger**
 
-The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the IBM CICS debugger. You are going to use this to debug the online Bankdemo application.
+The demonstration application includes around 60 programs and some of them are debuggable. The default debugger in Enterprise Developer is the CICS debugger. You are going to use this to debug the online Bankdemo application.
 
 1.  In Solution Explorer, right-click the **Bankdemo** project and click **Properties**.
 2.  Click the **Debug** tab in the properties.
