@@ -1,5 +1,8 @@
 # Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio 2022
 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+
+
 ## Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
@@ -7,13 +10,13 @@
 
 
 ## Overview
-This demonstration shows how you can compile, link, and debug an Open PL/I BANK IBM&reg; CICS&reg; application by using the Visual Studio IDE. The instructions assume that you already have a basic understanding of how to use Visual Studio.
+This demonstration shows how you can compile, link, and debug an Open PL/I BANK CICS application by using the Visual Studio IDE. The instructions assume that you already have a basic understanding of how to use Visual Studio.
 
 ## Prerequisites
 
 This demonstration requires:
 - Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
-- A TN3270 terminal emulator to run the IBM CICS application. 
+- A TN3270 terminal emulator to run the CICS application. 
 
 > **Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
@@ -77,7 +80,7 @@ This option does not exist in the UI-->
 4. From the **CICS** drop-down menu, select **Configuration**.
 5. Change **System Initialization Table** from **CBLVSAM** to **PLIVSAM**, and click **Apply**. 
     
-    This configures the server to use some PL/I IBM CICS resources (BMS maps and programs).
+    This configures the server to use some PL/I CICS resources (BMS maps and programs).
 
 ### Build the Application
 
@@ -117,7 +120,7 @@ This option does not exist in the UI-->
 3.  Check the **Output** window to see the progress of starting the server.
     <!--Starting the server launches the **Enterprise Server Console Daemon** window which also provides information about the server start-up.-->
 
-### Execute the bankmain IBM CICS Application 
+### Execute the bankmain CICS Application 
 
 1.  To start debugging in Visual Studio, press **F5**. This puts the IDE in wait mode for the BANK application to start.
 2.  Open a TN3270 emulator program such as Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.
@@ -131,7 +134,7 @@ This option does not exist in the UI-->
     Visual Studio debugging starts again so you can debug through the `SBANK10P` program.         
 6. Once you are ready to run the program to completion, click **F5** (Resume) as many times as necessary to run the program to completion.         
   
-    As this application is pseudo-conversational, debugging starts and ends with the invocation and completion of each transaction in the application. Since this is a small demo, all of the IBM CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
+    As this application is pseudo-conversational, debugging starts and ends with the invocation and completion of each transaction in the application. Since this is a small demo, all of the CICS programs after the Banking main options screen are not built for debug and the sources are not provided.
 7.  Once you are ready to leave the application, press **F3** to end the application in the **TN3270** window.          
 8.  You can now disconnect your TN3270 terminal to end the demo.          
 

@@ -1,5 +1,8 @@
 # Getting Started with Rocket Enterprise Developer for Eclipse (Linux)
 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+
+
 ## Overview
 
 This set of tutorials guides you through Rocket&reg; Enterprise Developer for Eclipse. They provide you with a basic understanding of how the product operates.
@@ -42,7 +45,7 @@ As part of this tutorial, you use the supplied standard Eclipse COBOL project in
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse (Linux). [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the IBM&reg; CICS&reg; application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -227,7 +230,7 @@ You now must perform a scan of the COBOL programs in your project to determine a
 
 1.  Right-click the **Bankdemo** project and click **Determine Directives**.
 
-    The IDE performs a scan of the files and shows a report of which directives for dialect and for IBM CICS must be set on the programs in your project so that they to compile cleanly.
+    The IDE performs a scan of the files and shows a report of which directives for dialect and for CICS must be set on the programs in your project so that they to compile cleanly.
 
     ![](images/2795bd96591744946bf6d7eb80c8704e.jpg)
 
@@ -803,9 +806,9 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 > **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
-**Executing the IBM CICS Application**
+**Executing the CICS Application**
 
-The IBM CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
 <!-- Service name still isn't changed from Micro Focus-->
 
 **Start the HACloud Session Server**

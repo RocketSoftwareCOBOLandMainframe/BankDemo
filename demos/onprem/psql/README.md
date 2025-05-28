@@ -4,6 +4,9 @@ This demonstration configures the Bankdemo application to store banking data in 
 
 The SQL database is populated with bank account data.
 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+
+
 ## Prerequisites
 
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server.
@@ -26,13 +29,13 @@ The SQL database is populated with bank account data.
 
 ## Demonstration Overview
 
-This demonstration shows a simple COBOL IBM&reg; CICS&reg; "green screen" application which accesses data using `EXEC SQL` statements. 
+This demonstration shows a simple COBOL CICS "green screen" application which accesses data using `EXEC SQL` statements. 
 
 The demonstration includes a Python script that helps you create the enterprise server instance. The script:
 
    - Creates the enterprise server instance in the `BANKSQL` subdirectory of this project.
    - Creates the enterprise server instance by using the ESCWA Admin API (almost exclusively).
-   - Uses a single command-line utility, `caspcrd`, to create the default IBM CICS resource definition file. 
+   - Uses a single command-line utility, `caspcrd`, to create the default CICS resource definition file. 
    - Configures the enterprise server instance for use with JCL and the VSAM datasets are cataloged.
    - Configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see *Step 6* in the procedure below).
    - Uses pre-built application modules.

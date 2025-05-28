@@ -2,6 +2,8 @@
 This project provides tutorials and demonstrations of features in the Rocket&reg; Enterprise Developer and Rocket&reg; Enterprise Server products.
 To use these materials, download the assets of the project [release](https://github.com/RocketSoftware/BankDemo/releases) that matches the version of the product you will be using. Check and follow the appropriate READMEs for instructions.
 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+
 ## Contents
 
 1. [Introduction](#intro)
@@ -21,9 +23,8 @@ The project demonstrates a selection of the capabilities of Rocket Enterprise Se
 It demonstrates applications running on premises and includes introductory tutorials for the use of
 the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
 
-In the simplest configuration, it demonstrates an IBM&reg; CICS&reg; and an JCL COBOL applications that access banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
+In the simplest configuration, it demonstrates a CICS and an JCL COBOL applications that access banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
 
-The Rocket Enterprise Suite supports IBM&reg; technologies including IBM&reg; MVS&trade;, IBM&reg; COBOL, IBM&reg; Enterprise PL/I for z/OS&reg;, IBM&reg; Assembler, IBM&reg; CICS&reg;, IBM&reg; IMS&trade;, IBM&reg; JCL, IBM&reg; DB2&reg;, IBM&reg; z/OS&reg;, IBM&reg; WebSphere MQ&trade;, and IBM&reg; zEnterprise&reg;, all of which are trademarks of International Business Machines Corporation, registered in various jurisdictions worldwide.
 
 ## <a name="license"></a>License
 

@@ -5,7 +5,7 @@
     - See specific demonstration instructions for any additional requirements
 - Prerequisites: 
     - Ensure that the Directory Server (MFDS) service is running
-    - Ensure that the Enterprise Server Common Web Administration (ESWA) service is running and listening on the default localhost port 10086
+    - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port 10086
 - Available demonstrations:
     - [Deploying and Running Bankdemo with VSAM Data](vsam/README.md)
        - Data stored in indexed sequential disk files accessed using COBOL verbs (READ/WRITE, etc.)

@@ -2,6 +2,8 @@
 
 This demonstration shows how to configure the Bankdemo application to store banking data in VSAM datasets on disk. You access the datasets from COBOL programs using `EXEC CICS` statements such as `STARTBR FILE`, `READ FILE`, `WRITE FILE`. The COBOL modules are stored in the `sources/cobol/data/vsam` (Windows) `sources\cobol\data\vsam` (Linux) directory of this project.
 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+
 ## Prerequisites
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server
 - A TN3270 terminal emulator. You can use the Rocket&reg; Host Access for the Cloud session server and TN3270 emulator included with both Enterprise Developer and Enterprise Server.
@@ -13,13 +15,13 @@ This demonstration shows how to configure the Bankdemo application to store bank
   ```
 
 ## Demonstration Overview
-This demonstration shows a simple COBOL IBM&reg; CICS&reg; "green screen" application which accesses VSAM data by using `EXEC CICS` statements where the data is held in indexed sequential files on a disk. 
+This demonstration shows a simple COBOL CICS "green screen" application which accesses VSAM data by using `EXEC CICS` statements where the data is held in indexed sequential files on a disk. 
 
 The demonstration includes a Python script that helps you create the enterprise server instance. The script:
 
    - Creates the enterprise server instance in the `BANKVSAM` subdirectory of this project
    - Creates the enterprise server instance by using the ESCWA Admin API (almost exclusively).
-   - Uses a single command-line utility, `caspcrd`, to create the default IBM CICS resource definition file. 
+   - Uses a single command-line utility, `caspcrd`, to create the default CICS resource definition file. 
    - Configures the enterprise server instance for use with JCL and the VSAM datasets are cataloged.
    - Configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see *Step 5* in the procedure below).
    - Configures the enterprise server instance to use pre-built application modules.
