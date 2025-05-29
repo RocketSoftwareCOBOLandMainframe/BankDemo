@@ -835,7 +835,6 @@ To check the IDE preferences for the TN3270 emulator:
 1.  In the IDE, click **Window \> Preferences**.
 2.  Expand **Rocket Software \> Enterprise Server** and click **TN3270**.
 3.  Ensure that **Enable display** and **Host Access for the Cloud** are selected.
-<!-- There's no Connect automatically option-->
 4.  Click **Apply and Close**.
 
 **Starting the Terminal Emulator**

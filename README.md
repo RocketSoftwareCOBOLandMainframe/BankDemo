@@ -57,8 +57,7 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Open PL/I Bankdemo Application in Enterprise Development for Visual Studio](tutorial/gettingstarted/visualstudio/PLIDemo.md)
     - Requirements: 
         - Ensure that the Directory Server (MFDS) service is running
-        <!-- The service is still called Microfocus Directory Server-->
-        - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
+          - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
 
 2. <a name="onprem"></a> Demonstrations of the Rocket Enterprise Server capabilities in "on premises" scenarios:
     - Prerequisite software: 
