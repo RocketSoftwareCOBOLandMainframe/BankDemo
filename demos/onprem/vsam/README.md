@@ -1,6 +1,6 @@
 # Deploying and Running Bankdemo with VSAM Data
 
-This demonstration shows how to configure the Bankdemo application to store banking data in VSAM datasets on disk. You access the datasets from COBOL programs using `EXEC CICS` statements such as `STARTBR FILE`, `READ FILE`, `WRITE FILE`. The COBOL modules are stored in the `sources/cobol/data/vsam` (Windows) `sources\cobol\data\vsam` (Linux) directory of this project.
+This demonstration shows how to configure the Bankdemo application to store banking data in VSAM datasets on disk. You access the datasets from COBOL programs using `EXEC CICS` statements such as `STARTBR FILE`, `READ FILE`, `WRITE FILE`. The COBOL modules are stored in the `sources\cobol\data\vsam` (Windows) `sources/cobol/data/vsam` (Linux) directory of this project.
 
 Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
@@ -80,4 +80,4 @@ The demonstration also includes some instructions to build the application from 
 
    Click the **General** menu, and select any option from the menu to explore the server configuration.
 
-9. You can use the `sources\jcl\ZBNKSTMS.jcl` file (Windows) and `sources/jcl/ZBNKSTMS.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it click **JES > Control**.
+9. You can use the `sources\jcl\ZBNKSTM.jcl` file (Windows) and `sources/jcl/ZBNKSTM.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it click **JES > Control**.

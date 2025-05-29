@@ -45,7 +45,7 @@ The demonstration includes a Python script that helps you create the enterprise 
       - The credentials vault is populated with database credentials (using the `mfsecretsadmin` command)
       - Builds the PostgreSQL RM switch module `esxaextcfg`. By default, the source COBOL file is in:
          - The `src/enterpriseserver/xa` directory of the Enterprise Developer installation location on Linux.
-         - The `\src\enterpriseserver\xa ` directory of the Enterprise Developer installation location on Windows.
+         - The `src\enterpriseserver\xa ` directory of the Enterprise Developer installation location on Windows.
       - The `esxaextcfg` module provides encrypted credentials to `espgsqlxa`.
 
 The demonstration also includes some instructions on how to build the application from the sources.

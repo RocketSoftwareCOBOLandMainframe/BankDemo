@@ -41,7 +41,7 @@ The preconfigured and fully executing application BankDemo is available from the
     You must have the following software installed:
 
     -   Rocket Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
-    -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
+    -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Micro Focus Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -575,9 +575,9 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 **Editing Data Files**
 
-You can edit data files using one of two available Rocket® Remote Data Tools for Enterprise Server.
+You can edit data files using one of two available Rocket Data File Editor tools.
 
-By default, Visual Studio is configured to use the new Remote Data Tools utility. To check whether this is enabled:
+By default, Visual Studio is configured to use the Data File Tools utility. To check whether this is enabled:
 
 1.  Click **Tools \> Options \> Rocket Tools \> Data File Tools**.
 2.  Ensure **Use New Data File Tools for supported options** is selected, and click **OK**.
@@ -875,7 +875,7 @@ In the previous step, Unit Testing the Batch Application, you used the BANKDEMO 
 
 As with JCL, execution of the jobs requires a previously configured enterprise server instance.
 
-Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is running:
+Before you proceed, ensure that Host Access for the Cloud (HACloud) is running:
 
 1. From the Windows Start menu, open the Services application.
 
@@ -885,7 +885,7 @@ Before you proceed, ensure that Rocket Host Access for the Cloud (HACloud) is ru
 
 **Executing the CICS application**
 
-The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HACloud), but you can adapt the tutorial to suit your terminal emulator of choice. 
+The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Host Access for the Cloud (HACloud), but you can adapt the tutorial to suit your terminal emulator of choice. 
 
 **Configuring the TN3270 Settings in the IDE** 
 

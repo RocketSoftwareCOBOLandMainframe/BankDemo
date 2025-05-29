@@ -150,7 +150,7 @@ You use the Bankdemo project supplied with the sample to create your project in 
     c.  Type **Bankdemo** in the project name field, and click **OK**.
 
     ![](images/95baffd8c05a67432bbd581e4eea8216.jpg)
-    <!--IMHO this is an old screenshot and needs to be updated-->
+
 
     This creates a copy of the Bankdemo project in your Eclipse workspace and adds the project to the application in the **Application Explorer** view. If the Bankdemo project entry is not displayed in the tree view, refresh the **Enterprise Development Projects** entry.
 
@@ -250,7 +250,7 @@ The demonstration application includes a number of data files. To see how you ca
 4.  Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
 5.  Click **Finish**.
 
-    This adds the file to the Bankdemo project and also automatically opens it in the Rocket&reg; Data File Tools utility. You can close the utility for now.
+    This adds the file to the Bankdemo project and also automatically opens it in the Rocket&reg;Software Data File Tools utility. You can close the utility for now.
 
 6.  Repeat steps 1 to 5 to add the `MFI01V.MFIDEMO.BNKACC.str` file to the project.
 
@@ -287,8 +287,7 @@ Scroll down the file until you see some COPY statements. Click on line 58 for th
     The **COBOL Copy View** is read-only, and you cannot edit the code in it. The screen background changes from white to pale yellow.
 
     ![](images/50dd201ae54b8737524aeec72a5a24a4.png)
-    <!--This screenshot needs to be updated. Although I edited the source file, the program still shows the old copyright info when I open the copy view-->
-
+ 
 2.  Press **Ctrl+F4** to close the **COBOL Copy View**.
 3.  To edit a copybook, position the cursor on the COPY statement and press **F3** (**Go To Definition**).
     
@@ -314,7 +313,7 @@ Notice that some data items in the Data Division are crossed out. This is becaus
 
 1. Right-click anywhere in the COBOL editor and select **Quick Outline**. This opens a pop-up with the outline of the program similar to what the Outline view shows.
 2. Press **Ctrl+O** in the pop-up to see a more detailed outline similar to the Program Outline view.
-3. Double-click an item in the outline to see how the cursor positions itself on the line of code that this outline item refers to.<!-- Double clicking items closes the pop-up.-->
+3. Click an item in the outline to see how the cursor positions itself on the line of code that this outline item refers to.
 4. Click in the permanent Outline view. 
    
    ![](images/0a83561f1813ee83b9864c7ff1316134.jpg)
@@ -452,7 +451,7 @@ To insert line numbers beyond the end of area B:
 -  Double-click the **ZBNKSTMT.jcl** file in the Bankdemo project to open it in the associated editor.
 
    The editor supports background parsing, syntax checking, content assist and an outline view like the COBOL Editor does.
-<!-- Updated with the Rocket Software Copyright manually-->
+
    ![](images/79827921bedc1a53ada598f23aa23084.jpg)
 
 **BMS Editing**
@@ -489,9 +488,10 @@ Next, you can edit the data file using the Rocket&reg; Software Data Tools:
     This starts the **Data File Editor** and loads the **.dat** file in the **Open Data File** dialog box.
 
 2.  Click **Open Exclusive** to load the file.
-3.  **Data File Editor** loads the data file and shows two views:
+3.  **Data File Tools** loads the data file and shows two views:
     -   The left pane shows the raw form of the file. Because many of the field are COMP-3 fields, the data in these fields is presented in an ASCII view.
-    -   The right pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a much better, editable form.
+     -   The right pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a user-friendly, editable form.
+
 
     ![](images/100704fd6fe5baadc0ee43afb24aaf09.png)
 
@@ -793,7 +793,7 @@ To view the spool:
     -   The **PRINTOUT** is the final printed results created by your job. Double-click **PRINTOUT** in the **DD Entries** section to see the results:
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
 
-<!-- in the Windows tutorial I saw one SYSTSPRT, 1 SYSOUT, and 1 PRINTOUT result. Maybe the screenshot and the above text should be updated here too?-->
+
 You can now start to look at how to run the online application.
 
 ## Unit Testing the Online Application
@@ -808,16 +808,13 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 **Executing the CICS Application**
 
-The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Rocket Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
-<!-- Service name still isn't changed from Micro Focus-->
+The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Micro Focus Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+
 
 **Start the HACloud Session Server**
 
 You must start the HACloud session server before you can use the HACloud TN3270 emulator. To do this you must run `startsessionserver.sh` script as follows:
 
-<!--1. Ensure that the installed Java is added to the PATH environment variable.
-This step seems to be unnecessary. Also, when I performed it for the PL/I VS tutorial, the emulator wouldn't load at all 
--->
 1. Open a terminal and set up the COBOL environment in it.
 2. Start the session server by running:
 
@@ -834,7 +831,6 @@ To check the IDE preferences for the TN3270 emulator:
 1.  In the IDE, click **Window \> Preferences**.
 2.  Expand **Rocket Software \> Enterprise Server** and click **TN3270**.
 3.  Ensure that **Enable display** and **Host Access for the Cloud** are selected.
-<!-- There's no Connect automatically option-->
 4.  Click **Apply and Close**.
 
 **Starting the Terminal Emulator**
@@ -865,7 +861,7 @@ If HACloud disconnects from the server, you can connect again manually as follow
 
 1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HACloud window.
 2.  In the **Available Sessions** dialog box, click the **BANKDEMO** server.    
-<!-- Check whether "cs aplps" is really in the name of the dialog box bcs it sounds strange-->
+
     This connects the display to the BANKDEMO server and loads the start screen of the application.
 
 3.  Follow the steps described earlier in this topic to execute the application in the **HACloud** view.

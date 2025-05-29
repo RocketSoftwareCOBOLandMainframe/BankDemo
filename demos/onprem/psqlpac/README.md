@@ -15,8 +15,6 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Ensure that the Directory Server (mfds) service is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Ensure that a Redis server is installed and running.
-   
-    The Rocket Enterprise Developer products on Windows include AdoptRedis which is suitable for testing and demonstration purposes. 
 - Verify that a PostgreSQL version 12 or later is installed and running.
 - Ensure that you add the PostgreSQL `bin` directory path to the PATH environmental variable, so that you can use `psql`.
 - Install and configure a PostgreSQL ODBC driver: 
@@ -77,7 +75,7 @@ The demonstration also includes some instructions to build the application from 
 
 5. Navigate to the `scripts` directory in the demonstration files.
 
-   For example, if you have created a `C:\MFETDUSER directory` (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
+   For example, if you have created a `C:\MFETDUSER` directory (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
 
    Windows: `C:\MFETDUSER\scripts`
    
@@ -123,4 +121,4 @@ The demonstration also includes some instructions to build the application from 
 
 12. In ESCWA, select the BANKPSOR under **SORs**. Expand BANKPAC and note the two Enterprise Server instances BANKPAC1 and BANKPAC2.
     
-13. You can use the `sources\jcl\ZBNKSTMS.jcl` file (Windows) and `sources/jcl/ZBNKSTMS.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it, click **JES > Control**. <!-- I can't find this in the UI. -->
+13. You can use the `sources\jcl\ZBNKSTM.jcl` file (Windows) and `sources/jcl/ZBNKSTM.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it, click **JES > Control**. 

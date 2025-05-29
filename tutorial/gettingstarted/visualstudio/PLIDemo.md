@@ -50,13 +50,9 @@ In this release, the Enterprise Server security features are enabled by default.
 
 You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this you must start the respective Windows service.
 
-<!--1. Ensure you have a 64-bit Java installed and added to the PATH environment variable.
-
-If i do this step, the emulator won't start at all-->
-
 1. From the Windows **Start** menu open the **Services** application.
 
-2. Navigate to the HACloud service and check whether its status is set to **Running**. If it is not running:
+2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**. If it is not running:
 
    - Right-click the service and click **Start**.
    - Alternatively, you can start the service by opening a command prompt as an administrator and running the following command:
@@ -75,8 +71,6 @@ If i do this step, the emulator won't start at all-->
      
 2. On the **Home** page, from the top toolbar, click **Native**.
 3. In the navigation bar on the left, expand **Directory Servers >  Default** and click **BANKDEMO**.
-<!--4. On the **General** page of the server, note that the **PL/I enabled** check box is already selected.
-This option does not exist in the UI-->
 4. From the **CICS** drop-down menu, select **Configuration**.
 5. Change **System Initialization Table** from **CBLVSAM** to **PLIVSAM**, and click **Apply**. 
     
@@ -118,7 +112,7 @@ This option does not exist in the UI-->
 1.  In **Server Explorer**, right-click **BANKDEMO**, and click **Start**.
 2.  (Optional) Click **OK** in the **Enterprise Server Sign On** dialog box, and leave the fields blank.
 3.  Check the **Output** window to see the progress of starting the server.
-    <!--Starting the server launches the **Enterprise Server Console Daemon** window which also provides information about the server start-up.-->
+
 
 ### Execute the bankmain CICS Application 
 
@@ -145,6 +139,5 @@ Now that you have finished running the demo, you can stop the associated BANKDEM
 1.  In **Server Explorer**, right-click the **BANKDEMO** server, and click **Stop**.
 2.  Check the **Output** window for messages that the server has been stopped successfully. 
 
-    <!--A number of messages also appear in the **Enterprise Server Console Daemon** window outside of Visual Studio before it closes down.-->
 
 > **Note**: You should re-enable Enterprise Server security if you have not already done so. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 

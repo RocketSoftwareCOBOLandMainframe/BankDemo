@@ -26,7 +26,7 @@ Before running this demo remotely, verify that you have an RDO and MFDS agent al
 
 >**Note**: If you have already imported the BANKDEMO enterprise server as part of the "Getting started with Rocket Enterprise Developer for Visual Studio 2022" tutorial, and HACloud service is running, you can skip these steps.
 
-The Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information. <!-- There was some discussion about this part of the instructions. Should we change the guidance for disabling ES security in any way? -->
+The Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information. 
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials, then this should be performed on a network-isolated machine. Re-enable security as soon as possible after completing the tutorial. For more details, see *To Recreate the Default Enterprise Server Security Configuration* in the product documentation. 
 
@@ -63,26 +63,66 @@ Ensure that **Server Explorer** contains a connection to the default Enterprise 
 6. Click **Finish**.
 The new connection appears at the top level, in **Server Explorer**.
 
-### Import the BANKDEMO Enterprise Server
+### Import the BANKDEMO Enterprise Server Region
 
 **Note:** If you have already imported the BANKDEMO enterprise server region for the IDE Getting Started tutorial, you scan skip these steps.
 
-1. Run the `tutorial\createdefinition.ps1` Powershell script (Windows) or `tutorial/createdefinition.sh` shell script (Linux) to create the `BANKDEMO.xml` region definition file. <!-- There were some issues with this running this script. Ita found that there is an additional step to be run before running this script. Also, it seems that the script only creates the server definition when it is run in the MDEFUSER folder, otherwise, part of the resource definition does not appear in the resulting XML file. According to Paula Willis: "The problem appears to be that BANKROOT is set to /.. which is not a valid path. Re-running the script from the tutorial folder should fix it. If not, you can hardcode BANKROOT=C:\MFETDUSER\tutorial/.. ( if the repository has been checked out to C:\MFEDTUSER)." However, I was having issues even when I ran the script in the folder, so maybe we should include the hardcoding part as a troubleshooting note in the docs? -->
-2. On the **Server Explorer** tab, right-click **Local** and select **Import Server**.
-4. Click **Browse**, select the `tutorial/BANKDEMO.xml` file and click **Finish**.
+**Create the BANKDEMO Region Definition File**
+
+Windows:
+
+1.  Open Windows PowerShell and navigate to the `C:\MFETDUSER\tutorial` folder.
+2.  Run `set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
+3.  (Optional) Unblock the script.
+
+    At times, for security reasons, when you have downloaded files by using a browser, the files can be blocked and you might not be able to run the script. To unblock the script:
+
+    a. Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
+
+    b. Right-click the **createdefinition.ps1** file and select **Properties**.
+
+    c. Select the **Unblock** check box and click **Apply**. 
+
+4.  Run the PowerShell script provided with the sample: `.\createdefinition.ps1`. 
+
+Linux: 
+
+
+1.  Navigate to the `/home/*username*/MFETDUSER/tutorial` directory and open a terminal from this location.
+2.  Run the following script: 
+
+     ```
+        ./createdefinition.sh
+        
+     ``` 
+
+    > **Note**: You might have to give execute permissions to this script. To do this, run: 
+    
+       ```
+        chmod +x createdefinition.sh
+
+       ```
+
+This runs the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
+
+**Import the BANKDEMO Enterprise Server**
+  
+1. On the **Server Explorer** tab, right-click **Local** and select **Import Server**.
+2. Click **Browse**, select the `tutorial/BANKDEMO.xml` file and click **Finish**.
     The BANKDEMO server appears under **Local** in Server Explorer.
 
 ### Start the HACloud Session Server
 
-You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this, start the Windows service (Windows) or the `startsessionserver.sh` script (UNIX).
+You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this, start the Windows service (Windows) or the `startsessionserver.sh` script (Linux).
 
 **Windows**
 
-<!-- 1. Ensure you have a 64-bit Java installed and added to the PATH environment variable.  
-adding JAVA to the PATH environment variable resulted in the emulator not opening as expected when running the demo (step 5 in Execute the BANKDEMO application). When I attempted to go through it a second time, I did not configure this and the emulator opened on its own. -->
-1. Open the Windows Service Manager.
-2. Go to **Rocket HA Cloud**, right-click it, and click **Start**. 
-3. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
+1. From the Windows **Start** menu open the Services application.
+
+2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**.
+
+3. If it is not running, right-click the service and select **Start**.
+4. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
 
     ```
     net start mfhacloud
@@ -90,7 +130,7 @@ adding JAVA to the PATH environment variable resulted in the emulator not openin
 
 **UNIX**
 
-1. Ensure that the installed Java is added to the PATH environment variable. <!-- do we need this here? --> 
+1. Ensure that the installed Java is added to the PATH environment variable. 
 adding JAVA to the PATH environment variable resulted in the emulator not opening as expected when running the demo (step 5 in Execute the BANKDEMO application). When I attempted to go through it a second time, I did not configure this and the emulator opened on its own. -->
 2. Start the enterprise server region that runs the application you want to connect to.
 3. Open a terminal and set up the COBOL environment in it.
@@ -144,7 +184,7 @@ Making these associations before you start the server enables the executables bu
 3. In the **Name** field, type a meaningful name, for example `BANK`.
 4. In PL/I project, type `BANKMAIN`, in **ESCWA**, enter `Local`, in **Directory Server**, enter `Default`, and in Region, enter `BANKDEMO`.
 5. Click **Apply** and then click **Debug**.
-6. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.  <!-- I am not sure how to do that. During my first attempt to go through the demo, I couldn't do this at all, during the second - the emulator opened on its own after I clicked `Debug`. -->
+6. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.  
 7. If you receive a dialog asking whether to automatically switch to the debug perspective, select **Remember my decision**, and click **Yes**.
 8. Eclipse should automatically open the `SBANK00P.PLI` source file with the `SBANK00P PROC` line highlighted as the current line of execution.
 9. If line numbers are not turned on in the source window, right-click in the left column of the source pane, and click **Show Line Numbers**.

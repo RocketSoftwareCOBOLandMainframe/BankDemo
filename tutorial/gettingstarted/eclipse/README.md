@@ -51,7 +51,7 @@ You must have the following software installed:
 
 If you have an active firewall on the machine that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
 
-For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
+For example, Directory Server  is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
 
 If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values, so that you can control access via these.
 
@@ -317,14 +317,14 @@ Notice that some data items in the Data Division are crossed out. This is becaus
 
 1. Right-click anywhere in the COBOL editor and select **Quick Outline**. This opens a pop-up with the outline of the program similar to what the **Outline** view shows. 
 2. Press **Ctrl+O** in the pop-up to see a more detailed outline similar to the **Program Outline** view. 
-3. Double-click an item in the outline to see how the cursor positions itself on the line of code that this outline item refers to. <!-- Double clicking items closes the pop-up.-->
-4. Click in the permanent Outline view.
+3. Click an item in the outline to see how the cursor positions itself on the line of code that this outline item refers to. 
+4. Click in the permanent **Outline** view.
 
 
 ![](images/0a83561f1813ee83b9864c7ff1316134.jpg)
 
 5.  Expand and collapse various lines in the **Outline** view.
-6.  Double-click items in the **Outline** view to see how the cursor positions itself on the respective line of code that each one of these outline items refers to and highlights the referenced item in the editor window.
+6.  Click items in the **Outline** view to see how the cursor positions itself on the respective line of code that each one of these outline items refers to and highlights the referenced item in the editor window.
 
     
 7. Click ![](images/76b30e98ec81ab51ddd71be8f2ab34c3.jpg) (**Sort**) in the **Outline** view to toggle between a physical or alphabetical sequence.
@@ -362,7 +362,6 @@ You can either use the mouse to mark a block of text or click ![](images/2a6ec09
 You can use rename refactoring to rename all occurrences of a variable:
 
 1.  Scroll down to line 228 in the `ZBNKPRT1.cbl` file.
-<!--included the file name, because a cpy file is also opened-->
 2.  Click WS-EXEC-PARM-LL in the editor, right-click it, and click **Refactor \> Rename**.
 
     A pop-up is displayed prompting you to enter a new name for the variable.
@@ -451,7 +450,7 @@ To insert line numbers beyond the end of area B:
  -  Double-click the **ZBNKSTMT.jcl** file in the Bankdemo project to open it in the associated editor.
 
 The editor supports background parsing, syntax checking, content assist and an outline view like the COBOL Editor does.
-<!-- Updated with the Rocket Software Copyright manually-->
+
 ![](images/79827921bedc1a53ada598f23aa23084.jpg)
 
 **BMS Editing**
@@ -511,7 +510,7 @@ Next, you can edit the data file using the Rocket&reg; Software Data File Tools:
     This starts the **Data File Editor** and loads the **.dat** file in the **Open Data File** dialog box.
 
 2.  Click **Open Exclusive** to load the file.
-3.  **Data File Editor** loads the data file and shows two views:
+3.  **Data File Tools** loads the data file and shows two views:
     -   The left pane shows the raw form of the file. Because many of the fields are COMP-3 fields, the data in these fields is presented in an ASCII view.
     -   The right pane shows the record layout for the file in its detailed field view and the COMP-3 fields are shown in a user-friendly, editable form.
 
@@ -666,7 +665,7 @@ To execute the JCL, run the application in an instance of the Rocket Enterprise 
 Before you proceed, ensure that the default settings are applied to the Directory Sever:
 
 1.  From the Windows **Start** menu, open the Services application. Navigate to the Directory Server service to view its status and set it to **Running** if it is not already started.
-<!-- Rocket Directory Server service is still called Micro Focus Directory Server-->
+
 2.  In Eclipse, click the **Server Explorer** view.
 
     If the window is not visible, click **Window** \> **Show View** \> **Other**, then expand **Rocket Software**, click **Server Explorer**, and click **Open**.
@@ -818,7 +817,7 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 > **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
-Before you proceed, ensure that the Host Access for the Cloud (HA Cloud) service is running:<!-- Service name still isn't changed from Micro Focus-->
+Before you proceed, ensure that the Host Access for the Cloud (HA Cloud) service is running:
 1. From the Windows **Start** menu open the Services application.
 
 2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**.

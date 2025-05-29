@@ -23,7 +23,7 @@ The project demonstrates a selection of the capabilities of Rocket Enterprise Se
 It demonstrates applications running on premises and includes introductory tutorials for the use of
 the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
 
-In the simplest configuration, it demonstrates a CICS and an JCL COBOL applications that access banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
+In the simplest configuration, it demonstrates an application comprising CICS online and JCL components that access banking data held in indexed (VSAM) files on disk. However, it can also be configured to access data from a PostgreSQL database and database hosted VSAM files using the Rocket Database File Handler. Further demonstrations would be added in the future to show more complex deployments such as scale-out and cloud deployments.
 
 
 ## <a name="license"></a>License

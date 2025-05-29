@@ -33,7 +33,7 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script creates the enterprise server instance in the `BANKMFDB` subdirectory of this project.
    - The script creates the instance by using (almost exclusively) the ESCWA Admin API.
    - A single command-line utility, `caspcrd`, is used to create the default CICS resource definition file.
-   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets.  <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
+   - The script configures the enterprise server instances for use with JCL and the VSAM datasets are cataloged.  
    - The script configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see Step 6 in the procedure below).
    - The enterprise server instance uses pre-built application modules.
    - Two ODBC system data sources, called `BANKVSAM.MASTER` and `BANKVSAM.VSAM`, are created.
@@ -69,7 +69,7 @@ The demonstration also includes some instructions to build the application from 
 
 5. Navigate to the `scripts` directory in the demonstration files.
 
-   For example, if you have created a `C:\MFETDUSER directory` (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
+   For example, if you have created a `C:\MFETDUSER` directory (Windows) or `/home/username/MFETDUSER` (Linux) and stored the Bankdemo folders in it, the `scripts` directory would be:
 
    Windows: `C:\MFETDUSER\scripts`
    
@@ -97,4 +97,4 @@ The demonstration also includes some instructions to build the application from 
 
 10. In ESCWA, select the BANKMFDB server under **Directory Servers > Default**. See the options on the **General** tab. Also, click the downwards arrow next to **General** and click any of the menu items to explore the server configuration.
     
-11. You can use the `sources\jcl\ZBNKSTMS.jcl` file (Windows) and `sources/jcl/ZBNKSTMS.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it, click **JES > Control**. <!-- I can't find this in the UI. -->
+11. You can use the `sources\jcl\ZBNKSTM.jcl` file (Windows) and `sources/jcl/ZBNKSTM.jcl` file (Linux) to run a JCL batch job from the ESCWA UI JCL control page. To open it, click **JES > Control**. 
