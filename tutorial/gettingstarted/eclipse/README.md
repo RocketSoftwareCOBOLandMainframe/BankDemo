@@ -253,7 +253,7 @@ The demonstration application includes a number of data files. To see how you ca
 4.  Select **MFI01V.MFIDEMO.BNKACC.dat** and click **Open**.
 5.  Click **Finish**.
 
-    This adds the file to the Bankdemo project and also automatically opens it in the Rocket Data Files Tools utility. You can close the utility for now.
+    This adds the file to the Bankdemo project and also automatically opens it in the Rocket Data File Tools utility. You can close the utility for now.
 
 6.  Repeat steps 1 to 4 to add the `MFI01V.MFIDEMO.BNKACC.str` file to the project.
 
@@ -290,6 +290,8 @@ Scroll down the file until you see some COPY statements. Click on line 58 for th
 1. Press **F4** to open the file in **COBOL Copy View**, which shows the code of the copybooks expanded in source file.
 
    The **COBOL Copy View** is read-only, and you cannot edit the code in it. The screen background changes from white to pale yellow.
+
+    ![](images/50dd201ae54b8737524aeec72a5a24a4.png)
 
 2. Press **Ctrl+F4** to close the **COBOL Copy View**.
 3. To edit a copybook, position the cursor on the COPY statement and press **F3** (**Go To Definition**).
@@ -795,9 +797,11 @@ To view the spool:
 
 1.  In **Server Explorer**, right-click the BANKDEMO server and select **Show Spool**.
 2.  Double-click the name of one of the jobs in the list to open the details in a new tab.
-![](images/ea36d8374884cc2250e25160fa077a34.png)
-3.  Details of the job are displayed in their own appropriate sections. You can expand these sections to view the details.
-![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
+
+    ![](images/ea36d8374884cc2250e25160fa077a34.png)
+3.   To see the details about a job, click the **Edit** icon. The details about the job are displayed in the **DD Details** window.
+     
+     ![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
 
     In the **DD Entries** section, there are:
 

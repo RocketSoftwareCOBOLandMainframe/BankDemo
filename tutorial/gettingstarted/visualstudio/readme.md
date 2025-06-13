@@ -575,7 +575,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 **Editing Data Files**
 
-You can edit data files using one of two available Rocket Data File Editor tools.
+You can edit data files using one of two available Rocket&reg; Software Data File Editor tools.
 
 By default, Visual Studio is configured to use the Data File Tools utility. To check whether this is enabled:
 

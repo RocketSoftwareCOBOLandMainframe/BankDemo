@@ -783,7 +783,7 @@ To view the spool:
 
     ![](images/00cd8757e37d31aaf294d49f3bff8251.png)
 
-3.  Details of the job are displayed in their own appropriate sections. You can expand these sections to view the details.
+3.  To see the details about a job, click the **Edit** icon. The details about the job are displayed in the **DD Details** window.
 
     ![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
 
