@@ -798,18 +798,17 @@ To view the spool:
 1.  In **Server Explorer**, right-click the BANKDEMO server and select **Show Spool**.
 2.  Double-click the name of one of the jobs in the list to open the details in a new tab.
 
-    ![](images/ea36d8374884cc2250e25160fa077a34.png)
-3.   To see the details about a job, click the **Edit** icon. The details about the job are displayed in the **DD Details** window.
-     
-     ![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
+    ![](images/ea36d8374884cc2250e25160fa077a34.png)\
+    
+3.  To see the details about a job, click the **Edit** icon. The details about the job are displayed in the **DD Details** window.
+
+    ![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
 
     In the **DD Entries** section, there are:
 
-    -   Two **SYSOUT** results (one for the EXTRACT and one for the SORT). Click these and see the **SYSOUT Details** section.
-    -   The **PRINTOUT** is the final printed results created by your job. Click **PRINTOUT** in the **DD Entries** section to see the results.
+    -   Two **SYSOUT** results (one for the EXTRACT and one for the SORT). Double-click these and see the **SYSOUT Details** section.
+    -   The **PRINTOUT** is the final printed results created by your job. Double-click **PRINTOUT** in the **DD Entries** section to see the results:
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
-
-You can now start to look at how to run the online application.
 
 ## Unit Testing the Online Application
 
