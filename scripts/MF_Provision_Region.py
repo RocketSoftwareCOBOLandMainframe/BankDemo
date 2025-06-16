@@ -185,7 +185,7 @@ def create_region(main_configfile):
                 write_log('ERROR: PostgreSQL ODBC driver not found')
                 sys.exit(1)
  
-    #determine te individual component configuration files to be used
+    #determine the individual component configuration files to be used
     configuration_files = main_config["configuration_files"]
 
     #base_config is used for settings to create the base region definition
@@ -257,8 +257,7 @@ def create_region(main_configfile):
             dfhdrdat = os.path.join(rdef, 'dfhdrdat')
             shutil.chown(dfhdrdat, esuid, esuid)
             write_log ('Set owner of {} to {}'.format(dfhdrdat, esuid))
-            create_db_vault_secrets(os_type, main_config, esuid)
-
+        create_db_vault_secrets(os_type, main_config, esuid)
     
     base_config = os.path.join(config_dir, base_config)
     update_config = os.path.join(config_dir, update_config)

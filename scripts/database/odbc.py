@@ -26,9 +26,9 @@ def check_odbc_driver_installed(db_type):
     if db_type != 'postgres':
         write_log("check_odbc_driver: invalid db_type {}".format(db_type))
         sys.exit(1)
-    driver_name = subprocess.getoutput("odbcinst -q -d | grep ANSI | grep PostgreSQL | sed 's/\[//g;s/\]//g'")
+    driver_name = subprocess.getoutput("odbcinst -q -d | grep ANSI | grep PostgreSQL | sed 's/\\[//g;s/\\]//g'")
     if driver_name=='':
-        driver_name = subprocess.getoutput("odbcinst -q -d | grep PostgreSQL | sed 's/\[//g;s/\]//g'")
+        driver_name = subprocess.getoutput("odbcinst -q -d | grep PostgreSQL | sed 's/\\[//g;s/\\]//g'")
     if driver_name[0:10] != 'PostgreSQL':
         write_log("check_odbc_driver: unable to find ODBC driver, running odbcinst -q -d")
         return False
@@ -40,9 +40,9 @@ def create_linux_dsn(db_type, dsn_name, description, database_name, database_con
     if db_type != 'postgres':
         write_log("create_linux_dsn: invalid db_type {}".format(db_type))
         sys.exit(1)
-    driver_name = subprocess.getoutput("odbcinst -q -d | grep ANSI | grep PostgreSQL | sed 's/\[//g;s/\]//g'")
+    driver_name = subprocess.getoutput("odbcinst -q -d | grep ANSI | grep PostgreSQL | sed 's/\\[//g;s/\\]//g'")
     if driver_name=='':
-        driver_name = subprocess.getoutput("odbcinst -q -d | grep PostgreSQL | sed 's/\[//g;s/\]//g'")
+        driver_name = subprocess.getoutput("odbcinst -q -d | grep PostgreSQL | sed 's/\\[//g;s/\\]//g'")
     if driver_name=='':
         write_log("create_linux_dsn: unable to find PostgreSQL ODBC driver\nSee 'odbcinst -q -d'")
         sys.exit(1)
