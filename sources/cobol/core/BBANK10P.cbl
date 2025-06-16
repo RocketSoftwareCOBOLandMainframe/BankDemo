@@ -44,11 +44,11 @@
          05  WS-RETURN-FLAG                        PIC X(1).
            88  WS-RETURN-FLAG-OFF                  VALUE LOW-VALUES.
            88  WS-RETURN-FLAG-ON                   VALUE '1'.
-         05  WS-RETURN-MSG                         PIC X(75).
-           88  WS-RETURN-MSG-OFF                   VALUE SPACES.
          05  WS-PFK-FLAG                           PIC X(1).
            88  PFK-VALID                           VALUE '0'.
            88  PFK-INVALID                         VALUE '1'.
+         05  WS-RETURN-MSG                         PIC X(75)
+                                                   VALUE SPACES.
          05  WS-ERROR-MSG                          PIC X(75).
 
        01  WS-BANK-DATA.

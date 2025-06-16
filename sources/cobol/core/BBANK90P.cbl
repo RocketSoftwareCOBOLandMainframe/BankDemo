@@ -1,6 +1,6 @@
       *****************************************************************
       *                                                               *
-      * Copyright 2010-2021 Rocket Software, Inc. or its affiliates.  *
+      * Copyright 2010-2025 Rocket Software, Inc. or its affiliates.  *
       * This software may be used, modified, and distributed          *
       * (provided this notice is included without modification)       *
       * solely for internal demonstration purposes with other         *
@@ -44,11 +44,11 @@
          05  WS-RETURN-FLAG                        PIC X(1).
            88  WS-RETURN-FLAG-OFF                  VALUE LOW-VALUES.
            88  WS-RETURN-FLAG-ON                   VALUE '1'.
-         05  WS-RETURN-MSG                         PIC X(75).
-           88  WS-RETURN-MSG-OFF                   VALUE SPACES.
          05  WS-PFK-FLAG                           PIC X(1).
            88  PFK-VALID                           VALUE '0'.
            88  PFK-INVALID                         VALUE '1'.
+         05  WS-RETURN-MSG                         PIC X(75)
+                                                   VALUE SPACES.
          05  WS-ERROR-MSG                          PIC X(75).
          05  WS-SUB1                               PIC S9(4) COMP.
          05  WS-SUB1-LIMIT                         PIC S9(4) COMP.
