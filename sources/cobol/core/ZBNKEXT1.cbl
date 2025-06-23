@@ -198,7 +198,7 @@
                      TO 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.
 
       *****************************************************************
-      * Check to see if we want to demonstrate MFE calling a module   *
+      * Check to see if we want to demonstrate ES calling a module    *
       * that resides on the mainframe.                                *
       *****************************************************************
            IF RPC-REQUESTED

@@ -66,17 +66,17 @@
                VALUE '                                   '.
          05  WS-INF-DATA05.
            10  FILLER                              PIC X(40)
-               VALUE '     http://www.microfocus.com          '.
+               VALUE '    https://www.rocketsoftware.com      '.
            10  FILLER                              PIC X(35)
                VALUE '                                   '.
          05  WS-INF-DATA07.
            10  FILLER                              PIC X(40)
-               VALUE 'or call our office at 1-800-VS-COBOL    '.
+               VALUE 'or call our office at 1-855-VS-COBOL    '.
            10  FILLER                              PIC X(35)
                VALUE '                                   '.
          05  WS-INF-DATA08.
            10  FILLER                              PIC X(40)
-               VALUE '                     (1-800-872-6265)   '.
+               VALUE '                     (1-855-577-4323)   '.
            10  FILLER                              PIC X(35)
                VALUE '                                   '.
          05  WS-INF-DATA10.
