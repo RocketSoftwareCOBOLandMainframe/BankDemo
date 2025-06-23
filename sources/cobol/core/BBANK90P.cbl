@@ -71,7 +71,7 @@
                VALUE '                                   '.
          05  WS-INF-DATA07.
            10  FILLER                              PIC X(40)
-               VALUE 'or call our office at 1-855-VS-COBOL    '.
+               VALUE 'or call our office at 1-855-577-4323    '.
            10  FILLER                              PIC X(35)
                VALUE '                                   '.
          05  WS-INF-DATA08.
