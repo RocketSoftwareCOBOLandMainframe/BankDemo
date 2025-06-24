@@ -74,12 +74,7 @@
                VALUE 'or call our office at 1-855-577-4323    '.
            10  FILLER                              PIC X(35)
                VALUE '                                   '.
-         05  WS-INF-DATA08.
-           10  FILLER                              PIC X(40)
-               VALUE '                     (1-855-577-4323)   '.
-           10  FILLER                              PIC X(35)
-               VALUE '                                   '.
-         05  WS-INF-DATA10.
+         05  WS-INF-DATA09.
            10  FILLER                              PIC X(40)
                VALUE 'Thank you for your interest.            '.
            10  FILLER                              PIC X(35)
@@ -252,8 +247,7 @@
               MOVE WS-INF-DATA03 TO HELP01O-L03
               MOVE WS-INF-DATA05 TO HELP01O-L05
               MOVE WS-INF-DATA07 TO HELP01O-L07
-              MOVE WS-INF-DATA08 TO HELP01O-L08
-              MOVE WS-INF-DATA10 TO HELP01O-L10
+              MOVE WS-INF-DATA09 TO HELP01O-L09
            END-IF.
            MOVE HELP01O-DATA TO BANK-SCREEN90-DATA.
        POPULATE-SCR90-DATA-EXIT.
