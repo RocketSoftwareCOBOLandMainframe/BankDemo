@@ -119,7 +119,7 @@ You must start the HACloud session server before attempting to use the HACloud T
 
 1. From the Windows **Start** menu open the Services application.
 
-2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**.
+2. Navigate to the Rocket HA Cloud service and check whether its status is set to **Running**.
 
 3. If it is not running, right-click the service and select **Start**.
 4. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
