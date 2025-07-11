@@ -11,7 +11,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ## Prerequisites
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server.
 - A TN3270 terminal emulator.
-   The Rocket&reg; Host Access for the Cloud session server and TN3270 emulator is included with both Enterprise Developer and Enterprise Server.
+   You can use the Rocket Software Secure Host Access (SHA) session server and the TN3270 emulator included with both Enterprise Developer and Enterprise Server.
 - Ensure that the Directory Server (mfds) service is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Verify that PostgreSQL version 12 or later is installed and running.

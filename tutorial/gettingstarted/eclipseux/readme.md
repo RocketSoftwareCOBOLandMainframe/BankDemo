@@ -45,7 +45,7 @@ As part of this tutorial, you use the supplied standard Eclipse COBOL project in
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse (Linux). [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the CICS application. This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -808,12 +808,12 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 **Executing the CICS Application**
 
-The CICS application requires that you use a 3270 terminal emulator. This tutorial uses Micro Focus Host Access for the Cloud (HA Cloud), but you may adapt the tutorial to suit your terminal emulator of choice. 
+The CICS application requires that you use a 3270 terminal emulator. This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, but you may adapt the tutorial to suit your terminal emulator of choice. 
 
 
-**Start the HACloud Session Server**
+**Start the SHA Session Server**
 
-You must start the HACloud session server before you can use the HACloud TN3270 emulator. To do this you must run `startsessionserver.sh` script as follows:
+You must start the SHA session server before you can use the SHA TN3270 emulator. To do this you must run `startsessionserver.sh` script as follows:
 
 1. Open a terminal and set up the COBOL environment in it.
 2. Start the session server by running:
@@ -822,7 +822,7 @@ You must start the HACloud session server before you can use the HACloud TN3270 
        startsessionserver.sh
     ```
     
-3. Check the terminal for the messages that the HACloud Session Server has started.
+3. Check the terminal for the messages that the Session Server has started.
 
 **Configuring the TN3270 Settings in the IDE**
 
@@ -857,9 +857,9 @@ To check the IDE preferences for the TN3270 emulator:
 
 4.  You can explore this application further if you wish or press **Ctrl + F2** to clear the screen and conclude the session.
 
-If HACloud disconnects from the server, you can connect again manually as follows:
+If HA Cloud disconnects from the server, you can connect again manually as follows:
 
-1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HACloud window.
+1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the HA Cloud window.
 2.  In the **Available Sessions** dialog box, click the **BANKDEMO** server.    
 
     This connects the display to the BANKDEMO server and loads the start screen of the application.

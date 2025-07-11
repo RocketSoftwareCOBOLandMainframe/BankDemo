@@ -18,7 +18,7 @@ This demonstration requires:
 - Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the CICS application. 
 
-> **Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
+> **Note:** This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 ## Requirements
 
@@ -48,11 +48,11 @@ In this release, the Enterprise Server security features are enabled by default.
 
 ### Start the HACloud Session Server
 
-You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this you must start the respective Windows service.
+You must start the HACloud session server before attempting to use the Secure Host Access (SHA) TN3270 terminal emulator. To do this you must start the respective Windows service.
 
 1. From the Windows **Start** menu open the **Services** application.
 
-2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**. If it is not running:
+2. Navigate to the HA Cloud service and check whether its status is set to **Running**. If it is not running:
 
    - Right-click the service and click **Start**.
    - Alternatively, you can start the service by opening a command prompt as an administrator and running the following command:
@@ -117,7 +117,7 @@ You must start the HACloud session server before attempting to use the HACloud T
 ### Execute the bankmain CICS Application 
 
 1.  To start debugging in Visual Studio, press **F5**. This puts the IDE in wait mode for the BANK application to start.
-2.  Open a TN3270 emulator program such as Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.
+2.  Open a TN3270 emulator program such as Secure Host Access (SHA), and connect to **localhost** (or **127.0.0.1**) on port **9023**.
 
     Visual Studio should automatically open the `SBANK00P.PLI` source file with the **SBANK00P PROC** line highlighted as the current line of execution.
 

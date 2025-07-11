@@ -16,15 +16,15 @@ If you decide to use the remote debug instructions, check with your system admin
 
 You must have the following software installed:
 
-- Rocket® Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
+- Rocket&reg; Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the CICS application.
->**Note:** This tutorial uses the Host Access for the Cloud (HACloud) service, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
+>**Note:** This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 Before running this demo remotely, verify that you have an RDO and MFDS agent already configured and running on the remote UNIX/Linux system. For more details, see the Rocket product documentation.
 
 ### Disable the Default Enterprise Server Security Configuration
 
->**Note**: If you have already imported the BANKDEMO enterprise server as part of the "Getting started with Rocket Enterprise Developer for Visual Studio 2022" tutorial, and HACloud service is running, you can skip these steps.
+>**Note**: If you have already imported the BANKDEMO enterprise server as part of the "Getting started with Rocket Enterprise Developer for Visual Studio 2022" tutorial, and HA Cloud service is running, you can skip these steps.
 
 The Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information. 
 
@@ -34,7 +34,7 @@ The Enterprise Server security features are enabled by default. However, tutoria
 
     Windows: `DisableESDefaultSecurity.cmd`
 
-    Linux: `DisableESDefaultSecurity.sh`
+    UNIX: `DisableESDefaultSecurity.sh`
       
  A series of messages appear as the script disables default security.
 
@@ -85,7 +85,7 @@ Windows:
 
 4.  Run the PowerShell script provided with the sample: `.\createdefinition.ps1`. 
 
-Linux: 
+UNIX: 
 
 
 1.  Navigate to the `/home/*username*/MFETDUSER/tutorial` directory and open a terminal from this location.
@@ -111,15 +111,15 @@ This runs the script and creates the Enterprise Server region definition file, `
 2. Click **Browse**, select the `tutorial/BANKDEMO.xml` file and click **Finish**.
     The BANKDEMO server appears under **Local** in Server Explorer.
 
-### Start the HACloud Session Server
+### Start the SHA Session Server
 
-You must start the HACloud session server before attempting to use the HACloud TN3270 terminal emulator. To do this, start the Windows service (Windows) or the `startsessionserver.sh` script (Linux).
+You must start the Secure Host Access session server before attempting to use the SHA TN3270 terminal emulator. To do this, start the Windows service (Windows) or the `startsessionserver.sh` script (UNIX).
 
 **Windows**
 
 1. From the Windows **Start** menu open the Services application.
 
-2. Navigate to the Rocket HA Cloud service and check whether its status is set to **Running**.
+2. Navigate to the HA Cloud service and check whether its status is set to **Running**.
 
 3. If it is not running, right-click the service and select **Start**.
 4. Alternatively, you can start the session by opening a command prompt as administrator and executing the following command:
@@ -184,7 +184,7 @@ Making these associations before you start the server enables the executables bu
 3. In the **Name** field, type a meaningful name, for example `BANK`.
 4. In PL/I project, type `BANKMAIN`, in **ESCWA**, enter `Local`, in **Directory Server**, enter `Default`, and in Region, enter `BANKDEMO`.
 5. Click **Apply** and then click **Debug**.
-6. Open a TN3270 emulation program like Rocket Host Access for the Cloud, and connect to **localhost** (or **127.0.0.1**) on port **9023**.  
+6. Open a TN3270 emulation program like Rocket Software Secure Host Access (SHA), and connect to **localhost** (or **127.0.0.1**) on port **9023**.  
 7. If you receive a dialog asking whether to automatically switch to the debug perspective, select **Remember my decision**, and click **Yes**.
 8. Eclipse should automatically open the `SBANK00P.PLI` source file with the `SBANK00P PROC` line highlighted as the current line of execution.
 9. If line numbers are not turned on in the source window, right-click in the left column of the source pane, and click **Show Line Numbers**.

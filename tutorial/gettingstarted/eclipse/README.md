@@ -45,7 +45,7 @@ As part of this tutorial, you use the supplied standard Eclipse COBOL project in
 You must have the following software installed:
 
 -   Rocket Enterprise Developer for Eclipse. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
--   A TN3270 terminal emulator to run the CICS application. This tutorial uses Rocket&reg; Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
+-   A TN3270 terminal emulator to run the CICS application. This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, which is installed with Enterprise Developer, but you can also use an alternative terminal emulator.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
@@ -820,16 +820,16 @@ As with JCL, execution of the jobs requires a previously configured enterprise s
 
 > **Important:** You need Enterprise Developer or Enterprise Developer for z Systems to execute the application. Running applications is not supported in Enterprise Developer Connect.
 
-Before you proceed, ensure that the Host Access for the Cloud (HA Cloud) service is running:
+Before you proceed, ensure that the Secure Host Access (HA Cloud) service is running:
 1. From the Windows **Start** menu open the Services application.
 
-2. Navigate to the Micro Focus HA Cloud service and check whether its status is set to **Running**.
+2. Navigate to the HA Cloud service and check whether its status is set to **Running**.
 
 3. If it is not running, right-click the service and select **Start**.
 
 **Executing the CICS Application**
 
-The application requires that you use a 3270 terminal emulator. This tutorial uses Host Access for the Cloud (HACloud), but you can adapt the tutorial to suit your terminal emulator of choice. 
+The application requires that you use a 3270 Terminal Emulator. This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, but you can adapt the tutorial to suit your terminal emulator of choice. 
 
 **Configuring the TN3270 Settings in the IDE**
 
@@ -864,7 +864,7 @@ To check the IDE preferences for the TN3270 emulator:
 
 4.  You can explore this application further if you wish, or press **Ctrl + F2** to clear the screen and conclude the session.
 
-If HACloud disconnects from the server, you can connect again manually as follows:
+If HA Cloud disconnects from the server, you can connect again manually as follows:
 
 1.  Click **Open Session**, ![](images/HAC_OpenSessionbutton.png), in the toolbar of the **HACloud** window.
 2.  In the **Available Sessions** dialog box, click the BANKDEMO server.    
