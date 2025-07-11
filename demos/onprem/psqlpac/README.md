@@ -36,7 +36,7 @@ The demonstration includes a Python script that helps create the enterprise serv
    - The script creates the enterprise server instances in the `BANKPAC1` and `BANKPAC2` subdirectories of this project.
    - The script creates the enterprise server instances by using (almost exclusively) the ESCWA Admin API.
    - A single command-line utility, `caspcrd`, is used to create the default CICS resource definition file.
-   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets. <!-- the original text was: "instances configured for use with JCL and the VSAM datasets are catalogued"  -->   
+   - The script configures the enterprise server instances for use with JCL and with the catalogued VSAM data sets. 
    - The script configures the enterprise server instance as a 64-bit server. You can change the configuration and deploy a 32-bit server (see Step 6 in the procedure below).
    - The script uses pre-built application modules.
    - Creates ODBC system data sources called `PG.MASTER`, `PG.VSAM`, `PG.CROSSREGION` and `PG.REGION`. 
