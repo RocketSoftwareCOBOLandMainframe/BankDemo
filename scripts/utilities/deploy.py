@@ -139,7 +139,7 @@ def deploy_vsam_postgres_pac(session, os_type, main_config, cwd, mfdbfh_config, 
     configure_xa(session, os_type, main_config, cwd, esuid)
     update_region_attribute(session, region_name, {"mfCASTXFILEP": "sql://BankPAC/VSAM?type=folder;folder=/data"})
 
-    create_db_vault_secrets(os_type, main_config, esuid)
+    catalog_pac_datasets(session, os_type, main_config, cwd, mfdbfh_config, esuid)
 
     write_log ('out of deploy_vsam_postgres_pac')
 
