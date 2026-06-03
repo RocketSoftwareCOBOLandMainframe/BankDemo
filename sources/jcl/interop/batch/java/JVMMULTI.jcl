@@ -1,21 +1,15 @@
-//JVMMULTI JOB 'MULTI-STEP',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
-//*-------------------------------------------------------------------*
-//* Multi-step JCL demonstrating various JVMLDM invocation patterns.
-//* Shows how to chain multiple Java steps in a single job using
-//* an inline JVM procedure with different configurations.
-//*-------------------------------------------------------------------*
+//JVMMULTI JOB 'CUSTACCT-RPT',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
-//********************************************************************
-//* Inline JVM procedure
-//********************************************************************
+//*-------------------------------------------------------------------*
+//* Inline JVM procedure (replaces external PROC reference)           *
+//*-------------------------------------------------------------------*
 //JVMPROC PROC JAVACLS=,
 //             ARGS='',
 //             VERSION='',
 //             LOGLVL='+I',
-//             REGSIZE='0M',
-//             LEPARM=''
+//             REGSIZE='0M'
 //JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
-//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*
 //SYSOUT   DD SYSOUT=*
 //STDOUT   DD SYSOUT=*
@@ -23,57 +17,40 @@
 //CEEDUMP  DD SYSOUT=*
 //ABNLIGNR DD DUMMY
 //         PEND
-//********************************************************************
+//*-------------------------------------------------------------------*
 //*
-//*-------------------------------------------------------------------*
-//* STEP 1: Filter accounts using regex from MAINARGS
-//*-------------------------------------------------------------------*
+//* STEP 1: Filter customers matching pattern from MAINARGS
+//*         Writes matched PIDs to temporary dataset for Step 2
+//*
 //STEP01   EXEC PROC=JVMPROC,
-//             JAVACLS='BankAcctFilter',
-//             ARGS=''
-//STDENV DD *
+//             JAVACLS='BankCustAcctReport',
+//             ARGS='FILTER'
+//STDENV    DD *
 set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
 Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
-//MAINARGS DD *
-'MFI01V.MFIDEMO.BNKACC' '0000[1-5]'
+//STDIN    DD  *
 /*
-//ACCDATA DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+//MAINARGS DD *
+'B000[1-5]'
+/*
+//CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
-//*-------------------------------------------------------------------*
-//* STEP 2: Generate transaction report with control cards
-//*-------------------------------------------------------------------*
+//* STEP 2: Generate account summary report for filtered customers
+//*         Reads control cards from STDIN, account data from ACCDATA,
+//*         and the filtered PID list from Step 1's CUST.DATASET
+//*
 //STEP02   EXEC PROC=JVMPROC,
-//             JAVACLS='BankTxnReport',
-//             ARGS=''
-//STDENV DD *
+//             JAVACLS='BankCustAcctReport',
+//             ARGS='REPORT 25'
+//STDENV    DD *
 set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
 Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
-//STDIN DD *
-REPORT_TITLE=Daily Batch Run - Filtered Transactions
-MAX_RECORDS=25
+//STDIN    DD *
+REPORT_TITLE=Daily Customer Account Summary - Filtered
 /*
-//TXNDATA DD DSN=MFI01V.MFIDEMO.BNKTXN,DISP=SHR
-//*
-//*-------------------------------------------------------------------*
-//* STEP 3: Simple MAINARGS demonstration with verbose flag
-//*-------------------------------------------------------------------*
-//STEP03   EXEC PROC=JVMPROC,
-//             JAVACLS='MainArgsDemo',
-//             ARGS='',
-//             LOGLVL='+T'
-//STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
-//MAINARGS DD *
-'BatchStep3Data' 'Batch.+[0-9]' '--verbose'
-/*
+//ACCDATA  DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
 //

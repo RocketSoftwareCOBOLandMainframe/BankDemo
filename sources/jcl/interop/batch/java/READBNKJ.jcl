@@ -36,6 +36,8 @@ set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
 set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
 AdoptOpenJDK
 /*
+//STDIN    DD  *
+/*
 //******************************************************************** 
 //* Application DDs (opened by Java via ZFile)                       * 
 //******************************************************************** 

@@ -12,11 +12,10 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 4. [Step 1 — Hello World: COBOL Calling Java](#step1)
 5. [Step 2 — Using JVMLDM Directly from JCL](#step2)
 6. [Step 3 — Accessing Datasets from Java with ZFile](#step3)
-7. [Step 4 — Using a JCL Procedure (JVMPRC86)](#step4)
-8. [Step 5 — MAINARGS DD and Inline STDENV](#step5)
-9. [Step 6 — Multi-Step Batch with Java](#step6)
-10. [Source Files Reference](#sources)
-11. [Troubleshooting](#troubleshooting)
+7. [Step 4 — Multi-Step Batch with Java](#step4)
+8. [Source Files Reference](#sources)
+9. [Exploring the JZOS API](#jzos-api)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -87,8 +86,6 @@ import com.rocketsoftware.jzos.ZUtil;
  */
 class HelloBatch {
     public static void run() {
-        System.setProperty("com.microfocus.cobol.allowLoadLibrary", "true");
-
         try {
             // Explicitly map Java standard streams to JCL DDs when not using JVMLDM.
             ZUtil.redirectStandardStreams("iso-8859-1", true);
@@ -98,7 +95,6 @@ class HelloBatch {
             System.out.println("Working directory: " + System.getProperty("user.dir"));
         } finally {
             ZUtil.restoreStandardStreams();
-            System.clearProperty("com.microfocus.cobol.allowLoadLibrary");
         }
     }
 }
@@ -195,7 +191,7 @@ Create the file `HELLOJAV.jcl`:
 
 ## <a name="step2"></a>Step 2 — Using JVMLDM Directly from JCL
 
-In this step, you bypass the COBOL bootstrap and invoke a Java class directly from JCL using the **JVMLDM** load module. This is useful when Java is the primary language for your batch step.
+In this step, you bypass the COBOL bootstrap and invoke a Java class directly from JCL using the **JVMLDM** load module. This is useful when Java is the primary language for your batch step. This step also covers argument passing via multiple sources (PARM, JZOS_MAIN_ARGS, MAINARGS DD) and inline STDENV configuration.
 
 ### 2.1 Write the Java Class
 
@@ -235,9 +231,8 @@ Create the file `JVMDEMO.jcl`:
 //             VERSION='',          < JVMLDM version: 21
 //             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
 //             REGSIZE='0M',        < EXECUTION REGION SIZE
-//             LEPARM=''
 //JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
-//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT  DD SYSOUT=* < System stdout
 //SYSOUT    DD SYSOUT=* < System stderr
 //STDOUT    DD SYSOUT=* < Java System.out
@@ -270,17 +265,56 @@ arg3 arg4
 //
 ```
 
-> **DD Allocations:**
-> | DD Name | Purpose |
-> |---------|---------|
-> | STDENV | Environment setup script (sets CLASSPATH, JAVA_HOME, etc.).
-> | SYSPRINT | System standard output from JVMLDM |
-> | SYSOUT | System standard error from JVMLDM |
-> | STDOUT | Java `System.out` (after stream redirection) |
-> | STDERR | Java `System.err` (after stream redirection) |
-> | STDIN | Java `System.in` (allocated as DUMMY if not needed) |
+### 2.3 DD Allocations
 
-### 2.4 Compile and Deploy
+| DD Name | Purpose |
+|---------|---------|
+| STDENV | Environment setup script (sets CLASSPATH, JAVA_HOME, etc.) |
+| SYSPRINT | System standard output from JVMLDM |
+| SYSOUT | System standard error from JVMLDM |
+| STDOUT | Java `System.out` (after stream redirection) |
+| STDERR | Java `System.err` (after stream redirection) |
+| STDIN | Java `System.in` (allocated as DUMMY if not needed) |
+| MAINARGS | Additional arguments passed to Java `main()` |
+
+### 2.4 How Arguments Are Assembled
+
+JVMLDM assembles `main()` arguments from multiple sources, appended in this order:
+
+1. **ARGS (PARM)** — Arguments specified on the EXEC statement after the class name
+2. **JZOS_MAIN_ARGS** — Environment variable set in STDENV
+3. **MAINARGS DD** — An inline or dataset DD containing arguments
+
+Arguments in MAINARGS are parsed as quoted strings, supporting:
+- Single-quoted tokens: `'Test string 1'`
+- Regex patterns: `'T[e].+[0-9]'`
+- Flags and options: `'--verbose'`
+
+### 2.5 Inline STDENV Configuration
+
+The `STDENV` DD is an inline script that configures the JVM environment. JVMLDM parses the following variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `JAVA_HOME` | JDK installation path |
+| `CLASSPATH` | Java class search path |
+| `JZOS_JVM_OPTIONS` | JVM command-line options (e.g. `-Xmx512m`, `-XX:+Enable3164Interoperability`) |
+| `JZOS_MAIN_ARGS` | Additional arguments appended to main() args |
+| `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection (default: UTF-8) |
+| `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` — enable/disable output transcoding |
+
+Example with JVM options:
+
+```jcl
+//STDENV    DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
+/*
+```
+
+### 2.6 Compile and Deploy
 
 1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
    ```
@@ -291,7 +325,7 @@ arg3 arg4
 
 3. **Ensure JVMLDM** on Windows, JVMLDM64 (64-bit) or **JVMLDM80** (32-bit) on Linux is available in the loadlib. These are provided with Enterprise Server.
 
-5. **Submit the JCL** and check the STDOUT DD output:
+4. **Submit the JCL** and check the STDOUT DD output:
    ```
      === Batch Report Generator ===                                                                                                        
      Arguments received: 6                                                                                                                 
@@ -304,8 +338,7 @@ arg3 arg4
      Report complete. RC=0                                                                                                                 
    ```
 
-   5.1 *Note:* We can see the inputted arguments are in a non-sequential order. This is because, arguments will be appended in the order of ARGS+JZOS_MAIN_ARGS+MAINARGS.
-   5.2 *In step 1,* we can notice JVMLDM handling the CLASSPATH environmental variable to include esjos.jar implicitly. Along with this, JVMLDM, is handling the redirection of standard streams for us also.
+> **Note:** The arguments appear in non-sequential order because they are appended in the order **ARGS → JZOS_MAIN_ARGS → MAINARGS**. In Step 1 we saw that JVMLDM handles adding `esjos.jar` to the CLASSPATH implicitly and manages stream redirection automatically.
 
 ---
 
@@ -386,9 +419,8 @@ Create the file `READBNKJ.jcl`:
 //             VERSION='',          < JVMLDM version: 21
 //             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
 //             REGSIZE='0M',        < EXECUTION REGION SIZE
-//             LEPARM=''
 //JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
-//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT  DD SYSOUT=* < System stdout
 //SYSOUT    DD SYSOUT=* < System stderr
 //STDOUT    DD SYSOUT=* < Java System.out
@@ -467,277 +499,390 @@ AdoptOpenJDK
      === Complete ===  
    ```
 
-5.1 *The Java program* is able to accept an integer (which can be passed via ARGS, MAINARGS or JZOS_MAIN_ARGS environmental variable). This will determine how many records will be displayed. Changing this from 5, to a non parsable integer. Should result in an exception which can viewed in the jobs output.
+5.1 *The Java program* is able to accept an integer (which can be passed via ARGS, MAINARGS or JZOS_MAIN_ARGS environmental variable). This will determine how many records will be displayed. Changing this from 5, to a non parsable integer. Should result in an exception which can viewed in the jobs STDERR output.
 
 ---
 
-## <a name="step4"></a>Step 4 — Using a JCL Procedure (JVMPRC86)
+## <a name="step4"></a>Step 4 — Multi-Step Batch: Customer Account Summary
 
-This step introduces a **reusable JCL procedure** that encapsulates the JVMLDM invocation. This mirrors the IBM z/OS JZOS Batch Launcher pattern (`JVMPRC21`/`JVMPRC31`) and simplifies Java batch job definitions.
+This step brings everything together in a realistic multi-step batch job that processes BankDemo datasets. The job reads customer records, joins them with account data, decodes packed-decimal balances, reads control parameters from STDIN, writes a formatted report to STDOUT, and logs diagnostics to STDERR. It demonstrates `ZFile` for VSAM I/O, `ZUtil` for stream redirection and job introspection, `ZFileException` handling, and MAINARGS-driven filtering.
 
-### 4.1 The JVMPRC86 Procedure
-
-The procedure `JVMPRC86.prc` is located in `sources/proclib/` and provides symbolic parameters:
-
-```jcl
-//JVMPRC86 PROC JAVACLS=,
-//             ARGS='',
-//             LOGLVL='',
-//             LEPARM=''
-//*
-//JAVA     EXEC PGM=JVMLDM86,
-//         PARM='&LOGLVL &JAVACLS &ARGS'
-//STEPLIB  DD  DSN=LOADLIB,DISP=SHR
-//SYSPRINT DD  SYSOUT=*
-//SYSOUT   DD  SYSOUT=*
-//STDOUT   DD  SYSOUT=*
-//STDERR   DD  SYSOUT=*
-//STDIN    DD  DUMMY
-//         PEND
-```
-
-| Symbolic | Purpose |
-|----------|---------|
-| `JAVACLS` | Fully qualified Java class name to execute (required) |
-| `ARGS` | Additional arguments appended to the PARM string |
-| `LOGLVL` | JVMLDM log level (`+T` for trace, blank for default) |
-| `LEPARM` | Language environment parameters (optional) |
-
-### 4.2 Calling the Procedure
-
-To invoke a Java class, the calling JCL uses `EXEC PROC=JVMPRC86` and overrides DDs with the `JAVA.` step prefix:
-
-```jcl
-//MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
-//*
-//STEP00   EXEC PROC=JVMPRC86,
-//             JAVACLS='com.package.Demo1',
-//             ARGS=''
-//* Override standard output
-//JAVA.STDOUT DD SYSOUT=*
-//JAVA.STDERR DD SYSOUT=*
-//* Inline environment configuration
-//JAVA.STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
-//
-```
-
-> **Key point:** DDs are overridden using the `JAVA.` prefix (matching the step name inside the proc). This allows the caller to provide inline STDENV, add application DDs, or override stream redirections.
-
----
-
-## <a name="step5"></a>Step 5 — MAINARGS DD and Inline STDENV
-
-JVMLDM supports receiving Java `main()` arguments from the **MAINARGS DD** (in addition to or instead of the PARM string). This is analogous to IBM's `JZOS_MAIN_ARGS` environment variable or the MAINARGS DD.
-
-### 5.1 How MAINARGS Works
-
-JVMLDM assembles arguments from multiple sources (in order of precedence):
-1. **PARM** — The `PARM=` on the EXEC statement (after the class name)
-2. **JZOS_MAIN_ARGS** environment variable — Set in STDENV
-3. **MAINARGS DD** — An inline or dataset DD containing arguments
-
-Arguments in MAINARGS are parsed as quoted strings, supporting:
-- Single-quoted tokens: `'Test string 1'`
-- Regex patterns: `'T[e].+[0-9]'`
-- Flags and options: `'--verbose'`
-
-### 5.2 Write the Java Class
-
-Create `MainArgsDemo.java`:
+### 4.1 Java Class: BankCustAcctReport.java
 
 ```java
 import com.rocketsoftware.jzos.*;
+import java.io.*;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
- * Demonstrates MAINARGS DD argument parsing.
- * Receives quoted strings, regex patterns, and flags from MAINARGS.
+ * Multi-step BankDemo batch report.
+ *
+ * FILTER: Reads BNKCUST, filters by customer ID regex pattern from MAINARGS.
+ * REPORT: Reads BNKACC, decodes packed-decimal balances, writes formatted report.
+ *
+ * Usage via JVMLDM:
+ *   PARM='... BankCustAcctReport FILTER <pattern>'
+ *   PARM='... BankCustAcctReport REPORT <maxRecords>'
  */
-class MainArgsDemo {
+public class BankCustAcctReport {
+
+    // BNKCUST record layout
+    private static final int CUST_PID_OFF = 0,   CUST_PID_LEN = 5;
+    private static final int CUST_NAME_OFF = 5,  CUST_NAME_LEN = 25;
+    private static final int CUST_STATE_OFF = 139, CUST_STATE_LEN = 2;
+    private static final int CUST_EMAIL_OFF = 159, CUST_EMAIL_LEN = 30;
+
+    // BNKACC record layout
+    private static final int ACC_PID_OFF = 0,     ACC_PID_LEN = 5;
+    private static final int ACC_ACCNO_OFF = 5,   ACC_ACCNO_LEN = 9;
+    private static final int ACC_TYPE_OFF = 14,   ACC_TYPE_LEN = 1;
+    private static final int ACC_BALANCE_OFF = 15, ACC_BALANCE_LEN = 5; // S9(7)V99 COMP-3
+
+    private static final String SEPARATOR = "=".repeat(72);
+
     public static void main(String[] args) {
-        System.out.println("=== MAINARGS Demonstration ===");
-        System.out.println("Total arguments: " + args.length);
+        try {
+            run(args);
+        } catch (Throwable t) {
+            System.err.println("FATAL: " + t.getClass().getName() + ": " + t.getMessage());
+            t.printStackTrace(System.err);
+            System.exit(16);
+        }
+    }
 
-        for (int i = 0; i < args.length; i++) {
-            System.out.printf("  args[%d] = '%s' (length=%d)%n",
-                i, args[i], args[i].length());
+    private static void run(String[] args) throws Exception {
+        if (args.length < 1) {
+            System.err.println("ERROR: Missing step argument (FILTER or REPORT)");
+            System.exit(12);
         }
 
-        // Demonstrate using args as regex patterns
-        if (args.length >= 2) {
-            String testData = args[0];
-            String pattern = args[1];
-            System.out.println("Regex test:");
-            System.out.println("  Data:    '" + testData + "'");
-            System.out.println("  Pattern: '" + pattern + "'");
-            boolean matches = testData.matches(pattern);
-            System.out.println("  Match:   " + matches);
+        String step = args[0].toUpperCase();
+        logJobContext(step);
+
+        switch (step) {
+            case "FILTER":
+                runFilter(args.length > 1 ? args[1] : ".*");
+                break;
+            case "REPORT":
+                int maxRecords = args.length > 1 ? Integer.parseInt(args[1]) : 50;
+                runReport(maxRecords, readControlCards());
+                break;
+            default:
+                System.err.println("ERROR: Unknown step '" + step + "'. Use FILTER or REPORT.");
+                System.exit(12);
+        }
+    }
+
+    private static void logJobContext(String step) {
+        System.err.printf("Job: %s (ID: %s)  Step: %s  User: %s%n",
+            ZUtil.getCurrentJobname(), ZUtil.getCurrentJobId(),
+            ZUtil.getCurrentStepname(), ZUtil.getCurrentUser());
+        System.err.printf("Mode: %s  Encoding: %s%n", step, ZUtil.getDefaultPlatformEncoding());
+    }
+
+    // -------------------------------------------------------------------------
+    // FILTER step
+    // -------------------------------------------------------------------------
+
+    private static void runFilter(String pattern) throws IOException {
+        ZFile outFile = new ZFile("//'MFI01V.MFIDEMO.CUST.FILTER'", "wb,lrecl=132,type=record");
+        try {
+            writeLine(outFile, "=== Customer Filter Step ===");
+            writeLine(outFile, "Filter pattern: " + pattern);
+            System.out.println("=== Customer Filter Step ===");
+            System.out.println("Filter pattern: " + pattern);
+
+            ZFile custFile = new ZFile("//DD:CUSTDATA", "rb,type=record");
+            try {
+                byte[] record = new byte[custFile.getLrecl()];
+                int totalRead = 0, matched = 0;
+
+                while (custFile.read(record) >= 0) {
+                    totalRead++;
+                    String pid = extractField(record, CUST_PID_OFF, CUST_PID_LEN);
+
+                    if (pid.matches(pattern)) {
+                        matched++;
+                        String line = String.format("  MATCH: PID=%-5s  Name=%-25s  State=%-2s  Email=%s",
+                            pid,
+                            extractField(record, CUST_NAME_OFF, CUST_NAME_LEN),
+                            extractField(record, CUST_STATE_OFF, CUST_STATE_LEN),
+                            extractField(record, CUST_EMAIL_OFF, CUST_EMAIL_LEN));
+                        System.out.println(line);
+                        writeLine(outFile, line);
+                    }
+                }
+
+                String summary = String.format("Filter complete: %d/%d customers matched.", matched, totalRead);
+                System.out.println(summary);
+                writeLine(outFile, summary);
+                System.err.printf("DIAG: Processed %d records, %d matched '%s'%n",
+                    totalRead, matched, pattern);
+            } finally {
+                custFile.close();
+            }
+        } finally {
+            outFile.close();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // REPORT step
+    // -------------------------------------------------------------------------
+
+    private static void runReport(int maxRecords, Map<String, String> controlCards)
+            throws IOException {
+        String title = controlCards.getOrDefault("REPORT_TITLE", "Bank Account Summary");
+
+        ZFile outFile = new ZFile("//'MFI01V.MFIDEMO.ACCT.SUMMARY'", "wb,lrecl=132,type=record");
+        try {
+            printBoth(outFile, SEPARATOR);
+            printBoth(outFile, "  " + title);
+            printBoth(outFile, String.format("  Generated by: %s / %s",
+                ZUtil.getCurrentJobname(), ZUtil.getCurrentStepname()));
+            printBoth(outFile, SEPARATOR);
+            printBoth(outFile, String.format("  %-5s  %-9s  %-4s  %12s", "PID", "Account", "Type", "Balance"));
+            printBoth(outFile, "  " + "-".repeat(38));
+
+            ZFile accFile = new ZFile("//DD:ACCDATA", "rb,type=record");
+            try {
+                byte[] record = new byte[accFile.getLrecl()];
+                int count = 0;
+                BigDecimal totalBalance = BigDecimal.ZERO;
+
+                while (accFile.read(record) >= 0 && count < maxRecords) {
+                    String pid = extractField(record, ACC_PID_OFF, ACC_PID_LEN);
+                    String accNo = extractField(record, ACC_ACCNO_OFF, ACC_ACCNO_LEN);
+                    String accType = extractField(record, ACC_TYPE_OFF, ACC_TYPE_LEN);
+                    BigDecimal balance = unpackDecimal(record, ACC_BALANCE_OFF, ACC_BALANCE_LEN, 2);
+
+                    String line = String.format("  %-5s  %-9s  %-4s  %12s",
+                        pid, accNo, accType, balance.toPlainString());
+                    printBoth(outFile, line);
+
+                    totalBalance = totalBalance.add(balance);
+                    count++;
+                }
+
+                printBoth(outFile, "  " + "-".repeat(38));
+                printBoth(outFile, String.format("  Records: %d   Total Balance: %s",
+                    count, totalBalance.toPlainString()));
+                printBoth(outFile, SEPARATOR);
+                System.err.printf("DIAG: Report displayed %d records%n", count);
+            } finally {
+                accFile.close();
+            }
+        } finally {
+            outFile.close();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Utilities
+    // -------------------------------------------------------------------------
+
+    private static String extractField(byte[] record, int offset, int length) {
+        return new String(record, offset, length).trim();
+    }
+
+    private static void writeLine(ZFile file, String text) throws IOException {
+        file.write(String.format("%-132s", text).getBytes());
+    }
+
+    private static void printBoth(ZFile file, String text) throws IOException {
+        System.out.println(text);
+        writeLine(file, text);
+    }
+
+    private static Map<String, String> readControlCards() {
+        Map<String, String> cards = new LinkedHashMap<>();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("*")) continue;
+                int eq = line.indexOf('=');
+                if (eq > 0) {
+                    cards.put(line.substring(0, eq).trim(), line.substring(eq + 1).trim());
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("WARN: Could not read control cards: " + e.getMessage());
+        }
+        System.err.printf("DIAG: Read %d control cards from STDIN%n", cards.size());
+        return cards;
+    }
+
+    private static BigDecimal unpackDecimal(byte[] data, int offset, int length, int scale) {
+        StringBuilder digits = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int b = data[offset + i] & 0xFF;
+            digits.append((b >> 4) & 0x0F);
+            if (i < length - 1) {
+                digits.append(b & 0x0F);
+            }
         }
 
-        System.out.println("=== MAINARGS Demo Complete. RC=0 ===");
+        int signNibble = data[offset + length - 1] & 0x0F;
+        BigDecimal value = new BigDecimal(digits.toString()).movePointLeft(scale);
+        return (signNibble == 0x0D) ? value.negate() : value;
     }
 }
 ```
 
-### 5.3 Write the JCL
-
-Create `JVMARGS.jcl`:
+### 4.2 Multi-Step JCL (JVMMULTI.jcl)
 
 ```jcl
-//JVMARGS  JOB 'MAINARGS-DEMO',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
+//JVMMULTI JOB 'CUSTACCT-RPT',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
-//STEP00   EXEC PROC=JVMPRC86,
-//             JAVACLS='MainArgsDemo',
-//             ARGS=''
+//*-------------------------------------------------------------------*
+//* Inline JVM procedure (replaces external PROC reference)           *
+//*-------------------------------------------------------------------*
+//JVMPROC PROC JAVACLS=,
+//             ARGS='',
+//             VERSION='',
+//             LOGLVL='+I',
+//             REGSIZE='0M'
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             PARM='&LOGLVL &JAVACLS &ARGS'
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//STDOUT   DD SYSOUT=*
+//STDERR   DD SYSOUT=*
+//CEEDUMP  DD SYSOUT=*
+//ABNLIGNR DD DUMMY
+//         PEND
+//*-------------------------------------------------------------------*
 //*
-//* Environment configuration (inline STDENV)
-//JAVA.STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
+//* STEP 1: Filter customers matching pattern from MAINARGS
+//*         Writes matched PIDs to temporary dataset for Step 2
+//*
+//STEP01   EXEC PROC=JVMPROC,
+//             JAVACLS='BankCustAcctReport',
+//             ARGS='FILTER'
+//STDENV    DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
+Enterprise Developer\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
-//*
-//* Arguments passed to Java main() via MAINARGS DD
-//JAVA.MAINARGS DD *
-'Test string 1' 'T[e].+[0-9]' '--verbose'
+//STDIN    DD  *
 /*
+//MAINARGS DD *
+'B000[1-5]'
+/*
+//CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
+//*
+//* STEP 2: Generate account summary report for filtered customers
+//*         Reads control cards from STDIN, account data from ACCDATA,
+//*         and the filtered PID list from Step 1's CUST.DATASET
+//*
+//STEP02   EXEC PROC=JVMPROC,
+//             JAVACLS='BankCustAcctReport',
+//             ARGS='REPORT 25'
+//STDENV    DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
+Enterprise Developer\AdoptOpenJDK
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//STDIN    DD *
+REPORT_TITLE=Daily Customer Account Summary - Filtered
+/*
+//ACCDATA  DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
 //
 ```
 
-### 5.4 Inline STDENV with JVM Options
+> **Key points:**
+> - Step 1 filters customers by regex and writes results to `MFI01V.MFIDEMO.CUST.FILTER` (created by ZFile)
+> - Step 2 reads account data, decodes COMP-3 balances, and writes a report to `MFI01V.MFIDEMO.ACCT.SUMMARY`
+> - Both steps write to STDOUT *and* to a cataloged dataset simultaneously
+> - Control cards in STDIN configure the report title dynamically
+> - Diagnostics are written to STDERR for operational visibility without polluting the report
+> - Packed-decimal (COMP-3) balance fields are decoded in Java for human-readable output
+>
+> **Note:** The output datasets (`MFI01V.MFIDEMO.CUST.FILTER` and `MFI01V.MFIDEMO.ACCT.SUMMARY`) are created on first run. On subsequent runs, ZFile's `"wb"` mode will overwrite them. If you encounter a file-already-exists error, delete the datasets via ESCWA or the catalog utility before re-submitting.
 
-The `STDENV` DD can also set `JZOS_JVM_OPTIONS` to pass JVM flags:
+### 4.3 Compile and Deploy
 
-```jcl
-//JAVA.STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
-/*
-```
-
-> **Environment variables parsed by JVMLDM from STDENV:**
-> | Variable | Purpose |
-> |----------|---------|
-> | `JAVA_HOME` | JDK installation path |
-> | `CLASSPATH` | Java class search path |
-> | `JZOS_JVM_OPTIONS` | JVM command-line options (e.g. `-Xmx512m`, `-XX:+Enable3164Interoperability`) |
-> | `JZOS_MAIN_ARGS` | Additional arguments appended to main() args |
-> | `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection (default: UTF-8) |
-> | `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` — enable/disable output transcoding |
-
-### 5.5 Expected Output
-
-```
-=== MAINARGS Demonstration ===
-Total arguments: 3
-  args[0] = 'Test string 1' (length=13)
-  args[1] = 'T[e].+[0-9]' (length=11)
-  args[2] = '--verbose' (length=9)
-
-Regex test:
-  Data:    'Test string 1'
-  Pattern: 'T[e].+[0-9]'
-  Match:   true
-
-Verbose mode enabled. System properties:
-  java.version = 17.0.x
-  java.home    = C:\Program Files (x86)\Rocket Software\...
-  user.dir     = C:\path\to\server
-  file.encoding= ISO-8859-1
-
-=== MAINARGS Demo Complete. RC=0 ===
-```
-
----
-
-## <a name="step6"></a>Step 6 — Multi-Step Batch with Java
-
-This step demonstrates chaining multiple Java steps in a single JCL job, each using the `JVMPRC86` procedure with different configurations. This is the typical production pattern for batch processing pipelines.
-
-### 6.1 Bank Account Filter (BankAcctFilter.java)
-
-A Java class that reads bank account data and filters by a regex pattern supplied via MAINARGS:
-
-```java
-import com.rocketsoftware.jzos.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-class BankAcctFilter {
-    public static void main(String[] args) {
-        String datasetName = args[0];
-        String filterPattern = args.length > 1 ? args[1] : ".*";
-
-        Pattern regex = Pattern.compile(filterPattern);
-        // Opens dataset via ZFile and filters account records...
-    }
-}
-```
-
-### 6.2 Multi-Step JCL (JVMMULTI.jcl)
-
-```jcl
-//JVMMULTI JOB 'MULTI-STEP',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
-//*
-//* STEP 1: Filter accounts using regex from MAINARGS
-//STEP01   EXEC PROC=JVMPRC86,
-//             JAVACLS='BankAcctFilter'
-//JAVA.STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
-//JAVA.MAINARGS DD *
-'MFI01V.MFIDEMO.BNKACC' '0000[1-5]'
-/*
-//JAVA.ACCDATA DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
-//*
-//* STEP 2: Generate transaction report with control cards
-//STEP02   EXEC PROC=JVMPRC86,
-//             JAVACLS='BankTxnReport'
-//JAVA.STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
-//JAVA.STDIN DD *
-REPORT_TITLE=Daily Batch Run - Filtered Transactions
-MAX_RECORDS=25
-/*
-//JAVA.TXNDATA DD DSN=MFI01V.MFIDEMO.BNKTXN,DISP=SHR
-//*
-//* STEP 3: MAINARGS demo with verbose trace logging
-//STEP03   EXEC PROC=JVMPRC86,
-//             JAVACLS='MainArgsDemo',
-//             LOGLVL='+T'
-//JAVA.STDENV DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
-set PATH=%JAVA_HOME%\bin\server;%PATH%
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
-//JAVA.MAINARGS DD *
-'BatchStep3Data' 'Batch.+[0-9]' '--verbose'
-/*
-//
-```
-
-### 6.3 Compile and Deploy
-
-1. **Compile all Java classes:**
+1. **Compile:**
    ```
-   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" BankAcctFilter.java BankTxnReport.java MainArgsDemo.java
+   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" BankCustAcctReport.java
    ```
 
-2. **Deploy** all `.class` files to the CLASSPATH directory (e.g. `$ESP/loadlib`).
+2. **Deploy** `BankCustAcctReport.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
 
-3. **Ensure** the datasets `MFI01V.MFIDEMO.BNKACC` and `MFI01V.MFIDEMO.BNKTXN` are cataloged.
+3. **Ensure** datasets `MFI01V.MFIDEMO.BNKCUST` and `MFI01V.MFIDEMO.BNKACC` are cataloged (they are set up by the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
 
-4. **Submit** `JVMMULTI.jcl` — each step executes independently with its own STDENV and arguments.
+4. **Submit** `JVMMULTI.jcl` and review the output:
+
+**STDOUT (Step 1 — Filter):**
+```
+Loaded
+ === Customer Filter Step ===                                                                                                          
+ Filter pattern: B000[1-5]                                                                                                             
+   MATCH: PID=B0001  Name=Fred Bloggs                State=4    Email=NN0001                                                            
+   MATCH: PID=B0002  Name=Loretta Morden             State=4    Email=NN0002                                                            
+   MATCH: PID=B0003  Name=Eleanor Rigby              State=7    Email=NN0003                                                            
+   MATCH: PID=B0004  Name=Desmond Jones              State=9    Email=NN0004                                                            
+   MATCH: PID=B0005  Name=Felicity Arkwright         State=5    Email=NN0005                                                            
+ Filter complete: 5/38 customers matched.       
+```
+
+**STDERR (Step 1 — Diagnostics):**
+```
+ Job: JVMMULTI (ID: J0001139)  Step: STEP01  User: JESUSER                                                                             
+ Mode: FILTER  Encoding: windows-1252                                                                                                  
+ DIAG: Opened DD:CUSTDATA  LRECL=250  RECFM=  BLKSIZE=0                                                                                
+ DIAG: Processed 38 records, 5 matched 'B000[1-5]' 
+```
+
+**STDOUT (Step 2 — Report):**
+```
+ ========================================================================                                                              
+   Daily Customer Account Summary - Filtered                                                                                           
+   Generated by: JVMMULTI / STEP02                                                                                                     
+ ========================================================================                                                              
+   PID    Account    Type       Balance                                                                                                
+   --------------------------------------                                                                                              
+   T0001  000000001  1            91.14                                                                                                
+   T0001  000000002  2           -79.40                                                                                                
+   T0001  000000003  3           795.52                                                                                                
+   T0001  000000004  4           192.24                                                                                                
+   T0001  000000005  5          1453.97                                                                                                
+   B0004  014289253  2           -79.40                                                                                                
+   B0015  021501544  1           222.60                                                                                                
+   B0026  025399550  4           351.00                                                                                                
+   B0019  048424439  4           526.05                                                                                                
+   B0035  054228132  4           252.56                                                                                                
+   B0004  067606426  4           192.24                                                                                                
+   B0004  067606427  5          1453.97                                                                                                
+   B0028  090543026  4           682.08                                                                                                
+   B0011  097510533  4           292.50                                                                                                
+   B0026  103842702  2             2.98                                                                                                
+          111112222                0.00                                                                                                
+   B0008  126195094  3           423.60                                                                                                
+   B0029  143898379  4           697.60                                                                                                
+   B0021  148367063  3           397.94                                                                                                
+   B0034  154460444  2           271.44                                                                                                
+   B0019  159914519  2           336.87                                                                                                
+   B0023  178238731  1           432.39                                                                                                
+   B0029  213882639  5           121.41                                                                                                
+   B0034  228552724  4            79.92                                                                                                
+   B0016  250299477  3           148.50                                                                                                
+   --------------------------------------                                                                                              
+   Records: 25   Total Balance: 9259.72                                                                                                
+ ========================================================================                                              
+```
+
+**STDERR (Step 2 — Diagnostics):**
+```
+ Job: JVMMULTI (ID: J0001139)  Step: STEP02  User: JESUSER                                                                             
+ Mode: REPORT  Encoding: windows-1252                                                                                                  
+ DIAG: Read 1 control cards from STDIN                                                                                                 
+ DIAG: Opened DD:ACCDATA  LRECL=200  RECFM=  BLKSIZE=0                                                                                 
+ DIAG: Report displayed 25 records       
+```
 
 ---
 
@@ -750,19 +895,11 @@ The source files for this demonstration are located in the following directories
 | `HELLOJAV.cbl` | `sources/cobol/interop/batch/java/` | COBOL bootstrap for Hello World |
 | `HelloBatch.java` | `sources/java/interop/batch/` | Hello World Java class |
 | `HELLOJAV.jcl` | `sources/jcl/interop/batch/java/` | JCL for Hello World demo |
-| `READBNKJ.cbl` | `sources/cobol/interop/batch/java/` | COBOL bootstrap for ZFile demo |
 | `ReadBankData.java` | `sources/java/interop/batch/` | ZFile dataset reader |
 | `READBNKJ.jcl` | `sources/jcl/interop/batch/java/` | JCL for ZFile demo |
 | `BatchReport.java` | `sources/java/interop/batch/` | Direct JVMLDM Java class |
 | `JVMDEMO.jcl` | `sources/jcl/interop/batch/java/` | JCL for JVMLDM direct demo |
-| `JVMPRC86.prc` | `sources/proclib/` | JVM Batch Launcher procedure (64-bit) |
-| `MainArgsDemo.java` | `sources/java/interop/batch/` | MAINARGS DD demonstration class |
-| `BankAcctFilter.java` | `sources/java/interop/batch/` | Regex-based account filter via MAINARGS |
-| `BankTxnReport.java` | `sources/java/interop/batch/` | Transaction report with STDIN control cards |
-| `JVMBNKF.cbl` | `sources/cobol/interop/batch/java/` | COBOL bootstrap for BankAcctFilter |
-| `JVMARGS.jcl` | `sources/jcl/interop/batch/java/` | JCL for MAINARGS demo |
-| `JVMFILT.jcl` | `sources/jcl/interop/batch/java/` | JCL for account filter via proc |
-| `JVMTXNR.jcl` | `sources/jcl/interop/batch/java/` | JCL for transaction report via proc |
+| `BankCustAcctReport.java` | `sources/java/interop/batch/` | Multi-step customer/account report |
 | `JVMMULTI.jcl` | `sources/jcl/interop/batch/java/` | Multi-step Java batch job |
 | `STDENV.cmd` | `sources/config/interop/` | STDENV script (Windows) |
 | `STDENV.sh` | `sources/config/interop/` | STDENV script (Linux) |
@@ -777,8 +914,176 @@ The source files for this demonstration are located in the following directories
 | Return code 101 (RC_CONFIG_ERR) | JVMLDM cannot initialize the JVM | Check STDENV script sets JAVA_HOME correctly and the JDK is installed |
 | Return code 102 (RC_SYSTEM_ERR) | System-level failure | Check SYSPRINT/SYSOUT DD output for detailed error messages |
 | Return code 100 (RC_MAIN_EXCEPTION) | Unhandled exception in Java code | Check STDERR DD output for the Java stack trace |
+| RTS 145 (COBOL interop error) | Stream closed prematurely or DCB conflict | Don't close `System.in`; don't duplicate DCB attrs in both DD and ZFile open string |
 | `ZFile` cannot open dataset | DD not allocated or dataset not cataloged | Verify the DD name in JCL matches what ZFile opens (e.g. `//DD:ACCDATA`) |
-| `allowLoadLibrary` error | Missing system property | Ensure `System.setProperty("com.microfocus.cobol.allowLoadLibrary", "true")` is called before ZFile operations |
+
+### Exception and System.exit Behavior
+
+When Java code throws an unhandled exception or calls `System.exit(n)` with a non-zero code, JVMLDM reports this as:
+
+- **STDERR DD** — Contains the full Java stack trace (exception class, message, and cause chain). This is always your first place to look for diagnostics.
+- **Step condition code** — Maps to an RTS code in the JES output:
+  - `System.exit(0)` → normal completion (CC 0000)
+  - `System.exit(n)` where n > 0 → reported as `RTS0145` (COBOL interoperability error) in the JCL step abend message
+  - Unhandled exception (no explicit `System.exit`) → RC 100 (`RC_MAIN_EXCEPTION`)
+- **SYSPRINT DD** — JVMLDM logs a `JVMJZBL` message indicating whether `main()` completed or threw
+
+**Best practice:** Catch exceptions in your `main()` method, print diagnostics to `System.err`, and call `System.exit(16)` (or another meaningful code). The error details will appear in the STDERR DD of the job output, making diagnosis straightforward without needing to decode RTS codes.
+
+---
+
+## <a name="jzos-api"></a>Exploring the JZOS API (`com.rocketsoftware.jzos`)
+
+The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Developer/Server installation) provides the `com.rocketsoftware.jzos` package — a Java API for interacting with Enterprise Server datasets, job context, and I/O streams. This section summarizes the key classes and what you can do with them beyond the basics shown in this tutorial. Here is additional information on the type of functions you can explore with as the next step.
+
+### ZFile — Dataset I/O
+
+`ZFile` is the primary class for reading and writing datasets (sequential, VSAM KSDS/RRDS/ESDS, and PDS members).
+
+#### Opening Datasets
+
+| Open String | Description |
+|-------------|-------------|
+| `"//DD:MYDD", "rb,type=record"` | Read binary, record mode, via DD name |
+| `"//'MY.DATASET'", "rb,type=record"` | Read binary, record mode, via cataloged dataset name |
+| `"//'MY.DATASET'", "wb,lrecl=80,type=record"` | Create/write a dataset (creates if not exists) |
+| `"//DD:MYDD", "rb,type=record,noseek"` | Read without seek support (more efficient for sequential access) |
+
+#### Instance Methods
+
+| Method | Description |
+|--------|-------------|
+| `read(byte[])` | Read next record into buffer; returns bytes read or -1 at EOF |
+| `write(byte[])` | Write a record |
+| `update(byte[])` | Update the last-read record in place (VSAM) |
+| `delrec()` | Delete the last-read record (VSAM) |
+| `close()` | Close the file (always call in a `finally` block) |
+| `getLrecl()` | Logical record length |
+| `getRecfm()` | Record format string |
+| `getBlksize()` | Block size |
+| `getDsorg()` | Dataset organization |
+| `seek(int offset, int origin)` | Seek to a position (use `ZFileConstants.SEEK_*`) |
+| `tell()` | Return current position |
+| `getPos()` | Get position token (byte array, for save/restore) |
+| `setPos(byte[])` | Restore a saved position |
+| `locate(byte[] key, int flags)` | Locate a VSAM record by key |
+| `locate(int value, int flags)` | Locate a VSAM record by RBA or RRN |
+| `getVsamType()` | Returns VSAM type (KSDS, RRDS, ESDS) |
+| `getVsamKeyLength()` | Returns the VSAM key length |
+
+#### Static Methods
+
+| Method | Description |
+|--------|-------------|
+| `ZFile.exists(String name)` | Check if a dataset or DD exists |
+| `ZFile.ddExists(String ddName)` | Check if a DD name is allocated in current step |
+| `ZFile.dsExists(String dsName)` | Check if a cataloged dataset exists |
+| `ZFile.getFullyQualifiedDSN(String)` | Resolve a dataset name to its fully qualified form |
+| `ZFile.getSlashSlashQuotedDSN(String)` | Format a DSN as `//'DSN.NAME'` for ZFile open |
+
+### ZFileConstants — Seek and Locate Flags
+
+Use these constants with `seek()` and `locate()` for VSAM operations:
+
+| Constant | Description |
+|----------|-------------|
+| `SEEK_SET` | Seek from beginning |
+| `SEEK_CUR` | Seek from current position |
+| `SEEK_END` | Seek from end |
+| `LOCATE_KEY_EQ` | Locate record with exact key match |
+| `LOCATE_KEY_GE` | Locate record with key >= given key |
+| `LOCATE_KEY_EQ_BWD` | Locate exact key, position for backward read |
+| `LOCATE_KEY_FIRST` | Position to first record |
+| `LOCATE_KEY_LAST` | Position to last record |
+| `LOCATE_RBA_EQ` | Locate by relative byte address (ESDS) |
+| `VSAM_TYPE_KSDS` | Key-sequenced dataset |
+| `VSAM_TYPE_RRDS` | Relative-record dataset |
+| `VSAM_TYPE_ESDS` | Entry-sequenced dataset |
+
+### ZUtil — Job Context and Stream Management
+
+| Method | Description |
+|--------|-------------|
+| `ZUtil.redirectStandardStreams(String encoding, boolean merge)` | Redirect `System.in/out/err` to JCL DDs (STDIN/STDOUT/STDERR). Required when calling Java from COBOL without JVMLDM. |
+| `ZUtil.restoreStandardStreams()` | Restore original streams (call in `finally`) |
+| `ZUtil.getCurrentJobname()` | Current JCL job name |
+| `ZUtil.getCurrentJobId()` | Current job ID (e.g. `J0001234`) |
+| `ZUtil.getCurrentStepname()` | Current step name |
+| `ZUtil.getCurrentUser()` | User ID running the job |
+| `ZUtil.getDefaultPlatformEncoding()` | Platform character encoding |
+
+### ZFileException — Error Handling
+
+`ZFileException` extends `IOException` and provides dataset-specific error context:
+
+| Method | Description |
+|--------|-------------|
+| `getFileName()` | The dataset/DD name that caused the error |
+| `getErrno()` | System error number |
+| `getMessage()` | Human-readable error description |
+
+### Important Gotchas
+
+| Issue | Explanation |
+|-------|-------------|
+| **Don't close `System.in`** | JVMLDM manages STDIN. Closing it via try-with-resources causes RTS 145 on step exit. Read from `System.in` without closing the stream. |
+| **Don't specify DCB attributes in both DD and ZFile** | If the JCL DD has `DCB=(RECFM=F,LRECL=80)`, open with just `"wb,type=record"` — not `"wb,type=record,lrecl=80,recfm=F"`. Conflicting attributes cause RTS 145. |
+| **JVMLDM auto-redirects streams** | Unlike the COBOL bootstrap path (Step 1), JVMLDM handles `ZUtil.redirectStandardStreams()` automatically. Do not call it yourself when using JVMLDM. |
+| **Dataset creation via ZFile** | Opening a non-existent dataset name with `"wb,lrecl=N,type=record"` creates it. No DD or JCL allocation is needed. |
+| **`ZFile.exists()` vs `ZFile.ddExists()`** | `exists()` checks both DD and DSN. `ddExists()` only checks if a DD is allocated in the current step. `dsExists()` only checks the catalog. |
+
+### VSAM Operations Example
+
+```java
+// Locate and read a specific record by key
+ZFile vsam = new ZFile("//DD:MYKSDS", "rb,type=record");
+try {
+    byte[] key = "00005".getBytes();
+    vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
+
+    byte[] record = new byte[vsam.getLrecl()];
+    if (vsam.read(record) >= 0) {
+        System.out.println("Found: " + new String(record).trim());
+    }
+} finally {
+    vsam.close();
+}
+```
+
+```java
+// Update a VSAM record in place
+ZFile vsam = new ZFile("//DD:MYKSDS", "r+b,type=record");
+try {
+    byte[] key = "00005".getBytes();
+    vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
+
+    byte[] record = new byte[vsam.getLrecl()];
+    if (vsam.read(record) >= 0) {
+        // Modify the record
+        System.arraycopy("UPDATED".getBytes(), 0, record, 50, 7);
+        vsam.update(record);
+    }
+} finally {
+    vsam.close();
+}
+```
+
+```java
+// Delete a VSAM record
+ZFile vsam = new ZFile("//DD:MYKSDS", "r+b,type=record");
+try {
+    byte[] key = "00005".getBytes();
+    vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
+
+    byte[] record = new byte[vsam.getLrecl()];
+    if (vsam.read(record) >= 0) {
+        vsam.delrec();
+        System.out.println("Deleted record with key 00005");
+    }
+} finally {
+    vsam.close();
+}
+```
 
 ---
 
@@ -788,3 +1093,4 @@ The source files for this demonstration are located in the following directories
 - Review the `com.rocketsoftware.jzos` API documentation for additional ZFile and ZUtil capabilities
 - Try writing a Java program that creates and writes to a new dataset using `ZFile` with write mode
 - Experiment with `ZUtil.redirectStandardStreams()` to map `System.in`/`System.out`/`System.err` to DD allocations
+- Use `ZFileConstants.LOCATE_*` with VSAM datasets to implement keyed record access, updates, and deletes
