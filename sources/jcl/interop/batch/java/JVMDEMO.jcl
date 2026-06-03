@@ -1,20 +1,43 @@
-//JVMDEMO  JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
-//*
-//* Invoke Java class directly using JVMLDM (64-bit).
-//* JVMLDM86 creates the JVM, executes STDENV to configure the
-//* environment, then runs the Java class specified in PARM.
-//*
-//* PARM format: [loglevel] <classname|-jar filename> [args]
-//*
-//STEP1    EXEC PGM=JVMLDM86,
-//         PARM='BatchReport arg1 arg2'
-//STEPLIB  DD  DSN=LOADLIB,DISP=SHR
-//STDENV   DD  DSN=CONFIG(STDENV),DISP=SHR
-//SYSPRINT DD  SYSOUT=*
-//SYSOUT   DD  SYSOUT=*
-//*
-//* --- Stream redirection DDs ---
-//STDOUT   DD  SYSOUT=*
-//STDERR   DD  SYSOUT=*
-//STDIN    DD  DUMMY
+//MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
+//* 
+//******************************************************************** 
+//* Custom JVM procedure                                             * 
+//******************************************************************** 
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS=,               < Args to Java class
+//             VERSION='',          < JVMLDM version: 21
+//             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
+//             REGSIZE='0M',        < EXECUTION REGION SIZE
+//             LEPARM=''
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//SYSPRINT  DD SYSOUT=* < System stdout
+//SYSOUT    DD SYSOUT=* < System stderr
+//STDOUT    DD SYSOUT=* < Java System.out
+//STDERR    DD SYSOUT=* < Java System.err
+//CEEDUMP  DD SYSOUT=* 
+//CEEOPTS DD * 
+TRAP(ON,NOSPIE) 
+/*
+//ABNLIGNR DD DUMMY
+//         PEND
+//******************************************************************** 
+//* End Custom JVM procedure                                         * 
+//******************************************************************** 
+//STEP00   EXEC PROC=JVMPROC,
+//             JAVACLS='BatchReport',
+//             ARGS='arg1 arg2'
+//* Standard Output redirection
+//STDOUT    DD SYSOUT=*
+//STDERR    DD SYSOUT=*
+//STDENV    DD *
+set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
+%CLASSPATH%
+set JZOS_MAIN_ARGS=arg5 arg6
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
+AdoptOpenJDK
+/*
+//MAINARGS DD *
+arg3 arg4
+/*
 //

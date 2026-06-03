@@ -1,4 +1,4 @@
-      $set fcdcat dialect(entcobol)
+      $set dialect(entcobol)
        IDENTIFICATION DIVISION.
        PROGRAM-ID. HELLOJAV.
       *
@@ -7,8 +7,6 @@
       * Enterprise Server Java interoperability mechanism.
       *
        PROCEDURE DIVISION.
-           DISPLAY "COBOL: Before Java call."
-
            CALL "Java.HelloBatch.run"
                ON EXCEPTION
                    DISPLAY "COBOL: Java call FAILED."
@@ -16,8 +14,6 @@
                NOT ON EXCEPTION
                    DISPLAY "COBOL: Java call succeeded."
            END-CALL
-
-           DISPLAY "COBOL: After Java call."
            GOBACK
            .
        END PROGRAM HELLOJAV.

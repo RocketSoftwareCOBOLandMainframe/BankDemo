@@ -4,7 +4,7 @@
  *
  * Usage: EXEC PGM=JVMLDM86,PARM='BatchReport arg1 arg2'
  */
-class BatchReport {
+public class BatchReport {
     public static void main(String[] args) {
         System.out.println("=== Batch Report Generator ===");
         System.out.println("Arguments received: " + args.length);

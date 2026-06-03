@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
 import com.rocketsoftware.jzos.ZUtil;
 
 /**
@@ -17,6 +22,13 @@ class HelloBatch {
             System.out.println("Hello from Java in a batch job!");
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
+
+            int tokenIndex = 0;
+            Scanner scanner = new Scanner(System.in);
+            while (scanner.hasNext()) {
+                String token = scanner.next();
+                System.out.println("Input token(" + (++tokenIndex) + "): " + token);
+            }
         } finally {
             ZUtil.restoreStandardStreams();
             System.clearProperty("com.microfocus.cobol.allowLoadLibrary");

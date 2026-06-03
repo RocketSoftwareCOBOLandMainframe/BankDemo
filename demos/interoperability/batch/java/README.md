@@ -12,8 +12,11 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 4. [Step 1 — Hello World: COBOL Calling Java](#step1)
 5. [Step 2 — Using JVMLDM Directly from JCL](#step2)
 6. [Step 3 — Accessing Datasets from Java with ZFile](#step3)
-7. [Source Files Reference](#sources)
-8. [Troubleshooting](#troubleshooting)
+7. [Step 4 — Using a JCL Procedure (JVMPRC86)](#step4)
+8. [Step 5 — MAINARGS DD and Inline STDENV](#step5)
+9. [Step 6 — Multi-Step Batch with Java](#step6)
+10. [Source Files Reference](#sources)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -25,23 +28,6 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
 
----
-
-## <a name="overview"></a>Overview
-
-Rocket Enterprise Server supports two patterns for running Java code from a JCL batch job:
-
-| Pattern | How It Works | When to Use |
-|---------|-------------|-------------|
-| **COBOL-to-Java CALL** | A COBOL program invokes a Java method using `CALL "Java.<class>.<method>"` | When you want COBOL to orchestrate logic and selectively call Java |
-| **JVMLDM Direct** | JCL invokes JVMLDM as the program (`PGM=JVMLDM86`), which sets up the JVM and runs a Java class directly | When you want Java to be the main entry point for the batch step |
-
-Both patterns support:
-- Accessing datasets and DD allocations from Java via the `ZFile` API
-- Redirecting `System.in`, `System.out`, and `System.err` to DD allocations
-- Passing arguments to the Java program via PARM or environment variables
-
----
 
 ## <a name="how-it-works"></a>How It Works
 
@@ -76,10 +62,15 @@ Both patterns support:
 ```
 
 ---
-
 ## <a name="step1"></a>Step 1 — Hello World: COBOL Calling Java
 
-In this step, you create a simple COBOL program that calls a Java method, and a JCL job that executes it.
+In this step, you create a simple COBOL program that calls a Java method, and a JCL job that executes it. In this example, demonstrates how to setup a bare metal JCL, Cobol program invoking a Java function which redirects the standard streams. Allowing usage of System.out, System.err & System.in.
+
+### Setup
+#### Ensure the region's environment variables include:
+   - `JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK`
+   - `PATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK\bin\server;$PATH`
+   - `CLASSPATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar;$ESP\loadlib`
 
 ### 1.1 Write the Java Class
 
@@ -129,8 +120,6 @@ Create the file `HELLOJAV.cbl`:
       * Enterprise Server Java interoperability mechanism.
       *
        PROCEDURE DIVISION.
-           DISPLAY "COBOL: Before Java call."
-
            CALL "Java.HelloBatch.run"
                ON EXCEPTION
                    DISPLAY "COBOL: Java call FAILED."
@@ -163,10 +152,8 @@ Create the file `HELLOJAV.jcl`:
 //*
 //STEP1    EXEC PGM=HELLOJAV
 //STEPLIB  DD  DSN=LOADLIB,DISP=SHR
-//SYSOUT   DD  SYSOUT=*
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
-//STDIN    DD  DUMMY
 //
 ```
 
@@ -180,17 +167,17 @@ Create the file `HELLOJAV.jcl`:
 
 ### 1.4 Compile and Run
 
-1. **Compile the Java class and link it the jzos jar file located in the products installed folder:**
+1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
    ```
-   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\jzos.jar" HelloBatch.java
+   "javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" HelloBatch.java
    ```
 
-2. **Compile the COBOL program** using Enterprise Developer or the command line:
+2. **Compile the COBOL program** using the Enterprise Developer 64-bit Command Prompt:
    ```
    cbllink -D HELLOJAV.cbl
    ```
 
-3. **Deploy** the compiled COBOL program (`HELLOJAV.dll` or `.so`) to your Enterprise Server's loadlib directory, and the compiled Java class (`HelloBatch.class`) to a location on the server's CLASSPATH. You will also need to update the PATH within the regions Environmental variables to include the server subdirectory of your java install, e.g. PATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK\bin\server;$PATH
+3. **Deploy** the compiled COBOL program `HELLOJAV.dll` & `HelloBatch.class` to your Enterprise Server's loadlib directory (`$ESP/loadlib`).
 
 4. **Submit the JCL** through ESCWA (JES > Control) or by using the Python submission scripts provided in the `scripts` directory of this project.
 
@@ -219,7 +206,7 @@ Create the file `BatchReport.java`:
  * A Java batch program invoked directly via JVMLDM.
  * Demonstrates receiving arguments and writing output.
  */
-class BatchReport {
+public class BatchReport {
     public static void main(String[] args) {
         System.out.println("=== Batch Report Generator ===");
         System.out.println("Arguments received: " + args.length);
@@ -233,83 +220,92 @@ class BatchReport {
 }
 ```
 
-### 2.2 Create the STDENV Script
-
-JVMLDM reads an environment setup script from the `STDENV` DD allocation. This script sets the CLASSPATH and any other Java environment variables.
-
-**Windows** — Create `STDENV.cmd`:
-```cmd
-@echo off
-REM STDENV script for JVMLDM batch Java execution
-REM Sets up the Java environment for the batch step
-
-set JAVA_HOME=C:\Program Files\Java\jdk-17
-set PATH=%JAVA_HOME%\bin;%PATH%
-set CLASSPATH=C:\path\to\your\classes;%CLASSPATH%
-```
-
-**Linux** — Create `STDENV.sh`:
-```bash
-#!/bin/sh
-# STDENV script for JVMLDM batch Java execution
-# Sets up the Java environment for the batch step
-
-export JAVA_HOME=/usr/lib/jvm/java-17
-export PATH=$JAVA_HOME/bin:$PATH
-export CLASSPATH=/path/to/your/classes:$CLASSPATH
-```
-
-### 2.3 Write the JCL
+### 2.2 Write the JCL
 
 Create the file `JVMDEMO.jcl`:
 
 ```jcl
-//JVMDEMO  JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
-//*
-//* Invoke Java class directly using JVMLDM (64-bit).
-//* PARM format: [loglevel] <classname> [program arguments]
-//*
-//STEP1    EXEC PGM=JVMLDM86,
-//         PARM='BatchReport arg1 arg2'
-//STEPLIB  DD  DSN=LOADLIB,DISP=SHR
-//STDENV   DD  DSN=CONFIG(STDENV),DISP=SHR
-//SYSPRINT DD  SYSOUT=*
-//SYSOUT   DD  SYSOUT=*
-//STDOUT   DD  SYSOUT=*
-//STDERR   DD  SYSOUT=*
+//MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
+//* 
+//******************************************************************** 
+//* Custom JVM procedure                                             * 
+//******************************************************************** 
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS=,               < Args to Java class
+//             VERSION='',          < JVMLDM version: 21
+//             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
+//             REGSIZE='0M',        < EXECUTION REGION SIZE
+//             LEPARM=''
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//SYSPRINT  DD SYSOUT=* < System stdout
+//SYSOUT    DD SYSOUT=* < System stderr
+//STDOUT    DD SYSOUT=* < Java System.out
+//STDERR    DD SYSOUT=* < Java System.err
+//CEEDUMP  DD SYSOUT=* 
+//CEEOPTS DD * 
+TRAP(ON,NOSPIE) 
+/*
+//ABNLIGNR DD DUMMY
+//         PEND
+//******************************************************************** 
+//* End Custom JVM procedure                                         * 
+//******************************************************************** 
+//STEP00   EXEC PROC=JVMPROC,
+//             JAVACLS='BatchReport',
+//             ARGS='arg1 arg2'
+//* Standard Output redirection
+//STDOUT    DD SYSOUT=*
+//STDERR    DD SYSOUT=*
+//STDENV    DD *
+set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
+%CLASSPATH%
+set JZOS_MAIN_ARGS=arg5 arg6
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
+AdoptOpenJDK
+/*
+//MAINARGS DD *
+arg3 arg4
+/*
 //
 ```
 
 > **DD Allocations:**
 > | DD Name | Purpose |
 > |---------|---------|
-> | STDENV | Environment setup script (sets CLASSPATH, JAVA_HOME, etc.) |
+> | STDENV | Environment setup script (sets CLASSPATH, JAVA_HOME, etc.).
 > | SYSPRINT | System standard output from JVMLDM |
 > | SYSOUT | System standard error from JVMLDM |
 > | STDOUT | Java `System.out` (after stream redirection) |
 > | STDERR | Java `System.err` (after stream redirection) |
+> | STDIN | Java `System.in` (allocated as DUMMY if not needed) |
 
 ### 2.4 Compile and Deploy
 
-1. **Compile the Java class:**
+1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
    ```
    javac BatchReport.java
    ```
 
-2. **Deploy** `BatchReport.class` to the directory referenced in your STDENV script's CLASSPATH.
+2. **Deploy** `BatchReport.class` to the directory referenced in your STDENV script's CLASSPATH (e.g. `$ESP/loadlib`).
 
-3. **Deploy** your STDENV script to a dataset or PDS member accessible from the JCL (as referenced by the `STDENV` DD).
-
-4. **Ensure JVMLDM86** (64-bit) or **JVMLDM80** (32-bit) is available in the loadlib. These are provided with Enterprise Server.
+3. **Ensure JVMLDM** on Windows, JVMLDM64 (64-bit) or **JVMLDM80** (32-bit) on Linux is available in the loadlib. These are provided with Enterprise Server.
 
 5. **Submit the JCL** and check the STDOUT DD output:
    ```
-   === Batch Report Generator ===
-   Arguments received: 2
-     arg[0] = arg1
-     arg[1] = arg2
-   Report complete. RC=0
+     === Batch Report Generator ===                                                                                                        
+     Arguments received: 6                                                                                                                 
+       arg[0] = arg1                                                                                                                       
+       arg[1] = arg2                                                                                                                       
+       arg[2] = arg5                                                                                                                       
+       arg[3] = arg6                                                                                                                       
+       arg[4] = arg3                                                                                                                       
+       arg[5] = arg4                                                                                                                       
+     Report complete. RC=0                                                                                                                 
    ```
+
+   5.1 *Note:* We can see the inputted arguments are in a non-sequential order. This is because, arguments will be appended in the order of ARGS+JZOS_MAIN_ARGS+MAINARGS.
+   5.2 *In step 1,* we can notice JVMLDM handling the CLASSPATH environmental variable to include esjos.jar implicitly. Along with this, JVMLDM, is handling the redirection of standard streams for us also.
 
 ---
 
@@ -329,40 +325,45 @@ import com.rocketsoftware.jzos.*;
  * Demonstrates using ZFile to access VSAM/sequential datasets
  * from Java in a batch environment.
  */
-class ReadBankData {
-    public static void run() {
-        System.setProperty("com.microfocus.cobol.allowLoadLibrary", "true");
+public class ReadBankData {
+    public static void main(String[] args) {
+        if(args.length != 1) {
+            throw new IllegalArgumentException("Number of passed arguments do not meet the minimum of 1.");
+        }
+
+        int recordsToShow = Integer.parseInt(args[0]); // Can throw if argument is not args[0] a parsable integer.
 
         System.out.println("=== Reading Bank Account Data ===");
-        readAccountFile();
+        readAccountFile(recordsToShow);
         System.out.println("=== Complete ===");
     }
 
-    private static void readAccountFile() {
+    public static void readAccountFile(int displayN) {
         // Open the dataset allocated to DD name ACCDATA
         ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record");
+
         try {
             byte[] record = new byte[zFile.getLrecl()];
             int bytesRead;
             int count = 0;
 
             while ((bytesRead = zFile.read(record)) >= 0) {
-                count++;
                 // Extract fields from fixed-length record
                 String accountId = new String(record, 0, 9).trim();
                 String custId = new String(record, 9, 5).trim();
                 String accountType = new String(record, 14, 1).trim();
 
-                System.out.printf("  Account: %s  Customer: %s  Type: %s%n",
-                    accountId, custId, accountType);
+                count++;
+                if (count <= displayN) {
+                    System.out.printf("  Account: %s  Customer: %s  Type: %s%n", accountId, custId, accountType);
 
-                if (count >= 5) {
-                    System.out.println("  ... (showing first 5 records)");
-                    break;
+                    if (count == displayN) {
+                        System.out.println("  ... (showing first " + displayN + " records)");
+                    }
                 }
             }
 
-            System.out.printf("  Total records shown: %d%n", count);
+            System.out.printf("  Total records: %d%n", count);
         } finally {
             zFile.close();
         }
@@ -370,64 +371,53 @@ class ReadBankData {
 }
 ```
 
-### 3.2 Write the COBOL Bootstrap
-
-Create the file `READBNKJ.cbl`:
-
-```cobol
-      $set dialect(entcobol)
-       IDENTIFICATION DIVISION.
-       PROGRAM-ID. READBNKJ.
-      *
-      * Invokes the Java class ReadBankData to read account
-      * information from a dataset allocated via JCL DD.
-      *
-       PROCEDURE DIVISION.
-           DISPLAY "Reading bank data via Java..."
-
-           CALL "Java.ReadBankData.run"
-               ON EXCEPTION
-                   DISPLAY "ERROR: Java call failed."
-                   MOVE 16 TO RETURN-CODE
-               NOT ON EXCEPTION
-                   DISPLAY "Java processing complete."
-           END-CALL
-
-           GOBACK
-           .
-       END PROGRAM READBNKJ.
-```
-
-### 3.3 Write the JCL
+### 3.2 Write the JCL
 
 Create the file `READBNKJ.jcl`:
 
 ```jcl
-//READBNKJ JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
-//*
-//* Read Bankdemo account data using Java ZFile API.
-//* The COBOL program READBNKJ calls Java.ReadBankData.run()
-//* which reads the dataset allocated to DD ACCDATA.
-//*
-//* DD Allocations:
-//*   SYSOUT   - COBOL DISPLAY output
-//*   STDOUT   - Java System.out (redirected stream)
-//*   STDERR   - Java System.err (redirected stream)
-//*   STDIN    - Java System.in  (redirected stream)
-//*   ACCDATA  - Application DD: opened by Java via
-//*              ZFile("//DD:ACCDATA", ...)
-//*
-//STEP1    EXEC PGM=READBNKJ
-//STEPLIB  DD  DSN=LOADLIB,DISP=SHR
-//*
-//* --- Stream redirection DDs ---
-//SYSOUT   DD  SYSOUT=*
-//STDOUT   DD  SYSOUT=*
-//STDERR   DD  SYSOUT=*
-//STDIN    DD  DUMMY
-//*
-//* --- Application DDs (opened by Java via ZFile) ---
-//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+//MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
+//* 
+//******************************************************************** 
+//* Custom JVM procedure                                             * 
+//******************************************************************** 
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS=,               < Args to Java class
+//             VERSION='',          < JVMLDM version: 21
+//             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
+//             REGSIZE='0M',        < EXECUTION REGION SIZE
+//             LEPARM=''
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//SYSPRINT  DD SYSOUT=* < System stdout
+//SYSOUT    DD SYSOUT=* < System stderr
+//STDOUT    DD SYSOUT=* < Java System.out
+//STDERR    DD SYSOUT=* < Java System.err
+//CEEDUMP  DD SYSOUT=* 
+//CEEOPTS DD * 
+TRAP(ON,NOSPIE) 
+/*
+//ABNLIGNR DD DUMMY
+//         PEND
+//******************************************************************** 
+//* End Custom JVM procedure                                         * 
+//******************************************************************** 
+//STEP00   EXEC PROC=JVMPROC,
+//             JAVACLS='ReadBankData',
+//             ARGS='5'
+//* Standard Output redirection
+//STDOUT    DD SYSOUT=*
+//STDERR    DD SYSOUT=*
+//STDENV    DD *
+set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
+%CLASSPATH%
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
+AdoptOpenJDK
+/*
+//******************************************************************** 
+//* Application DDs (opened by Java via ZFile)                       * 
+//******************************************************************** 
+//ACCDATA   DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
 //
 ```
 
@@ -452,34 +442,302 @@ Create the file `READBNKJ.jcl`:
 
 ### 3.4 Compile and Run
 
-1. **Compile the Java class:**
+1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
    ```
-   javac -cp esjos.jar ReadBankData.java
+   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" ReadBankData.java
    ```
-   The `esjos.jar` file is provided with Enterprise Server and contains the `com.rocketsoftware.jzos` package.
+   The `esjos.jar` file is provided with Enterprise Developer/Server at `bin64\esjos.jar` and contains the `com.rocketsoftware.jzos` package.
 
-2. **Compile the COBOL program:**
-   ```
-   cobol READBNKJ.cbl dialect(entcobol) ilgen;
-   cbllink -o READBNKJ READBNKJ.obj
-   ```
-
-3. **Deploy** the compiled artifacts to your Enterprise Server instance:
+2. **Deploy** the compiled artifacts to your Enterprise Server instance:
    - `READBNKJ.dll` (or `.so`) → loadlib
-   - `ReadBankData.class` → a directory on the CLASSPATH
+   - `ReadBankData.class` → loadlib
 
 4. **Ensure** the `MFI01V.MFIDEMO.BNKACC` dataset is cataloged (it is automatically cataloged if you have run the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
 
-5. **Submit the JCL** and check output:
+5. **Submit the JCL** and check STDOUT DD:
    ```
-   Reading bank data via Java...
-   === Reading Bank Account Data ===
-     Account: 00000001  Customer: 00001  Type: C
-     Account: 00000002  Customer: 00001  Type: S
-     ...
-   === Complete ===
-   Java processing complete.
+    === Reading Bank Account Data ===                                                                                                     
+       Account: T00010000  Customer: 00001  Type: 1                                                                                        
+       Account: T00010000  Customer: 00002  Type: 2                                                                                        
+       Account: T00010000  Customer: 00003  Type: 3                                                                                        
+       Account: T00010000  Customer: 00004  Type: 4                                                                                        
+       Account: T00010000  Customer: 00005  Type: 5                                                                                        
+       ... (showing first 5 records)                                                                                                       
+       Total records: 108                                                                                                                  
+     === Complete ===  
    ```
+
+5.1 *The Java program* is able to accept an integer (which can be passed via ARGS, MAINARGS or JZOS_MAIN_ARGS environmental variable). This will determine how many records will be displayed. Changing this from 5, to a non parsable integer. Should result in an exception which can viewed in the jobs output.
+
+---
+
+## <a name="step4"></a>Step 4 — Using a JCL Procedure (JVMPRC86)
+
+This step introduces a **reusable JCL procedure** that encapsulates the JVMLDM invocation. This mirrors the IBM z/OS JZOS Batch Launcher pattern (`JVMPRC21`/`JVMPRC31`) and simplifies Java batch job definitions.
+
+### 4.1 The JVMPRC86 Procedure
+
+The procedure `JVMPRC86.prc` is located in `sources/proclib/` and provides symbolic parameters:
+
+```jcl
+//JVMPRC86 PROC JAVACLS=,
+//             ARGS='',
+//             LOGLVL='',
+//             LEPARM=''
+//*
+//JAVA     EXEC PGM=JVMLDM86,
+//         PARM='&LOGLVL &JAVACLS &ARGS'
+//STEPLIB  DD  DSN=LOADLIB,DISP=SHR
+//SYSPRINT DD  SYSOUT=*
+//SYSOUT   DD  SYSOUT=*
+//STDOUT   DD  SYSOUT=*
+//STDERR   DD  SYSOUT=*
+//STDIN    DD  DUMMY
+//         PEND
+```
+
+| Symbolic | Purpose |
+|----------|---------|
+| `JAVACLS` | Fully qualified Java class name to execute (required) |
+| `ARGS` | Additional arguments appended to the PARM string |
+| `LOGLVL` | JVMLDM log level (`+T` for trace, blank for default) |
+| `LEPARM` | Language environment parameters (optional) |
+
+### 4.2 Calling the Procedure
+
+To invoke a Java class, the calling JCL uses `EXEC PROC=JVMPRC86` and overrides DDs with the `JAVA.` step prefix:
+
+```jcl
+//MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
+//*
+//STEP00   EXEC PROC=JVMPRC86,
+//             JAVACLS='com.package.Demo1',
+//             ARGS=''
+//* Override standard output
+//JAVA.STDOUT DD SYSOUT=*
+//JAVA.STDERR DD SYSOUT=*
+//* Inline environment configuration
+//JAVA.STDENV DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//
+```
+
+> **Key point:** DDs are overridden using the `JAVA.` prefix (matching the step name inside the proc). This allows the caller to provide inline STDENV, add application DDs, or override stream redirections.
+
+---
+
+## <a name="step5"></a>Step 5 — MAINARGS DD and Inline STDENV
+
+JVMLDM supports receiving Java `main()` arguments from the **MAINARGS DD** (in addition to or instead of the PARM string). This is analogous to IBM's `JZOS_MAIN_ARGS` environment variable or the MAINARGS DD.
+
+### 5.1 How MAINARGS Works
+
+JVMLDM assembles arguments from multiple sources (in order of precedence):
+1. **PARM** — The `PARM=` on the EXEC statement (after the class name)
+2. **JZOS_MAIN_ARGS** environment variable — Set in STDENV
+3. **MAINARGS DD** — An inline or dataset DD containing arguments
+
+Arguments in MAINARGS are parsed as quoted strings, supporting:
+- Single-quoted tokens: `'Test string 1'`
+- Regex patterns: `'T[e].+[0-9]'`
+- Flags and options: `'--verbose'`
+
+### 5.2 Write the Java Class
+
+Create `MainArgsDemo.java`:
+
+```java
+import com.rocketsoftware.jzos.*;
+
+/**
+ * Demonstrates MAINARGS DD argument parsing.
+ * Receives quoted strings, regex patterns, and flags from MAINARGS.
+ */
+class MainArgsDemo {
+    public static void main(String[] args) {
+        System.out.println("=== MAINARGS Demonstration ===");
+        System.out.println("Total arguments: " + args.length);
+
+        for (int i = 0; i < args.length; i++) {
+            System.out.printf("  args[%d] = '%s' (length=%d)%n",
+                i, args[i], args[i].length());
+        }
+
+        // Demonstrate using args as regex patterns
+        if (args.length >= 2) {
+            String testData = args[0];
+            String pattern = args[1];
+            System.out.println("Regex test:");
+            System.out.println("  Data:    '" + testData + "'");
+            System.out.println("  Pattern: '" + pattern + "'");
+            boolean matches = testData.matches(pattern);
+            System.out.println("  Match:   " + matches);
+        }
+
+        System.out.println("=== MAINARGS Demo Complete. RC=0 ===");
+    }
+}
+```
+
+### 5.3 Write the JCL
+
+Create `JVMARGS.jcl`:
+
+```jcl
+//JVMARGS  JOB 'MAINARGS-DEMO',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
+//*
+//STEP00   EXEC PROC=JVMPRC86,
+//             JAVACLS='MainArgsDemo',
+//             ARGS=''
+//*
+//* Environment configuration (inline STDENV)
+//JAVA.STDENV DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//*
+//* Arguments passed to Java main() via MAINARGS DD
+//JAVA.MAINARGS DD *
+'Test string 1' 'T[e].+[0-9]' '--verbose'
+/*
+//
+```
+
+### 5.4 Inline STDENV with JVM Options
+
+The `STDENV` DD can also set `JZOS_JVM_OPTIONS` to pass JVM flags:
+
+```jcl
+//JAVA.STDENV DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
+/*
+```
+
+> **Environment variables parsed by JVMLDM from STDENV:**
+> | Variable | Purpose |
+> |----------|---------|
+> | `JAVA_HOME` | JDK installation path |
+> | `CLASSPATH` | Java class search path |
+> | `JZOS_JVM_OPTIONS` | JVM command-line options (e.g. `-Xmx512m`, `-XX:+Enable3164Interoperability`) |
+> | `JZOS_MAIN_ARGS` | Additional arguments appended to main() args |
+> | `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection (default: UTF-8) |
+> | `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` — enable/disable output transcoding |
+
+### 5.5 Expected Output
+
+```
+=== MAINARGS Demonstration ===
+Total arguments: 3
+  args[0] = 'Test string 1' (length=13)
+  args[1] = 'T[e].+[0-9]' (length=11)
+  args[2] = '--verbose' (length=9)
+
+Regex test:
+  Data:    'Test string 1'
+  Pattern: 'T[e].+[0-9]'
+  Match:   true
+
+Verbose mode enabled. System properties:
+  java.version = 17.0.x
+  java.home    = C:\Program Files (x86)\Rocket Software\...
+  user.dir     = C:\path\to\server
+  file.encoding= ISO-8859-1
+
+=== MAINARGS Demo Complete. RC=0 ===
+```
+
+---
+
+## <a name="step6"></a>Step 6 — Multi-Step Batch with Java
+
+This step demonstrates chaining multiple Java steps in a single JCL job, each using the `JVMPRC86` procedure with different configurations. This is the typical production pattern for batch processing pipelines.
+
+### 6.1 Bank Account Filter (BankAcctFilter.java)
+
+A Java class that reads bank account data and filters by a regex pattern supplied via MAINARGS:
+
+```java
+import com.rocketsoftware.jzos.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+class BankAcctFilter {
+    public static void main(String[] args) {
+        String datasetName = args[0];
+        String filterPattern = args.length > 1 ? args[1] : ".*";
+
+        Pattern regex = Pattern.compile(filterPattern);
+        // Opens dataset via ZFile and filters account records...
+    }
+}
+```
+
+### 6.2 Multi-Step JCL (JVMMULTI.jcl)
+
+```jcl
+//JVMMULTI JOB 'MULTI-STEP',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
+//*
+//* STEP 1: Filter accounts using regex from MAINARGS
+//STEP01   EXEC PROC=JVMPRC86,
+//             JAVACLS='BankAcctFilter'
+//JAVA.STDENV DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//JAVA.MAINARGS DD *
+'MFI01V.MFIDEMO.BNKACC' '0000[1-5]'
+/*
+//JAVA.ACCDATA DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+//*
+//* STEP 2: Generate transaction report with control cards
+//STEP02   EXEC PROC=JVMPRC86,
+//             JAVACLS='BankTxnReport'
+//JAVA.STDENV DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//JAVA.STDIN DD *
+REPORT_TITLE=Daily Batch Run - Filtered Transactions
+MAX_RECORDS=25
+/*
+//JAVA.TXNDATA DD DSN=MFI01V.MFIDEMO.BNKTXN,DISP=SHR
+//*
+//* STEP 3: MAINARGS demo with verbose trace logging
+//STEP03   EXEC PROC=JVMPRC86,
+//             JAVACLS='MainArgsDemo',
+//             LOGLVL='+T'
+//JAVA.STDENV DD *
+set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set PATH=%JAVA_HOME%\bin\server;%PATH%
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//JAVA.MAINARGS DD *
+'BatchStep3Data' 'Batch.+[0-9]' '--verbose'
+/*
+//
+```
+
+### 6.3 Compile and Deploy
+
+1. **Compile all Java classes:**
+   ```
+   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" BankAcctFilter.java BankTxnReport.java MainArgsDemo.java
+   ```
+
+2. **Deploy** all `.class` files to the CLASSPATH directory (e.g. `$ESP/loadlib`).
+
+3. **Ensure** the datasets `MFI01V.MFIDEMO.BNKACC` and `MFI01V.MFIDEMO.BNKTXN` are cataloged.
+
+4. **Submit** `JVMMULTI.jcl` — each step executes independently with its own STDENV and arguments.
 
 ---
 
@@ -497,6 +755,15 @@ The source files for this demonstration are located in the following directories
 | `READBNKJ.jcl` | `sources/jcl/interop/batch/java/` | JCL for ZFile demo |
 | `BatchReport.java` | `sources/java/interop/batch/` | Direct JVMLDM Java class |
 | `JVMDEMO.jcl` | `sources/jcl/interop/batch/java/` | JCL for JVMLDM direct demo |
+| `JVMPRC86.prc` | `sources/proclib/` | JVM Batch Launcher procedure (64-bit) |
+| `MainArgsDemo.java` | `sources/java/interop/batch/` | MAINARGS DD demonstration class |
+| `BankAcctFilter.java` | `sources/java/interop/batch/` | Regex-based account filter via MAINARGS |
+| `BankTxnReport.java` | `sources/java/interop/batch/` | Transaction report with STDIN control cards |
+| `JVMBNKF.cbl` | `sources/cobol/interop/batch/java/` | COBOL bootstrap for BankAcctFilter |
+| `JVMARGS.jcl` | `sources/jcl/interop/batch/java/` | JCL for MAINARGS demo |
+| `JVMFILT.jcl` | `sources/jcl/interop/batch/java/` | JCL for account filter via proc |
+| `JVMTXNR.jcl` | `sources/jcl/interop/batch/java/` | JCL for transaction report via proc |
+| `JVMMULTI.jcl` | `sources/jcl/interop/batch/java/` | Multi-step Java batch job |
 | `STDENV.cmd` | `sources/config/interop/` | STDENV script (Windows) |
 | `STDENV.sh` | `sources/config/interop/` | STDENV script (Linux) |
 
