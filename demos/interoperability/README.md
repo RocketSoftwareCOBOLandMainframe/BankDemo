@@ -14,20 +14,6 @@ Demonstrations showing how to invoke programs written in other languages from JC
     - Invoke Java classes from JCL using JVMLDM and COBOL-to-Java bridging
     - Access datasets from Java using the JZOS-compatible ZFile API
 
-### CICS Interoperability
-
-*(Coming soon)* — Demonstrations showing how to call external language programs from within a CICS transaction environment.
-
-## Concepts
-
-Language interoperability in Rocket Enterprise Server is built on the following mechanisms:
-
-| Mechanism | Description |
-|-----------|-------------|
-| **JVMLDM** | JVM Load Module — a batch launcher that creates a Java environment from a STDENV script and executes a Java class or JAR directly from JCL |
-| **COBOL-to-Java CALL** | COBOL programs can call Java methods using the syntax `CALL "Java.<class>.<method>"` |
-| **ESJOS / JZOS API** | Java classes can access Enterprise Server datasets, VSAM files, and DD allocations using the `com.rocketsoftware.jzos` package (ZFile, ZUtil, etc.) |
-
 ## Prerequisites
 
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server

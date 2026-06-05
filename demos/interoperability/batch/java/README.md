@@ -1,4 +1,4 @@
-# Batch Java Interoperability with JVMLDM
+﻿# Batch Java Interoperability with JVMLDM
 
 This demonstration walks you through invoking Java classes from JCL batch jobs using Rocket Enterprise Server's language interoperability features. You will learn how to use the **JVMLDM** (JVM Load Module) launcher and the **COBOL-to-Java CALL** mechanism to execute Java programs that can access Enterprise Server datasets and DD allocations.
 
@@ -9,13 +9,14 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 1. [Prerequisites](#prerequisites)
 2. [Overview](#overview)
 3. [How It Works](#how-it-works)
-4. [Step 1 — Hello World: COBOL Calling Java](#step1)
-5. [Step 2 — Using JVMLDM Directly from JCL](#step2)
-6. [Step 3 — Accessing Datasets from Java with ZFile](#step3)
-7. [Step 4 — Multi-Step Batch with Java](#step4)
-8. [Source Files Reference](#sources)
-9. [Exploring the JZOS API](#jzos-api)
-10. [Troubleshooting](#troubleshooting)
+4. [Step 1 - Hello World: COBOL Calling Java](#step1)
+5. [Step 2 - Using JVMLDM Directly from JCL](#step2)
+6. [Step 3 - Accessing Datasets from Java with ZFile](#step3)
+7. [Step 4 - Multi-Step Batch with Java](#step4)
+8. [Step 5 - VSAM Operations from Java](#step5)
+9. [Source Files Reference](#sources)
+10. [Exploring the JZOS API](#jzos-api)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -61,7 +62,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ```
 
 ---
-## <a name="step1"></a>Step 1 — Hello World: COBOL Calling Java
+## <a name="step1"></a>Step 1 - Hello World: COBOL Calling Java
 
 In this step, you create a simple COBOL program that calls a Java method, and a JCL job that executes it. In this example, demonstrates how to setup a bare metal JCL, Cobol program invoking a Java function which redirects the standard streams. Allowing usage of System.out, System.err & System.in.
 
@@ -93,6 +94,7 @@ class HelloBatch {
             System.out.println("Hello from Java in a batch job!");
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
+            System.out.println("Env var (ESOS_TEST_VAR): " + System.getenv("ESOS_TEST_VAR"));
         } finally {
             ZUtil.restoreStandardStreams();
         }
@@ -150,6 +152,9 @@ Create the file `HELLOJAV.jcl`:
 //STEPLIB  DD  DSN=LOADLIB,DISP=SHR
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
+//CEEOPTS  DD *
+ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
+/*
 //
 ```
 
@@ -157,9 +162,31 @@ Create the file `HELLOJAV.jcl`:
 > | DD Name | Required | Purpose |
 > |---------|----------|----------|
 > | SYSOUT | Yes | Captures COBOL `DISPLAY` output and system messages |
-> | STDOUT | Yes | Java `System.out` — mapped by the runtime's stream redirection |
-> | STDERR | Yes | Java `System.err` — mapped by the runtime's stream redirection |
-> | STDIN | Optional | Java `System.in` — if your Java code reads from `System.in`, allocate this DD with input data or `DUMMY` |
+> | STDOUT | Yes | Java `System.out` - mapped by the runtime's stream redirection |
+> | STDERR | Yes | Java `System.err` - mapped by the runtime's stream redirection |
+> | STDIN | Optional | Java `System.in` - if your Java code reads from `System.in`, allocate this DD with input data or `DUMMY` |
+
+> **Understanding CEEOPTS:**
+>
+> The `CEEOPTS` DD allows you to alter the Language Environment (LE) runtime options for the step. In this example, we use `ENVAR()` to set an environment variable that the Java code can read via `System.getenv()`:
+>
+> ```jcl
+> //CEEOPTS  DD *
+> ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
+> /*
+> ```
+>
+> The Java class retrieves this with `System.getenv("ESOS_TEST_VAR")` and prints it to STDOUT. This confirms that the LE runtime options are being applied to the step and are visible to the Java code running within it.
+>
+> Common CEEOPTS options include:
+> | Option | Purpose |
+> |--------|---------|
+> | `ENVAR("KEY=VALUE")` | Set environment variables visible to the program |
+> | `TRAP(ON,NOSPIE)` | Control exception/signal handling behavior |
+> | `POSIX(ON)` | Enable POSIX semantics |
+> | `STORAGE(NONE,NONE,NONE)` | Control storage initialization |
+>
+> You can verify CEEOPTS is taking effect by checking the step's output - the environment variable value will appear in STDOUT, proving the LE options were applied before the program executed.
 
 ### 1.4 Compile and Run
 
@@ -181,15 +208,16 @@ Create the file `HELLOJAV.jcl`:
    ```
    COBOL: Before Java call.
    Hello from Java in a batch job!
-   Java version: 17.0.x
+   Java version: 21.0.x
    Working directory: /path/to/server
+   Env var (ESOS_TEST_VAR): HELLO_FROM_ESOS
    COBOL: Java call succeeded.
    COBOL: After Java call.
    ```
 
 ---
 
-## <a name="step2"></a>Step 2 — Using JVMLDM Directly from JCL
+## <a name="step2"></a>Step 2 - Using JVMLDM Directly from JCL
 
 In this step, you bypass the COBOL bootstrap and invoke a Java class directly from JCL using the **JVMLDM** load module. This is useful when Java is the primary language for your batch step. This step also covers argument passing via multiple sources (PARM, JZOS_MAIN_ARGS, MAINARGS DD) and inline STDENV configuration.
 
@@ -281,9 +309,9 @@ arg3 arg4
 
 JVMLDM assembles `main()` arguments from multiple sources, appended in this order:
 
-1. **ARGS (PARM)** — Arguments specified on the EXEC statement after the class name
-2. **JZOS_MAIN_ARGS** — Environment variable set in STDENV
-3. **MAINARGS DD** — An inline or dataset DD containing arguments
+1. **ARGS (PARM)** - Arguments specified on the EXEC statement after the class name
+2. **JZOS_MAIN_ARGS** - Environment variable set in STDENV
+3. **MAINARGS DD** - An inline or dataset DD containing arguments
 
 Arguments in MAINARGS are parsed as quoted strings, supporting:
 - Single-quoted tokens: `'Test string 1'`
@@ -301,7 +329,7 @@ The `STDENV` DD is an inline script that configures the JVM environment. JVMLDM 
 | `JZOS_JVM_OPTIONS` | JVM command-line options (e.g. `-Xmx512m`, `-XX:+Enable3164Interoperability`) |
 | `JZOS_MAIN_ARGS` | Additional arguments appended to main() args |
 | `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection (default: UTF-8) |
-| `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` — enable/disable output transcoding |
+| `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` - enable/disable output transcoding |
 
 Example with JVM options:
 
@@ -338,11 +366,11 @@ set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
      Report complete. RC=0                                                                                                                 
    ```
 
-> **Note:** The arguments appear in non-sequential order because they are appended in the order **ARGS → JZOS_MAIN_ARGS → MAINARGS**. In Step 1 we saw that JVMLDM handles adding `esjos.jar` to the CLASSPATH implicitly and manages stream redirection automatically.
+> **Note:** The arguments appear in non-sequential order because they are appended in the order **ARGS â†’ JZOS_MAIN_ARGS â†’ MAINARGS**. In Step 1 we saw that JVMLDM handles adding `esjos.jar` to the CLASSPATH implicitly and manages stream redirection automatically.
 
 ---
 
-## <a name="step3"></a>Step 3 — Accessing Datasets from Java with ZFile
+## <a name="step3"></a>Step 3 - Accessing Datasets from Java with ZFile
 
 This step demonstrates how a Java program invoked from JCL can read and write Enterprise Server datasets using the `ZFile` API from the `com.rocketsoftware.jzos` package.
 
@@ -457,7 +485,7 @@ AdoptOpenJDK
 >
 > The JCL must allocate **two categories** of DDs:
 >
-> 1. **Stream redirection DDs** — These are mapped automatically by the runtime to Java's standard I/O streams:
+> 1. **Stream redirection DDs** - These are mapped automatically by the runtime to Java's standard I/O streams:
 >    | DD Name | Maps To |
 >    |---------|----------|
 >    | STDOUT | `System.out` |
@@ -465,7 +493,7 @@ AdoptOpenJDK
 >    | STDIN | `System.in` |
 >    | SYSOUT | COBOL `DISPLAY` / system messages |
 >
-> 2. **Application DDs** — Any dataset your Java code opens explicitly via `ZFile("//DD:<name>", ...)` must be allocated in the JCL:
+> 2. **Application DDs** - Any dataset your Java code opens explicitly via `ZFile("//DD:<name>", ...)` must be allocated in the JCL:
 >    | DD Name | Opened By |
 >    |---------|----------|
 >    | ACCDATA | `new ZFile("//DD:ACCDATA", "rb,type=record")` in `ReadBankData.java` |
@@ -816,7 +844,7 @@ REPORT_TITLE=Daily Customer Account Summary - Filtered
 
 4. **Submit** `JVMMULTI.jcl` and review the output:
 
-**STDOUT (Step 1 — Filter):**
+**STDOUT (Step 1 - Filter):**
 ```
 Loaded
  === Customer Filter Step ===                                                                                                          
@@ -829,7 +857,7 @@ Loaded
  Filter complete: 5/38 customers matched.       
 ```
 
-**STDERR (Step 1 — Diagnostics):**
+**STDERR (Step 1 - Diagnostics):**
 ```
  Job: JVMMULTI (ID: J0001139)  Step: STEP01  User: JESUSER                                                                             
  Mode: FILTER  Encoding: windows-1252                                                                                                  
@@ -837,7 +865,7 @@ Loaded
  DIAG: Processed 38 records, 5 matched 'B000[1-5]' 
 ```
 
-**STDOUT (Step 2 — Report):**
+**STDOUT (Step 2 - Report):**
 ```
  ========================================================================                                                              
    Daily Customer Account Summary - Filtered                                                                                           
@@ -875,7 +903,7 @@ Loaded
  ========================================================================                                              
 ```
 
-**STDERR (Step 2 — Diagnostics):**
+**STDERR (Step 2 - Diagnostics):**
 ```
  Job: JVMMULTI (ID: J0001139)  Step: STEP02  User: JESUSER                                                                             
  Mode: REPORT  Encoding: windows-1252                                                                                                  
@@ -884,26 +912,512 @@ Loaded
  DIAG: Report displayed 25 records       
 ```
 
+
+---
+
+## <a name="step5"></a>Step 5 — VSAM Operations from Java
+
+This step demonstrates direct VSAM KSDS operations from Java - **keyed lookup**, **sequential browse**, and **record update** - against the BankDemo customer dataset (`BNKCUST`). It shows how to use `ZFile.locate()` with `ZFileConstants` seek flags, read individual records, and update them in place.
+
+### What the program does
+
+| Operation | Description |
+|-----------|-------------|
+| `LOOKUP`  | Locates a single customer record by its 5-byte primary key (customer ID) and displays the fields |
+| `BROWSE`  | Positions to a key using `LOCATE_KEY_FIRST` or `LOCATE_KEY_GE` then reads up to *n* records sequentially |
+| `UPDATE`  | Locates a record by key, toggles the SendMail flag (`Y`â†”`N`), and writes it back with `ZFile.update()` |
+
+### BNKCUST Record Layout (CBANKVCS.cpy)
+
+| Field | Offset | Length | Type | Description |
+|-------|--------|--------|------|-------------|
+| PID | 0 | 5 | PIC X | **Primary key** (e.g. `B0001`) |
+| Name | 5 | 25 | PIC X | Customer name |
+| Name FF | 30 | 25 | PIC X | Name (first-last format) |
+| SIN | 55 | 9 | PIC X | Social insurance number |
+| Address 1 | 64 | 25 | PIC X | Street address |
+| Address 2 | 89 | 25 | PIC X | City |
+| State | 114 | 2 | PIC X | State code |
+| Country | 116 | 6 | PIC X | Country |
+| Post Code | 122 | 6 | PIC X | Postal code |
+| Phone | 128 | 12 | PIC X | Telephone number |
+| Email | 140 | 30 | PIC X | Email address |
+| SendMail | 170 | 1 | PIC X | `Y` or `N` |
+| SendEmail | 171 | 1 | PIC X | `Y` or `N` |
+
+### Java Class: VsamAccountOps.java
+
+```java
+import com.rocketsoftware.jzos.*;
+import java.util.Arrays;
+
+/**
+ * Demonstrates VSAM KSDS operations on the BankDemo customer dataset.
+ *
+ * Operations:
+ *   LOOKUP  <custId>          - Locate and display a single customer by key
+ *   BROWSE  <startKey> <count> - Browse records starting from a key
+ *   UPDATE  <custId>          - Locate a customer and toggle the SendMail flag
+ *
+ * Dataset: MFI01V.MFIDEMO.BNKCUST (KSDS, key at offset 0, length 5)
+ *
+ * Usage via JVMLDM:
+ *   PARM='... VsamAccountOps LOOKUP B0001'
+ *   PARM='... VsamAccountOps BROWSE B0001 10'
+ *   PARM='... VsamAccountOps UPDATE B0001'
+ */
+public class VsamAccountOps {
+
+    // BNKCUST record layout (from CBANKVCS.CPY)
+    private static final int REC_LEN = 250;
+    private static final int PID_OFF = 0,        PID_LEN = 5;
+    private static final int NAME_OFF = 5,       NAME_LEN = 25;
+    private static final int NAMEFF_OFF = 30,    NAMEFF_LEN = 25;
+    private static final int SIN_OFF = 55,       SIN_LEN = 9;
+    private static final int ADDR1_OFF = 64,     ADDR1_LEN = 25;
+    private static final int ADDR2_OFF = 89,     ADDR2_LEN = 25;
+    private static final int STATE_OFF = 114,    STATE_LEN = 2;
+    private static final int COUNTRY_OFF = 116,  COUNTRY_LEN = 6;
+    private static final int POSTCODE_OFF = 122, POSTCODE_LEN = 6;
+    private static final int TEL_OFF = 128,      TEL_LEN = 12;
+    private static final int EMAIL_OFF = 140,    EMAIL_LEN = 30;
+    private static final int SENDMAIL_OFF = 170, SENDMAIL_LEN = 1;
+    private static final int SENDEMAIL_OFF = 171, SENDEMAIL_LEN = 1;
+
+    private static final String SEPARATOR = "-".repeat(60);
+
+    public static void main(String[] args) {
+        try {
+            run(args);
+        } catch (Throwable t) {
+            System.err.println("FATAL: " + t.getClass().getName() + ": " + t.getMessage());
+            t.printStackTrace(System.err);
+            System.exit(16);
+        }
+    }
+
+    private static void run(String[] args) throws Exception {
+        if (args.length < 1) {
+            System.err.println("ERROR: Missing operation (LOOKUP, BROWSE, or UPDATE)");
+            System.exit(12);
+        }
+
+        String op = args[0].toUpperCase();
+        System.err.printf("Job: %s  Step: %s  Operation: %s%n",
+            ZUtil.getCurrentJobname(), ZUtil.getCurrentStepname(), op);
+        System.err.printf("DEBUG: args.length=%d  args=%s%n", args.length, Arrays.toString(args));
+
+        switch (op) {
+            case "LOOKUP":
+                if (args.length < 2) {
+                    System.err.println("ERROR: LOOKUP requires a customer ID argument");
+                    System.exit(12);
+                }
+                doLookup(args[1]);
+                break;
+            case "BROWSE":
+                String startKey = args.length > 1 ? args[1] : "";
+                int count = args.length > 2 ? Integer.parseInt(args[2]) : 10;
+                doBrowse(startKey, count);
+                break;
+            case "UPDATE":
+                if (args.length < 2) {
+                    System.err.println("ERROR: UPDATE requires a customer ID argument");
+                    System.exit(12);
+                }
+                doUpdate(args[1]);
+                break;
+            default:
+                System.err.println("ERROR: Unknown operation '" + op + "'");
+                System.exit(12);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // LOOKUP: Locate a single record by primary key (customer ID)
+    // -------------------------------------------------------------------------
+
+    private static void doLookup(String custId) {
+        System.out.println("=== VSAM LOOKUP ===");
+        System.out.println("Searching for customer: '" + custId + "' (length=" + custId.length() + ")");
+        System.out.println(SEPARATOR);
+
+        System.err.printf("LOOKUP: custId='%s' len=%d bytes=%s%n",
+            custId, custId.length(), Arrays.toString(custId.getBytes()));
+
+        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
+        System.err.printf("LOOKUP: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
+            vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
+
+        try {
+            byte[] key = makeKey(custId, vsam.getVsamKeyLength());
+            System.err.printf("LOOKUP: key bytes=%s (len=%d)%n", Arrays.toString(key), key.length);
+
+            boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
+            System.err.printf("LOOKUP: locate(KEY_EQ) returned %b%n", found);
+
+            if (found) {
+                byte[] record = new byte[vsam.getLrecl()];
+                int bytesRead = vsam.read(record);
+                System.err.printf("LOOKUP: read() returned %d bytes%n", bytesRead);
+                System.err.printf("LOOKUP: record[0..40]='%s'%n",
+                    new String(record, 0, Math.min(40, bytesRead)));
+                System.err.printf("LOOKUP: record hex[0..20]=%s%n", bytesToHex(record, 0, 20));
+                if (bytesRead >= 0) {
+                    printCustomerRecord(record);
+                } else {
+                    System.out.println("  Record not found (read returned " + bytesRead + ")");
+                }
+            } else {
+                System.out.println("  Record not found for key: " + custId);
+                // Try KEY_GE as fallback diagnostic
+                boolean geFound = vsam.locate(key, ZFileConstants.LOCATE_KEY_GE);
+                System.err.printf("LOOKUP: locate(KEY_GE) returned %b%n", geFound);
+                if (geFound) {
+                    byte[] record = new byte[vsam.getLrecl()];
+                    int bytesRead = vsam.read(record);
+                    System.err.printf("LOOKUP: GE read %d bytes, first 40='%s'%n",
+                        bytesRead, new String(record, 0, Math.min(40, bytesRead)));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("  Error: " + e.getMessage());
+            System.err.println("LOOKUP exception: " + e);
+            e.printStackTrace(System.err);
+        } finally {
+            vsam.close();
+        }
+
+        System.out.println(SEPARATOR);
+    }
+
+    // -------------------------------------------------------------------------
+    // BROWSE: Sequential read starting from a key (KEY_GE)
+    // -------------------------------------------------------------------------
+
+    private static void doBrowse(String startKey, int maxCount) throws Exception {
+        System.out.println("=== VSAM BROWSE ===");
+        System.out.printf("Start key: '%s'  Max records: %d%n", startKey, maxCount);
+        System.out.println(SEPARATOR);
+        System.out.printf("  %-5s  %-25s  %-12s  %-30s  %s%n",
+            "PID", "Name", "Phone", "Email", "Mail");
+        System.out.println("  " + "-".repeat(80));
+
+        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
+        System.err.printf("BROWSE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
+            vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
+        try {
+            if (!startKey.isEmpty()) {
+                byte[] key = makeKey(startKey, vsam.getVsamKeyLength());
+                System.err.printf("BROWSE: locate KEY_GE key=%s%n", Arrays.toString(key));
+                boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_GE);
+                System.err.printf("BROWSE: locate returned %b%n", found);
+            } else {
+                byte[] key = new byte[vsam.getVsamKeyLength()];
+                System.err.printf("BROWSE: locate KEY_FIRST key=%s%n", Arrays.toString(key));
+                boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_FIRST);
+                System.err.printf("BROWSE: locate returned %b%n", found);
+            }
+
+            byte[] record = new byte[vsam.getLrecl()];
+            int count = 0;
+
+            while (vsam.read(record) >= 0 && count < maxCount) {
+                if (count == 0) {
+                    System.err.printf("BROWSE: first record hex[0..20]=%s%n", bytesToHex(record, 0, 20));
+                    System.err.printf("BROWSE: first record text[0..40]='%s'%n",
+                        new String(record, 0, Math.min(40, record.length)));
+                }
+                String pid = field(record, PID_OFF, PID_LEN);
+                String name = field(record, NAME_OFF, NAME_LEN);
+                String tel = field(record, TEL_OFF, TEL_LEN);
+                String email = field(record, EMAIL_OFF, EMAIL_LEN);
+                String sendMail = field(record, SENDMAIL_OFF, SENDMAIL_LEN);
+
+                System.out.printf("  %-5s  %-25s  %-12s  %-30s  %s%n",
+                    pid, name, tel, email, sendMail);
+                count++;
+            }
+
+            System.out.println("  " + "-".repeat(80));
+            System.out.printf("  Browsed %d records%n", count);
+            System.err.printf("BROWSE: returned %d records from key '%s'%n", count, startKey);
+        } catch (Exception e) {
+            System.out.println("  No records found from key: " + startKey);
+            System.err.println("BROWSE exception: " + e);
+            e.printStackTrace(System.err);
+        } finally {
+            vsam.close();
+        }
+
+        System.out.println(SEPARATOR);
+    }
+
+    // -------------------------------------------------------------------------
+    // UPDATE: Locate a record and toggle the SendMail flag
+    // -------------------------------------------------------------------------
+
+    private static void doUpdate(String custId) throws Exception {
+        System.out.println("=== VSAM UPDATE ===");
+        System.out.println("Updating customer: " + custId);
+        System.out.println(SEPARATOR);
+
+        System.err.printf("UPDATE: custId='%s' len=%d%n", custId, custId.length());
+
+        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+");
+        System.err.printf("UPDATE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
+            vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
+        try {
+            byte[] key = makeKey(custId, vsam.getVsamKeyLength());
+            System.err.printf("UPDATE: key bytes=%s%n", Arrays.toString(key));
+            boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
+            System.err.printf("UPDATE: locate(KEY_EQ) returned %b%n", found);
+
+            if (!found) {
+                System.out.println("  Record not found for key: " + custId);
+                return;
+            }
+
+            byte[] record = new byte[vsam.getLrecl()];
+            int bytesRead = vsam.read(record);
+            System.err.printf("UPDATE: read() returned %d bytes%n", bytesRead);
+            System.err.printf("UPDATE: record[0..40]='%s'%n",
+                new String(record, 0, Math.min(40, bytesRead >= 0 ? bytesRead : 0)));
+
+            System.out.println("  Before update:");
+            printCustomerRecord(record);
+
+            // Toggle SendMail: "Y" <-> "N"
+            String currentMail = field(record, SENDMAIL_OFF, SENDMAIL_LEN);
+            String newMail = currentMail.equals("Y") ? "N" : "Y";
+            System.arraycopy(newMail.getBytes(), 0, record, SENDMAIL_OFF, SENDMAIL_LEN);
+
+            vsam.update(record, 0, record.length);
+            System.err.printf("UPDATE: update() completed successfully%n");
+
+            System.out.println("  After update:");
+            printCustomerRecord(record);
+            System.err.printf("UPDATE: Toggled SendMail: '%s' -> '%s'%n", currentMail, newMail);
+        } catch (Exception e) {
+            System.out.println("  Update failed: " + e.getMessage());
+            System.err.println("UPDATE exception: " + e);
+            e.printStackTrace(System.err);
+        } finally {
+            vsam.close();
+        }
+
+        System.out.println(SEPARATOR);
+    }
+
+    // -------------------------------------------------------------------------
+    // Utilities
+    // -------------------------------------------------------------------------
+
+    private static void printCustomerRecord(byte[] record) {
+        String pid = field(record, PID_OFF, PID_LEN);
+        String name = field(record, NAME_OFF, NAME_LEN);
+        String addr1 = field(record, ADDR1_OFF, ADDR1_LEN);
+        String state = field(record, STATE_OFF, STATE_LEN);
+        String postcode = field(record, POSTCODE_OFF, POSTCODE_LEN);
+        String tel = field(record, TEL_OFF, TEL_LEN);
+        String email = field(record, EMAIL_OFF, EMAIL_LEN);
+        String sendMail = field(record, SENDMAIL_OFF, SENDMAIL_LEN);
+        String sendEmail = field(record, SENDEMAIL_OFF, SENDEMAIL_LEN);
+
+        System.out.printf("  PID: %s  Name: %s%n", pid, name);
+        System.out.printf("  Address: %s, %s %s%n", addr1, state, postcode);
+        System.out.printf("  Phone: %s  Email: %s%n", tel, email);
+        System.out.printf("  SendMail: %s  SendEmail: %s%n", sendMail, sendEmail);
+    }
+
+    private static String field(byte[] record, int offset, int length) {
+        return new String(record, offset, length).trim();
+    }
+
+    private static byte[] makeKey(String value, int keyLength) {
+        byte[] key = new byte[keyLength];
+        byte[] src = value.getBytes();
+        System.arraycopy(src, 0, key, 0, Math.min(src.length, keyLength));
+        return key;
+    }
+
+    private static String bytesToHex(byte[] data, int offset, int length) {
+        StringBuilder sb = new StringBuilder();
+        int end = Math.min(offset + length, data.length);
+        for (int i = offset; i < end; i++) {
+            sb.append(String.format("%02X ", data[i] & 0xFF));
+        }
+        return sb.toString().trim();
+    }
+}
+```
+
+### JCL - `JVMVSAM.jcl`
+
+The job has three steps, each invoking `VsamAccountOps` with a different operation. The operation and key are passed via ARGS in the PARM string:
+
+```jcl
+//JVMVSAM  JOB 'VSAM-OPS',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
+//*
+//JVMPROC PROC JAVACLS=,ARGS='',VERSION='',LOGLVL='+I',REGSIZE='0M'
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             PARM='&LOGLVL &JAVACLS &ARGS'
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//STDOUT   DD SYSOUT=*
+//STDERR   DD SYSOUT=*
+//CEEDUMP  DD SYSOUT=*
+//ABNLIGNR DD DUMMY
+//         PEND
+//*
+//* STEP 1: LOOKUP - Find a specific customer by key
+//STEP01   EXEC PROC=JVMPROC,JAVACLS='VsamAccountOps',ARGS='LOOKUP B0001'
+//CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
+//*
+//* STEP 2: BROWSE - Read 10 customers from beginning
+//STEP02   EXEC PROC=JVMPROC,JAVACLS='VsamAccountOps',ARGS='BROWSE'
+//MAINARGS DD *
+'' '10'
+/*
+//CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
+//*
+//* STEP 3: UPDATE - Toggle SendMail flag
+//STEP03   EXEC PROC=JVMPROC,JAVACLS='VsamAccountOps',ARGS='UPDATE B0001'
+//CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
+```
+
+### DD Allocations
+
+| DD Name | Purpose |
+|---------|---------|
+| `CUSTDATA` | The VSAM KSDS customer dataset (`MFI01V.MFIDEMO.BNKCUST`). Opened with `DISP=SHR` |
+| `MAINARGS` | Additional arguments passed to `main(String[] args)` (used by BROWSE for start key and count) |
+| `STDOUT` | Program output (record displays) |
+| `STDERR` | Diagnostics (VSAM type, key length, locate results) |
+
+### Key VSAM API Calls
+
+```java
+// Open for read only
+ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
+
+// Open for read + update
+ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+");
+
+// Locate by exact key (key must be exactly getVsamKeyLength() bytes)
+byte[] key = makeKey("B0001", vsam.getVsamKeyLength());
+boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
+
+// Locate >= key (for browse)
+vsam.locate(key, ZFileConstants.LOCATE_KEY_GE);
+
+// Position to first record
+vsam.locate(new byte[vsam.getVsamKeyLength()], ZFileConstants.LOCATE_KEY_FIRST);
+
+// Read the located record
+byte[] record = new byte[vsam.getLrecl()];
+vsam.read(record);
+
+// Update the record just read (must follow read in update mode)
+vsam.update(record, 0, record.length);
+```
+
+### Compile and Deploy
+
+1. **Compile:**
+   ```
+   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" VsamAccountOps.java
+   ```
+
+2. **Deploy** `VsamAccountOps.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
+
+3. **Ensure** dataset `MFI01V.MFIDEMO.BNKCUST` is cataloged (set up by the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
+
+### Running the job
+
+Submit `JVMVSAM.jcl` in the same way as previous steps. The STDOUT output will show:
+
+```
+=== VSAM LOOKUP ===                                                                                                                   
+ Searching for customer: 'B0001' (length=5)                                                                                            
+ ------------------------------------------------------------                                                                          
+   PID: B0001  Name: Fred Bloggs                                                                                                       
+   Address: 722 Parkland Ave, ON L5H3G8                                                                                                
+   Phone: 800-555-1234  Email:                                                                                                         
+   SendMail: Y  SendEmail: N                                                                                                           
+ ------------------------------------------------------------
+```
+
+For the BROWSE step:
+
+```
+=== VSAM BROWSE ===                                                                                                                   
+ Start key: 'B0002'  Max records: 10                                                                                                   
+ ------------------------------------------------------------                                                                          
+   PID    Name                       Phone         Email                           Mail                                                
+   --------------------------------------------------------------------------------                                                    
+   B0002  Loretta Morden             800-555-3854                                  N                                                   
+   B0003  Eleanor Rigby              800-555-3857                                  N                                                   
+   B0004  Desmond Jones              800-555-1029                                  N                                                   
+   B0005  Felicity Arkwright         800-555-8275                                  N                                                   
+   B0006  James Tiberius Kirk        800-555-1701                                  N                                                   
+   B0007  Mark Thyme                 800-555-4434                                  N                                                   
+   B0008  Timothy Haye               800-555-9910                                  N                                                   
+   B0009  Herr Barber                800-555-8745                                  N                                                   
+   B0010  Barbara Allen              800-555-9637                                  N                                                   
+   B0011  Ben Doone                  800-555-9543                                  N                                                   
+   --------------------------------------------------------------------------------                                                    
+   Browsed 10 records                                                                                                                  
+ ------------------------------------------------------------
+```
+
+For the UPDATE step:
+
+```
+=== VSAM UPDATE ===                                                                                                                   
+ Updating customer: B0001                                                                                                              
+ ------------------------------------------------------------                                                                          
+   Before update:                                                                                                                      
+   PID: B0001  Name: Fred Bloggs                                                                                                       
+   Address: 722 Parkland Ave, ON L5H3G8                                                                                                
+   Phone: 800-555-1234  Email:                                                                                                         
+   SendMail: Y  SendEmail: N                                                                                                           
+   After update:                                                                                                                       
+   PID: B0001  Name: Fred Bloggs                                                                                                       
+   Address: 722 Parkland Ave, ON L5H3G8                                                                                                
+   Phone: 800-555-1234  Email:                                                                                                         
+   SendMail: N  SendEmail: N                                                                                                           
+ ------------------------------------------------------------
+```
+
+### Key takeaways
+
+- The open mode string must be `"type=record,rb"` for read-only or `"type=record,rb+"` for read+update
+- `ZFile.locate()` returns a `boolean` - check it before calling `read()`
+- The key byte array **must be exactly `getVsamKeyLength()` bytes** - pad with null bytes if shorter
+- `LOCATE_KEY_FIRST` requires a key-length zeroed byte array: `new byte[vsam.getVsamKeyLength()]`
+- `LOCATE_KEY_EQ` finds an exact match; `LOCATE_KEY_GE` finds the first record at or after the key
+- For updates: open with `"type=record,rb+"`, then `locate()` â†’ `read()` â†’ modify â†’ `update()`
+
+
 ---
 
 ## <a name="sources"></a>Source Files Reference
-
 The source files for this demonstration are located in the following directories:
 
 | File | Location | Description |
 |------|----------|-------------|
-| `HELLOJAV.cbl` | `sources/cobol/interop/batch/java/` | COBOL bootstrap for Hello World |
-| `HelloBatch.java` | `sources/java/interop/batch/` | Hello World Java class |
-| `HELLOJAV.jcl` | `sources/jcl/interop/batch/java/` | JCL for Hello World demo |
-| `ReadBankData.java` | `sources/java/interop/batch/` | ZFile dataset reader |
-| `READBNKJ.jcl` | `sources/jcl/interop/batch/java/` | JCL for ZFile demo |
-| `BatchReport.java` | `sources/java/interop/batch/` | Direct JVMLDM Java class |
-| `JVMDEMO.jcl` | `sources/jcl/interop/batch/java/` | JCL for JVMLDM direct demo |
-| `BankCustAcctReport.java` | `sources/java/interop/batch/` | Multi-step customer/account report |
-| `JVMMULTI.jcl` | `sources/jcl/interop/batch/java/` | Multi-step Java batch job |
-| `STDENV.cmd` | `sources/config/interop/` | STDENV script (Windows) |
-| `STDENV.sh` | `sources/config/interop/` | STDENV script (Linux) |
-
+| `HELLOJAV.cbl` | `sources/cobol/` | COBOL bootstrap for Hello World |
+| `HelloBatch.java` | `sources/java/` | Hello World Java class |
+| `HELLOJAV.jcl` | `sources/jcl/` | JCL for Hello World demo |
+| `ReadBankData.java` | `sources/java/` | ZFile dataset reader |
+| `READBNKJ.jcl` | `sources/jcl/` | JCL for ZFile demo |
+| `BatchReport.java` | `sources/java/` | Direct JVMLDM Java class |
+| `JVMDEMO.jcl` | `sources/jcl/` | JCL for JVMLDM direct demo |
+| `BankCustAcctReport.java` | `sources/java/` | Multi-step customer/account report |
+| `JVMMULTI.jcl` | `sources/jcl/` | Multi-step Java batch job |
+| `VsamAccountOps.java` | `sources/java/` | VSAM KSDS operations demo |
+| `JVMVSAM.jcl` | `sources/jcl/` | JCL for VSAM operations demo |
 ---
 
 ## <a name="troubleshooting"></a>Troubleshooting
@@ -934,9 +1448,9 @@ When Java code throws an unhandled exception or calls `System.exit(n)` with a no
 
 ## <a name="jzos-api"></a>Exploring the JZOS API (`com.rocketsoftware.jzos`)
 
-The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Developer/Server installation) provides the `com.rocketsoftware.jzos` package — a Java API for interacting with Enterprise Server datasets, job context, and I/O streams. This section summarizes the key classes and what you can do with them beyond the basics shown in this tutorial. Here is additional information on the type of functions you can explore with as the next step.
+The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Developer/Server installation) provides the `com.rocketsoftware.jzos` package - a Java API for interacting with Enterprise Server datasets, job context, and I/O streams. This section summarizes the key classes and what you can do with them beyond the basics shown in this tutorial. Here is additional information on the type of functions you can explore with as the next step.
 
-### ZFile — Dataset I/O
+### ZFile - Dataset I/O
 
 `ZFile` is the primary class for reading and writing datasets (sequential, VSAM KSDS/RRDS/ESDS, and PDS members).
 
@@ -981,7 +1495,7 @@ The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Develop
 | `ZFile.getFullyQualifiedDSN(String)` | Resolve a dataset name to its fully qualified form |
 | `ZFile.getSlashSlashQuotedDSN(String)` | Format a DSN as `//'DSN.NAME'` for ZFile open |
 
-### ZFileConstants — Seek and Locate Flags
+### ZFileConstants - Seek and Locate Flags
 
 Use these constants with `seek()` and `locate()` for VSAM operations:
 
@@ -1000,7 +1514,7 @@ Use these constants with `seek()` and `locate()` for VSAM operations:
 | `VSAM_TYPE_RRDS` | Relative-record dataset |
 | `VSAM_TYPE_ESDS` | Entry-sequenced dataset |
 
-### ZUtil — Job Context and Stream Management
+### ZUtil - Job Context and Stream Management
 
 | Method | Description |
 |--------|-------------|
@@ -1012,7 +1526,7 @@ Use these constants with `seek()` and `locate()` for VSAM operations:
 | `ZUtil.getCurrentUser()` | User ID running the job |
 | `ZUtil.getDefaultPlatformEncoding()` | Platform character encoding |
 
-### ZFileException — Error Handling
+### ZFileException - Error Handling
 
 `ZFileException` extends `IOException` and provides dataset-specific error context:
 
@@ -1027,63 +1541,10 @@ Use these constants with `seek()` and `locate()` for VSAM operations:
 | Issue | Explanation |
 |-------|-------------|
 | **Don't close `System.in`** | JVMLDM manages STDIN. Closing it via try-with-resources causes RTS 145 on step exit. Read from `System.in` without closing the stream. |
-| **Don't specify DCB attributes in both DD and ZFile** | If the JCL DD has `DCB=(RECFM=F,LRECL=80)`, open with just `"wb,type=record"` — not `"wb,type=record,lrecl=80,recfm=F"`. Conflicting attributes cause RTS 145. |
+| **Don't specify DCB attributes in both DD and ZFile** | If the JCL DD has `DCB=(RECFM=F,LRECL=80)`, open with just `"wb,type=record"` - not `"wb,type=record,lrecl=80,recfm=F"`. Conflicting attributes cause RTS 145. |
 | **JVMLDM auto-redirects streams** | Unlike the COBOL bootstrap path (Step 1), JVMLDM handles `ZUtil.redirectStandardStreams()` automatically. Do not call it yourself when using JVMLDM. |
 | **Dataset creation via ZFile** | Opening a non-existent dataset name with `"wb,lrecl=N,type=record"` creates it. No DD or JCL allocation is needed. |
 | **`ZFile.exists()` vs `ZFile.ddExists()`** | `exists()` checks both DD and DSN. `ddExists()` only checks if a DD is allocated in the current step. `dsExists()` only checks the catalog. |
-
-### VSAM Operations Example
-
-```java
-// Locate and read a specific record by key
-ZFile vsam = new ZFile("//DD:MYKSDS", "rb,type=record");
-try {
-    byte[] key = "00005".getBytes();
-    vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
-
-    byte[] record = new byte[vsam.getLrecl()];
-    if (vsam.read(record) >= 0) {
-        System.out.println("Found: " + new String(record).trim());
-    }
-} finally {
-    vsam.close();
-}
-```
-
-```java
-// Update a VSAM record in place
-ZFile vsam = new ZFile("//DD:MYKSDS", "r+b,type=record");
-try {
-    byte[] key = "00005".getBytes();
-    vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
-
-    byte[] record = new byte[vsam.getLrecl()];
-    if (vsam.read(record) >= 0) {
-        // Modify the record
-        System.arraycopy("UPDATED".getBytes(), 0, record, 50, 7);
-        vsam.update(record);
-    }
-} finally {
-    vsam.close();
-}
-```
-
-```java
-// Delete a VSAM record
-ZFile vsam = new ZFile("//DD:MYKSDS", "r+b,type=record");
-try {
-    byte[] key = "00005".getBytes();
-    vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
-
-    byte[] record = new byte[vsam.getLrecl()];
-    if (vsam.read(record) >= 0) {
-        vsam.delrec();
-        System.out.println("Deleted record with key 00005");
-    }
-} finally {
-    vsam.close();
-}
-```
 
 ---
 

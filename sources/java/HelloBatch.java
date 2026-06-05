@@ -1,8 +1,3 @@
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Scanner;
-
 import com.rocketsoftware.jzos.ZUtil;
 
 /**
@@ -13,8 +8,6 @@ import com.rocketsoftware.jzos.ZUtil;
  */
 class HelloBatch {
     public static void run() {
-        System.setProperty("com.microfocus.cobol.allowLoadLibrary", "true");
-
         try {
             // Explicitly map Java standard streams to JCL DDs when not using JVMLDM.
             ZUtil.redirectStandardStreams("iso-8859-1", true);
@@ -22,16 +15,9 @@ class HelloBatch {
             System.out.println("Hello from Java in a batch job!");
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
-
-            int tokenIndex = 0;
-            Scanner scanner = new Scanner(System.in);
-            while (scanner.hasNext()) {
-                String token = scanner.next();
-                System.out.println("Input token(" + (++tokenIndex) + "): " + token);
-            }
+            System.out.println("Env var (ESOS_TEST_VAR): " + System.getenv("ESOS_TEST_VAR"));
         } finally {
             ZUtil.restoreStandardStreams();
-            System.clearProperty("com.microfocus.cobol.allowLoadLibrary");
         }
     }
 }
