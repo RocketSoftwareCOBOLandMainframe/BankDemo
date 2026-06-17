@@ -9,12 +9,12 @@
 //             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
 //JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
-//SYSPRINT DD SYSOUT=*
-//SYSOUT   DD SYSOUT=*
-//STDOUT   DD SYSOUT=*
-//STDERR   DD SYSOUT=*
-//CEEDUMP  DD SYSOUT=*
-//ABNLIGNR DD DUMMY
+//SYSPRINT DD  SYSOUT=*
+//SYSOUT   DD  SYSOUT=*
+//STDOUT   DD  SYSOUT=*
+//STDERR   DD  SYSOUT=*
+//CEEDUMP  DD  SYSOUT=*
+//ABNLIGNR DD  DUMMY
 //         PEND
 //*-------------------------------------------------------------------*
 //*
@@ -24,10 +24,7 @@
 //STEP01   EXEC PROC=JVMPROC,
 //             JAVACLS='BankCustAcctReport',
 //             ARGS='FILTER'
-//STDENV    DD *
-set JAVA_HOME=%COBDIR%\AdoptOpenJDK
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
+//STDENV   DD  DUMMY
 //STDIN    DD  *
 /*
 //MAINARGS DD *
@@ -42,12 +39,9 @@ set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 //STEP02   EXEC PROC=JVMPROC,
 //             JAVACLS='BankCustAcctReport',
 //             ARGS='REPORT 25'
-//STDENV    DD *
-set JAVA_HOME=%COBDIR%\AdoptOpenJDK
-set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-/*
-//STDIN    DD *
+//STDENV   DD  DUMMY
+//STDIN    DD  *
 REPORT_TITLE=Daily Customer Account Summary - Filtered
 /*
-//ACCDATA  DD DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
 //
