@@ -3,12 +3,11 @@
 //*-------------------------------------------------------------------*
 //* Inline JVM procedure (replaces external PROC reference)           *
 //*-------------------------------------------------------------------*
-//JVMPROC PROC JAVACLS=,
-//             ARGS='',
-//             VERSION='',
-//             LOGLVL='+I',
-//             REGSIZE='0M'
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS='',             < Args to Java class
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*
 //SYSOUT   DD SYSOUT=*
@@ -26,8 +25,7 @@
 //             JAVACLS='BankCustAcctReport',
 //             ARGS='FILTER'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD  *
@@ -45,8 +43,7 @@ set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 //             JAVACLS='BankCustAcctReport',
 //             ARGS='REPORT 25'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD *

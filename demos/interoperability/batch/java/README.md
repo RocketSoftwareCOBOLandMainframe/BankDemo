@@ -23,10 +23,10 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ## <a name="prerequisites"></a>Prerequisites
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
-- A Java Development Kit (JDK) 8 or later installed and available on your system PATH
+- The Java Development Kit (JDK) bundled with Rocket Enterprise Developer/Server (located at `%COBDIR%/AdoptOpenJDK`). If you prefer to use your own JDK, check the version of the bundled JDK and align to the same major version
 - An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../demos/onprem/vsam/README.md) demonstration)
 - Ensure that the Directory Server (MFDS) service is running
-- Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
+- Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
 
 
 ## <a name="how-it-works"></a>How It Works
@@ -34,7 +34,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ```
 ┌────────────────────────────────────────┐
 │  JCL Job Step                          │
-│  EXEC PGM=BOOTSTRP  (or JVMLDM86)     │
+│  EXEC PGM=BOOTSTRP  (or JVMLDM64)      │
 │  DD allocations (STDIN, STDOUT, etc.)  │
 └───────────────────┬────────────────────┘
                     │
@@ -56,7 +56,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ┌────────────────────────────────────────┐
 │  Enterprise Server                     │
 │  - Manages DD allocations              │
-│  - Provides dataset I/O               │
+│  - Provides dataset I/O                │
 │  - Returns exit code to JCL            │
 └────────────────────────────────────────┘
 ```
@@ -68,9 +68,9 @@ In this step, you create a simple COBOL program that calls a Java method, and a 
 
 ### Setup
 #### Ensure the region's environment variables include:
-   - `JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK`
-   - `PATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK\bin\server;$PATH`
-   - `CLASSPATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar;$ESP\loadlib`
+   - `JAVA_HOME=$COBDIR\AdoptOpenJDK`
+   - `PATH=$COBDIR\AdoptOpenJDK\bin\server;$PATH`
+   - `CLASSPATH=$COBDIR\bin64\esjos.jar;$ESP\loadlib`
 
 ### 1.1 Write the Java Class
 
@@ -95,6 +95,9 @@ class HelloBatch {
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
             System.out.println("Env var (ESOS_TEST_VAR): " + System.getenv("ESOS_TEST_VAR"));
+        } catch (Exception e) {
+            System.err.println("ERROR: " + e.getMessage());
+            e.printStackTrace(System.err);
         } finally {
             ZUtil.restoreStandardStreams();
         }
@@ -110,26 +113,16 @@ Create the file `HELLOJAV.cbl`:
 
 ```cobol
       $set dialect(entcobol)
-       IDENTIFICATION DIVISION.
-       PROGRAM-ID. HELLOJAV.
       *
       * Simple demonstration of calling a Java class from COBOL.
       * The Java class HelloBatch.run() is invoked using the
       * Enterprise Server Java interoperability mechanism.
       *
-       PROCEDURE DIVISION.
-           CALL "Java.HelloBatch.run"
-               ON EXCEPTION
-                   DISPLAY "COBOL: Java call FAILED."
-                   MOVE 16 to RETURN-CODE
-               NOT ON EXCEPTION
-                   DISPLAY "COBOL: Java call succeeded."
-           END-CALL
-
-           DISPLAY "COBOL: After Java call."
-           GOBACK
+       procedure division.
+           call "Java.HelloBatch.run"
+           display "COBOL: Java call succeeded."
+           goback
            .
-       END PROGRAM HELLOJAV.
 ```
 
 ### 1.3 Write the JCL
@@ -168,7 +161,7 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
 
 > **Understanding CEEOPTS:**
 >
-> The `CEEOPTS` DD allows you to alter the Language Environment (LE) runtime options for the step. In this example, we use `ENVAR()` to set an environment variable that the Java code can read via `System.getenv()`:
+> The `CEEOPTS` DD allows you to alter the Language Environment (LE) runtime options for the step. In this example, we use `ENVAR()` to set environment variables that the Java code can read via `System.getenv()`:
 >
 > ```jcl
 > //CEEOPTS  DD *
@@ -176,23 +169,16 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
 > /*
 > ```
 >
-> The Java class retrieves this with `System.getenv("ESOS_TEST_VAR")` and prints it to STDOUT. This confirms that the LE runtime options are being applied to the step and are visible to the Java code running within it.
->
-> Common CEEOPTS options include:
-> | Option | Purpose |
-> |--------|---------|
-> | `ENVAR("KEY=VALUE")` | Set environment variables visible to the program |
-> | `TRAP(ON,NOSPIE)` | Control exception/signal handling behavior |
-> | `POSIX(ON)` | Enable POSIX semantics |
-> | `STORAGE(NONE,NONE,NONE)` | Control storage initialization |
->
-> You can verify CEEOPTS is taking effect by checking the step's output - the environment variable value will appear in STDOUT, proving the LE options were applied before the program executed.
+> The Java class retrieves `ESOS_TEST_VAR` with `System.getenv("ESOS_TEST_VAR")` and prints it to STDOUT. You can set or extend any environment variable via `ENVAR()`, including those used by the JVM — avoiding the need to configure them in the region's environment.
+> You can verify CEEOPTS is taking effect by checking the step's output - the environment variable value will appear in STDOUT, proving the LE options were applied before the program executed. ENVAR also can take a second parameter to either override (OVR) or not (NONOVR) for the supplied variables.
+
+> **Tip:** Environment variables such as `CLASSPATH` can also be set per-step via the `CEEOPTS` DD using `ENVAR()`, as shown in section 1.3. This avoids needing to configure them in the region's environment.
 
 ### 1.4 Compile and Run
 
 1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
    ```
-   "javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" HelloBatch.java
+   "javac -cp "%COBDIR%\bin64\esjos.jar" HelloBatch.java
    ```
 
 2. **Compile the COBOL program** using the Enterprise Developer 64-bit Command Prompt:
@@ -206,13 +192,11 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
 
 5. **Check output** in the job's SYSOUT. You should see:
    ```
-   COBOL: Before Java call.
    Hello from Java in a batch job!
    Java version: 21.0.x
    Working directory: /path/to/server
    Env var (ESOS_TEST_VAR): HELLO_FROM_ESOS
    COBOL: Java call succeeded.
-   COBOL: After Java call.
    ```
 
 ---
@@ -256,10 +240,9 @@ Create the file `JVMDEMO.jcl`:
 //******************************************************************** 
 //JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
 //             ARGS=,               < Args to Java class
-//             VERSION='',          < JVMLDM version: 21
-//             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
-//             REGSIZE='0M',        < EXECUTION REGION SIZE
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT  DD SYSOUT=* < System stdout
 //SYSOUT    DD SYSOUT=* < System stderr
@@ -281,14 +264,13 @@ TRAP(ON,NOSPIE)
 //STDOUT    DD SYSOUT=*
 //STDERR    DD SYSOUT=*
 //STDENV    DD *
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
 %CLASSPATH%
-set JZOS_MAIN_ARGS=arg5 arg6
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
-AdoptOpenJDK
+set JZOS_MAIN_ARGS=arg3 arg4
 /*
 //MAINARGS DD *
-arg3 arg4
+arg5 arg6
 /*
 //
 ```
@@ -303,15 +285,15 @@ arg3 arg4
 | STDOUT | Java `System.out` (after stream redirection) |
 | STDERR | Java `System.err` (after stream redirection) |
 | STDIN | Java `System.in` (allocated as DUMMY if not needed) |
-| MAINARGS | Additional arguments passed to Java `main()` |
+| MAINARGS | Optional. Additional arguments passed to Java `main()`. Only read if `JZOS_MAIN_ARGS_DD` is set in STDENV |
 
 ### 2.4 How Arguments Are Assembled
 
 JVMLDM assembles `main()` arguments from multiple sources, appended in this order:
 
 1. **ARGS (PARM)** - Arguments specified on the EXEC statement after the class name
-2. **JZOS_MAIN_ARGS** - Environment variable set in STDENV
-3. **MAINARGS DD** - An inline or dataset DD containing arguments
+2. **MAINARGS DD** - An inline or dataset DD containing arguments
+3. **JZOS_MAIN_ARGS** - Environment variable set in STDENV
 
 Arguments in MAINARGS are parsed as quoted strings, supporting:
 - Single-quoted tokens: `'Test string 1'`
@@ -326,21 +308,25 @@ The `STDENV` DD is an inline script that configures the JVM environment. JVMLDM 
 |----------|---------|
 | `JAVA_HOME` | JDK installation path |
 | `CLASSPATH` | Java class search path |
-| `JZOS_JVM_OPTIONS` | JVM command-line options (e.g. `-Xmx512m`, `-XX:+Enable3164Interoperability`) |
+| `JZOS_JVM_OPTIONS` | JVM command-line options (appended to `JAVA_TOOL_OPTIONS`). E.g. `-Xmx512m`, `-Djzos.merge.sysout=true`, `-Dfile.encoding=UTF-8` |
 | `JZOS_MAIN_ARGS` | Additional arguments appended to main() args |
-| `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection (default: UTF-8) |
+| `JZOS_MAIN_ARGS_DD` | Name of the DD to read additional main args from (e.g. `MAINARGS`). If not set, the MAINARGS DD is not read |
+| `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection |
 | `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` - enable/disable output transcoding |
+| `JZOS_ABEND_EXIT` | If set to an exit code threshold, `System.exit(n)` at or above this level triggers a U3333 abend |
 
 Example with JVM options:
 
 ```jcl
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set PATH=%JAVA_HOME%\bin\server;%PATH%
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
-set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
+set JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 /*
 ```
+
+> **Note:** If STDENV is allocated as `DUMMY`, JVMLDM skips STDENV processing and uses the region's environment variables directly.
 
 ### 2.6 Compile and Deploy
 
@@ -351,7 +337,7 @@ set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
 
 2. **Deploy** `BatchReport.class` to the directory referenced in your STDENV script's CLASSPATH (e.g. `$ESP/loadlib`).
 
-3. **Ensure JVMLDM** on Windows, JVMLDM64 (64-bit) or **JVMLDM80** (32-bit) on Linux is available in the loadlib. These are provided with Enterprise Server.
+3. **Ensure JVMLDM** is available in the loadlib. `JVMLDM64` (64-bit) is provided with Enterprise Server on both Windows and Linux.
 
 4. **Submit the JCL** and check the STDOUT DD output:
    ```
@@ -359,14 +345,24 @@ set JZOS_JVM_OPTIONS=-XX:+Enable3164Interoperability
      Arguments received: 6                                                                                                                 
        arg[0] = arg1                                                                                                                       
        arg[1] = arg2                                                                                                                       
-       arg[2] = arg5                                                                                                                       
-       arg[3] = arg6                                                                                                                       
-       arg[4] = arg3                                                                                                                       
-       arg[5] = arg4                                                                                                                       
+       arg[2] = arg3                                                                                                                       
+       arg[3] = arg4                                                                                                                       
+       arg[4] = arg5                                                                                                                       
+       arg[5] = arg6                                                                                                                       
      Report complete. RC=0                                                                                                                 
    ```
 
-> **Note:** The arguments appear in non-sequential order because they are appended in the order **ARGS â†’ JZOS_MAIN_ARGS â†’ MAINARGS**. In Step 1 we saw that JVMLDM handles adding `esjos.jar` to the CLASSPATH implicitly and manages stream redirection automatically.
+> **Note:** The arguments are assembled in the order **ARGS → JZOS_MAIN_ARGS → MAINARGS**. JVMLDM handles adding `esjos.jar` to the CLASSPATH implicitly and manages stream redirection automatically.
+
+> **Tip: Using `-jar` with JVMLDM**
+>
+> JVMLDM also supports invoking an executable JAR directly. Instead of specifying a class name, pass `-jar` followed by the JAR path in `JAVACLS`:
+> ```
+> //STEP00   EXEC PROC=JVMPROC,
+> //             JAVACLS='-jar myapp.jar',
+> //             ARGS='arg1 arg2'
+> ```
+> The JAR's `Main-Class` attribute (from `META-INF/MANIFEST.MF`) will be used as the entry point. All other DD allocations, STDENV, and argument passing work the same way.
 
 ---
 
@@ -395,11 +391,17 @@ public class ReadBankData {
         int recordsToShow = Integer.parseInt(args[0]); // Can throw if argument is not args[0] a parsable integer.
 
         System.out.println("=== Reading Bank Account Data ===");
-        readAccountFile(recordsToShow);
+        try {
+            readAccountFile(recordsToShow);
+        } catch (ZFileException e) {
+            System.err.println("ERROR: " + e.getMessage());
+            e.printStackTrace(System.err);
+            System.exit(16);
+        }
         System.out.println("=== Complete ===");
     }
 
-    public static void readAccountFile(int displayN) {
+    public static void readAccountFile(int displayN) throws ZFileException {
         // Open the dataset allocated to DD name ACCDATA
         ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record");
 
@@ -407,6 +409,7 @@ public class ReadBankData {
             byte[] record = new byte[zFile.getLrecl()];
             int bytesRead;
             int count = 0;
+            long totalRecords = zFile.getRecordCount();
 
             while ((bytesRead = zFile.read(record)) >= 0) {
                 // Extract fields from fixed-length record
@@ -424,7 +427,7 @@ public class ReadBankData {
                 }
             }
 
-            System.out.printf("  Total records: %d%n", count);
+            System.out.printf("  Total records: %d%n", totalRecords);
         } finally {
             zFile.close();
         }
@@ -444,10 +447,9 @@ Create the file `READBNKJ.jcl`:
 //******************************************************************** 
 //JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
 //             ARGS=,               < Args to Java class
-//             VERSION='',          < JVMLDM version: 21
-//             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
-//             REGSIZE='0M',        < EXECUTION REGION SIZE
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT  DD SYSOUT=* < System stdout
 //SYSOUT    DD SYSOUT=* < System stderr
@@ -469,10 +471,9 @@ TRAP(ON,NOSPIE)
 //STDOUT    DD SYSOUT=*
 //STDERR    DD SYSOUT=*
 //STDENV    DD *
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
 %CLASSPATH%
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
-AdoptOpenJDK
 /*
 //******************************************************************** 
 //* Application DDs (opened by Java via ZFile)                       * 
@@ -504,7 +505,7 @@ AdoptOpenJDK
 
 1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
    ```
-   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" ReadBankData.java
+   javac -cp "%COBDIR%\bin64\esjos.jar" ReadBankData.java
    ```
    The `esjos.jar` file is provided with Enterprise Developer/Server at `bin64\esjos.jar` and contains the `com.rocketsoftware.jzos` package.
 
@@ -579,7 +580,7 @@ public class BankCustAcctReport {
         }
     }
 
-    private static void run(String[] args) throws Exception {
+    private static void run(String[] args) throws IOException {
         if (args.length < 1) {
             System.err.println("ERROR: Missing step argument (FILTER or REPORT)");
             System.exit(12);
@@ -768,12 +769,11 @@ public class BankCustAcctReport {
 //*-------------------------------------------------------------------*
 //* Inline JVM procedure (replaces external PROC reference)           *
 //*-------------------------------------------------------------------*
-//JVMPROC PROC JAVACLS=,
-//             ARGS='',
-//             VERSION='',
-//             LOGLVL='+I',
-//             REGSIZE='0M'
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS='',             < Args to Java class
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*
 //SYSOUT   DD SYSOUT=*
@@ -791,8 +791,7 @@ public class BankCustAcctReport {
 //             JAVACLS='BankCustAcctReport',
 //             ARGS='FILTER'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD  *
@@ -810,8 +809,7 @@ set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 //             JAVACLS='BankCustAcctReport',
 //             ARGS='REPORT 25'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD *
@@ -835,7 +833,7 @@ REPORT_TITLE=Daily Customer Account Summary - Filtered
 
 1. **Compile:**
    ```
-   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" BankCustAcctReport.java
+   javac -cp "%COBDIR%\bin64\esjos.jar" BankCustAcctReport.java
    ```
 
 2. **Deploy** `BankCustAcctReport.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
@@ -996,7 +994,7 @@ public class VsamAccountOps {
         }
     }
 
-    private static void run(String[] args) throws Exception {
+    private static void run(String[] args) throws ZFileException {
         if (args.length < 1) {
             System.err.println("ERROR: Missing operation (LOOKUP, BROWSE, or UPDATE)");
             System.exit(12);
@@ -1259,8 +1257,14 @@ The job has three steps, each invoking `VsamAccountOps` with a different operati
 ```jcl
 //JVMVSAM  JOB 'VSAM-OPS',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
-//JVMPROC PROC JAVACLS=,ARGS='',VERSION='',LOGLVL='+I',REGSIZE='0M'
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//*-------------------------------------------------------------------*
+//* Inline JVM procedure                                              *
+//*-------------------------------------------------------------------*
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS='',             < Args to Java class
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*
 //SYSOUT   DD SYSOUT=*
@@ -1269,20 +1273,45 @@ The job has three steps, each invoking `VsamAccountOps` with a different operati
 //CEEDUMP  DD SYSOUT=*
 //ABNLIGNR DD DUMMY
 //         PEND
+//*-------------------------------------------------------------------*
 //*
 //* STEP 1: LOOKUP - Find a specific customer by key
-//STEP01   EXEC PROC=JVMPROC,JAVACLS='VsamAccountOps',ARGS='LOOKUP B0001'
+//STEP01   EXEC PROC=JVMPROC,
+//             JAVACLS='VsamAccountOps',
+//             ARGS='LOOKUP'
+//STDENV    DD *
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//MAINARGS DD *
+'B0001'
+/*
 //CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
 //* STEP 2: BROWSE - Read 10 customers from beginning
-//STEP02   EXEC PROC=JVMPROC,JAVACLS='VsamAccountOps',ARGS='BROWSE'
+//STEP02   EXEC PROC=JVMPROC,
+//             JAVACLS='VsamAccountOps',
+//             ARGS='BROWSE'
+//STDENV    DD *
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
 //MAINARGS DD *
-'' '10'
+'B0002' '10'
 /*
 //CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
 //* STEP 3: UPDATE - Toggle SendMail flag
-//STEP03   EXEC PROC=JVMPROC,JAVACLS='VsamAccountOps',ARGS='UPDATE B0001'
+//STEP03   EXEC PROC=JVMPROC,
+//             JAVACLS='VsamAccountOps',
+//             ARGS='UPDATE'
+//STDENV    DD *
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
+set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
+/*
+//MAINARGS DD *
+'B0001'
+/*
 //CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 ```
 
@@ -1326,7 +1355,7 @@ vsam.update(record, 0, record.length);
 
 1. **Compile:**
    ```
-   javac -cp "C:\Program Files (x86)\Rocket Software\Enterprise Developer\bin64\esjos.jar" VsamAccountOps.java
+   javac -cp "%COBDIR%\bin64\esjos.jar" VsamAccountOps.java
    ```
 
 2. **Deploy** `VsamAccountOps.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
@@ -1425,133 +1454,101 @@ The source files for this demonstration are located in the following directories
 | Problem | Cause | Solution |
 |---------|-------|----------|
 | `Java call FAILED` with ON EXCEPTION | Java class not found on CLASSPATH | Verify your CLASSPATH includes the directory containing the compiled `.class` file |
-| Return code 101 (RC_CONFIG_ERR) | JVMLDM cannot initialize the JVM | Check STDENV script sets JAVA_HOME correctly and the JDK is installed |
-| Return code 102 (RC_SYSTEM_ERR) | System-level failure | Check SYSPRINT/SYSOUT DD output for detailed error messages |
+| Return code 101 (RC_CONFIG_ERR) | JVMLDM configuration error | Check SYSOUT DD for detailed error messages |
+| Return code 102 (RC_SYSTEM_ERR) | System-level failure | Check SYSOUT DD for detailed error messages |
 | Return code 100 (RC_MAIN_EXCEPTION) | Unhandled exception in Java code | Check STDERR DD output for the Java stack trace |
-| RTS 145 (COBOL interop error) | Stream closed prematurely or DCB conflict | Don't close `System.in`; don't duplicate DCB attrs in both DD and ZFile open string |
+| RTS 145 (COBOL interop error) | JVM failed to initialize, stream closed prematurely, or DCB conflict | If the JVM cannot initialize (e.g. bad JAVA_HOME), it may surface as RTS 145 rather than RC 101. |
 | `ZFile` cannot open dataset | DD not allocated or dataset not cataloged | Verify the DD name in JCL matches what ZFile opens (e.g. `//DD:ACCDATA`) |
+| DCB attribute conflict | JCL DD and ZFile open string both specify DCB attrs | If the JCL DD has `DCB=(RECFM=F,LRECL=80)`, open with just `"wb,type=record"` — not `"wb,type=record,lrecl=80,recfm=F"` |
+| JVMLDM auto-redirects streams | Calling `ZUtil.redirectStandardStreams()` under JVMLDM | JVMLDM handles stream redirection automatically. Do not call it yourself when using JVMLDM. |
+| Dataset creation via ZFile | Opening a non-existent dataset in write/append mode | Opens in `"wb"` or `"ab"` mode will create the dataset. Use `lrecl=N` to set record length, where N is an integer. VSAM datasets cannot be implicitly created — define the cluster first (e.g. via IDCAMS DEFINE CLUSTER). |
+| `ZFile.exists()` vs `ZFile.ddExists()` | Checking dataset/DD existence | `exists()` checks both DD and DSN. `ddExists()` only checks if a DD is allocated in the current step. `dsExists()` only checks the catalog. |
 
 ### Exception and System.exit Behavior
 
-When Java code throws an unhandled exception or calls `System.exit(n)` with a non-zero code, JVMLDM reports this as:
+`System.exit(n)` is caught by JVMLDM, which returns a corresponding "ended with System exit" message. If `JZOS_ABEND_EXIT` is configured, it will trigger a U3333 abend if the exit code is < 0 or > the configured abend level.
 
-- **STDERR DD** — Contains the full Java stack trace (exception class, message, and cause chain). This is always your first place to look for diagnostics.
-- **Step condition code** — Maps to an RTS code in the JES output:
-  - `System.exit(0)` → normal completion (CC 0000)
-  - `System.exit(n)` where n > 0 → reported as `RTS0145` (COBOL interoperability error) in the JCL step abend message
-  - Unhandled exception (no explicit `System.exit`) → RC 100 (`RC_MAIN_EXCEPTION`)
-- **SYSPRINT DD** — JVMLDM logs a `JVMJZBL` message indicating whether `main()` completed or threw
+- **Unhandled exception** (no explicit `System.exit`) → RC 100 (`RC_MAIN_EXCEPTION`). Check STDERR DD for the Java stack trace.
 
-**Best practice:** Catch exceptions in your `main()` method, print diagnostics to `System.err`, and call `System.exit(16)` (or another meaningful code). The error details will appear in the STDERR DD of the job output, making diagnosis straightforward without needing to decode RTS codes.
+**Best practice:** Catch exceptions in your `main()` method, print diagnostics to `System.err`, and call `System.exit(n)` with a meaningful code.
 
 ---
 
 ## <a name="jzos-api"></a>Exploring the JZOS API (`com.rocketsoftware.jzos`)
 
-The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Developer/Server installation) provides the `com.rocketsoftware.jzos` package - a Java API for interacting with Enterprise Server datasets, job context, and I/O streams. This section summarizes the key classes and what you can do with them beyond the basics shown in this tutorial. Here is additional information on the type of functions you can explore with as the next step.
+The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Developer/Server installation) provides the `com.rocketsoftware.jzos` package — a compatibility implementation of the [IBM JZOS Batch Toolkit](https://www.ibm.com/docs/en/sdk-java-technology/8?topic=sdjt-jzos-overview) API for Enterprise Server.
 
-### ZFile - Dataset I/O
+The API is used identically to IBM JZOS — refer to the IBM JZOS documentation for method signatures, parameters, and usage patterns. Rocket Software product documentation will be linked here when available.
 
-`ZFile` is the primary class for reading and writing datasets (sequential, VSAM KSDS/RRDS/ESDS, and PDS members).
+### Not Currently Supported
 
-#### Opening Datasets
+The following IBM JZOS classes and methods are not supported:
 
-| Open String | Description |
-|-------------|-------------|
-| `"//DD:MYDD", "rb,type=record"` | Read binary, record mode, via DD name |
-| `"//'MY.DATASET'", "rb,type=record"` | Read binary, record mode, via cataloged dataset name |
-| `"//'MY.DATASET'", "wb,lrecl=80,type=record"` | Create/write a dataset (creates if not exists) |
-| `"//DD:MYDD", "rb,type=record,noseek"` | Read without seek support (more efficient for sequential access) |
+**Classes (not shipped):**
 
-#### Instance Methods
+- `MvsJobSubmitter`
+- `CatalogSearch`
+- `Enqueue` / `MvsEnqueue`
+- `MvsConsole`
+- `PdsDirectory`
+- `WtoMessage`
+- `FileFactory` (IBM variant)
+- `RDWInputRecordStream` / `RDWOutputRecordStream`
+- `AccessMethodServices`
 
-| Method | Description |
-|--------|-------------|
-| `read(byte[])` | Read next record into buffer; returns bytes read or -1 at EOF |
-| `write(byte[])` | Write a record |
-| `update(byte[])` | Update the last-read record in place (VSAM) |
-| `delrec()` | Delete the last-read record (VSAM) |
-| `close()` | Close the file (always call in a `finally` block) |
-| `getLrecl()` | Logical record length |
-| `getRecfm()` | Record format string |
-| `getBlksize()` | Block size |
-| `getDsorg()` | Dataset organization |
-| `seek(int offset, int origin)` | Seek to a position (use `ZFileConstants.SEEK_*`) |
-| `tell()` | Return current position |
-| `getPos()` | Get position token (byte array, for save/restore) |
-| `setPos(byte[])` | Restore a saved position |
-| `locate(byte[] key, int flags)` | Locate a VSAM record by key |
-| `locate(int value, int flags)` | Locate a VSAM record by RBA or RRN |
-| `getVsamType()` | Returns VSAM type (KSDS, RRDS, ESDS) |
-| `getVsamKeyLength()` | Returns the VSAM key length |
+**ZFile:**
 
-#### Static Methods
+- `bpxwdyn(String)`
+- `allocDummyDDName()`
+- `makeFifo(String, int)`
+- `obtainDSN(String, int)`
+- `readDSCBChain(String)`
+- `readJFCB()`
 
-| Method | Description |
-|--------|-------------|
-| `ZFile.exists(String name)` | Check if a dataset or DD exists |
-| `ZFile.ddExists(String ddName)` | Check if a DD name is allocated in current step |
-| `ZFile.dsExists(String dsName)` | Check if a cataloged dataset exists |
-| `ZFile.getFullyQualifiedDSN(String)` | Resolve a dataset name to its fully qualified form |
-| `ZFile.getSlashSlashQuotedDSN(String)` | Format a DSN as `//'DSN.NAME'` for ZFile open |
+**DatasetVolumeList:**
 
-### ZFileConstants - Seek and Locate Flags
+- `getTotalVolumesCount()`
+- `getReturnedDSN()`
+- `getVolumes()`
 
-Use these constants with `seek()` and `locate()` for VSAM operations:
+**ZUtil:**
 
-| Constant | Description |
-|----------|-------------|
-| `SEEK_SET` | Seek from beginning |
-| `SEEK_CUR` | Seek from current position |
-| `SEEK_END` | Seek from end |
-| `LOCATE_KEY_EQ` | Locate record with exact key match |
-| `LOCATE_KEY_GE` | Locate record with key >= given key |
-| `LOCATE_KEY_EQ_BWD` | Locate exact key, position for backward read |
-| `LOCATE_KEY_FIRST` | Position to first record |
-| `LOCATE_KEY_LAST` | Position to last record |
-| `LOCATE_RBA_EQ` | Locate by relative byte address (ESDS) |
-| `VSAM_TYPE_KSDS` | Key-sequenced dataset |
-| `VSAM_TYPE_RRDS` | Relative-record dataset |
-| `VSAM_TYPE_ESDS` | Entry-sequenced dataset |
+- `environ()`
+- `getEnv(String)`
+- `setEnv(String, String)`
+- `smfRecord(int, int, byte[])`
+- `substituteSystemSymbols(String)`
+- `peekOSMemory(long, byte[], int, int)`
+- `getTodClock()` / `getTodClockExtended()`
+- `logDiagnostic(int, String)`
 
-### ZUtil - Job Context and Stream Management
+### Encoding
 
-| Method | Description |
-|--------|-------------|
-| `ZUtil.redirectStandardStreams(String encoding, boolean merge)` | Redirect `System.in/out/err` to JCL DDs (STDIN/STDOUT/STDERR). Required when calling Java from COBOL without JVMLDM. |
-| `ZUtil.restoreStandardStreams()` | Restore original streams (call in `finally`) |
-| `ZUtil.getCurrentJobname()` | Current JCL job name |
-| `ZUtil.getCurrentJobId()` | Current job ID (e.g. `J0001234`) |
-| `ZUtil.getCurrentStepname()` | Current step name |
-| `ZUtil.getCurrentUser()` | User ID running the job |
-| `ZUtil.getDefaultPlatformEncoding()` | Platform character encoding |
+JVMLDM uses `ZUtil.redirectStandardStreams()` to redirect `System.out`, `System.err`, and `System.in` to the JCL DD streams. The encoding used for this redirection is determined as follows:
 
-### ZFileException - Error Handling
+**Resolution order:**
 
-`ZFileException` extends `IOException` and provides dataset-specific error context:
+1. `JZOS_OUTPUT_ENCODING` environment variable (set in STDENV) — if specified and valid, this encoding is used
+2. `MF_CHARSET` environment variable — if set, the first character selects a default:
+   - `A` (ASCII) → `windows-1252` on Windows, `iso-8859-1` on Linux
+   - `E` (EBCDIC) → `IBM037`
+3. Java `file.encoding` system property — if set (e.g. via `-Dfile.encoding=UTF-8` in `JZOS_JVM_OPTIONS`)
+4. Platform default — `windows-1252` on Windows, `iso-8859-1` on Linux
 
-| Method | Description |
-|--------|-------------|
-| `getFileName()` | The dataset/DD name that caused the error |
-| `getErrno()` | System error number |
-| `getMessage()` | Human-readable error description |
+**Controlling encoding via STDENV:**
 
-### Important Gotchas
+```bat
+set JZOS_OUTPUT_ENCODING=UTF-8
+set JZOS_ENABLE_OUTPUT_TRANSCODING=true
+```
 
-| Issue | Explanation |
-|-------|-------------|
-| **Don't close `System.in`** | JVMLDM manages STDIN. Closing it via try-with-resources causes RTS 145 on step exit. Read from `System.in` without closing the stream. |
-| **Don't specify DCB attributes in both DD and ZFile** | If the JCL DD has `DCB=(RECFM=F,LRECL=80)`, open with just `"wb,type=record"` - not `"wb,type=record,lrecl=80,recfm=F"`. Conflicting attributes cause RTS 145. |
-| **JVMLDM auto-redirects streams** | Unlike the COBOL bootstrap path (Step 1), JVMLDM handles `ZUtil.redirectStandardStreams()` automatically. Do not call it yourself when using JVMLDM. |
-| **Dataset creation via ZFile** | Opening a non-existent dataset name with `"wb,lrecl=N,type=record"` creates it. No DD or JCL allocation is needed. |
-| **`ZFile.exists()` vs `ZFile.ddExists()`** | `exists()` checks both DD and DSN. `ddExists()` only checks if a DD is allocated in the current step. `dsExists()` only checks the catalog. |
+If `JZOS_ENABLE_OUTPUT_TRANSCODING` is set to `false`, no transcoding occurs and output uses the JVM's `file.encoding` as-is.
 
----
+**Programmatic control:**
+
+- `ZUtil.getDefaultPlatformEncoding()` — returns the current default encoding
+- `ZUtil.setDefaultPlatformEncoding(String)` — overrides the default (validated; invalid encodings are rejected)
+- `ZUtil.redirectStandardStreams(encoding, enableTranscoding)` — redirects streams with explicit encoding
 
 ## Next Steps
-
-- Explore the [VSAM demonstration](../../../demos/onprem/vsam/README.md) to set up the Bankdemo datasets referenced in Step 3
-- Review the `com.rocketsoftware.jzos` API documentation for additional ZFile and ZUtil capabilities
-- Try writing a Java program that creates and writes to a new dataset using `ZFile` with write mode
-- Experiment with `ZUtil.redirectStandardStreams()` to map `System.in`/`System.out`/`System.err` to DD allocations
-- Use `ZFileConstants.LOCATE_*` with VSAM datasets to implement keyed record access, updates, and deletes
+- Refer to the [IBM JZOS documentation](https://www.ibm.com/docs/en/sdk-java-technology/8?topic=sdjt-jzos-overview) for the full API reference

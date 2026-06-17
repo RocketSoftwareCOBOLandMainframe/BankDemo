@@ -16,6 +16,9 @@ class HelloBatch {
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
             System.out.println("Env var (ESOS_TEST_VAR): " + System.getenv("ESOS_TEST_VAR"));
+        } catch (Exception e) {
+            System.err.println("ERROR: " + e.getMessage());
+            e.printStackTrace(System.err);
         } finally {
             ZUtil.restoreStandardStreams();
         }

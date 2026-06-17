@@ -5,12 +5,10 @@
 //******************************************************************** 
 //JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
 //             ARGS=,               < Args to Java class
-//             VERSION='',          < JVMLDM version: 21
-//             LOGLVL='+I',         < Debug LVL: +I(info) +T(trc)
-//             REGSIZE='0M',        < EXECUTION REGION SIZE
-//             LEPARM=''
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
-//             PARM='&LEPARM/&LOGLVL &JAVACLS &ARGS'
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
+//             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT  DD SYSOUT=* < System stdout
 //SYSOUT    DD SYSOUT=* < System stderr
 //STDOUT    DD SYSOUT=* < Java System.out
@@ -31,13 +29,12 @@ TRAP(ON,NOSPIE)
 //STDOUT    DD SYSOUT=*
 //STDERR    DD SYSOUT=*
 //STDENV    DD *
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=C:\dev\sources\bankdemo\BANKVSAM\system\loadlib;^
 %CLASSPATH%
-set JZOS_MAIN_ARGS=arg5 arg6
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\Enterprise Developer\^
-AdoptOpenJDK
+set JZOS_MAIN_ARGS=arg3 arg4
 /*
 //MAINARGS DD *
-arg3 arg4
+arg5 arg6
 /*
 //

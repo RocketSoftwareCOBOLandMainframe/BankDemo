@@ -14,11 +14,17 @@ public class ReadBankData {
         int recordsToShow = Integer.parseInt(args[0]); // Can throw if argument is not args[0] a parsable integer.
 
         System.out.println("=== Reading Bank Account Data ===");
-        readAccountFile(recordsToShow);
+        try {
+            readAccountFile(recordsToShow);
+        } catch (ZFileException e) {
+            System.err.println("ERROR: " + e.getMessage());
+            e.printStackTrace(System.err);
+            System.exit(16);
+        }
         System.out.println("=== Complete ===");
     }
 
-    public static void readAccountFile(int displayN) {
+    public static void readAccountFile(int displayN) throws ZFileException {
         // Open the dataset allocated to DD name ACCDATA
         ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record");
 
@@ -26,6 +32,7 @@ public class ReadBankData {
             byte[] record = new byte[zFile.getLrecl()];
             int bytesRead;
             int count = 0;
+            long totalRecords = zFile.getRecordCount();
 
             while ((bytesRead = zFile.read(record)) >= 0) {
                 // Extract fields from fixed-length record
@@ -43,7 +50,7 @@ public class ReadBankData {
                 }
             }
 
-            System.out.printf("  Total records: %d%n", count);
+            System.out.printf("  Total records: %d%n", totalRecords);
         } finally {
             zFile.close();
         }

@@ -39,7 +39,7 @@ public class BankCustAcctReport {
         }
     }
 
-    private static void run(String[] args) throws Exception {
+    private static void run(String[] args) throws IOException {
         if (args.length < 1) {
             System.err.println("ERROR: Missing step argument (FILTER or REPORT)");
             System.exit(12);

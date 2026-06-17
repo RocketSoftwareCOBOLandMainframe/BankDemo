@@ -3,12 +3,11 @@
 //*-------------------------------------------------------------------*
 //* Inline JVM procedure                                              *
 //*-------------------------------------------------------------------*
-//JVMPROC PROC JAVACLS=,
-//             ARGS='',
-//             VERSION='',
-//             LOGLVL='+I',
-//             REGSIZE='0M'
-//JAVAJVM  EXEC PGM=JVMLDM&VERSION,REGION=&REGSIZE,
+//JVMPROC PROC JAVACLS=,            < Fully Qfied Java class..RQD
+//             ARGS='',             < Args to Java class
+//             VERSION='',          < PGM name suffix (e.g. 64)
+//             LOGLVL='+I'          < +T(trace) +I(info) +W(warn)
+//JAVAJVM  EXEC PGM=JVMLDM&VERSION,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*
 //SYSOUT   DD SYSOUT=*
@@ -25,14 +24,14 @@
 //             JAVACLS='VsamAccountOps',
 //             ARGS='LOOKUP'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD *
 /*
 //MAINARGS DD *
 'B0001'
+/*
 //CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
 //* STEP 2: BROWSE - Read 10 customers starting from a key
@@ -41,8 +40,7 @@ set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 //             JAVACLS='VsamAccountOps',
 //             ARGS='BROWSE'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD *
@@ -58,13 +56,13 @@ set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 //             JAVACLS='VsamAccountOps',
 //             ARGS='UPDATE'
 //STDENV    DD *
-set JAVA_HOME=C:\Program Files (x86)\Rocket Software\^
-Enterprise Developer\AdoptOpenJDK
+set JAVA_HOME=%COBDIR%\AdoptOpenJDK
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 /*
 //STDIN    DD *
 /*
 //MAINARGS DD *
 'B0001'
+/*
 //CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //
