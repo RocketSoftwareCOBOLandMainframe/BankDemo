@@ -1,5 +1,32 @@
 # Plan: Python Batch Interoperability for BankDemo
 
+## Current Status (2026-06-24)
+
+**All code implementation is COMPLETE and TESTED.** Remaining work is documentation only.
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| Phase 1: `batch_report.py` + `PYDEMO.jcl` | ✅ Tested | Script/module mode, arg passing |
+| Phase 2: `read_bank_data.py` + `READBNKP.jcl` | ✅ Tested | VSAM sequential read via zopen |
+| Phase 3: `bank_cust_acct_report.py` + `PYMULTI.jcl` | ✅ Tested | FILTER + REPORT, COMP-3 decode |
+| Phase 4: `vsam_account_ops.py` + `PYVSAM.jcl` | ✅ Tested | LOOKUP/BROWSE/UPDATE via esos |
+| Phase 5: `cobol_interop.py` + `PYCBLCL.jcl` | ✅ Tested | Python→COBOL cobcall (3 programs) |
+| Phase 6: FILTER dataset write (OUTFILE DD) | ✅ Tested | Dual output: stdout + dataset |
+| Phase 7: REPORT control cards (STDIN DD) | ✅ Tested | KEY=VALUE params from inline JCL |
+| Phase 8: `demos/.../python/README.md` | ⬜ Not started | Tutorial documentation |
+| Phase 9: Update interop + root READMEs | ⬜ Not started | Cross-references |
+| Phase 10: Capture output for README | ⬜ Not started | Final validation |
+
+**Key lessons learned during implementation:**
+- `RecordIO` write method is `write()` (not `writerecord()` — that's read-only)
+- `if outfile:` on a `RecordIO` object triggers `__len__` → `NotImplementedError`; always use `if outfile is not None:`
+- PYLDM's `pyonexception`/`pyexceptioncheck` handles unhandled exceptions safely (RC=0100); do NOT wrap scripts in try/except
+- `import ctypes.util` inside a function makes `ctypes` a local variable — import at module level
+- ENTCOBOL COMP fields are big-endian: `struct.pack('>h', value)`
+- **Must use `ctypes.PyDLL` (not `ctypes.CDLL`)** when calling bridge conversion APIs (`_mFpyStringFromCOBOL`, `_mFpyDecimalFromCOBOL`) from Python. These functions call Python C API functions internally (`PyUnicode_FromString`, `Decimal()` constructor) which require the GIL. `CDLL` releases the GIL before the call → access violation crash. `PyDLL` keeps the GIL held.
+
+---
+
 ## Summary
 
 Add Python batch interoperability demonstrations mirroring the existing Java interoperability demo (`demos/interoperability/batch/java/`). The Java demo was added in commits `b3077e4..6a2dc73` and follows a 5-step tutorial structure of increasing complexity. This plan replicates that structure for Python using PYLDM (the Python Language Definition Module) as the sole invocation mechanism, in a 4-step tutorial.
@@ -70,24 +97,29 @@ All questions from the original plan are now answered from the `esos` and `coret
 
 The Python interpreter is initialized **once** per region lifetime (by `_mFpyInitPython`). CPython does not support clean reinit, so the same interpreter is reused across all PYLDM invocations until the region is restarted.
 
-**If a Python script crashes with an unhandled exception:**
-- PYLDM's `restore-std-streams` may not execute cleanly
-- Stream redirection and OUTDD file handles are left in a corrupted state
-- **All subsequent jobs** inherit the corrupted state (COBOL DISPLAY output routed to wrong DDs, garbage characters from 121-byte OUTDD records leaking into stream output)
-- The region must be restarted to recover
+**PYLDM exception handling (`pyonexception`/`pyexceptioncheck`)**:
+- PYLDM wraps script execution with `pyonexception` / `pyexceptioncheck` directives
+- If a Python script raises an unhandled exception, PYLDM catches it safely
+- The exception traceback is printed to STDERR
+- `ws-max-rc` is set to 100 (via `set ws-rc-main-exception to true`)
+- Streams are properly restored regardless of the exception
 
-**Required pattern** — always wrap entry points in try/except:
+**Recommended pattern** — let exceptions propagate:
 ```python
 if __name__ in ("__main__", "<run_path>"):
-    try:
-        main()
-    except Exception as e:
-        import sys, traceback
-        print(f"ERROR: {e}", file=sys.stderr)
-        traceback.print_exc(file=sys.stderr)
+    main()
 ```
 
-This ensures Python always exits cleanly back to PYLDM, allowing proper stream restoration regardless of script errors.
+Do **NOT** wrap entry points in try/except — this is counterproductive because:
+1. PYLDM's `pyonexception` mechanism already handles unhandled exceptions safely
+2. A try/except swallows the exception, causing PYLDM to report RC 0000 (success) instead of RC 0100 (error)
+3. The exception traceback is still printed (PYLDM handles this before restoring streams)
+
+**Return codes from PYLDM**:
+- `0000` — script completed successfully
+- `0100` — unhandled exception (caught by `pyonexception`)
+- `0101` — configuration error
+- `0102` — system error
 
 **Module mode caching**: `_mFpyCallModule` invalidates the module from `sys.modules` before each import, so code changes are picked up without region restart. Sub-modules imported by the main module remain cached (library modules like `esos`, `zoautil_py` don't change between runs).
 
@@ -231,7 +263,7 @@ All VSAM operations are now exposed in the Python `esos.py` wrapper:
   - **FILTER mode** (`sys.argv[1] == "FILTER"`):
     - Opens `//DD:CUSTDATA` via `zopen()` — reads BNKCUST (lrecl=250, recfm="F")
     - Filters by regex pattern from args using `re.match(pattern, pid)`
-    - Writes matches to output dataset via `zopen("//'MFI01V.MFIDEMO.CUST.FILTER'", "w", lrecl=132, recfm="F")`
+    - Writes matches to output dataset via `zopen("//DD:OUTFILE", "w", lrecl=132, recfm="FB")` if OUTFILE DD is allocated
     - Writes to both `sys.stdout` and the dataset simultaneously
     - Uses try/finally for explicit `close()` (RecordIO is not a context manager)
   - **REPORT mode** (`sys.argv[1] == "REPORT"`):
@@ -317,7 +349,7 @@ Mirror the Java README structure exactly:
    - Key points / notes
 6. **Source Files Reference** — Table mapping files to locations
 7. **Python API Reference** — Cover both API layers:
-   - `zoautil_py.zoau_io` — `zopen()`, `RecordIO` (NOT context manager), `RecordIO_TextWrapper`, `readrecords()`, `readrecord()`, `write()`
+   - `zoautil_py.zoau_io` — `zopen()`, `RecordIO` (NOT context manager, truthiness check triggers `__len__` which raises `NotImplementedError` — always use `is not None`), `RecordIO_TextWrapper`, `readrecords()`, `readrecord()`, `write()`
    - `esos` — `Esos`, `EsosContext`, `EsosFile` (IS context manager), `FileOptions`, `EsosFileMode`, `EsosOpenFlags`, `EsosLocateOption`, `FcdEncodedOffset`
      - VSAM: `locate()`, `update()`, `delete_record()`, `getpos()`/`setpos()`, `rba`
    - `esos.util` — `redirect_streams()`, `restore_streams()`
@@ -339,7 +371,7 @@ Update Prerequisites to include Python 3.8+.
 
 ---
 
-## Implementation Order
+## Implementation Order (Original 4-Step Plan)
 
 | Phase | Tasks | Dependencies |
 |-------|-------|-------------|
@@ -347,9 +379,12 @@ Update Prerequisites to include Python 3.8+.
 | **Phase 2** ✅ | Create `sources/python/read_bank_data.py` + `sources/jcl/READBNKP.jcl` | None |
 | **Phase 3** ✅ | Create `sources/python/bank_cust_acct_report.py` + `sources/jcl/PYMULTI.jcl` | None |
 | **Phase 4** ✅ | Create `sources/python/vsam_account_ops.py` + `sources/jcl/PYVSAM.jcl` | None — full VSAM locate/update available |
-| **Phase 5** | Write `demos/interoperability/batch/python/README.md` | Phases 1–4 (needs actual output from test runs) |
-| **Phase 6** | Update `demos/interoperability/README.md` + root `README.md` | Phase 5 |
-| **Phase 7** | Test all 4 steps end-to-end, capture output for README | All |
+| **Phase 5** ✅ | `cobol_interop.py` + `PYCBLCL.jcl` — Python→COBOL cobcall | Loadlib with SVERSONP, UDATECNV, UTWOSCMP |
+| **Phase 6** ✅ | Enhance FILTER mode: write to output dataset + PYMULTI.jcl OUTFILE DD | Phase 3 |
+| **Phase 7** ✅ | Enhance REPORT mode: read control cards from STDIN DD | Phase 3 |
+| **Phase 8** | Write `demos/interoperability/batch/python/README.md` | Phases 1–7 |
+| **Phase 9** | Update `demos/interoperability/README.md` + root `README.md` | Phase 8 |
+| **Phase 10** | End-to-end test, capture output for README | All |
 
 ---
 
@@ -368,7 +403,7 @@ Update Prerequisites to include Python 3.8+.
 | **Record update** | `zFile.update(record)` | `file.update(buffer, offset, length)` (low-level `EsosFile` only) |
 | **VSAM keyed lookup** | `zFile.locate(key, LOCATE_KEY_EQ)` | `file.locate(key, EsosLocateOption.KEY_EQ)` → `bool` (low-level `EsosFile` only) |
 | **Cross-language call** | COBOL→Java: `CALL "Java.Class.method"` | Python→COBOL: `_mFpyCobcall(prog, argc, argv)` via ctypes |
-| **Dataset write** | `zFile.write(record)` | `zopen("//DD:X", "w", lrecl=N, recfm="F")` + `f.writerecord(data)` |
+| **Dataset write** | `zFile.write(record)` | `zopen("//DD:X", "w", lrecl=N, recfm="FB")` + `f.write(data)` |
 | **Stream/STDIN reading** | `new BufferedReader(InputStreamReader(System.in))` | `sys.stdin.readline()` (STDIN DD redirected by PYLDM) |
 
 ---
@@ -452,7 +487,7 @@ def do_twoscomp(input_text: str):
 
 **Approach A — Enhance existing `bank_cust_acct_report.py` FILTER mode**:
 - Add optional `OUTFILE` DD: if allocated, write matched records to it
-- Uses `zopen("//DD:OUTFILE", "w", lrecl=132, recfm="FB")` + `f.writerecord(line.encode())`
+- Uses `zopen("//DD:OUTFILE", "w", lrecl=132, recfm="FB")` + `f.write(line.encode())`
 - Falls back gracefully if DD not allocated (write to stdout only)
 - Add `//OUTFILE DD DSN=MFI01V.MFIDEMO.CUST.FILTER,DISP=(NEW,CATLG),LRECL=132,RECFM=FB` to PYMULTI.jcl Step 1
 
@@ -475,10 +510,10 @@ def main():
     try:
         infile._file.locate(b'', EsosLocateOption.KEY_FIRST)
         # ... read records, format, write to outfile ...
-        outfile.writerecord(header_line)
+        outfile.write(header_line)
         for record in records:
-            outfile.writerecord(formatted_line)
-        outfile.writerecord(total_line)
+            outfile.write(formatted_line)
+        outfile.write(total_line)
     finally:
         infile.close()
         outfile.close()
@@ -541,38 +576,9 @@ MAX_RECORDS=50
 
 ---
 
-### Step 8 — COBOL→Python Bootstrap (Optional)
+### ~~Step 8 — COBOL→Python Bootstrap~~ (Removed)
 
-**Gap**: Java had `HELLOJAV.cbl` + `HelloBatch.java` showing COBOL calling Java directly. While the plan intentionally excluded this (PYLDM is the supported mechanism), having a minimal example of COBOL calling `_mFpyCall` directly would complete the picture.
-
-**Assessment**: This is the LOWEST priority gap. The `_mFpyCall` export is intended for internal use by PYLDM, not for direct COBOL consumption. Unlike Java's `CALL "Java.Class.method"` which is a supported user API, calling `_mFpyCall` directly requires managing initialization, argument buffers, and cleanup manually. The cobcall direction (Step 5) is far more useful.
-
-**If implemented** — minimal COBOL program:
-```cobol
-       IDENTIFICATION DIVISION.
-       PROGRAM-ID. HELLOPY.
-      *
-      * Minimal demo: COBOL calling Python via the bridge.
-      * NOTE: PYLDM is the supported mechanism for production use.
-      * This shows the raw bridge calls for educational purposes.
-      *
-       DATA DIVISION.
-       WORKING-STORAGE SECTION.
-       01  WS-SCRIPT      PIC X(260) VALUE "hello_from_cobol.py".
-       01  WS-RC          PIC S9(8) COMP VALUE 0.
-       PROCEDURE DIVISION.
-           CALL "_mFpyInitPython" RETURNING WS-RC
-           CALL "_mFpyCallScript" USING WS-SCRIPT
-           CALL "_mFpyFinalizePython"
-           GOBACK.
-```
-
-With a trivial `hello_from_cobol.py`:
-```python
-print("Hello from Python, called by COBOL!")
-```
-
-**Recommendation**: Defer or skip entirely. The cobcall demo (Step 5) is the compelling story. If we include this, add a prominent "NOTE: Use PYLDM for production — this shows internals" disclaimer.
+Removed from scope. The `_mFpyCall` export is for internal PYLDM use only, not a supported user API. The cobcall direction (Step 5) is the compelling bidirectional interop story.
 
 ---
 
@@ -584,13 +590,12 @@ print("Hello from Python, called by COBOL!")
 | **Phase 2** ✅ | `read_bank_data.py` + `READBNKP.jcl` | None | — |
 | **Phase 3** ✅ | `bank_cust_acct_report.py` + `PYMULTI.jcl` | None | — |
 | **Phase 4** ✅ | `vsam_account_ops.py` + `PYVSAM.jcl` | None | — |
-| **Phase 5** | `cobol_interop.py` + `PYCBLCL.jcl` — Python→COBOL cobcall | Loadlib with SVERSONP, UDATECNV, UTWOSCMP | **HIGH** |
-| **Phase 6** | Enhance FILTER mode: write to output dataset + PYMULTI.jcl OUTFILE DD | Phase 3 | **MEDIUM** |
-| **Phase 7** | Enhance REPORT mode: read control cards from STDIN DD | Phase 3 | **LOW** |
-| **Phase 8** | (Optional) `HELLOPY.cbl` + `hello_from_cobol.py` — COBOL→Python bootstrap | None | **LOW** |
-| **Phase 9** | Write `demos/interoperability/batch/python/README.md` | Phases 1–7 | — |
-| **Phase 10** | Update `demos/interoperability/README.md` + root `README.md` | Phase 9 | — |
-| **Phase 11** | End-to-end test, capture output for README | All | — |
+| **Phase 5** ✅ | `cobol_interop.py` + `PYCBLCL.jcl` — Python→COBOL cobcall | Loadlib with SVERSONP, UDATECNV, UTWOSCMP | **HIGH** |
+| **Phase 6** ✅ | Enhance FILTER mode: write to output dataset + PYMULTI.jcl OUTFILE DD | Phase 3 | **MEDIUM** |
+| **Phase 7** ✅ | Enhance REPORT mode: read control cards from STDIN DD | Phase 3 | **LOW** |
+| **Phase 8** | Write `demos/interoperability/batch/python/README.md` | Phases 1–7 | — |
+| **Phase 9** | Update `demos/interoperability/README.md` + root `README.md` | Phase 8 | — |
+| **Phase 10** | End-to-end test, capture output for README | All | — |
 
 ---
 
@@ -612,8 +617,12 @@ int _mFpyCobcall(const char *prog_name, int argc, cobchar_t **argv)
 ```python
 import ctypes
 
-# Load the bridge (already loaded by PYLDM — find it)
-bridge = ctypes.CDLL("cblcpyiapi")  # or find via ctypes.util
+# Load the bridge (already loaded by PYLDM — find it).
+# IMPORTANT: Use PyDLL, not CDLL. The bridge conversion functions
+# (_mFpyStringFromCOBOL, _mFpyDecimalFromCOBOL) call Python C API
+# functions internally. PyDLL keeps the GIL held; CDLL releases it,
+# causing access violations when the C code calls back into Python.
+bridge = ctypes.PyDLL("cblcpyiapi")
 
 # Define the function signature
 cobcall = bridge._mFpyCobcall
@@ -627,8 +636,8 @@ argv = (ctypes.c_char_p * 1)(ctypes.cast(buf1, ctypes.c_char_p))
 # Call COBOL
 rc = cobcall(b"SVERSONP", 1, argv)
 
-# Read result from buf1
-version = buf1.raw.decode("ascii").strip()
+# Read result from buf1 using the bridge conversion API
+version = bridge._mFpyStringFromCOBOL(buf1.raw, 0, 7)  # COBOL_PIC_X=0
 ```
 
 ### COBOL Data Type Mapping

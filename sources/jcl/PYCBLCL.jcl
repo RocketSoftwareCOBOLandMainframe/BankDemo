@@ -1,12 +1,13 @@
-//PYMULTI  JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
+//PYCBLCL  JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
-//* Demonstration: Multi-step Python batch processing via PYLDM.
-//* Step 1 - FILTER: Read BNKCUST, filter customers by PID pattern,
-//*                  write matches to stdout AND to an output dataset.
-//* Step 2 - REPORT: Read BNKACC, decode COMP-3 balances, produce report.
-//*                  Report parameters from control cards via STDIN DD.
+//* Demonstration: Calling COBOL programs from Python via _mFpyCobcall.
 //*
-//* Shows same Python script invoked with different modes/arguments.
+//* Python calls COBOL subroutines by building LINKAGE
+//* SECTION buffers with ctypes.
+//*
+//* Step 1 - VERSION:  Call SVERSONP (trivial 1-param output)
+//* Step 2 - DATECONV: Call UDATECNV (structured group parameter)
+//* Step 3 - TWOSCOMP: Call UTWOSCMP (3 params including COMP binary)
 //*
 //********************************************************************
 //* Python procedure                                                 *
@@ -30,12 +31,11 @@
 //********************************************************************
 //*
 //* -------------------------------------------------------------------
-//* Step 1: Filter customers matching pattern (all customers)
-//*         Writes results to stdout AND to OUTFILE dataset.
+//* Step 1: Get application version from SVERSONP
 //* -------------------------------------------------------------------
 //STEP1    EXEC PROC=PYPROC,
-//             PYSCRIPT='bank_cust_acct_report.py',
-//             ARGS='FILTER .*'
+//             PYSCRIPT='cobol_interop.py',
+//             ARGS='VERSION'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
@@ -45,22 +45,13 @@ set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
 /*
-//********************************************************************
-//* Application DDs                                                  *
-//********************************************************************
-//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
-//* Output dataset for filtered results (FB, lrecl=132)
-//OUTFILE  DD  DSN=MFI01V.MFIDEMO.CUST.FILTER,
-//             DISP=(OLD,CATLG,DELETE),
-//             LRECL=132,RECFM=FB
 //*
 //* -------------------------------------------------------------------
-//* Step 2: Account balance report with control cards from STDIN
-//*         Control cards override report title and max records.
+//* Step 2: Convert date from YYYYMMDD to DD.MMM.YYYY via UDATECNV
 //* -------------------------------------------------------------------
 //STEP2    EXEC PROC=PYPROC,
-//             PYSCRIPT='bank_cust_acct_report.py',
-//             ARGS='REPORT'
+//             PYSCRIPT='cobol_interop.py',
+//             ARGS='DATECONV 20260624'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
@@ -70,14 +61,20 @@ set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
 /*
-//********************************************************************
-//* Application DDs                                                  *
-//********************************************************************
-//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
-//* Control cards: KEY=VALUE pairs read via sys.stdin
-//STDIN    DD  *
-* Report configuration (lines starting with * are comments)
-REPORT_TITLE=BankDemo Account Summary Report
-MAX_RECORDS=50
+//*
+//* -------------------------------------------------------------------
+//* Step 3: Two's complement computation via UTWOSCMP
+//* -------------------------------------------------------------------
+//STEP3    EXEC PROC=PYPROC,
+//             PYSCRIPT='cobol_interop.py',
+//             ARGS='TWOSCOMP HELLO'
+//STDOUT   DD  SYSOUT=*
+//STDERR   DD  SYSOUT=*
+//STDENV   DD  *
+set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set ESPY_OUTPUT_ENCODING=ASCII
+set ESPY_ENABLE_OUTPUT_TRANSCODING=false
+set ESPY_MERGE_SYSOUT=false
 /*
 //
