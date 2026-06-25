@@ -30,6 +30,18 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 
 No additional Python packages are required — the `zoautil_py` and `esos` packages are provided by the Enterprise Server installation.
 
+### Region Configuration
+
+The Enterprise Server region must have its `PYTHONPATH` environment variable configured to include the runtime packages provided by the installation. Add the following to the region's environment variables (via ESCWA or the region configuration):
+
+```
+PYTHONPATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\esos.zip;C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\zoautil_py.zip
+```
+
+This region-level `PYTHONPATH` provides access to the `esos` and `zoautil_py` packages that Python scripts need for dataset I/O.
+
+> **Note:** The `STDENV` DD in each JCL job step *appends* to this region-level `PYTHONPATH` - it adds your application script directories (e.g. `%BANKROOT%\sources\python`) so PYLDM can locate your `.py` files.
+
 ---
 
 ## <a name="overview"></a>Overview
@@ -88,7 +100,7 @@ Unlike the Java interop (which requires `JAVA_HOME`, classpath configuration, an
 
 ### Environment Configuration (STDENV DD)
 
-The STDENV DD contains environment variable assignments executed before the Python script runs:
+The STDENV DD contains environment variable assignments executed before the Python script runs. Its primary purpose is to add your **application script directories** to `PYTHONPATH` so PYLDM can locate the `.py` files to execute. It appends to the region-level `PYTHONPATH` (which provides `esos.zip` and `zoautil_py.zip`):
 
 ```
 set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
@@ -100,7 +112,7 @@ set ESPY_MERGE_SYSOUT=false
 
 | Variable | Purpose |
 |----------|---------|
-| `PYTHONPATH` | Python module search path (equivalent of Java's CLASSPATH) |
+| `PYTHONPATH` | Appends application script directories to the region-level path (uses `%PYTHONPATH%` to preserve existing entries) |
 | `ESPY_WORKING_DIR` | Working directory for the script |
 | `ESPY_OUTPUT_ENCODING` | Encoding for redirected output streams |
 | `ESPY_ENABLE_OUTPUT_TRANSCODING` | Enable/disable encoding transcoding |
