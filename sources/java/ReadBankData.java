@@ -32,7 +32,6 @@ public class ReadBankData {
             byte[] record = new byte[zFile.getLrecl()];
             int bytesRead;
             int count = 0;
-            long totalRecords = zFile.getRecordCount();
 
             while ((bytesRead = zFile.read(record)) >= 0) {
                 // Extract fields from fixed-length record
@@ -50,7 +49,7 @@ public class ReadBankData {
                 }
             }
 
-            System.out.printf("  Total records: %d%n", totalRecords);
+            System.out.printf("  Total records: %d%n", zFile.getRecordCount());
         } finally {
             zFile.close();
         }
