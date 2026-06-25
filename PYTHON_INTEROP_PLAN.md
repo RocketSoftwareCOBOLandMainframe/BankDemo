@@ -7,7 +7,7 @@
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Phase 1: `batch_report.py` + `PYDEMO.jcl` | ✅ Tested | Script/module mode, arg passing |
-| Phase 2: `read_bank_data.py` + `READBNKP.jcl` | ✅ Tested | VSAM sequential read via zopen |
+| Phase 2: `read_bank_data.py` + `PYREADBNK.jcl` | ✅ Tested | VSAM sequential read via zopen |
 | Phase 3: `bank_cust_acct_report.py` + `PYMULTI.jcl` | ✅ Tested | FILTER + REPORT, COMP-3 decode |
 | Phase 4: `vsam_account_ops.py` + `PYVSAM.jcl` | ✅ Tested | LOOKUP/BROWSE/UPDATE via esos |
 | Phase 5: `cobol_interop.py` + `PYCBLCL.jcl` | ✅ Tested | Python→COBOL cobcall (3 programs) |
@@ -47,7 +47,7 @@ Add Python batch interoperability demonstrations mirroring the existing Java int
 | Java | `sources/java/VsamAccountOps.java` | VSAM KSDS LOOKUP / BROWSE / UPDATE via ZFile |
 | JCL | `sources/jcl/HELLOJAV.jcl` | COBOL bootstrap JCL |
 | JCL | `sources/jcl/JVMDEMO.jcl` | JVMLDM direct invocation with PROC, STDENV, MAINARGS |
-| JCL | `sources/jcl/READBNKJ.jcl` | Dataset read JCL |
+| JCL | `sources/jcl/JVMREADBNK.jcl` | Dataset read JCL |
 | JCL | `sources/jcl/JVMMULTI.jcl` | Multi-step batch JCL |
 | JCL | `sources/jcl/JVMVSAM.jcl` | VSAM operations JCL |
 
@@ -159,7 +159,7 @@ All VSAM operations are now exposed in the Python `esos.py` wrapper:
 | 4 | `sources/python/bank_cust_acct_report.py` | `BankCustAcctReport.java` | Multi-step FILTER + REPORT, COMP-3 decode |
 | 5 | `sources/python/vsam_account_ops.py` | `VsamAccountOps.java` | VSAM KSDS LOOKUP / BROWSE / UPDATE |
 | 6 | `sources/jcl/PYDEMO.jcl` | `JVMDEMO.jcl` | JCL for direct PYLDM invocation |
-| 7 | `sources/jcl/READBNKP.jcl` | `READBNKJ.jcl` | JCL for dataset read demo |
+| 7 | `sources/jcl/PYREADBNK.jcl` | `JVMREADBNK.jcl` | JCL for dataset read demo |
 | 8 | `sources/jcl/PYMULTI.jcl` | `JVMMULTI.jcl` | JCL for multi-step batch |
 | 9 | `sources/jcl/PYVSAM.jcl` | `JVMVSAM.jcl` | JCL for VSAM operations |
 
@@ -242,7 +242,7 @@ All VSAM operations are now exposed in the Python `esos.py` wrapper:
     finally:
         f.close()
     ```
-- **JCL** (`READBNKP.jcl`):
+- **JCL** (`PYREADBNK.jcl`):
   - ACCDATA DD → `MFI01V.MFIDEMO.BNKACC`
   - Uses PYPROC with STDENV setting `PYTHONPATH`
   - `PARM='read_bank_data.py 5'`
@@ -376,7 +376,7 @@ Update Prerequisites to include Python 3.8+.
 | Phase | Tasks | Dependencies |
 |-------|-------|-------------|
 | **Phase 1** ✅ | Create `sources/python/batch_report.py` + `sources/jcl/PYDEMO.jcl` | None |
-| **Phase 2** ✅ | Create `sources/python/read_bank_data.py` + `sources/jcl/READBNKP.jcl` | None |
+| **Phase 2** ✅ | Create `sources/python/read_bank_data.py` + `sources/jcl/PYREADBNK.jcl` | None |
 | **Phase 3** ✅ | Create `sources/python/bank_cust_acct_report.py` + `sources/jcl/PYMULTI.jcl` | None |
 | **Phase 4** ✅ | Create `sources/python/vsam_account_ops.py` + `sources/jcl/PYVSAM.jcl` | None — full VSAM locate/update available |
 | **Phase 5** ✅ | `cobol_interop.py` + `PYCBLCL.jcl` — Python→COBOL cobcall | Loadlib with SVERSONP, UDATECNV, UTWOSCMP |
@@ -587,7 +587,7 @@ Removed from scope. The `_mFpyCall` export is for internal PYLDM use only, not a
 | Phase | Tasks | Dependencies | Priority |
 |-------|-------|-------------|----------|
 | **Phase 1** ✅ | `batch_report.py` + `PYDEMO.jcl` | None | — |
-| **Phase 2** ✅ | `read_bank_data.py` + `READBNKP.jcl` | None | — |
+| **Phase 2** ✅ | `read_bank_data.py` + `PYREADBNK.jcl` | None | — |
 | **Phase 3** ✅ | `bank_cust_acct_report.py` + `PYMULTI.jcl` | None | — |
 | **Phase 4** ✅ | `vsam_account_ops.py` + `PYVSAM.jcl` | None | — |
 | **Phase 5** ✅ | `cobol_interop.py` + `PYCBLCL.jcl` — Python→COBOL cobcall | Loadlib with SVERSONP, UDATECNV, UTWOSCMP | **HIGH** |
@@ -686,7 +686,7 @@ Following the Java pattern with Python equivalents:
 | `JVMDEMO.jcl` | `PYDEMO.jcl` | PY prefix replaces JVM |
 | `JVMMULTI.jcl` | `PYMULTI.jcl` | PY prefix replaces JVM |
 | `JVMVSAM.jcl` | `PYVSAM.jcl` | PY prefix replaces JVM |
-| `READBNKJ.jcl` | `READBNKP.jcl` | J→P suffix (Java→Python) |
+| `JVMREADBNK.jcl` | `PYREADBNK.jcl` | JVM→PY prefix (Java→Python) |
 | `JVMLDM` | `PYLDM` | Python Load Module (confirmed in esos) |
 | `JVMPROC` (JCL PROC) | `PYPROC` | Inline JCL PROC for Python steps |
 | `JZOS_*` env vars | `ESPY_*` env vars | Runtime configuration namespace |

@@ -33,6 +33,7 @@ Usage:
   EXEC PGM=PYLDM,PARM='vsam_account_ops.py UPDATE key new_email'
 """
 
+import ctypes
 import sys
 
 from esos.esos import (
@@ -168,6 +169,29 @@ def read_record(f):
         if status.code in ("10", "23"):
             return None
         raise
+
+
+def update_record(f, record):
+    """Update the current VSAM record with the contents of the buffer.
+
+    Works around a bug in esos.py where EsosFile.update() passes the length
+    parameter by value, but the native esos_file_update() expects it by
+    reference (a pointer to int, like esos_file_write). Passing by value
+    causes the length (e.g. 250) to be dereferenced as a pointer, triggering
+    an access violation at address 0xFA.
+    """
+    from esos import esos as _esos_mod
+    buf = bytes(record)
+    length_store = ctypes.c_int(len(buf))
+    fn = _esos_mod._EsosLib.file_update_fn
+    saved_argtypes = fn.argtypes
+    fn.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.POINTER(ctypes.c_int)]
+    try:
+        _esos_mod._EsosLib.raiseOnError(
+            fn(f._handle, ctypes.c_char_p(buf), ctypes.byref(length_store))
+        )
+    finally:
+        fn.argtypes = saved_argtypes
 
 
 def print_customer(record):
@@ -316,7 +340,7 @@ def do_update(args):
         set_field(record, CUST_EMAIL, new_email)
 
         # Rewrite the entire record at the same VSAM position
-        f.update(bytes(record), 0, CUST_LRECL)
+        update_record(f, record)
 
         print(f"  After:  email='{new_email}'")
 

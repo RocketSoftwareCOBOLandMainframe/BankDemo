@@ -14,8 +14,14 @@ Demonstrations showing how to invoke programs written in other languages from JC
     - Invoke Java classes from JCL using JVMLDM and COBOL-to-Java bridging
     - Access datasets from Java using the JZOS-compatible ZFile API
 
+- [Python Batch Interoperability](batch/python/README.md)
+    - Invoke Python scripts from JCL using PYLDM (no compilation required)
+    - Access datasets from Python using the zoautil_py and esos APIs
+    - Call existing COBOL programs from Python via the cblcpyiapi bridge
+
 ## Prerequisites
 
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server
-- A Java Development Kit (JDK) 8 or later
+- A Java Development Kit (JDK) 8 or later (for Java demonstrations)
+- Python 3.8 or later (for Python demonstrations)
 - See specific demonstration instructions for additional requirements

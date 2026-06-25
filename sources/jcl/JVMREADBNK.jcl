@@ -1,4 +1,4 @@
-//MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
+//JVMRDBNK JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
 //* 
 //******************************************************************** 
 //* Custom JVM procedure                                             * 

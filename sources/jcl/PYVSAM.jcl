@@ -33,7 +33,7 @@
 //* -------------------------------------------------------------------
 //STEP1    EXEC PROC=PYPROC,
 //             PYSCRIPT='vsam_account_ops.py',
-//             ARGS='LOOKUP 00001'
+//             ARGS='LOOKUP B0001'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
@@ -46,11 +46,11 @@ set ESPY_MERGE_SYSOUT=false
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
 //* -------------------------------------------------------------------
-//* Step 2: Browse customers starting from key '00003'
+//* Step 2: Browse customers starting from key 'B0002'
 //* -------------------------------------------------------------------
 //STEP2    EXEC PROC=PYPROC,
 //             PYSCRIPT='vsam_account_ops.py',
-//             ARGS='BROWSE 00003 5'
+//             ARGS='BROWSE B0002 5'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
@@ -67,7 +67,7 @@ set ESPY_MERGE_SYSOUT=false
 //* -------------------------------------------------------------------
 //STEP3    EXEC PROC=PYPROC,
 //             PYSCRIPT='vsam_account_ops.py',
-//             ARGS='UPDATE 00001 newemail@example.com'
+//             ARGS='UPDATE B0001 newemail@example.com'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *

@@ -471,7 +471,7 @@ public class ReadBankData {
 
 ### 3.2 Write the JCL
 
-Create the file `READBNKJ.jcl`:
+Create the file `JVMREADBNK.jcl`:
 
 ```jcl
 //MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
@@ -552,7 +552,7 @@ TRAP(ON,NOSPIE)
    The `esjos.jar` file is provided with Enterprise Developer/Server at `bin64/esjos.jar` and contains the `com.rocketsoftware.jzos` package.
 
 2. **Deploy** the compiled artifacts to your Enterprise Server instance:
-   - `READBNKJ.dll` (Windows) or `READBNKJ.so` (Linux) → loadlib
+   - `JVMREADBNK.dll` (or `.so`) → loadlib
    - `ReadBankData.class` → loadlib
 
 4. **Ensure** the `MFI01V.MFIDEMO.BNKACC` dataset is cataloged (it is automatically cataloged if you have run the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
@@ -1495,7 +1495,7 @@ The source files for this demonstration are located in the following directories
 | `HelloBatch.java` | `sources/java/` | Hello World Java class |
 | `HELLOJAV.jcl` | `sources/jcl/` | JCL for Hello World demo |
 | `ReadBankData.java` | `sources/java/` | ZFile dataset reader |
-| `READBNKJ.jcl` | `sources/jcl/` | JCL for ZFile demo |
+| `JVMREADBNK.jcl` | `sources/jcl/` | JCL for ZFile demo |
 | `BatchReport.java` | `sources/java/` | Direct JVMLDM Java class |
 | `JVMDEMO.jcl` | `sources/jcl/` | JCL for JVMLDM direct demo |
 | `BankCustAcctReport.java` | `sources/java/` | Multi-step customer/account report |

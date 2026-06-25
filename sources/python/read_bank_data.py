@@ -17,7 +17,7 @@ The dataset MFI01V.MFIDEMO.BNKACC is a VSAM Key-Sequenced Data Set:
   - Primary key: bytes 5-13 (account number, 9 bytes)
   - Record layout defined in COBOL copybook CBANKVAC.cpy
 
-See READBNKP.jcl for the JCL that allocates the DD and runs this script.
+See PYREADBNK.jcl for the JCL that allocates the DD and runs this script.
 
 Usage: EXEC PGM=PYLDM,PARM='+I read_bank_data.py 5'
 """

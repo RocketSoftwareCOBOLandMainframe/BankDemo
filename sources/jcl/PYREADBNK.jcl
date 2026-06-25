@@ -1,10 +1,10 @@
-//READBNKP JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
+//PYRDBNK  JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
 //* Demonstration: Reading dataset records from Python via PYLDM.
 //* Uses zoautil_py.zoau_io.zopen() to read MFI01V.MFIDEMO.BNKACC
 //* allocated via DD name.
 //*
-//* This is the Python equivalent of READBNKJ.jcl (Java/ZFile).
+//* This is the Python equivalent of JVMREADBNK.jcl (Java/ZFile).
 //*
 //********************************************************************
 //* Python procedure (mirrors JVMPROC for Java)                      *
