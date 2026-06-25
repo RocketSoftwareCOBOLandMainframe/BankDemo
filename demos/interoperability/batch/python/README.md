@@ -10,7 +10,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 2. [Overview](#overview)
 3. [How It Works](#how-it-works)
 4. [Step 1 - Using PYLDM Directly from JCL](#step1)
-5. [Step 2 - Accessing Datasets from Python](#step2)
+5. [Step 2 - Sequential File I/O from Python](#step2)
 6. [Step 3 - Multi-Step Batch with Python](#step3)
 7. [Step 4 - VSAM Operations from Python](#step4)
 8. [Step 5 - Calling COBOL from Python](#step5)
@@ -182,59 +182,69 @@ extraArg1 extraArg2
 
 ---
 
-## <a name="step2"></a>Step 2 - Accessing Datasets from Python
+## <a name="step2"></a>Step 2 - Sequential File I/O from Python
 
-In this step, you read records from a VSAM dataset using the `zoautil_py` record I/O API — the Python equivalent of Java's ZFile.
+In this step, you read Fixed Block (FB) records from a data file via `DD PATH=` allocation and produce a formatted summary report, demonstrating non-VSAM sequential file I/O with `zoautil_py`.
 
 ### 2.1 The Python Script
 
-`sources/python/read_bank_data.py` reads the BNKACC (bank account) dataset:
+`sources/python/sequential_file_ops.py` supports two modes:
 
+**WRITE mode** — displays the sample transaction records in their 80-byte fixed format:
+```python
+def do_write():
+    for txn in SAMPLE_TRANSACTIONS:
+        record = format_record(*txn)  # 80-byte fixed-width
+        print(f"  {record}")
+```
+
+**READ mode** — reads records from the INPUT DD and produces a summary report with totals by account:
 ```python
 from zoautil_py.zoau_io import zopen
-from esos.esos import EsosLocateOption
 
-def read_account_file(display_n):
-    f = zopen("//DD:ACCDATA", "r", lrecl=200, recfm="KS")
+LRECL = 80  # Fixed Block, 80-byte card-image format
+
+def do_read():
+    f = zopen("//DD:INPUT", "r", lrecl=LRECL, recfm="FB")
     try:
-        f._file.locate(b'', EsosLocateOption.KEY_FIRST)
         records = []
         while True:
             try:
                 record = f.readrecord()
                 if not record:
                     break
-                records.append(record)
+                records.append(parse_record(record))
             except Exception:
-                break  # EOF
+                break
 
-        for i, record in enumerate(records[:display_n]):
-            cust_id = pic_x(record, 0, 5)
-            account_id = pic_x(record, 5, 9)
-            print(f"  Account: {account_id}  Customer: {cust_id}")
+        # Accumulate totals by account, print listing and summary
     finally:
         f.close()
 ```
 
 ### 2.2 The JCL
 
-`sources/jcl/PYREADBNK.jcl` allocates the BNKACC dataset to DD name ACCDATA:
+`sources/jcl/PYREADBNK.jcl` runs two steps — display record format and read data file:
 
 ```jcl
-//STEP1    EXEC PROC=PYPROC,
-//             PYSCRIPT='read_bank_data.py',
-//             ARGS='5'
-//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+//* Step 1: Display sample transaction records (record format demo)
+//WRITE    EXEC PROC=PYPROC,PYSCRIPT='sequential_file_ops.py',ARGS='WRITE'
+//*
+//* Step 2: Read transaction data file and produce a summary report
+//READ     EXEC PROC=PYPROC,PYSCRIPT='sequential_file_ops.py',ARGS='READ'
+//INPUT    DD  PATH='%BANKROOT%\sources\data\transactions.dat'
 ```
+
+The `DD PATH=` allocates a file-system file as a sequential DD, avoiding the need to create or catalog a dataset.
 
 ### 2.3 Key Points
 
-- **`zopen("//DD:NAME", mode, lrecl=N, recfm="XX")`** — opens a DD allocation for record I/O
-- **Must specify `lrecl` and `recfm`** — unlike Java's ZFile which auto-detects from the catalog
-- **`RecordIO` is NOT a context manager** — use try/finally with `f.close()`
-- **VSAM requires explicit positioning** — call `locate(KEY_FIRST)` before sequential reads
-- **EOF signaled by exception** — not by empty return (VSAM file status "10")
-- **Bridge conversion API** — use `_mFpyStringFromCOBOL` via `ctypes.PyDLL` for PIC X field extraction
+- **Non-VSAM I/O** — uses `recfm="FB"` (Fixed Block) instead of `"KS"` (Key-Sequenced VSAM)
+- **Read with `zopen("//DD:NAME", "r", ...)`** — opens for sequential input
+- **`DD PATH=`** — allocates a file-system file as a sequential DD, no catalog entry needed
+- **80-byte card image** — classic mainframe record format (LRECL=80, RECFM=FB)
+- **No dataset creation** — avoids `DISP=(NEW,CATLG)` and IEFBR14 cleanup complexity
+- **No VSAM positioning needed** — sequential access reads records in order
 
 ---
 
@@ -322,13 +332,13 @@ MAX_RECORDS=50
 
 ## <a name="step4"></a>Step 4 - VSAM Operations from Python
 
-In this step, you perform direct VSAM keyed lookup, sequential browse, and record update using the low-level `esos` API.
+In this step, you perform direct VSAM keyed lookup, sequential browse, record update, and sequential reading using the low-level `esos` API. A cleanup step restores the modified record.
 
 ### 4.1 The Python Script
 
-`sources/python/vsam_account_ops.py` demonstrates three VSAM operations:
+`sources/python/vsam_account_ops.py` demonstrates five VSAM operations on two datasets:
 
-**LOOKUP** — exact key match:
+**LOOKUP** — exact key match on BNKCUST:
 ```python
 from esos.esos import Esos, FileOptions, EsosLocateOption, EsosFileMode, EsosOpenFlags
 
@@ -337,44 +347,74 @@ opts.mode_flags = EsosFileMode.MODE_TYPE_READ
 opts.open_flags = EsosOpenFlags.OPEN_MODE_BINARY | EsosOpenFlags.OPEN_MODE_RECORD
 
 with Esos.default.file_open("//DD:CUSTDATA", opts) as f:
-    key = b"B0001".ljust(5, b'\x00')
     if f.locate(key, EsosLocateOption.KEY_EQ):
-        record = f.read(250)
+        buf = bytearray(250)
+        f.read(buf, 0, 250)
         # ... extract and display fields
 ```
 
 **BROWSE** — sequential read from a starting position:
 ```python
-    f.locate(b'', EsosLocateOption.KEY_FIRST)
+    f.locate(start_key, EsosLocateOption.KEY_GE)
     for i in range(max_records):
-        record = f.read(250)
+        f.read(buf, 0, 250)
         # ... display record
 ```
 
-**UPDATE** — locate, read, modify, write back:
+**UPDATE** — locate, read, modify, write back (omitting email clears it):
 ```python
-opts.mode_flags = EsosFileMode.MODE_TYPE_READ
-opts.open_flags |= EsosOpenFlags.FLAG_MODE_UPDATE
+opts.mode_flags = EsosFileMode.MODE_TYPE_READ | EsosFileMode.MODE_FLAG_UPDATE
 
 with Esos.default.file_open("//DD:CUSTDATA", opts) as f:
     if f.locate(key, EsosLocateOption.KEY_EQ):
-        record = bytearray(f.read(250))
-        # Modify the SendMail flag
-        record[170:171] = b'Y'
-        f.update(record, 0, 250)
+        buf = bytearray(250)
+        f.read(buf, 0, 250)
+        set_field(buf, CUST_EMAIL, new_email)
+        update_record(f, buf)   # workaround for esos update() bug
+```
+
+**READ** — sequential read of the BNKACC (account) dataset:
+```python
+with open_accdata() as f:
+    f.locate(b'', EsosLocateOption.KEY_FIRST)
+    buf = bytearray(200)
+    while True:
+        try:
+            f.read(buf, 0, 200)
+        except EsosError:
+            break  # EOF
+        # ... display record
 ```
 
 ### 4.2 The JCL
 
-`sources/jcl/PYVSAM.jcl` runs three steps: LOOKUP, BROWSE, and UPDATE.
+`sources/jcl/PYVSAM.jcl` runs five steps: LOOKUP, BROWSE, UPDATE, cleanup (restore), and READ:
+
+```jcl
+//STEP1    EXEC PROC=PYPROC,ARGS='LOOKUP B0001'
+//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
+//*
+//STEP2    EXEC PROC=PYPROC,ARGS='BROWSE B0002 5'
+//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
+//*
+//STEP3    EXEC PROC=PYPROC,ARGS='UPDATE B0001 newemail@example.com'
+//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
+//*
+//STEP4    EXEC PROC=PYPROC,ARGS='UPDATE B0001'
+//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
+//*
+//STEP5    EXEC PROC=PYPROC,ARGS='READ 5'
+//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+```
 
 ### 4.3 Key Points
 
 - **`EsosFile` IS a context manager** — use `with ... as f:` (unlike RecordIO)
 - **`locate()` returns `bool`** — `False` means key not found (VSAM status "23")
-- **Update cycle**: `locate()` → `read()` → modify → `update(buffer, offset, length)`
-- **Key padding** — VSAM keys must be exactly the defined length; pad with null bytes
-- **Two API layers**: `zoautil_py.zopen()` (high-level, no locate) vs `esos` (low-level, full VSAM)
+- **Update cycle**: `locate()` → `read()` → modify → `update_record(f, buf)`
+- **Cleanup pattern** — Step 4 calls UPDATE with no email (clears to blank) to undo Step 3
+- **Two datasets** — BNKCUST for LOOKUP/BROWSE/UPDATE, BNKACC for READ
+- **Two API layers**: `zoautil_py.zopen()` (high-level, Step 2) vs `esos` (low-level, this step)
 
 ---
 
@@ -461,12 +501,12 @@ def do_twoscomp(input_text):
 | File | Description |
 |------|-------------|
 | `sources/python/batch_report.py` | Step 1: PYLDM invocation, argument handling |
-| `sources/python/read_bank_data.py` | Step 2: Sequential dataset read via zoautil_py |
+| `sources/python/sequential_file_ops.py` | Step 2: Non-VSAM sequential file read via zoautil_py |
 | `sources/python/bank_cust_acct_report.py` | Step 3: Multi-step FILTER + REPORT, COMP-3, dataset write, control cards |
-| `sources/python/vsam_account_ops.py` | Step 4: VSAM LOOKUP / BROWSE / UPDATE via esos |
+| `sources/python/vsam_account_ops.py` | Step 4: VSAM LOOKUP / BROWSE / UPDATE / READ via esos |
 | `sources/python/cobol_interop.py` | Step 5: Python→COBOL via _mFpyCobcall |
 | `sources/jcl/PYDEMO.jcl` | JCL for Step 1 (script + module mode) |
-| `sources/jcl/PYREADBNK.jcl` | JCL for Step 2 (dataset read) |
+| `sources/jcl/PYREADBNK.jcl` | JCL for Step 2 (sequential write, read, cleanup) |
 | `sources/jcl/PYMULTI.jcl` | JCL for Step 3 (multi-step filter/report) |
 | `sources/jcl/PYVSAM.jcl` | JCL for Step 4 (VSAM operations) |
 | `sources/jcl/PYCBLCL.jcl` | JCL for Step 5 (COBOL interop) |

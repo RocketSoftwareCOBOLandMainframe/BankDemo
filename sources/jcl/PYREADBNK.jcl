@@ -1,8 +1,13 @@
 //PYRDBNK  JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
-//* Demonstration: Reading dataset records from Python via PYLDM.
-//* Uses zoautil_py.zoau_io.zopen() to read MFI01V.MFIDEMO.BNKACC
-//* allocated via DD name.
+//* Demonstration: Non-VSAM Sequential File I/O from Python via PYLDM.
+//* Uses zoautil_py zopen() to read/write a Physical Sequential (PS)
+//* dataset with Fixed (F) records - same DD pattern as VSAM.
+//*
+//* Known issue: The JES initiator abends with signal 0xc0150014
+//* (STATUS_SXS_ASSEMBLY_NOT_FOUND) during process shutdown AFTER the
+//* script completes successfully. All output is correct in spool.
+//* VSAM datasets (PYVSAM.jcl) are not affected.
 //*
 //* This is the Python equivalent of JVMREADBNK.jcl (Java/ZFile).
 //*
@@ -28,11 +33,11 @@
 //********************************************************************
 //*
 //* -------------------------------------------------------------------
-//* Read first 5 account records from BNKACC dataset
+//* Write transaction records then read them back
 //* -------------------------------------------------------------------
-//STEP1    EXEC PROC=PYPROC,
-//             PYSCRIPT='read_bank_data.py',
-//             ARGS='5'
+//WRTEREAD EXEC PROC=PYPROC,
+//             PYSCRIPT='sequential_file_ops.py',
+//             ARGS='WRITEREAD'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
@@ -42,8 +47,5 @@ set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
 /*
-//********************************************************************
-//* Application DDs (opened by Python via zopen)                     *
-//********************************************************************
-//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
+//TXNDATA  DD  DSN=MFI01V.MFIDEMO.PYTXN,DISP=OLD
 //

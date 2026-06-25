@@ -1,14 +1,15 @@
 """
 Step 4 Demo: Low-level VSAM Operations with the esos API.
 
-Demonstrates direct VSAM KSDS operations on the BNKCUST (customer) dataset
-using the low-level esos.esos API instead of the higher-level zoautil_py.
+Demonstrates direct VSAM KSDS operations on BankDemo datasets using the
+low-level esos.esos API instead of the higher-level zoautil_py.
 This is the Python equivalent of VsamAccountOps.java.
 
-Three VSAM operations are shown:
+Four VSAM operations are shown:
   LOOKUP - Random keyed read: locate a specific customer by primary key
   BROWSE - Sequential browse: read records starting from a given key (KEY_GE)
   UPDATE - Read-for-update: locate a record, modify a field, rewrite it
+  READ   - Sequential read: read all records from BNKACC (account dataset)
 
 Key concepts demonstrated:
   - Low-level esos API: Esos.default.file_open(path, FileOptions)
@@ -22,15 +23,17 @@ When to use which API:
   - zoautil_py (zopen): Simple sequential read/write, less setup, familiar API
   - esos (EsosFile): Keyed access, update-in-place, browse, delete, position
 
-Dataset: MFI01V.MFIDEMO.BNKCUST (VSAM KSDS, 250 bytes, key at offset 0)
-Record layout: CBANKVCS.cpy
+Datasets:
+  MFI01V.MFIDEMO.BNKCUST (VSAM KSDS, 250 bytes, key at offset 0) - LOOKUP/BROWSE/UPDATE
+  MFI01V.MFIDEMO.BNKACC  (VSAM KSDS, 200 bytes, key at offset 5) - READ
 
-See PYVSAM.jcl for the JCL that runs all three operations.
+See PYVSAM.jcl for the JCL that runs all four operations.
 
 Usage:
   EXEC PGM=PYLDM,PARM='vsam_account_ops.py LOOKUP key'
   EXEC PGM=PYLDM,PARM='vsam_account_ops.py BROWSE start_key max_records'
   EXEC PGM=PYLDM,PARM='vsam_account_ops.py UPDATE key new_email'
+  EXEC PGM=PYLDM,PARM='vsam_account_ops.py READ [max_records]'
 """
 
 import ctypes
@@ -311,13 +314,13 @@ def do_update(args):
 
     The JCL must specify DISP=OLD on the DD for update access.
     """
-    if len(args) < 2:
-        print("Usage: vsam_account_ops.py UPDATE <customer_id> <new_email>",
+    if len(args) < 1:
+        print("Usage: vsam_account_ops.py UPDATE <customer_id> [new_email]",
               file=sys.stderr)
         return 1
 
     key = args[0].encode("ascii").ljust(5)[:5]
-    new_email = args[1]
+    new_email = args[1] if len(args) > 1 else ""
     print(f"=== VSAM UPDATE: key='{key.decode().strip()}', new_email='{new_email}' ===")
 
     # Open with update=True for read+update mode (DISP=OLD)
@@ -349,6 +352,82 @@ def do_update(args):
 
 
 # =============================================================================
+# READ Operation: Sequential VSAM Read of BNKACC
+# =============================================================================
+
+# BNKACC record layout (from CBANKVAC.cpy, VSAM KSDS, lrecl=200)
+ACC_LRECL = 200
+ACC_CUSTID = (0, 5)
+ACC_ACCTID = (5, 9)
+ACC_TYPE = (14, 1)
+
+
+def open_accdata():
+    """Open the ACCDATA DD (BNKACC dataset) for sequential VSAM reading.
+
+    This demonstrates opening a second VSAM dataset with different
+    parameters (LRECL=200, key length=9) compared to CUSTDATA (LRECL=250).
+    """
+    opts = FileOptions()
+    opts.mode_flags = EsosFileMode.MODE_TYPE_READ
+    opts.open_flags = EsosOpenFlags.OPEN_MODE_RECORD | EsosOpenFlags.OPEN_MODE_BINARY
+    opts.recfm = "KS"
+    opts.lrecl = ACC_LRECL
+    opts.disposition = EsosDisposition.FLAG_DISP_SHR
+    opts.dsorg = EsosDsorg.VSAM
+    opts.vsam_type = EsosVsamType.CLUSTER
+    opts.vsam_key_length = 9  # Account ID at offset 5, length 9
+
+    return Esos.default.file_open("//DD:ACCDATA", opts)
+
+
+def do_read(args):
+    """Read BNKACC records sequentially using the esos VSAM API.
+
+    Demonstrates VSAM sequential reading with the low-level esos API:
+    explicit FileOptions, locate(KEY_FIRST), and read() in a loop.
+    Compare with Step 2 (sequential_file_ops.py) which uses zoautil_py
+    for non-VSAM sequential I/O.
+
+    Args:
+        args[0]: Number of records to display (default: 5)
+    """
+    display_n = int(args[0]) if args else 5
+    print(f"=== VSAM READ: First {display_n} account records (esos API) ===")
+
+    with open_accdata() as f:
+        # Position to the very first record in key sequence
+        f.locate(b'', EsosLocateOption.KEY_FIRST)
+
+        buf = bytearray(ACC_LRECL)
+        count = 0
+        displayed = 0
+
+        while True:
+            try:
+                n = f.read(buf, 0, ACC_LRECL)
+                if n == 0:
+                    break
+            except EsosError:
+                break  # Status "10" = end of file
+
+            count += 1
+            if displayed < display_n:
+                cust_id = field(buf, ACC_CUSTID)
+                account_id = field(buf, ACC_ACCTID)
+                account_type = field(buf, ACC_TYPE)
+                print(f"  Account: {account_id}  Customer: {cust_id}  Type: {account_type}")
+                displayed += 1
+
+        if displayed < count:
+            print(f"  ... ({count - displayed} more records not shown)")
+        print(f"  Total records: {count}")
+
+    print("=== Read Complete ===")
+    return 0
+
+
+# =============================================================================
 # Main Entry Point
 # =============================================================================
 
@@ -357,7 +436,7 @@ def main(args=None):
         args = sys.argv[1:]
 
     if len(args) < 1:
-        print("Usage: vsam_account_ops.py LOOKUP|BROWSE|UPDATE [args...]",
+        print("Usage: vsam_account_ops.py LOOKUP|BROWSE|UPDATE|READ [args...]",
               file=sys.stderr)
         return 1
 
@@ -370,8 +449,10 @@ def main(args=None):
         return do_browse(remaining)
     elif mode == "UPDATE":
         return do_update(remaining)
+    elif mode == "READ":
+        return do_read(remaining)
     else:
-        print(f"Unknown mode: {mode}. Use LOOKUP, BROWSE, or UPDATE.",
+        print(f"Unknown mode: {mode}. Use LOOKUP, BROWSE, UPDATE, or READ.",
               file=sys.stderr)
         return 1
 

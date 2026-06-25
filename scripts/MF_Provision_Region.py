@@ -486,6 +486,9 @@ def create_region(main_configfile):
         #data_dir_3 hold the directory name, under the cwd that contains definitions of extra datasets to be catalogued - this setting is optional
         catalog_datasets(session, cwd, region_name, ip_address, configuration_files, 'data_dir_3', None, catalog_dir)
 
+        #data_dir_4 hold the directory name for PS (sequential) datasets - this setting is optional
+        catalog_datasets(session, cwd, region_name, ip_address, configuration_files, 'data_dir_4', None, catalog_dir)
+
     if  database_type == 'SQL_Postgres':
         loadlibDir = 'SQL_Postgres'
     else:

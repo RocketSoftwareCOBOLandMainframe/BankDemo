@@ -1,9 +1,11 @@
 //PYVSAM   JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
 //*
 //* Demonstration: Low-level VSAM operations from Python via PYLDM.
-//* Step 1 - LOOKUP: Random read by customer ID.
-//* Step 2 - BROWSE: Sequential browse from a starting key.
-//* Step 3 - UPDATE: Rewrite a customer's email field.
+//* Step 1 - LOOKUP:  Random read by customer ID.
+//* Step 2 - BROWSE:  Sequential browse from a starting key.
+//* Step 3 - UPDATE:  Rewrite a customer's email field.
+//* Step 4 - RESTORE: Undo the UPDATE (restore original email).
+//* Step 5 - READ:    Sequential read of BNKACC (account dataset).
 //*
 //* Uses the esos.esos API directly (EsosFile, FileOptions, locate).
 //*
@@ -78,4 +80,38 @@ set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
 /*
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
+//*
+//* -------------------------------------------------------------------
+//* Step 4: Cleanup - restore original email (blank)
+//* -------------------------------------------------------------------
+//STEP4    EXEC PROC=PYPROC,
+//             PYSCRIPT='vsam_account_ops.py',
+//             ARGS='UPDATE B0001'
+//STDOUT   DD  SYSOUT=*
+//STDERR   DD  SYSOUT=*
+//STDENV   DD  *
+set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set ESPY_OUTPUT_ENCODING=ASCII
+set ESPY_ENABLE_OUTPUT_TRANSCODING=false
+set ESPY_MERGE_SYSOUT=false
+/*
+//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
+//*
+//* -------------------------------------------------------------------
+//* Step 5: Sequential read of BNKACC (account dataset)
+//* -------------------------------------------------------------------
+//STEP5    EXEC PROC=PYPROC,
+//             PYSCRIPT='vsam_account_ops.py',
+//             ARGS='READ 5'
+//STDOUT   DD  SYSOUT=*
+//STDERR   DD  SYSOUT=*
+//STDENV   DD  *
+set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set ESPY_OUTPUT_ENCODING=ASCII
+set ESPY_ENABLE_OUTPUT_TRANSCODING=false
+set ESPY_MERGE_SYSOUT=false
+/*
+//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
 //
