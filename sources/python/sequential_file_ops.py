@@ -13,17 +13,12 @@ Key concepts demonstrated:
   - zopen() for sequential access: zopen(path, mode, lrecl=N, recfm="F")
   - Fixed record format: classic mainframe card-image (LRECL=80)
   - RecordIO write/readrecord: one record at a time
+  - DD DSN=...,DISP=OLD allocation in JCL (same pattern as VSAM)
   - Batch JCL integration via PYLDM and STDENV environment variables
 
-Known issue:
-  The JES initiator process abends with signal 0xc0150014
-  (STATUS_SXS_ASSEMBLY_NOT_FOUND) during shutdown AFTER the Python script
-  has completed successfully. All output is correct and visible in spool,
-  but the step is reported as abended. This does NOT occur with VSAM
-  datasets (PYVSAM.jcl exits RC=0).
-
-  Workarounds attempted (atexit handle zeroing, os._exit, removing DD 
-  allocation, switching to esos API directly) do not resolve it.
+Note: Scripts running under PYLDM must NOT call sys.exit(). The embedded
+Python interpreter does not handle SystemExit cleanly; instead, let the
+script return naturally from its top-level code.
 
 Record layout (80-byte fixed):
   Offset  Length  Field
@@ -222,4 +217,4 @@ def main(args=None):
 
 
 if __name__ in ("__main__", "<run_path>"):
-    sys.exit(main() or 0)
+    main()

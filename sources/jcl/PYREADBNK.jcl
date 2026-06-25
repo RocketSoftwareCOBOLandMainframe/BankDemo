@@ -4,10 +4,9 @@
 //* Uses zoautil_py zopen() to read/write a Physical Sequential (PS)
 //* dataset with Fixed (F) records - same DD pattern as VSAM.
 //*
-//* Known issue: The JES initiator abends with signal 0xc0150014
-//* (STATUS_SXS_ASSEMBLY_NOT_FOUND) during process shutdown AFTER the
-//* script completes successfully. All output is correct in spool.
-//* VSAM datasets (PYVSAM.jcl) are not affected.
+//* Two steps:
+//*   1. WRITE - Write sample transaction records to the PS dataset
+//*   2. READ  - Read them back and produce a summary report
 //*
 //* This is the Python equivalent of JVMREADBNK.jcl (Java/ZFile).
 //*
@@ -33,11 +32,11 @@
 //********************************************************************
 //*
 //* -------------------------------------------------------------------
-//* Write transaction records then read them back
+//* Step 1: Write sample transaction records to the PS dataset
 //* -------------------------------------------------------------------
-//WRTEREAD EXEC PROC=PYPROC,
+//WRITE    EXEC PROC=PYPROC,
 //             PYSCRIPT='sequential_file_ops.py',
-//             ARGS='WRITEREAD'
+//             ARGS='WRITE'
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
@@ -48,4 +47,21 @@ set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
 /*
 //TXNDATA  DD  DSN=MFI01V.MFIDEMO.PYTXN,DISP=OLD
+//*
+//* -------------------------------------------------------------------
+//* Step 2: Read records back and produce a summary report
+//* -------------------------------------------------------------------
+//READ     EXEC PROC=PYPROC,
+//             PYSCRIPT='sequential_file_ops.py',
+//             ARGS='READ'
+//STDOUT   DD  SYSOUT=*
+//STDERR   DD  SYSOUT=*
+//STDENV   DD  *
+set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set ESPY_OUTPUT_ENCODING=ASCII
+set ESPY_ENABLE_OUTPUT_TRANSCODING=false
+set ESPY_MERGE_SYSOUT=false
+/*
+//TXNDATA  DD  DSN=MFI01V.MFIDEMO.PYTXN,DISP=SHR
 //
