@@ -157,6 +157,14 @@ def read_record(f):
 
     Returns:
         bytearray of CUST_LRECL bytes, or None if at end-of-file.
+
+    Note:
+        Known issue in esos.py: EsosFile.read() raises EsosError on EOF
+        instead of returning 0. The native esos_file_read() returns a
+        non-zero status for VSAM status "10" (EOF), and raiseOnError()
+        treats any non-zero return as an error. zoautil_py's readrecord()
+        expects read() to return 0 at EOF (returning empty bytes), so
+        this bug affects zoautil_py VSAM reads as well.
     """
     buf = bytearray(CUST_LRECL)
     try:
@@ -165,7 +173,8 @@ def read_record(f):
             return None
         return buf
     except EsosError as e:
-        # VSAM status codes returned as file status:
+        # Workaround: esos.py raises EsosError on EOF instead of returning 0.
+        # Check VSAM status codes to distinguish EOF from real errors:
         #   "10" = end of file (no more records)
         #   "23" = record not found (key doesn't exist)
         status = f.status()
@@ -409,7 +418,10 @@ def do_read(args):
                 if n == 0:
                     break
             except EsosError:
-                break  # Status "10" = end of file
+                # Workaround: esos.py bug — EsosFile.read() raises
+                # EsosError at EOF (VSAM status "10") instead of
+                # returning 0. See read_record() docstring for details.
+                break
 
             count += 1
             if displayed < display_n:

@@ -140,6 +140,8 @@ def do_read():
                     break
                 records.append(parse_record(record))
             except Exception:
+                # Workaround: esos.py bug — EsosFile.read() raises on EOF
+                # instead of returning 0 bytes. readrecord() inherits this.
                 break
     finally:
         f.close()

@@ -155,8 +155,12 @@ def read_vsam_records(file_handle):
     """Read all records from a positioned VSAM file.
 
     Reads sequentially from the current position until EOF.
-    The esos layer signals EOF by raising an exception (VSAM status "10")
-    rather than returning empty bytes.
+
+    Known issue: esos.py's EsosFile.read() raises EsosError at EOF
+    (VSAM status "10") instead of returning 0 bytes. zoautil_py's
+    readrecord() wraps EsosFile.read() and expects 0 at EOF (returning
+    empty bytes b''), so this bug propagates through both API layers.
+    We catch the exception here as our EOF signal.
     """
     records = []
     while True:
@@ -166,7 +170,8 @@ def read_vsam_records(file_handle):
                 break
             records.append(record)
         except Exception:
-            # Any read exception after positioning = end of data
+            # Workaround: esos.py raises on EOF instead of returning
+            # empty bytes. Any read exception after positioning = EOF.
             break
     return records
 

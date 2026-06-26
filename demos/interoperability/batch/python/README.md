@@ -416,6 +416,16 @@ with open_accdata() as f:
 - **Two datasets** — BNKCUST for LOOKUP/BROWSE/UPDATE, BNKACC for READ
 - **Two API layers**: `zoautil_py.zopen()` (high-level, Step 2) vs `esos` (low-level, this step)
 
+### 4.4 Known Issues (esos.py workarounds)
+
+Two bugs in `esos.py` require workarounds in the demo code:
+
+1. **EOF raises an exception instead of returning empty bytes.**
+   `EsosFile.read()` calls `raiseOnError()` on the native return code. At VSAM end-of-file (status "10"), the native function returns non-zero, so `raiseOnError()` raises `EsosError` instead of returning 0. This affects both `EsosFile.read()` (low-level) and `zoautil_py`'s `readrecord()` (high-level). All read loops in these demos use `try/except` to catch EOF.
+
+2. **`EsosFile.update()` crashes with an access violation.**
+   The Python wrapper passes the record length by value, but the native `esos_file_update()` expects it by reference (pointer to int). `vsam_account_ops.py` includes an `update_record()` function that patches `argtypes` to work around this.
+
 ---
 
 ## <a name="step5"></a>Step 5 - Calling COBOL from Python
