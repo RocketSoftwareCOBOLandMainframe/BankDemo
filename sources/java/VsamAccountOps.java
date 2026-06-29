@@ -95,8 +95,7 @@ public class VsamAccountOps {
         System.err.printf("LOOKUP: custId='%s' len=%d bytes=%s%n",
             custId, custId.length(), Arrays.toString(custId.getBytes()));
 
-        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
-        try {
+        try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb")) {
             System.err.printf("LOOKUP: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
                 vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
 
@@ -130,8 +129,6 @@ public class VsamAccountOps {
                         bytesRead, new String(record, 0, Math.min(40, bytesRead)));
                 }
             }
-        } finally {
-            vsam.close();
         }
 
         System.out.println(SEPARATOR);
@@ -149,8 +146,7 @@ public class VsamAccountOps {
             "PID", "Name", "Phone", "Email", "Mail");
         System.out.println("  " + "-".repeat(80));
 
-        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
-        try {
+        try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb")) {
             System.err.printf("BROWSE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
                 vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
             if (!startKey.isEmpty()) {
@@ -192,8 +188,6 @@ public class VsamAccountOps {
             System.out.println("  No records found from key: " + startKey);
             System.err.println("BROWSE exception: " + e);
             e.printStackTrace(System.err);
-        } finally {
-            vsam.close();
         }
 
         System.out.println(SEPARATOR);
@@ -210,8 +204,7 @@ public class VsamAccountOps {
 
         System.err.printf("UPDATE: custId='%s' len=%d%n", custId, custId.length());
 
-        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+");
-        try {
+        try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+")) {
             System.err.printf("UPDATE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
                 vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
             byte[] key = makeKey(custId, vsam.getVsamKeyLength());
@@ -248,8 +241,6 @@ public class VsamAccountOps {
             System.out.println("  Update failed: " + e.getMessage());
             System.err.println("UPDATE exception: " + e);
             e.printStackTrace(System.err);
-        } finally {
-            vsam.close();
         }
 
         System.out.println(SEPARATOR);

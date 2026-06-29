@@ -24,7 +24,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
 - A 64-bit Enterprise Server region and 64-bit environment (JVMLDM requires a 64-bit process)
-- The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `%COBDIR%\AdoptOpenJDK`. The supported major version is 21. If you prefer to use your own JDK, align to the same major version
+- The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `%COBDIR%\AdoptOpenJDK`. The supported major version is 21-25. If you prefer to use your own JDK, align to the same major version
 - An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../demos/onprem/vsam/README.md) demonstration)
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
@@ -199,7 +199,7 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
 
 2. **Deploy** `HelloBatch.class` and the compiled COBOL program (`HELLOJAV.dll` on Windows, `HELLOJAV.so` on Linux) to your Enterprise Server's loadlib directory (`$ESP/loadlib`).
 
-4. **Submit the JCL** through ESCWA (JES > Control) or by using the Python submission scripts provided in the `scripts` directory of this project.
+4. **Submit the JCL**, such as through ESCWA (JES > Control), `cassub`, or the Python submission scripts provided in the `scripts` directory of this project.
 
 5. **Check output** in the job's SYSOUT. You should see:
    ```
@@ -306,7 +306,7 @@ arg5 arg6
 | STDOUT | Java `System.out` (after stream redirection) |
 | STDERR | Java `System.err` (after stream redirection) |
 | STDIN | Java `System.in` (allocated as DUMMY if not needed) |
-| MAINARGS | Optional. Additional arguments passed to Java `main()`. Only read if `JZOS_MAIN_ARGS_DD` is set in STDENV |
+| MAINARGS | Default DD for additional arguments passed to Java `main()`. Optional — read if allocated. If `JZOS_MAIN_ARGS_DD` is explicitly set in STDENV, the named DD becomes required |
 
 ### 2.4 How Arguments Are Assembled
 
@@ -331,9 +331,9 @@ The `STDENV` DD is an inline script that configures the JVM environment. JVMLDM 
 | `CLASSPATH` | Java class search path |
 | `JZOS_JVM_OPTIONS` | JVM command-line options (appended to `JAVA_TOOL_OPTIONS`). E.g. `-Xmx512m`, `-Djzos.merge.sysout=true`, `-Dfile.encoding=UTF-8` |
 | `JZOS_MAIN_ARGS` | Additional arguments appended to main() args |
-| `JZOS_MAIN_ARGS_DD` | Name of the DD to read additional main args from (e.g. `MAINARGS`). If not set, the MAINARGS DD is not read |
-| `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection |
-| `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` - enable/disable output transcoding |
+| `JZOS_MAIN_ARGS_DD` | Name of the DD to read additional main args from. Defaults to `MAINARGS` if not set (and the DD is optional). If explicitly set, the named DD is required |
+| `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection. Must be a charset name supported by the JVM (e.g. `UTF-8`, `ISO-8859-1`, `IBM037`) |
+| `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` - enable/disable output transcoding. Default is `true` |
 | `JZOS_ABEND_EXIT` | If set to an exit code threshold, `System.exit(n)` at or above this level triggers a U3333 abend |
 
 Example with JVM options:
@@ -359,6 +359,8 @@ export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 ```
 
 > **Note:** When using inline STDENV, the script syntax is platform-specific (`set` on Windows, `export` on Linux). Using `STDENV DD DUMMY` with region-level environment variables avoids this difference.
+
+> **Tip:** The STDENV script can also change the current working directory (e.g. `cd /path/to/dir` on Linux or `cd \path\to\dir` on Windows), which affects the JVM's `user.dir` property and any relative paths used by your Java code.
 
 ### 2.6 Compile and Deploy
 
@@ -437,9 +439,7 @@ public class ReadBankData {
 
     public static void readAccountFile(int displayN) throws ZFileException {
         // Open the dataset allocated to DD name ACCDATA
-        ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record");
-
-        try {
+        try (ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record")) {
             byte[] record = new byte[zFile.getLrecl()];
             int bytesRead;
             int count = 0;
@@ -462,8 +462,6 @@ public class ReadBankData {
             }
 
             System.out.printf("  Total records: %d%n", totalRecords);
-        } finally {
-            zFile.close();
         }
     }
 }
@@ -659,15 +657,13 @@ public class BankCustAcctReport {
     // -------------------------------------------------------------------------
 
     private static void runFilter(String pattern) throws IOException {
-        ZFile outFile = new ZFile("//'MFI01V.MFIDEMO.CUST.FILTER'", "wb,lrecl=132,type=record");
-        try {
+        try (ZFile outFile = new ZFile("//'MFI01V.MFIDEMO.CUST.FILTER'", "wb,lrecl=132,type=record")) {
             writeLine(outFile, "=== Customer Filter Step ===");
             writeLine(outFile, "Filter pattern: " + pattern);
             System.out.println("=== Customer Filter Step ===");
             System.out.println("Filter pattern: " + pattern);
 
-            ZFile custFile = new ZFile("//DD:CUSTDATA", "rb,type=record");
-            try {
+            try (ZFile custFile = new ZFile("//DD:CUSTDATA", "rb,type=record")) {
                 byte[] record = new byte[custFile.getLrecl()];
                 int totalRead = 0, matched = 0;
 
@@ -692,11 +688,7 @@ public class BankCustAcctReport {
                 writeLine(outFile, summary);
                 System.err.printf("DIAG: Processed %d records, %d matched '%s'%n",
                     totalRead, matched, pattern);
-            } finally {
-                custFile.close();
             }
-        } finally {
-            outFile.close();
         }
     }
 
@@ -708,8 +700,7 @@ public class BankCustAcctReport {
             throws IOException {
         String title = controlCards.getOrDefault("REPORT_TITLE", "Bank Account Summary");
 
-        ZFile outFile = new ZFile("//'MFI01V.MFIDEMO.ACCT.SUMMARY'", "wb,lrecl=132,type=record");
-        try {
+        try (ZFile outFile = new ZFile("//'MFI01V.MFIDEMO.ACCT.SUMMARY'", "wb,lrecl=132,type=record")) {
             printBoth(outFile, SEPARATOR);
             printBoth(outFile, "  " + title);
             printBoth(outFile, String.format("  Generated by: %s / %s",
@@ -718,8 +709,7 @@ public class BankCustAcctReport {
             printBoth(outFile, String.format("  %-5s  %-9s  %-4s  %12s", "PID", "Account", "Type", "Balance"));
             printBoth(outFile, "  " + "-".repeat(38));
 
-            ZFile accFile = new ZFile("//DD:ACCDATA", "rb,type=record");
-            try {
+            try (ZFile accFile = new ZFile("//DD:ACCDATA", "rb,type=record")) {
                 byte[] record = new byte[accFile.getLrecl()];
                 int count = 0;
                 BigDecimal totalBalance = BigDecimal.ZERO;
@@ -743,11 +733,7 @@ public class BankCustAcctReport {
                     count, totalBalance.toPlainString()));
                 printBoth(outFile, SEPARATOR);
                 System.err.printf("DIAG: Report displayed %d records%n", count);
-            } finally {
-                accFile.close();
             }
-        } finally {
-            outFile.close();
         }
     }
 
@@ -1090,11 +1076,10 @@ public class VsamAccountOps {
         System.err.printf("LOOKUP: custId='%s' len=%d bytes=%s%n",
             custId, custId.length(), Arrays.toString(custId.getBytes()));
 
-        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
-        System.err.printf("LOOKUP: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
-            vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
+        try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb")) {
+            System.err.printf("LOOKUP: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
+                vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
 
-        try {
             byte[] key = makeKey(custId, vsam.getVsamKeyLength());
             System.err.printf("LOOKUP: key bytes=%s (len=%d)%n", Arrays.toString(key), key.length);
 
@@ -1129,8 +1114,6 @@ public class VsamAccountOps {
             System.out.println("  Error: " + e.getMessage());
             System.err.println("LOOKUP exception: " + e);
             e.printStackTrace(System.err);
-        } finally {
-            vsam.close();
         }
 
         System.out.println(SEPARATOR);
@@ -1148,10 +1131,10 @@ public class VsamAccountOps {
             "PID", "Name", "Phone", "Email", "Mail");
         System.out.println("  " + "-".repeat(80));
 
-        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb");
-        System.err.printf("BROWSE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
-            vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
-        try {
+        try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb")) {
+            System.err.printf("BROWSE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
+                vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
+
             if (!startKey.isEmpty()) {
                 byte[] key = makeKey(startKey, vsam.getVsamKeyLength());
                 System.err.printf("BROWSE: locate KEY_GE key=%s%n", Arrays.toString(key));
@@ -1191,8 +1174,6 @@ public class VsamAccountOps {
             System.out.println("  No records found from key: " + startKey);
             System.err.println("BROWSE exception: " + e);
             e.printStackTrace(System.err);
-        } finally {
-            vsam.close();
         }
 
         System.out.println(SEPARATOR);
@@ -1209,10 +1190,10 @@ public class VsamAccountOps {
 
         System.err.printf("UPDATE: custId='%s' len=%d%n", custId, custId.length());
 
-        ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+");
-        System.err.printf("UPDATE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
-            vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
-        try {
+        try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+")) {
+            System.err.printf("UPDATE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
+                vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
+
             byte[] key = makeKey(custId, vsam.getVsamKeyLength());
             System.err.printf("UPDATE: key bytes=%s%n", Arrays.toString(key));
             boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
@@ -1247,8 +1228,6 @@ public class VsamAccountOps {
             System.out.println("  Update failed: " + e.getMessage());
             System.err.println("UPDATE exception: " + e);
             e.printStackTrace(System.err);
-        } finally {
-            vsam.close();
         }
 
         System.out.println(SEPARATOR);
@@ -1512,11 +1491,11 @@ The source files for this demonstration are located in the following directories
 | Return code 101 (RC_CONFIG_ERR) | JVMLDM configuration error | Check SYSOUT DD for detailed error messages |
 | Return code 102 (RC_SYSTEM_ERR) | System-level failure | Check SYSOUT DD for detailed error messages |
 | Return code 100 (RC_MAIN_EXCEPTION) | Unhandled exception in Java code | Check STDERR DD output for the Java stack trace |
-| RTS 145 (COBOL interop error) | JVM failed to initialize, stream closed prematurely, or DCB conflict | If the JVM cannot initialize (e.g. bad JAVA_HOME), it may surface as RTS 145 rather than RC 101. |
+| RTS 145 (COBOL interop error) | JVM failed to initialize, stream closed prematurely, or class/JAR loading failure | If the JVM cannot initialize (e.g. bad JAVA_HOME) or the class/JAR cannot be loaded, it may surface as RTS 145 rather than RC 101. |
 | `ZFile` cannot open dataset | DD not allocated or dataset not cataloged | Verify the DD name in JCL matches what ZFile opens (e.g. `//DD:ACCDATA`) |
-| DCB attribute conflict | JCL DD and ZFile open string both specify DCB attrs | If the JCL DD has `DCB=(RECFM=F,LRECL=80)`, open with just `"wb,type=record"` — not `"wb,type=record,lrecl=80,recfm=F"` |
+| DCB attribute conflict | ZFile open string specifies DCB attrs that don't match the existing dataset | DCB attributes (`lrecl`, `recfm`, `blksize`, etc) are optional for existing datasets — they are populated automatically from the file. If passed, they must match the underlying dataset's existing DCB attributes, otherwise a file status 39 can be returned. Therefore, it makes more sense to avoid specifying DCB attributes if on existing or vsam datasets, however, DCB attributes can be passed to create new non-vsam datasets. |
 | JVMLDM auto-redirects streams | Calling `ZUtil.redirectStandardStreams()` under JVMLDM | JVMLDM handles stream redirection automatically. Do not call it yourself when using JVMLDM. |
-| Dataset creation via ZFile | Opening a non-existent dataset in write/append mode | Opens in `"wb"` or `"ab"` mode will create the dataset. Use `lrecl=N` to set record length, where N is an integer. VSAM datasets cannot be implicitly created — define the cluster first (e.g. via IDCAMS DEFINE CLUSTER). |
+| Dataset creation via ZFile | Opening a non-existent dataset in write/append mode | Opens in `"wb"` or `"ab"` mode will create the dataset. Use `lrecl=N` to set record length (where N is an integer) and `recfm=[*+]\|[fvu][abms]` (FB, VS, *, +, etc),  to set record format (e.g. `"wb,type=record,lrecl=132,recfm=FB"`). VSAM datasets cannot be implicitly created — define the cluster first (e.g. via IDCAMS DEFINE CLUSTER). |
 | `ZFile.exists()` vs `ZFile.ddExists()` | Checking dataset/DD existence | `exists()` checks both DD and DSN. `ddExists()` only checks if a DD is allocated in the current step. `dsExists()` only checks the catalog. |
 
 ### Exception and System.exit Behavior
@@ -1535,47 +1514,76 @@ The `esjos.jar` library (located at `bin64/esjos.jar` in your Enterprise Develop
 
 The API is used identically to IBM JZOS — refer to the IBM JZOS documentation for method signatures, parameters, and usage patterns. Rocket Software product documentation will be linked here when available.
 
-### Not Currently Supported
+**Classes Supported, along with methods not supported.**
 
-The following IBM JZOS classes and methods are not supported:
+> Any unlisted classes/listed functions are currently not supported.
 
-**Classes (not shipped):**
-
-- `MvsJobSubmitter`
-- `CatalogSearch`
-- `Enqueue` / `MvsEnqueue`
-- `MvsConsole`
-- `PdsDirectory`
-- `WtoMessage`
-- `FileFactory` (IBM variant)
-- `RDWInputRecordStream` / `RDWOutputRecordStream`
-- `AccessMethodServices`
-
-**ZFile:**
-
-- `bpxwdyn(String)`
-- `allocDummyDDName()`
-- `makeFifo(String, int)`
-- `obtainDSN(String, int)`
-- `readDSCBChain(String)`
-- `readJFCB()`
-
-**DatasetVolumeList:**
-
-- `getTotalVolumesCount()`
-- `getReturnedDSN()`
-- `getVolumes()`
-
-**ZUtil:**
-
-- `environ()`
-- `getEnv(String)`
-- `setEnv(String, String)`
-- `smfRecord(int, int, byte[])`
-- `substituteSystemSymbols(String)`
-- `peekOSMemory(long, byte[], int, int)`
-- `getTodClock()` / `getTodClockExtended()`
-- `logDiagnostic(int, String)`
+- **ZFile:**
+    - `bpxwdyn(String)`
+    - `allocDummyDDName()`
+    - `makeFifo(String, int)`
+    - `obtainDSN(String, int)`
+    - `readDSCBChain(String)`
+    - `readJFCB()`
+    - `locateDSN(java.lang.String dsn)`
+    - `locateDSN(java.lang.String dsn, DatasetVolumeList dsvl)`
+- **DatasetVolumeList:**
+    - `getTotalVolumesCount()`
+    - `getReturnedDSN()`
+    - `getVolumes()`
+    - `getDeviceTypes()`
+- **ZUtil:**
+    - `environ()`
+    - `getEnv(String)`
+    - `setEnv(String, String)`
+    - `getCodePageCurrentLocale()`
+    - `getCpuTimeMicros()`
+    - `getCurrentTimeMicros()`
+    - `getCurrentTsoPrefix()`
+    - `getEpochMillis(byte[] stckOrStcke)`
+    - `getEpochMillis(long stck)`
+    - `getEpochMilliSeconds(long stck)`
+    - `getJzosDllVersion()`
+    - `getJzosJarVersion()`
+    - `getLoggingLevel()`
+    - `setLoggingLevel(int level)`
+    - `getPid()`
+    - `getPPid()`
+    - `getTodClock()`
+    - `getTodClock(byte[] buffer)`
+    - `getTodClockExtended()`
+    - `getTodClockExtended(byte[] buffer)`
+    - `newEncodedPrintStream(java.io.OutputStream os, boolean autoFlush)`
+    - `newEncodedPrintStream(java.io.OutputStream os, boolean autoFlush, java.lang.String encoding)`
+    - `newEncodedPrintStream(java.io.OutputStream os, boolean autoFlush, java.lang.String encoding, boolean enable)`
+    - `peekOSMemory(long address, byte[] bytes)`
+    - `peekOSMemory(long address, byte[] bytes, int offset, int len)`
+    - `peekOSMemory(long address, int len)`
+    - `smfRecord(int type, int subtype, byte[] record)`
+    - `substituteSystemSymbols(java.lang.String pattern)`
+    - `substituteSystemSymbols(java.lang.String pattern, boolean warn)`
+- **ByteUtil**:
+    - `dumpHex(java.lang.String label, byte[] bytes, int offset, int len, int bytesPerLine, java.io.Writer writer)`
+    - `dumpHex(java.lang.String label, byte[] bytes, java.io.OutputStream ostream)`
+    - `	dumpHex(java.lang.String label, byte[] bytes, java.io.OutputStream ostream, java.lang.String encoding)`
+    - `dumpHex(java.lang.String label, byte[] bytes, java.io.Writer writer)`
+    - `intAsBytes(int i)`
+    - `longAsBytes(long l)`
+    - `putInt(int i, byte[] bytes, int offset)`
+    - `putString(java.lang.String str, byte[] bytes, int offset, int length, java.lang.String encoding)`
+    - `toHexString(int i, int numDigits)`
+    - `unpackLong(byte[] bytes, int offset, int length, boolean isSigned)`
+- **ZFileException**:
+    - `getSynadMsg()`
+- **EnqueueException**:
+- **ErrnoException**:
+- **JesVsamException**:
+- **JzosPermission**:
+- **Messages**:
+- **RauditxException**:
+- **RcException**:
+- **ZFileConstants**:
+- **ZLogstreamException**:
 
 ### Encoding
 

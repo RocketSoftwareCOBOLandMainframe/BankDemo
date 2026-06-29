@@ -22,6 +22,6 @@ Demonstrations showing how to invoke programs written in other languages from JC
 ## Prerequisites
 
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server
-- A Java Development Kit (JDK) 8 or later (for Java demonstrations)
+- A Java Development Kit (JDK) 21-25 (for Java demonstrations)
 - Python 3.8 or later (for Python demonstrations)
 - See specific demonstration instructions for additional requirements

@@ -26,9 +26,7 @@ public class ReadBankData {
 
     public static void readAccountFile(int displayN) throws ZFileException {
         // Open the dataset allocated to DD name ACCDATA
-        ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record");
-
-        try {
+        try (ZFile zFile = new ZFile("//DD:ACCDATA", "rb,type=record")) {
             byte[] record = new byte[zFile.getLrecl()];
             int bytesRead;
             int count = 0;
@@ -50,8 +48,6 @@ public class ReadBankData {
             }
 
             System.out.printf("  Total records: %d%n", zFile.getRecordCount());
-        } finally {
-            zFile.close();
         }
     }
 }
