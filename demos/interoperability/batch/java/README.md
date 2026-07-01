@@ -1068,7 +1068,7 @@ public class VsamAccountOps {
     // LOOKUP: Locate a single record by primary key (customer ID)
     // -------------------------------------------------------------------------
 
-    private static void doLookup(String custId) {
+    private static void doLookup(String custId) throws ZFileException {
         System.out.println("=== VSAM LOOKUP ===");
         System.out.println("Searching for customer: '" + custId + "' (length=" + custId.length() + ")");
         System.out.println(SEPARATOR);
@@ -1110,10 +1110,6 @@ public class VsamAccountOps {
                         bytesRead, new String(record, 0, Math.min(40, bytesRead)));
                 }
             }
-        } catch (Exception e) {
-            System.out.println("  Error: " + e.getMessage());
-            System.err.println("LOOKUP exception: " + e);
-            e.printStackTrace(System.err);
         }
 
         System.out.println(SEPARATOR);
@@ -1123,7 +1119,7 @@ public class VsamAccountOps {
     // BROWSE: Sequential read starting from a key (KEY_GE)
     // -------------------------------------------------------------------------
 
-    private static void doBrowse(String startKey, int maxCount) throws Exception {
+    private static void doBrowse(String startKey, int maxCount) throws ZFileException {
         System.out.println("=== VSAM BROWSE ===");
         System.out.printf("Start key: '%s'  Max records: %d%n", startKey, maxCount);
         System.out.println(SEPARATOR);
@@ -1134,7 +1130,6 @@ public class VsamAccountOps {
         try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb")) {
             System.err.printf("BROWSE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
                 vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
-
             if (!startKey.isEmpty()) {
                 byte[] key = makeKey(startKey, vsam.getVsamKeyLength());
                 System.err.printf("BROWSE: locate KEY_GE key=%s%n", Arrays.toString(key));
@@ -1170,7 +1165,7 @@ public class VsamAccountOps {
             System.out.println("  " + "-".repeat(80));
             System.out.printf("  Browsed %d records%n", count);
             System.err.printf("BROWSE: returned %d records from key '%s'%n", count, startKey);
-        } catch (Exception e) {
+        } catch (ZFileException e) {
             System.out.println("  No records found from key: " + startKey);
             System.err.println("BROWSE exception: " + e);
             e.printStackTrace(System.err);
@@ -1183,7 +1178,7 @@ public class VsamAccountOps {
     // UPDATE: Locate a record and toggle the SendMail flag
     // -------------------------------------------------------------------------
 
-    private static void doUpdate(String custId) throws Exception {
+    private static void doUpdate(String custId) throws ZFileException {
         System.out.println("=== VSAM UPDATE ===");
         System.out.println("Updating customer: " + custId);
         System.out.println(SEPARATOR);
@@ -1193,7 +1188,6 @@ public class VsamAccountOps {
         try (ZFile vsam = new ZFile("//DD:CUSTDATA", "type=record,rb+")) {
             System.err.printf("UPDATE: Opened. VsamType=%d  KeyLen=%d  LRECL=%d%n",
                 vsam.getVsamType(), vsam.getVsamKeyLength(), vsam.getLrecl());
-
             byte[] key = makeKey(custId, vsam.getVsamKeyLength());
             System.err.printf("UPDATE: key bytes=%s%n", Arrays.toString(key));
             boolean found = vsam.locate(key, ZFileConstants.LOCATE_KEY_EQ);
@@ -1224,7 +1218,7 @@ public class VsamAccountOps {
             System.out.println("  After update:");
             printCustomerRecord(record);
             System.err.printf("UPDATE: Toggled SendMail: '%s' -> '%s'%n", currentMail, newMail);
-        } catch (Exception e) {
+        } catch (ZFileException e) {
             System.out.println("  Update failed: " + e.getMessage());
             System.err.println("UPDATE exception: " + e);
             e.printStackTrace(System.err);
