@@ -55,9 +55,9 @@ For example, Directory Server  is configured, by default, to use port 86. You mu
 
 If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values, so that you can control access via these.
 
-## Enterprise Server Security
+<!-- ## Enterprise Server Security
 
-In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
+In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.-->
 
 ### Disable the Default Enterprise Server Security Configuration
 
@@ -796,11 +796,11 @@ To view the catalog:
 To view the spool:
 
 1.  In **Server Explorer**, right-click the BANKDEMO server and select **Show Spool**.
-2.  Double-click the name of one of the jobs in the list to open the details in a new tab.
+2.  Double-click the name of the job to open the details in a new tab.
 
     ![](images/ea36d8374884cc2250e25160fa077a34.png)\
     
-3.  To see the details about a job, click the **Edit** icon. The details about the job are displayed in the **DD Details** window.
+3.  Details about the job are displayed in their own sections. Scroll down to the DD Entries section, select a result and click the **Edit** icon. The details are displayed in the **DD Details** window.
 
     ![](images/2fa4e0ba0e3925ed4279c4c8a995af04.jpg)
 
