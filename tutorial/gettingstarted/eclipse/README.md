@@ -55,9 +55,10 @@ For example, Directory Server  is configured, by default, to use port 86. You mu
 
 If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values, so that you can control access via these.
 
-<!-- ## Enterprise Server Security
+<!--
+ ## Enterprise Server Security
 
-In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.-->
+In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
 
 ### Disable the Default Enterprise Server Security Configuration
 
@@ -67,6 +68,7 @@ In this release, the Enterprise Server security features are enabled by default.
 2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting or stopping and other actions.
 
+-->
 
 ## Starting the Eclipse Integrated Development Environment (IDE)
 

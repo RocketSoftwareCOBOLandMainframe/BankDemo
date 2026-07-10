@@ -59,7 +59,7 @@ If you want remote users to access Enterprise Server functionality through the f
 ## Enterprise Server Security
 
 In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
--->
+
 ### Disable the Default Enterprise Server Security Configuration
 
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
@@ -75,7 +75,7 @@ In this release, the Enterprise Server security features are enabled by default.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. 
 
     Regions will no longer require credentials for starting or stopping and other actions.
-
+-->
 ## Starting the Eclipse Integrated Development Environment (IDE)
 
 [Back to Top](#overview)
