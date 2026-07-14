@@ -55,6 +55,11 @@ For example, Directory Server is configured, by default, to use port 86. You mus
 
 If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values, so that you can control access via these.
 
+
+## Enterprise Server Security
+
+In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted.
+
 <!--
 ## Enterprise Server Security
 

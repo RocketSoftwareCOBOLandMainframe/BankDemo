@@ -53,6 +53,10 @@ The preconfigured and fully executing application BankDemo is available from the
 
 ## Enterprise Server Security
 
+In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted. 
+
+<!-- ## Enterprise Server Security
+
 In this release, the Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
 
 ### Disable the Default Enterprise Server Security Configuration
@@ -71,7 +75,7 @@ In this release, the Enterprise Server security features are enabled by default.
     Regions no longer require credentials for starting, stopping and other actions.
 
 
-
+-->
 
 ## Starting the Visual Studio Integrated Development Environment
 
@@ -704,7 +708,6 @@ To execute the JCL, you must run the application in an instance of the Rocket En
 
 **Importing the Bankdemo Server**
 
-.
 
 1.  Open Windows PowerShell and navigate to the `C:\MFETDUSER\tutorial` folder.
 2.  Run `set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
@@ -740,19 +743,17 @@ Ensure that the default settings are applied to the Directory Sever:
 
     ![](images/03218b9fa5693aaca14ff3cf3aa3dd1b.jpg) **Tip:** Use the Auto Hide button (![](images/bf74b6a329048075497d723393231eba.jpg)) in the Server Explorer toolbar to pin the window to the IDE window.
 
-3.  Right-click **Rocket Enterprise Servers** and select **Add Directory Server**. This opens the Rocket Directory Server window. 
+3.  Right-click **Rocket Enterprise Server** and select **Add Directory Server**. This opens the Rocket Directory Server window. 
 
 4.  Ensure that the host name is `localhost` and the port number is `86`.
 
 Now you can import the definition of the Bankdemo logical server (LSER) in Enterprise Server:
 
-1.  In Visual Studio, open the Server Explorer window.
-
-2.  Expand **Rocket Enterprise Server**.
+1.  In Visual Studio, in the Server Explorer window, expand **Rocket Enterprise Server**.
 
     If you are presented with the **Enterprise Server Sign On** dialog box, click **OK**.
 
-3.  Right-click **localhost** and click **Import**.
+3.  Right-click **Default** and click **Import**.
 4.  In the **Import Server** dialog box, click **...** on the line for **Import server definition file**.
 5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, click **Open**, and click **OK**.
 
