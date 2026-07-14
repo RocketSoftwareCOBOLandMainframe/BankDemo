@@ -60,6 +60,15 @@ If you want remote users to access Enterprise Server functionality through the f
 
 In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted.
 
+In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted.
+
+To retrieve the default generated password:
+
+1. Source the cobsetenv script. 
+    You may need to be running as either the Enterprise Server account (as specified when installing the product) or root, in order to have read access to the vault.
+2. Run the command `mfsecretsadmin read microfocus/temp/admin`.
+3. Note down the generated password.
+
 <!--
 ## Enterprise Server Security
 

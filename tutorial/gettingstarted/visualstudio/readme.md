@@ -55,6 +55,12 @@ The preconfigured and fully executing application BankDemo is available from the
 
 In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted. 
 
+To retrieve the default generated password:
+
+1. Open Enterprise Developer command prompt.
+2. Run the command `mfsecretsadmin read microfocus/temp/admin`.
+3. Note down the generated password.
+
 <!-- ## Enterprise Server Security
 
 In this release, the Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
