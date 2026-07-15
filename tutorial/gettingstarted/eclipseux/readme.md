@@ -60,8 +60,6 @@ If you want remote users to access Enterprise Server functionality through the f
 
 In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted.
 
-In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted.
-
 To retrieve the default generated password:
 
 1. Source the cobsetenv script. 
