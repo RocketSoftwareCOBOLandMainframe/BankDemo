@@ -6,6 +6,11 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>com.microfocus.eclipse.project.cobolBuilder</name>
 			<arguments>
 				<dictionary>
@@ -26,6 +31,7 @@
 	<natures>
 		<nature>com.microfocus.eclipse.project.cobolNature</nature>
 		<nature>com.microfocus.eclipse.edt.core.edtNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<linkedResources>
 		<link>
