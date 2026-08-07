@@ -1,4 +1,4 @@
-# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio 2022
+# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio
 
 Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
@@ -15,14 +15,14 @@ This demonstration shows how you can compile, link, and debug an Open PL/I BANK 
 ## Prerequisites
 
 This demonstration requires:
-- Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
+- Rocket&reg; Enterprise Developer for Visual Studio. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the CICS application. 
 
 > **Note:** This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 ## Requirements
 
-> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio 2022](..\README.md)" tutorial, and HACloud service is running, you can skip these steps.
+> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio](..\README.md)" tutorial, and HACloud service is running, you can skip these steps.
 
 ### Disable the Default Enterprise Server Security
 

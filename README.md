@@ -48,7 +48,7 @@ WITH THIS SOFTWARE.
 To use the project, download the **source.zip** or **source.tar.gz** from the [release](https://github.com/RocketSoftware/BankDemo/releases) that matches the product version you want to use, then follow the relevant readme instructions. You can use the project in one of the following ways:
 1. <a name="tutorial"></a> As the basis of the introductory tutorials for the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
     - Prerequisite software: 
-        - Rocket Enterprise Developer for Eclipse or Rocket Enterprise Developer for Visual Studio 2022
+        - Rocket Enterprise Developer for Eclipse or Rocket Enterprise Developer for Visual Studio
     - Available tutorials:
         - [Getting Started with Enterprise Developer for Eclipse (Windows)](tutorial/gettingstarted/eclipse/README.md)
         - [Getting Started with Enterprise Developer for Eclipse (Linux)](tutorial/gettingstarted/eclipseux/readme.md)

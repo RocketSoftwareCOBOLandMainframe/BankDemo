@@ -24,7 +24,7 @@ Before running this demo remotely, verify that you have an RDO and MFDS agent al
 
 ### Disable the Default Enterprise Server Security Configuration
 
->**Note**: If you have already imported the BANKDEMO enterprise server as part of the "Getting started with Rocket Enterprise Developer for Visual Studio 2022" tutorial, and HA Cloud service is running, you can skip these steps.
+>**Note**: If you have already imported the BANKDEMO enterprise server as part of the "Getting started with Rocket Enterprise Developer for Visual Studio" tutorial, and HA Cloud service is running, you can skip these steps.
 
 The Enterprise Server security features are enabled by default. However, tutorials that use enterprise server regions assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *To Disable the Default Enterprise Server Security Configuration* for more information. 
 

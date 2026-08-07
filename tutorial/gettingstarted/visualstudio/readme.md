@@ -1,12 +1,12 @@
-# Getting Started with Rocket&reg; Enterprise Developer for Visual Studio 2022
+# Getting Started with Rocket&reg; Enterprise Developer for Visual Studio
 
 Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
 ## Overview
 
-This set of tutorials guides you through Rocket&reg; Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through Rocket&reg; Enterprise Developer for Visual Studio. They provide a basic understanding of how the product operates.
 
-These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio 2022 to develop and maintain both simple COBOL and mainframe subsystem applications. Other tutorials, which are designed for Administrators, are also available.
+These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio to develop and maintain both simple COBOL and mainframe subsystem applications. Other tutorials, which are designed for Administrators, are also available.
 
 - [Starting the Visual Studio Integrated Development Environment](#starting-the-visual-studio-integrated-development-environment)
 - [Adding Files to your Visual Studio Project](#adding-files-to-your-visual-studio-project)
@@ -40,7 +40,7 @@ The preconfigured and fully executing application BankDemo is available from the
 
     You must have the following software installed:
 
-    -   Rocket Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
+    -   Rocket Enterprise Developer for Visual Studio. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
     -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Micro Focus Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
@@ -90,10 +90,10 @@ In this release, the Enterprise Server security features are enabled by default.
 1. To start the Visual Studio IDE:
 
     **On Windows 10**: 
-    From your Windows desktop, click **Start \> Visual Studio 2022**.
+    From your Windows desktop, click **Start \> Visual Studio**.
 
     **On Windows 11**:
-    Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio 2022**.
+    Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio**.
 
     If this is the first time you start Visual Studio on your system, you are prompted to specify default environment settings. Set **Development Settings** to **General**.
 
