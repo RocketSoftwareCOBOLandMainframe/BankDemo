@@ -19,7 +19,9 @@ Other tutorials, which are designed for Administrators, are also available.
 * [Unit Testing the Online Application](#unit-testing-the-online-application)
 * [Debugging the Batch Application](#debugging-the-batch-application)
 * [Debugging the Online Application](#debugging-the-online-application)
-* [Java Interoperability in ES](#java-interoperability-in-es)
+* [Compiling Java Sources for Use in ES](#compiling-java-sources-for-use-in-es)
+* [Unit Testing the Java Batch Application](#unit-testing-the-java-batch-application)
+* [Debugging the Java Batch Application](#debugging-the-java-batch-application)
 
 **Download the Demonstration Application**
 
@@ -1110,7 +1112,7 @@ You use the same features as previously to debug the application.
 
 2. Finally, click the **Team Developer** perspective button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), to switch back to editing your application.
 
-## Java Interoperability in ES
+## Compiling Java Sources for Use in ES
 
 [Back to Top](#overview)
 
@@ -1132,7 +1134,7 @@ Add the Java sample folder as a linked resource:
 Configure the project so Eclipse can resolve Java dependencies and related sources:
 
 1.  Right-click the **Bankdemo** project and click **Properties**.
-2.  Expand **Rocket Software \> Build Path** and select the check box for **Bankdemo/cobol** (this is where `HelloJav` is located).
+2.  Expand **Rocket Software \> Build Path \> Build Precedence**   and select the check box for **Bankdemo/cobol** (this is where `HelloJav` is located).
 3.  Click **Apply and Close**.
 4.  Right-click the **Bankdemo** project and click **Properties**.
 5.  Navigate to **Java Build Path \> Libraries \> Classpath**.
@@ -1148,7 +1150,12 @@ The Bankdemo template is preconfigured so Java build output is written to `loadl
 -   With **Project \> Build Automatically** enabled, Java sources are compiled whenever you save changes.
 -   To force a full rebuild, click **Project \> Clean...**, select the **Bankdemo** project, and rebuild.
 -   If unresolved imports or missing classes are reported, recheck **Properties \> Java Build Path \> Libraries** and confirm **ES Java Support Library** is present.
+-   If the java files fail to build, confirm the folder is assigned as a source in **Properties \> Java Build Path \> Source \> Add Folder \> java**
 -   If required, verify the linked folder path still points to `C:\MFETDUSER\sources\java`.
+
+## Unit Testing the Java Batch Application
+
+[Back to Top](#overview)
 
 **Running the Java Job and Viewing Spool Output**
 
@@ -1167,17 +1174,26 @@ To run the Java sample, submit `HELLOJAV.jcl`:
 
     This mapping occurs because `HelloBatch.java` explicitly redirects Java standard streams to JCL DDs by calling `ZUtil.redirectStandardStreams(...)`, and restores them afterward with `ZUtil.restoreStandardStreams()`.
 
-**Running Java Directly with JVMDEMO.jcl**
+**Running Java Directly with JVMLDM**
 
-You can also run Java directly from JCL without a COBOL bootstrap program.
+The remaining Java JCL samples invoke Java classes directly via JVMLDM, without an explicit intermediate COBOL program. JVMLDM handles JVM initialisation and stream redirection automatically, so only the Java class and its DD allocations are needed in the JCL.
+
+To try the first example:
 
 1.  In **Application Explorer**, expand the **jcl** folder.
-2.  Right-click **JVMDEMO.jcl** and select **Submit JCL to associated Server**.
-3.  Open the spool entry for the submitted job and review **STDOUT** and **STDERR** DD output.
+2.  Open **JVMDEMO.jcl** and review it. The job passes arguments to `BatchReport` from three sources Ã”Ã‡Ã¶ the `PARM` string, the `STDENV` DD, and the `MAINARGS` DD Ã”Ã‡Ã¶ and all six should appear in **STDOUT**.
+3.  Right-click **JVMDEMO.jcl** and select **Submit JCL to associated Server**.
+4.  Open the spool entry and review the **STDOUT** and **STDERR** DD output.
 
-This path executes the Java program through JVMLDM.
+The following additional JCL samples are also provided in the **jcl** folder and can be submitted in the same way:
 
-**Debugging Mixed COBOL and Java (HELLOJAV)**
+-   **JVMREADBNK.jcl** Ã”Ã‡Ã¶ reads BankDemo account records from a dataset using the `ZFile` API and prints a summary to **STDOUT**.
+-   **JVMMULTI.jcl** Ã”Ã‡Ã¶ a two-step job that filters customer records in the first step and produces a formatted account report in the second, passing data between steps via cataloged datasets.
+-   **JVMVSAM.jcl** Ã”Ã‡Ã¶ a three-step job demonstrating keyed VSAM lookup, sequential browse, and record update operations against the `BNKCUST` dataset.
+
+## Debugging the Java Batch Application
+
+[Back to Top](#overview)
 
 You can debug the COBOL-to-Java-to-COBOL flow in one run by combining the existing JCL Debug configuration with a Remote Java debug configuration.
 
@@ -1206,15 +1222,16 @@ Enable remote Java debugging in `HELLOJAV.jcl` by setting `JAVA_TOOL_OPTIONS` in
 Use this format (the break before `=8005` is intentional to satisfy the 80-character JCL line limit):
 
     ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
-    "JAVA_TOOL_OPTIONS=agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address
-    =8005")
+    "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8005")
 
-Set breakpoints before running:
+**Set Breakpoints**
 
 1.  In COBOL `HELLOJAV.cbl`, set breakpoints at the Java call and at a display line after Java returns.
 2.  In Java, set a breakpoint in `HelloBatch.java` on a line of code.
 
-Start the debuggers and run the job:
+**Start the Debuggers and Run the Job**
+
+> **Note:** The JVM can only be initialised once and will have been initialised by previous java job submissions, so it is best to restart the BANKDEMO region in the server explorer before attempting to debug.
 
 1.  Open **Run** \> **Debug Configurations...** and start **COBOL Enterprise Server \> JCL Debug**.
 2.  Open **Run** \> **Debug Configurations...** and start **Remote Java Application \> ES Java Debug**.
@@ -1223,7 +1240,7 @@ Start the debuggers and run the job:
 5.  Press **F8** to continue to the Java breakpoint.
 6.  Press **F8** again to continue back to the COBOL breakpoint after the Java call.
 
-For reruns of the same job, keep the Java debugger active. Do not stop the Remote Java debugger between reruns of `HELLOJAV.jcl`; if you stop it, you would need to kill the enterprise server SEP because of JVM initialization behavior.
+Keep the Java debugger active, as the JVM will not reconnect until re-intialised. With the debugger connection open, any other Java Batch program can be debugged. For example running **JVMDEMO.jcl**, will allow you to debug through **BatchReport.java**.
 
 
 This concludes this set of tutorials that introduce Enterprise Developer.
