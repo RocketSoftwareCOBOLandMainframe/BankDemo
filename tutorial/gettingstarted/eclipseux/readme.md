@@ -1115,10 +1115,8 @@ This section describes how to add Java content to the Bankdemo project and compi
 Ensure that the `JAVA_HOME` environment variable is set on the Linux machine, pointing to a Java JDK installation. For example:
 
 ```bash
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-21.0.10.0.7-1.el9.x86_64
 ```
-
-Add this to your shell profile (for example, `~/.bashrc` or `~/.profile`) so that it is set whenever Enterprise Developer is launched.
 
 **Adding Java Source Files**
 
