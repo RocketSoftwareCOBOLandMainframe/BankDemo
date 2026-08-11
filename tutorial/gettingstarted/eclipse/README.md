@@ -1151,7 +1151,7 @@ The Bankdemo template is preconfigured so Java build output is written to `loadl
 -   To force a full rebuild, click **Project \> Clean...**, select the **Bankdemo** project, and rebuild.
 -   If unresolved imports or missing classes are reported, recheck **Properties \> Java Build Path \> Libraries** and confirm **ES Java Support Library** is present.
 -   If the java files fail to build, confirm the folder is assigned as a source in **Properties \> Java Build Path \> Source \> Add Folder \> java**
--   If required, verify the linked folder path still points to `C:\MFETDUSER\sources\java`.
+-   If missing from loadlib check the **Properties \> Java Build Path \> Default output folder \> Bankdemo/loadlib**
 
 ## Unit Testing the Java Batch Application
 
