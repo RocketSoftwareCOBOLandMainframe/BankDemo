@@ -1,4 +1,4 @@
-# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio 2022
+# Open PL/I Bankdemo Application in Enterprise Developer for Visual Studio
 
 Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
@@ -15,16 +15,16 @@ This demonstration shows how you can compile, link, and debug an Open PL/I BANK 
 ## Prerequisites
 
 This demonstration requires:
-- Rocket&reg; Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
+- Rocket&reg; Enterprise Developer for Visual Studio. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the documentation for Enterprise Developer.
 - A TN3270 terminal emulator to run the CICS application. 
 
 > **Note:** This tutorial uses the Rocket Software Secure Host Access (SHA) TN3270 emulator, which is installed with Enterprise Developer, but you can use an alternative terminal emulator.
 
 ## Requirements
 
-> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio 2022](..\README.md)" tutorial, and HACloud service is running, you can skip these steps.
+> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio](..\README.md)" tutorial, and HACloud service is running, you can skip these steps.
 
-### Disable the Default Enterprise Server Security
+<!--### Disable the Default Enterprise Server Security
 
 In this release, the Enterprise Server security features are enabled by default. Tutorials that use enterprise server regions, however, assume that Enterprise Server security is not configured. To perform this tutorial without modification, you must disable the default configured Enterprise Server security. See *Disable the Default Enterprise Server Security Configuration* for more information.
 
@@ -33,8 +33,20 @@ In this release, the Enterprise Server security features are enabled by default.
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer command prompt, run the command `DisableESDefaultSecurity.cmd`. You see a series of messages as the script disables default security.
-2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
+2. Restart the Enterprise Directory Service (EDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting/stopping and other actions.
+-->
+
+## Enterprise Server Security
+
+In this release, the Enterprise Server security features are enabled by default. Make sure that you have the SYSAD password handy so that you can provide it whenever you are prompted.
+
+To retrieve the default generated password:
+
+1. Open Enterprise Developer command prompt.
+2. Run the command `mfsecretsadmin read microfocus/temp/admin`.
+3. Note down the generated password.
+
 
 ### Import the Supplied Bankdemo Enterprise Server:
     

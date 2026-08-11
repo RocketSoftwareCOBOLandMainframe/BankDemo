@@ -12,7 +12,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server.
 - A TN3270 terminal emulator. 
    You can use the Rocket Software Secure Host Access (SHA) session server and the TN3270 emulator included with both Enterprise Developer and Enterprise Server.
-- Ensure that the Directory Server service (MFDS) is running and listening on the default port (86).
+- Ensure that the Enterprise Directory Service (EDS) is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - PostgreSQL version 12 or later.
 - Ensure that you add the PostgreSQL `bin` directory path to the PATH environmental variable, so that you can use `psql`.

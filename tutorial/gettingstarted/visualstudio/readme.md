@@ -1,12 +1,12 @@
-# Getting Started with Rocket&reg; Enterprise Developer for Visual Studio 2022
+# Getting Started with Rocket&reg; Enterprise Developer for Visual Studio
 
 Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
 ## Overview
 
-This set of tutorials guides you through Rocket&reg; Enterprise Developer for Visual Studio 2022. They provide a basic understanding of how the product operates.
+This set of tutorials guides you through Rocket&reg; Enterprise Developer for Visual Studio. They provide a basic understanding of how the product operates.
 
-These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio 2022 to develop and maintain both simple COBOL and mainframe subsystem applications. Other tutorials, which are designed for Administrators, are also available.
+These tutorials are designed for developers who have experience with developing COBOL on the mainframe but do not necessarily have a working knowledge of the Visual Studio Integrated Development Environment (IDE). The tutorials provide a basic understanding of the features offered in Enterprise Developer for Visual Studio to develop and maintain both simple COBOL and mainframe subsystem applications. Other tutorials, which are designed for Administrators, are also available.
 
 - [Starting the Visual Studio Integrated Development Environment](#starting-the-visual-studio-integrated-development-environment)
 - [Adding Files to your Visual Studio Project](#adding-files-to-your-visual-studio-project)
@@ -40,14 +40,14 @@ The preconfigured and fully executing application BankDemo is available from the
 
     You must have the following software installed:
 
-    -   Rocket Enterprise Developer for Visual Studio 2022. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
+    -   Rocket Enterprise Developer for Visual Studio. [*Click here*](https://docs.rocketsoftware.com/bundle?cluster=true&labelkey=prod_enterprise_developer) to access the product Help and the release notes of Enterprise Developer.
     -   A TN3270 terminal emulator to run the CICS application. This tutorial uses Micro Focus Host Access for the Cloud (HACloud), which is installed with Enterprise Developer, but you can use an alternative terminal emulator if you want.
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
-   If you have an active firewall on the system that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
+   If you have an active firewall on the system that is running your Enterprise Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
     
-   For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
+   For example, Enterprise Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
 
    If you want remote users to access Enterprise Server functionality through the firewall, you can use fixed port values so that you can control access through them.
 
@@ -73,7 +73,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
      A series of messages appear as the script disables default security.
 
-2. Restart the Directory Server (MFDS) service and the Enterprise Server Administration (ESCWA) service to pick up the configuration changes. 
+2. Restart the Enterprise Directory Service (EDS) and the Enterprise Server Administration (ESCWA) service to pick up the configuration changes. 
 
     Now, you can use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. 
@@ -90,10 +90,10 @@ In this release, the Enterprise Server security features are enabled by default.
 1. To start the Visual Studio IDE:
 
     **On Windows 10**: 
-    From your Windows desktop, click **Start \> Visual Studio 2022**.
+    From your Windows desktop, click **Start \> Visual Studio**.
 
     **On Windows 11**:
-    Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio 2022**.
+    Click **Start** in the Task Bar. Use the search field in the Start menu to find and start **Visual Studio**.
 
     If this is the first time you start Visual Studio on your system, you are prompted to specify default environment settings. Set **Development Settings** to **General**.
 
