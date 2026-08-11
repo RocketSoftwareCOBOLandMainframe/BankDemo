@@ -4,7 +4,7 @@
     - Python 3 with `requests` and for the PostgreSQL demonstration `psycopg2-binary` packages (e.g. `python3 -m pip install requests psycopg2-binary`)
     - See specific demonstration instructions for any additional requirements
 - Prerequisites: 
-    - Ensure that the Directory Server (MFDS) service is running
+    - Ensure that the Enterprise Directory Service (EDS) is running
     - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port 10086
 - Available demonstrations:
     - [Deploying and Running Bankdemo with VSAM Data](vsam/README.md)

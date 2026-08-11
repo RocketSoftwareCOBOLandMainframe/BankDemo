@@ -28,7 +28,7 @@ In the simplest configuration, it demonstrates an application comprising CICS on
 
 ## <a name="license"></a>License
 
-Copyright 2010 – 2025 Rocket Software, Inc. or its affiliates. 
+Copyright 2010 – 2026 Rocket Software, Inc. or its affiliates. 
 This software may be used, modified, and distributed 
 (provided this notice is included without modification)
 solely for internal demonstration purposes with other 
@@ -56,8 +56,8 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Open PL/I Bankdemo Application in Enterprise Developer for Eclipse](tutorial/gettingstarted/eclipse/PLIDemo.md)
         - [Open PL/I Bankdemo Application in Enterprise Development for Visual Studio](tutorial/gettingstarted/visualstudio/PLIDemo.md)
     - Requirements: 
-        - Ensure that the Directory Server (MFDS) service is running
-          - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
+        - Ensure that the Enterprise Directory Service (EDS) is running.
+        - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
 
 2. <a name="onprem"></a> Demonstrations of the Rocket Enterprise Server capabilities in "on premises" scenarios:
     - Prerequisite software: 
@@ -70,7 +70,7 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Deploying and Running Bankdemo with VSAM stored in PostgreSQL using MFDBFH](demos/onprem/psqlmfdbfh/README.md) 
         - [Deploying and Running Bankdemo in a Performance and Availability Cluster with PostgreSQL](demos/onprem/psqlpac/README.md) 
     - Requirements: 
-        - Ensure that the Directory Server (mfds) service is running
+        - Ensure that the Enterprise Directory Service (EDS) is running.
         - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.
 
 Use the **Issues** tab to report issues, or to raise questions.

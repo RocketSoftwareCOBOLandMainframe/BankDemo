@@ -7,7 +7,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ## Prerequisites
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server
 - A TN3270 terminal emulator. You can use the Rocket Software Secure Host Access (SHA) session server and TN3270 emulator included with both Enterprise Developer and Enterprise Server.
-- Ensure that the Directory Server service (MFDS) is running and listening on the default port (86).
+- Ensure that the Enterprise Directory Service (EDS) is running and listening on the default port (86).
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086).
 - Python 3.*n* and the `requests` package from Python.org. You can install the package after installing Python with the following command: 
   ```

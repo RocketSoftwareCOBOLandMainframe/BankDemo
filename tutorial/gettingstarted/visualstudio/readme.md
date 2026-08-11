@@ -45,9 +45,9 @@ The preconfigured and fully executing application BankDemo is available from the
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
-   If you have an active firewall on the system that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
+   If you have an active firewall on the system that is running your Enterprise Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
     
-   For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
+   For example, Enterprise Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
 
    If you want remote users to access Enterprise Server functionality through the firewall, you can use fixed port values so that you can control access through them.
 
@@ -73,7 +73,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
      A series of messages appear as the script disables default security.
 
-2. Restart the Directory Server (MFDS) service and the Enterprise Server Administration (ESCWA) service to pick up the configuration changes. 
+2. Restart the Enterprise Directory Service (EDS) and the Enterprise Server Administration (ESCWA) service to pick up the configuration changes. 
 
     Now, you can use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. 

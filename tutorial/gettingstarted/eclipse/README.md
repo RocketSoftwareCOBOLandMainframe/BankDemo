@@ -49,9 +49,9 @@ You must have the following software installed:
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
-If you have an active firewall on the machine that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
+If you have an active firewall on the machine that is running your Enterprise Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
 
-For example, Directory Server  is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
+For example, Enterprise Directory Server  is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
 
 If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values, so that you can control access via these.
 
@@ -76,7 +76,7 @@ In this release, the Enterprise Server security features are enabled by default.
 > **Important**: Rocket Software does not recommend disabling Enterprise Server security permanently. If you disable the default Enterprise Server security to facilitate running tutorials then this should be performed on a network isolated machine. Re-enable security as soon as possible after completing the tutorial. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 
 1. In an Enterprise Developer Command Prompt, run the command `DisableESDefaultSecurity.cmd`. You see a series of messages as the script disables default security.
-2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
+2. Restart the Enterprise Directory Service (EDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. You can now use ESCWA without having to log in.
 3. Restart any running enterprise server regions to have them pick up the configuration changes. Regions will no longer require credentials for starting or stopping and other actions.
 
 -->
@@ -679,7 +679,7 @@ To execute the JCL, run the application in an instance of the Rocket Enterprise 
 
 Before you proceed, ensure that the default settings are applied to the Directory Sever:
 
-1.  From the Windows **Start** menu, open the Services application. Navigate to the Directory Server service to view its status and set it to **Running** if it is not already started.
+1.  From the Windows **Start** menu, open the Services application. Navigate to the Enterprise Directory Service to view its status and set it to **Running** if it is not already started.
 
 2.  In Eclipse, click the **Server Explorer** view.
 

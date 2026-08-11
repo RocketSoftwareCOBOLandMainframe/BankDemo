@@ -49,9 +49,9 @@ You must have the following software installed:
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
-If you have an active firewall on the machine that is running your Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
+If you have an active firewall on the machine that is running your Enterprise Directory Service (EDS) and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
 
-For example, Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
+For example, EDS is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must permit access to these ports.
 
 If you want remote users to access Enterprise Server functionality through the firewall, we recommend that you use fixed port values, so that you can control access via these.
 
@@ -80,7 +80,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
     You see a series of messages as the script disables default security.
 
-2. Restart the Directory Server (MFDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. 
+2. Restart the Enterprise Developer Service (EDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. 
 
     You can now use ESCWA without having to log in.
 
@@ -682,7 +682,7 @@ Next, ensure that the following two services are running on your machine:
         nohup escwa < /dev/null > escwa.out 2>&1 &
         ```
 
-   -   Directory Server (MFDS) - from a terminal that has the COBOL environment set, run the following as root if you must start this service:
+   -   Enterprise Developer Service (EDS) - from a terminal that has the COBOL environment set, run the following as root if you must start this service:
 
         ```
         mfds64 &
