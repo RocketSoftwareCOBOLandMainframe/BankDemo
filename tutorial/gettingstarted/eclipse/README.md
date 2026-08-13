@@ -1134,12 +1134,9 @@ Add the Java sample folder as a linked resource:
 Configure the project so Eclipse can resolve Java dependencies and related sources:
 
 1.  Right-click the **Bankdemo** project and click **Properties**.
-2.  Expand **Rocket Software \> Build Path \> Build Precedence**   and select the check box for **Bankdemo/cobol** (this is where `HelloJav` is located).
-3.  Click **Apply and Close**.
-4.  Right-click the **Bankdemo** project and click **Properties**.
-5.  Navigate to **Java Build Path \> Libraries \> Classpath**.
-6.  Click **Add Library** and select **ES Java Support Library**.
-7.  Click **Apply and Close**.
+2.  Navigate to **Java Build Path \> Libraries \> Classpath**.
+3.  Click **Add Library** and select **ES Java Support Library**.
+4.  Click **Apply and Close**.
 
 **Compiling Java Code**
 

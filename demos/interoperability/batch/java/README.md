@@ -1464,7 +1464,7 @@ The source files for this demonstration are located in the following directories
 
 | File | Location | Description |
 |------|----------|-------------|
-| `HELLOJAV.cbl` | `sources/cobol/` | COBOL bootstrap for Hello World |
+| `HELLOJAV.cbl` | `sources/cobol/core/` | COBOL bootstrap for Hello World |
 | `HelloBatch.java` | `sources/java/` | Hello World Java class |
 | `HELLOJAV.jcl` | `sources/jcl/` | JCL for Hello World demo |
 | `ReadBankData.java` | `sources/java/` | ZFile dataset reader |
