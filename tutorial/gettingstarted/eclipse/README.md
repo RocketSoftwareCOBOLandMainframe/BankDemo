@@ -1207,7 +1207,7 @@ You can debug the COBOL-to-Java-to-COBOL flow in one run by combining the existi
     -   **Name:** `ES Java Debug`
     -   **Project:** `Bankdemo`
     -   **Host:** `localhost`
-    -   **Port:** `8005`
+    -   **Port:** `8000`
     -   **Connection Type:** `Standard (Socket Listen)`
 
 5.  Click **Apply**.
@@ -1215,14 +1215,12 @@ You can debug the COBOL-to-Java-to-COBOL flow in one run by combining the existi
 7.  In **Display in favorites menu**, select **Debug**.
 8.  Click **Apply**, then **Close**.
 
-Enable remote Java debugging in `HELLOJAV.jcl` by setting `JAVA_TOOL_OPTIONS` in `CEEOPTS ENVAR`. Keep values on continuation lines with no extra spaces, and keep each JCL line within the 80-character limit.
+Enable remote Java debugging in `HELLOJAV.jcl` by setting `JAVA_TOOL_OPTIONS` in `CEEOPTS ENVAR`.
 
 > **Note:** Keep the JDWP option names in lower case (`transport`, `server`, `suspend`, `address`) as Java expects this format.
 
-Use this format (the break before `=8005` is intentional to satisfy the 80-character JCL line limit):
-
     ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
-    "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8005")
+    "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8000")
 
 **Set Breakpoints**
 

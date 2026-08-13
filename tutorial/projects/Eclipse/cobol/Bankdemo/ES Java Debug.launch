@@ -2,7 +2,7 @@
 <launchConfiguration type="org.eclipse.jdt.launching.remoteJavaApplication">
     <booleanAttribute key="org.eclipse.jdt.launching.ALLOW_TERMINATE" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.HOST" value="localhost"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PORT" value="8005"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PORT" value="8000"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Bankdemo"/>
     <stringAttribute key="org.eclipse.jdt.launching.VM_CONNECTOR_ID" value="org.eclipse.jdt.launching.socketListenConnector"/>
     <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
