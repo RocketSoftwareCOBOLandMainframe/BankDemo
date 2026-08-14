@@ -69,6 +69,9 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
         - [Deploying and Running Bankdemo with PostgreSQL](demos/onprem/psql/README.md) 
         - [Deploying and Running Bankdemo with VSAM stored in PostgreSQL using MFDBFH](demos/onprem/psqlmfdbfh/README.md) 
         - [Deploying and Running Bankdemo in a Performance and Availability Cluster with PostgreSQL](demos/onprem/psqlpac/README.md) 
+        - [Language Interoperability Demonstrations](demos/interoperability/README.md)
+            - [Java Batch Interoperability](demos/interoperability/batch/java/README.md)
+            - [Python Batch Interoperability](demos/interoperability/batch/python/README.md)
     - Requirements: 
         - Ensure that the Enterprise Directory Service (EDS) is running.
         - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.

@@ -14,7 +14,8 @@
             "secrets_config": "mfsecrets_login.json",
             "data_dir_1": "datasets_po",
             "data_dir_2": "datasets_vsam",
-            "data_dir_3": "datasets_gdg"
+            "data_dir_3": "datasets_gdg",
+            "data_dir_4": "datasets_ps"
         },
     "JES": true,
     "CICS": true,
