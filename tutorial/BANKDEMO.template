@@ -129,14 +129,7 @@ CHIP=x64</mfCustomConfiguration>
             <mfInstance>1</mfInstance>
             <mfServerStatus>Stopped</mfServerStatus>
             <mfRequestedEndpoint>tcp:*:*</mfRequestedEndpoint>
-            <mfActualEndpoint>tcp:147.2.107.140:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:172.21.240.1:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:172.30.144.1:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:192.168.1.74:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:[fe80::e4ff:d5f5:66f:af81]:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:[fe80::3414:620:4498:e82f]:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:[fe80::591b:dfed:c214:cc02]:62920</mfActualEndpoint>
-            <mfActualEndpoint>tcp:[fe80::bd95:2d98:6019:37b5]:62920</mfActualEndpoint>
+            <mfActualEndpoint>tcp:0.0.0.0:0</mfActualEndpoint>
             <mfSSLCertificate/>
             <mfSSLKeyfile/>
             <mfSSLClientOption>1</mfSSLClientOption>
@@ -238,14 +231,7 @@ uploads=*.txt *.car *.wsdl
                 <cn>TN3270</cn>
                 <mfListenerStatus>Stopped</mfListenerStatus>
                 <mfRequestedEndpoint>tcp:*:9023</mfRequestedEndpoint>
-                <mfActualEndpoint>tcp:147.2.107.140:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:172.21.240.1:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:172.30.144.1:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:192.168.1.74:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:[fe80::e4ff:d5f5:66f:af81]:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:[fe80::3414:620:4498:e82f]:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:[fe80::591b:dfed:c214:cc02]:9023</mfActualEndpoint>
-                <mfActualEndpoint>tcp:[fe80::bd95:2d98:6019:37b5]:9023</mfActualEndpoint>
+                <mfActualEndpoint>tcp:0.0.0.0:0</mfActualEndpoint>
                 <mfConnector>tn3270::tn3270</mfConnector>
                 <mfError>OK</mfError>
                 <description>Default TN3270 listener</description>
@@ -267,6 +253,39 @@ uploads=*.txt *.car *.wsdl
                 <mfTLS13CipherSuites/>
                 <mfTLSMiddleBoxCompatibilityMode>No</mfTLSMiddleBoxCompatibilityMode>
                 <mfCustomConfiguration/>
+              </mfListener>
+              <mfListener>
+                <objectclass>mflistener</objectclass>
+                <mfStructVersion>18</mfStructVersion>
+                <mfUID>1.3.6.1.4.1.5043.02.018.1647534610.28</mfUID>
+                <mfServerUID>1.3.6.1.4.1.5043.06.005.1647534610.9</mfServerUID>
+                <cn>RFA</cn>
+                <mfListenerStatus>Started</mfListenerStatus>
+                <mfRequestedEndpoint>tcp:127.0.0.1:*</mfRequestedEndpoint>
+                <mfActualEndpoint>tcp:0.0.0.0:0</mfActualEndpoint>
+                <mfConnector>mfcs-rfa::mfcs-rfa</mfConnector>
+                <mfError>OK</mfError>
+                <description/>
+                <mfSSLCertificate/>
+                <mfSSLKeyfile/>
+                <mfSSLClientOption>1</mfSSLClientOption>
+                <mfSSLMaxKeyLength>0</mfSSLMaxKeyLength>
+                <mfSSLAllowNULLCipher>No</mfSSLAllowNULLCipher>
+                <mfSSLCARootfile/>
+                <mfSSLAllowCertCNIPMismatch>No</mfSSLAllowCertCNIPMismatch>
+                <mfSSLCheckCertRevocation>No</mfSSLCheckCertRevocation>
+                <mfSSLCheckCertPublishersRevocation>No</mfSSLCheckCertPublishersRevocation>
+                <mfSSLHonorServerCipherList>Yes</mfSSLHonorServerCipherList>
+                <mfTLSProtocols/>
+                <mfTLSCipherSuites/>
+                <mfTLSDHMinimumGroupSize>0</mfTLSDHMinimumGroupSize>
+                <mfTLSCipherGroups/>
+                <mfSSLServerCARootfile/>
+                <mfTLS13CipherSuites/>
+                <mfTLSMiddleBoxCompatibilityMode>No</mfTLSMiddleBoxCompatibilityMode>
+                <mfCustomConfiguration>[Security]
+allow files=no
+</mfCustomConfiguration>
               </mfListener>
             </mfListenerList>
           </mfCommsProcess>

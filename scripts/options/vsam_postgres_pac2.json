@@ -12,6 +12,7 @@
             "alias_config": "alias.json",
             "init_config": "init.json",
             "secrets_config": "mfsecrets_login.json",
+            "rfa_config": "rfa.json",
             "xa_config": "xa_postgres_pac.json"
         },
     "JES": true,

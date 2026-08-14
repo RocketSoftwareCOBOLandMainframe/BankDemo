@@ -1,0 +1,9 @@
+{
+    "CN": "RFA",
+    "description": "",
+    "mfConfig": "",
+    "mfRequestedEndpoint": [
+      "tcp:127.0.0.1:*"
+    ],
+    "mfConnector": "mfcs-rfa"
+  }

@@ -1,5 +1,5 @@
 """
-Copyright 2010 – 2024 Rocket Software, Inc. or its affiliates. 
+Copyright 2010 – 2026 Rocket Software, Inc. or its affiliates. 
 This software may be used, modified, and distributed
 (provided this notice is included without modification)
 solely for internal demonstration purposes with other
@@ -53,7 +53,7 @@ def dbfhadmin(is64bit, cmd):
     arg_list = [dbfhadmin_path]
     arg_list.extend(cmd.split(" "))
     write_log("{} {}".format(dbfhadmin_path, cmd))
-    result = subprocess.run(arg_list)
+    result = subprocess.run(arg_list, check=True)
     return result
 
 def create_crossregion_database(main_config):
@@ -80,4 +80,4 @@ def create_region_database(main_config):
     cmd = "-script -type:region -provider:pg -name:{} -db:{} -file:create_region_db.sql".format(pac_name, pac_db)
     dbfhadmin(is64bit, cmd)
     arg_list = ["psql", "--file", "create_region_db.sql", "postgresql://{}:{}@{}:{}".format(database_user, database_pwd, database_server, database_port)]
-    result = subprocess.run(arg_list)
+    result = subprocess.run(arg_list, check=True)

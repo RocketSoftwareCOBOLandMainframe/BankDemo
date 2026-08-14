@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Copyright 2010 – 2024 Rocket Software, Inc. or its affiliates. 
+Copyright 2010 – 2026 Rocket Software, Inc. or its affiliates. 
 This software may be used, modified, and distributed
 (provided this notice is included without modification)
 solely for internal demonstration purposes with other
@@ -33,8 +33,8 @@ from utilities.deploy import deploy_application_option, deploy_dfhdrdat_postgres
 from database.odbc import check_odbc_driver_installed
 from ESCWA.region_control import add_region, start_region, del_region, confirm_region_status, stop_region
 from ESCWA.region_config import update_region, update_region_attribute, update_alias, add_initiator, check_security
-from ESCWA.comm_control import set_jes_listener, set_commsserver_local
-from utilities.exceptions import ESCWAException
+from ESCWA.comm_control import set_jes_listener, set_commsserver_local, add_listener
+from utilities.exceptions import ESCWAException, InputException
 from ESCWA.resourcedef import  add_sit, add_Startup_list, add_groups, add_fct, add_ppt, add_pct, update_sit_in_use
 from ESCWA.mq_config import add_mq_listener
 from build.MFBuild import  run_ant_file
@@ -206,6 +206,12 @@ def create_region(main_configfile):
     else:
         alias_config = configuration_files["alias_config"]
 
+    #rfa_config is used to set the remote file access listener details for the region - this setting is optional
+    if 'rfa_config' not in configuration_files:
+        rfa_config = 'none'
+    else:
+        rfa_config = configuration_files["rfa_config"]
+
     #init_config contains the details of any JES initiators that need to be configured - this settings is optional
     if 'init_config' not in configuration_files:
         init_config ='none'
@@ -252,6 +258,9 @@ def create_region(main_configfile):
         create_dfhdrdat =  '\"' +caspcrd + '\" /c /dp=' + rdef
         write_log ('Create resource definition file {}'.format(create_dfhdrdat))
         caspcrd_process = os.system(create_dfhdrdat)
+        if caspcrd_process != 0:
+            write_log('Unable to create resource definition file, rc={}'.format(caspcrd_process))
+            sys.exit(1)
         #change ownership to match ES user
         if os_type == 'Linux':
             dfhdrdat = os.path.join(rdef, 'dfhdrdat')
@@ -261,14 +270,18 @@ def create_region(main_configfile):
     
     base_config = os.path.join(config_dir, base_config)
     update_config = os.path.join(config_dir, update_config)
-    alias_config = os.path.join(config_dir, alias_config)
+    if  alias_config != 'none':
+        alias_config = os.path.join(config_dir, alias_config)
     init_config = os.path.join(config_dir, init_config)
     env_config = os.path.join(config_dir, env_config)
     secrets_config = os.path.join(config_dir, secrets_config)
     resourcedef_dir = os.path.join(config_dir, 'CSD')
+    if  rfa_config != 'none':
+        rfa_config = os.path.join(config_dir, rfa_config)
 
     session = EscwaSession("http", ip_address, 10086)
         
+    security_enabled = False
     try:
         write_log ('check if VSAM ESM is enabled')
         check_security(session)
@@ -286,6 +299,7 @@ def create_region(main_configfile):
             else:
                 mfsecretsadmin = os.path.join(install_dir, 'mfsecretsadmin.exe')
             session.logon(mfsecretsadmin, login_secrets_location)
+            security_enabled = True
         except ESCWAException as exc:
             write_log('Unable to logon to ESCWA.')
             write_log(exc)
@@ -325,6 +339,15 @@ def create_region(main_configfile):
         write_log('Unable to set JES listener.')
         write_log(exc)
         sys.exit(1)
+
+    if security_enabled == True and rfa_config != 'none':
+        write_log ('RFA listener configuration found. Listener being added')
+        try:
+            add_listener(session, region_name, ip_address, rfa_config)
+        except ESCWAException as exc:
+            write_log('Unable to add RFA listener.')
+            write_log(exc)
+            sys.exit(1)
 
     if len(pac_name) > 0:
         if database_connection is None:

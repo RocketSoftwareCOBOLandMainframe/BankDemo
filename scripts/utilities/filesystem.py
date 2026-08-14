@@ -1,5 +1,5 @@
 """
-Copyright 2010 – 2024 Rocket Software, Inc. or its affiliates. 
+Copyright 2010 – 2026 Rocket Software, Inc. or its affiliates. 
 This software may be used, modified, and distributed
 (provided this notice is included without modification)
 solely for internal demonstration purposes with other
@@ -106,7 +106,7 @@ def dbfhdeploy_vsam_data (repo_dir, os_type, is64Bit, configuration_files, mfdbf
     db = mfdbfh_location.split('{')
     dbfhdeploy_cmd = '\"{}\" create \"{}\"'.format(dbfhdeploy, db[0])
     write_log(dbfhdeploy_cmd)
-    subprocess.run([dbfhdeploy, "create", db[0]])
+    subprocess.run([dbfhdeploy, "create", db[0]], check=True)
 
     for file in os.scandir(dataset_dir):
         if file.name.endswith(".dat"):
@@ -114,7 +114,7 @@ def dbfhdeploy_vsam_data (repo_dir, os_type, is64Bit, configuration_files, mfdbf
 
             dbfhdeploy_cmd = '\"{}\" add \"{}\" \"{}\"'.format(dbfhdeploy, file.path, catalog_location)
             write_log(dbfhdeploy_cmd)
-            subprocess.run([dbfhdeploy, "add", file.path, catalog_location])
+            subprocess.run([dbfhdeploy, "add", file.path, catalog_location], check=True)
 
 def dbfhdeploy_dataset (os_type, is64Bit, source_location, mfdbfh_location, filename):
     if os_type == 'Windows':
@@ -129,12 +129,12 @@ def dbfhdeploy_dataset (os_type, is64Bit, source_location, mfdbfh_location, file
     db = mfdbfh_location.split('{')
     dbfhdeploy_cmd = '\"{}\" create \"{}\"'.format(dbfhdeploy, db[0])
     write_log(dbfhdeploy_cmd)
-    subprocess.run([dbfhdeploy, "create", db[0]])
+    subprocess.run([dbfhdeploy, "create", db[0]], check=True)
 
     catalog_location = mfdbfh_location.format(filename)
     source_file = "{}/{}".format(source_location, filename)
 
     dbfhdeploy_cmd = '\"{}\" add \"{}\" \"{}\"'.format(dbfhdeploy, source_file, catalog_location)
     write_log(dbfhdeploy_cmd)
-    subprocess.run([dbfhdeploy, "add", source_file, catalog_location])
+    subprocess.run([dbfhdeploy, "add", source_file, catalog_location], check=True)
             

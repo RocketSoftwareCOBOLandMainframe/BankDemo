@@ -1,6 +1,6 @@
 import requests
 from utilities.misc import create_headers, check_http_error
-from utilities.exceptions import ESCWAException, HTTPException
+from utilities.exceptions import ESCWAException, HTTPException, InputException
 from utilities.output import write_json, write_log 
 import subprocess
 import json
@@ -80,7 +80,7 @@ class EscwaSession:
         try:
             creds_body = subprocess.check_output([mfsecretsadmin, 'read', location]).decode()
             req_body = json.loads(creds_body)
-        except InputException as exc:
+        except (subprocess.SubprocessError, OSError, json.JSONDecodeError, InputException) as exc:
             raise ESCWAException('Unable to get logon credentials.') from exc
 
         res = self.post(uri, req_body, 'Unable to logon')

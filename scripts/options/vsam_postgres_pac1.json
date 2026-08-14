@@ -12,6 +12,7 @@
             "alias_config": "alias.json",
             "init_config": "init.json",
             "secrets_config": "mfsecrets_login.json",
+            "rfa_config": "rfa.json",
             "data_dir_1": "datasets_po",
             "data_dir_2": "datasets_vsam",
             "data_dir_3": "datasets_gdg",
