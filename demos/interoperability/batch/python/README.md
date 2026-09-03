@@ -23,11 +23,30 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ## <a name="prerequisites"></a>Prerequisites
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
-- Python 3.8 or later installed and available on your system PATH
+- Python 3.8 or later, installed so that Enterprise Server can load it (see below)
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
 
 No additional Python packages are required — the `zoautil_py` and `esos` packages are provided by the Enterprise Server installation.
+
+### Installing Python
+
+PYLDM does not run the `python` executable. It loads the Python **shared library** into the Enterprise Server process, so it is that library which must be locatable:
+
+**Windows** — install Python 3 from [python.org](https://www.python.org/downloads/) and tick *Add python.exe to PATH*. PYLDM loads `python3.dll` using the standard DLL search order, so the directory containing it must be on `PATH`.
+
+**Linux** — install the Python 3 runtime *and* its development package, which provides the `libpython3.so` linker name:
+
+```
+sudo dnf install python3 python3-devel      # RHEL / Oracle Linux / Fedora
+sudo apt install python3 python3-dev        # Ubuntu / Debian
+```
+
+PYLDM tries `libpython3.so` first, then `libpython3.so.1.0`. The library must be reachable through `ldconfig` or `LD_LIBRARY_PATH`. If your distribution only ships a versioned library, set `PYTHON_SHARED_LIB` in the region environment to name it explicitly, for example `libpython3.12.so`.
+
+> **Important:** The Python you use at a shell prompt is not necessarily the one Enterprise Server can see. The region inherits its environment from wherever the server was started, so if you change `PATH` (Windows) or `LD_LIBRARY_PATH` (Linux) afterwards, restart the region. The bitness must also match: a 64-bit region needs 64-bit Python.
+
+To confirm which interpreter PYLDM actually loaded, run [Step 1](#step1) — `batch_report.py` prints the running Python version.
 
 ### The BANKVSAM Region
 
@@ -56,6 +75,49 @@ Because all four datasets are cataloged during provisioning, the Python demonstr
 No region configuration is required. The `esos` and `zoautil_py` packages supplied with Enterprise Server are located automatically, and the `STDENV` DD in each JCL job step adds the demonstration's own script directory to `PYTHONPATH` (e.g. `%ESP%\..\..\sources\python`) so PYLDM can find the `.py` files.
 
 > **About `%ESP%`:** `ESP` is a standard Enterprise Server region variable holding the region's system directory (for example `C:\BankDemo\BANKVSAM\system`). Because the region directory is created inside the BankDemo project, `%ESP%\..\..` resolves back to the project root - so the JCL locates the demo scripts without needing any extra variable to be defined. The JCL in these demonstrations uses this relative form deliberately, so no additional region configuration is required.
+
+### Running on Linux
+
+The supplied JCL is written for Windows. Everything else in these demonstrations - the Python scripts, the dataset definitions, and the provisioning command - is identical on Linux, but the **STDENV DD is not portable** and must be edited before the jobs will run.
+
+PYLDM writes the contents of the STDENV DD to a temporary script and executes it with the platform's own shell: `cmd.exe` on Windows, `/bin/sh` on Linux. The script therefore has to be written in the syntax of that shell:
+
+| | Windows | Linux |
+|---|---------|-------|
+| Assign a variable | `set NAME=value` | `export NAME=value` |
+| Reference a variable | `%NAME%` | `$NAME` |
+| Directory separator | `\` | `/` |
+| `PYTHONPATH` separator | `;` | `:` |
+
+Each STDENV block in the five `PY*.jcl` files needs converting. For example, this Windows form:
+
+```
+//STDENV   DD  *
+set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_OUTPUT_ENCODING=ASCII
+set ESPY_ENABLE_OUTPUT_TRANSCODING=false
+set ESPY_MERGE_SYSOUT=false
+/*
+```
+
+becomes this on Linux:
+
+```
+//STDENV   DD  *
+export PYTHONPATH=$ESP/../../sources/python:$PYTHONPATH
+export ESPY_WORKING_DIR=$ESP/../../sources/python
+export ESPY_OUTPUT_ENCODING=ASCII
+export ESPY_ENABLE_OUTPUT_TRANSCODING=false
+export ESPY_MERGE_SYSOUT=false
+/*
+```
+
+Note the two separator changes as well as `set` becoming `export`: `\` becomes `/`, and the `;` joining the two `PYTHONPATH` entries becomes `:`.
+
+`ESP` itself is set by Enterprise Server on both platforms, so `$ESP/../..` resolves to the project root exactly as `%ESP%\..\..` does on Windows.
+
+Everything else is unchanged. `python MF_Provision_Region.py vsam` provisions BANKVSAM on Linux the same way, the dataset names and DD names are identical, and the Python sources need no modification. For Step 5, the COBOL bridge is `libcblcpyiapi.so` rather than `cblcpyiapi.dll`, but `cobol_interop.py` resolves the platform-specific name itself.
 
 ---
 
@@ -132,6 +194,8 @@ set ESPY_MERGE_SYSOUT=false
 | `ESPY_OUTPUT_ENCODING` | Encoding for redirected output streams |
 | `ESPY_ENABLE_OUTPUT_TRANSCODING` | Enable/disable encoding transcoding |
 | `ESPY_MERGE_SYSOUT` | Merge stdout and stderr to SYSOUT DD |
+
+> **Linux:** These examples use Windows batch syntax. PYLDM runs the STDENV script with the platform's own shell, so on Linux use `export NAME=value` and `$NAME` - see [Running on Linux](#running-on-linux).
 
 ---
 
