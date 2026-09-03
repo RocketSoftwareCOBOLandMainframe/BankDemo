@@ -110,7 +110,7 @@ def read_account_file(display_n):
         f._file.locate(b'', EsosLocateOption.KEY_FIRST)
 
         # Read all records. Known issue: esos.py's EsosFile.read() raises
-        # EsosError at EOF (VSAM status "10") instead of returning 0 bytes.
+        # EsosException at EOF (VSAM status "10") instead of returning 0 bytes.
         # zoautil_py's readrecord() inherits this behavior, so EOF propagates
         # as an exception rather than returning empty bytes (b'').
         # We catch the exception here as our EOF signal.

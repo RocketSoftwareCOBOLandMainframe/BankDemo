@@ -36,12 +36,11 @@ Usage:
   EXEC PGM=PYLDM,PARM='vsam_account_ops.py READ [max_records]'
 """
 
-import ctypes
 import sys
 
 from esos.esos import (
     Esos,              # Main entry point: Esos.default gives the EsosContext
-    EsosError,         # Exception raised on file I/O errors
+    EsosException,     # Exception raised on file I/O errors
     EsosFileMode,      # Read, Write, Append, Update flags
     EsosLocateOption,  # KEY_EQ, KEY_GE, KEY_FIRST, KEY_LAST, etc.
     EsosOpenFlags,     # OPEN_MODE_RECORD, OPEN_MODE_BINARY
@@ -159,7 +158,7 @@ def read_record(f):
         bytearray of CUST_LRECL bytes, or None if at end-of-file.
 
     Note:
-        Known issue in esos.py: EsosFile.read() raises EsosError on EOF
+        Known issue in esos.py: EsosFile.read() raises EsosException on EOF
         instead of returning 0. The native esos_file_read() returns a
         non-zero status for VSAM status "10" (EOF), and raiseOnError()
         treats any non-zero return as an error. zoautil_py's readrecord()
@@ -172,8 +171,8 @@ def read_record(f):
         if n == 0:
             return None
         return buf
-    except EsosError as e:
-        # Workaround: esos.py raises EsosError on EOF instead of returning 0.
+    except EsosException as e:
+        # Workaround: esos.py raises EsosException on EOF instead of returning 0.
         # Check VSAM status codes to distinguish EOF from real errors:
         #   "10" = end of file (no more records)
         #   "23" = record not found (key doesn't exist)
@@ -181,29 +180,6 @@ def read_record(f):
         if status.code in ("10", "23"):
             return None
         raise
-
-
-def update_record(f, record):
-    """Update the current VSAM record with the contents of the buffer.
-
-    Works around a bug in esos.py where EsosFile.update() passes the length
-    parameter by value, but the native esos_file_update() expects it by
-    reference (a pointer to int, like esos_file_write). Passing by value
-    causes the length (e.g. 250) to be dereferenced as a pointer, triggering
-    an access violation at address 0xFA.
-    """
-    from esos import esos as _esos_mod
-    buf = bytes(record)
-    length_store = ctypes.c_int(len(buf))
-    fn = _esos_mod._EsosLib.file_update_fn
-    saved_argtypes = fn.argtypes
-    fn.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.POINTER(ctypes.c_int)]
-    try:
-        _esos_mod._EsosLib.raiseOnError(
-            fn(f._handle, ctypes.c_char_p(buf), ctypes.byref(length_store))
-        )
-    finally:
-        fn.argtypes = saved_argtypes
 
 
 def print_customer(record):
@@ -352,7 +328,7 @@ def do_update(args):
         set_field(record, CUST_EMAIL, new_email)
 
         # Rewrite the entire record at the same VSAM position
-        update_record(f, record)
+        f.update(bytes(record), 0, CUST_LRECL)
 
         print(f"  After:  email='{new_email}'")
 
@@ -417,9 +393,9 @@ def do_read(args):
                 n = f.read(buf, 0, ACC_LRECL)
                 if n == 0:
                     break
-            except EsosError:
+            except EsosException:
                 # Workaround: esos.py bug — EsosFile.read() raises
-                # EsosError at EOF (VSAM status "10") instead of
+                # EsosException at EOF (VSAM status "10") instead of
                 # returning 0. See read_record() docstring for details.
                 break
 
