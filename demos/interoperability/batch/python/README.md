@@ -195,6 +195,52 @@ extraArg1 extraArg2
 2. Submit `PYDEMO.jcl` via ESCWA or `casutil`
 3. Check the job output — STDOUT DD shows the report, SYSPRINT shows PYLDM messages
 
+### 1.5 Expected Output
+
+STEP1 (script mode) writes the following to its STDOUT DD. The PARM arguments (`hello world`) and the MAINARGS DD content (`arg3 arg4`) are concatenated into `sys.argv`:
+
+```
+============================================================
+Python Batch Report (via PYLDM)
+============================================================
+
+Script: batch_report.py
+Python version: 3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]
+Working directory: C:\dev\BankDemo\sources\python
+
+Arguments received: 4
+  arg[0] = 'hello'
+  arg[1] = 'world'
+  arg[2] = 'arg3'
+  arg[3] = 'arg4'
+
+PYLDM environment:
+  ESPY_ENABLE_OUTPUT_TRANSCODING = false
+  ESPY_MERGE_SYSOUT = false
+  ESPY_OUTPUT_ENCODING = ASCII
+  ESPY_WORKING_DIR = C:\dev\BankDemo\BANKVSAM\system\..\..\sources\python
+
+PYTHONPATH entries:
+  [1] C:\dev\BankDemo\BANKVSAM\system\..\..\sources\python
+  [2] C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\esos.zip
+  [3] C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\zoautil_py.zip
+
+Report complete. RC=0
+============================================================
+```
+
+STEP2 (module mode) produces the same report with its own arguments. Note that it does not set `ESPY_WORKING_DIR`, so the working directory stays at the region's default:
+
+```
+Working directory: C:\dev\BankDemo\BANKVSAM\system\loadlib
+
+Arguments received: 2
+  arg[0] = 'moduleArg1'
+  arg[1] = 'moduleArg2'
+```
+
+The `esos.zip` and `zoautil_py.zip` entries appear automatically — the JCL only adds entry `[1]`. Both steps end with `RC=0000`, and the STDERR DD is empty.
+
 ---
 
 ## <a name="step2"></a>Step 2 - Sequential File I/O from Python
@@ -265,6 +311,47 @@ Both steps allocate the same DD name, so a single script can write and then read
 - **80-byte card image** — classic mainframe record format (LRECL=80, RECFM=F)
 - **Pre-cataloged dataset** — `DISP=OLD` to write, `DISP=SHR` to read; no `DISP=(NEW,CATLG)` or IEFBR14 cleanup needed
 - **No VSAM positioning needed** — sequential access reads records in order
+
+### 2.4 Expected Output
+
+The WRITE step populates the dataset:
+
+```
+=== Sequential Write: Writing transaction records ===
+  Wrote: TXN00001  Acct=10001  CR     1500.00
+  Wrote: TXN00002  Acct=10001  DR       45.99
+  Wrote: TXN00003  Acct=10002  CR     3200.00
+  ...
+  Wrote: TXN00010  Acct=10003  CR       75.00
+  ---
+  Total records written: 10
+=== Write Complete ===
+```
+
+The READ step reads the same dataset back and accumulates totals by account:
+
+```
+=== Sequential Read: Transaction Summary ===
+  TXN ID     ACCT    DATE       TYPE      AMOUNT  DESCRIPTION
+  ---------- ------- ---------- ----- ----------  --------------------
+  TXN00001   10001   20260615   CR       1500.00  Monthly salary deposit
+  TXN00002   10001   20260616   DR         45.99  Grocery store purchase
+  TXN00003   10002   20260616   CR       3200.00  Wire transfer received
+  ...
+  TXN00010   10003   20260620   CR         75.00  Interest credit
+
+  ACCOUNT     RECORDS      CREDITS       DEBITS          NET
+  ---------- -------- ------------ ------------ ------------
+  10001             4      1700.00       165.99      1534.01
+  10002             3      3200.00      1889.50      1310.50
+  10003             3       575.00       250.00       325.00
+  TOTAL            10      5475.00      2305.49      3169.51
+
+  Total records read: 10
+=== Read Complete ===
+```
+
+Because WRITE recreates the ten records each time, re-running the job is safe and always produces these totals.
 
 ---
 
@@ -348,6 +435,43 @@ MAX_RECORDS=50
 - **Control cards via STDIN DD** — `sys.stdin` is redirected by PYLDM to the STDIN DD
 - **Dual output** — write to both stdout (for console viewing) and a dataset (for downstream jobs)
 - **`if outfile is not None:`** — never use truthiness on RecordIO objects (`__len__` raises NotImplementedError)
+
+### 3.4 Expected Output
+
+STEP1 (FILTER) lists every customer matching the pattern and writes the same lines to the OUTFILE dataset:
+
+```
+=== Customer Filter: pattern='.*' ===
+  ADMIN  The Bank
+  B0001  Fred Bloggs                ON
+  B0002  Loretta Morden             AB
+  B0003  Eleanor Rigby              ON
+  ...
+  B0036  James Coleburn             QC
+  T0001  Desmond Jones              BC
+--- 38 customers matched out of 38 total ---
+  (Results also written to OUTFILE DD)
+```
+
+STEP2 (REPORT) reads the control cards from STDIN, decodes the COMP-3 balances, and totals them:
+
+```
+=== BankDemo Account Summary Report ===
+  (Control cards: REPORT_TITLE=BankDemo Account Summary Report, MAX_RECORDS=50)
+PID    Account    Type       Balance
+----------------------------------------
+  T0001 000000001  1            91.14
+  T0001 000000002  2           -79.40
+  T0001 000000003  3           795.52
+  ...
+  ... (58 more records not shown)
+----------------------------------------
+  Total records: 108
+  Total balance:    31,302.13
+=== Report Complete ===
+```
+
+The report title and the 50-record display limit both come from the STDIN control cards — change them in the JCL and the output changes accordingly. The totals still cover all 108 records.
 
 ---
 
@@ -444,6 +568,67 @@ One known bug in `esos.py` requires a workaround in the demo code:
 1. **EOF raises an exception instead of returning empty bytes.**
    `EsosFile.read()` calls `raiseOnError()` on the native return code. At VSAM end-of-file (status "10"), the native function returns non-zero, so `raiseOnError()` raises `EsosException` instead of returning 0. This affects both `EsosFile.read()` (low-level) and `zoautil_py`'s `readrecord()` (high-level). All read loops in these demos use `try/except` to catch EOF.
 
+### 4.5 Expected Output
+
+STEP1 (LOOKUP) retrieves a single record by exact key:
+
+```
+=== VSAM LOOKUP: key='B0001' ===
+  PID:    B0001
+  Name:   Fred Bloggs
+  Addr:   722 Parkland Ave
+  State:  ON  Post: L5H3G8
+  Tel:    800-555-1234
+  Email:
+=== Lookup Complete ===
+```
+
+STEP2 (BROWSE) reads forward from a starting key:
+
+```
+=== VSAM BROWSE: start='B0002', max=5 ===
+PID    Name                      State  Email
+----------------------------------------------------------------------
+  B0002 Loretta Morden            AB
+  B0003 Eleanor Rigby             ON
+  B0004 Desmond Jones             BC
+  B0005 Felicity Arkwright        QC
+  B0006 James Tiberius Kirk       QC
+----------------------------------------------------------------------
+  5 records displayed.
+=== Browse Complete ===
+```
+
+STEP3 (UPDATE) sets the email field, and STEP4 clears it again so the job can be re-run:
+
+```
+=== VSAM UPDATE: key='B0001', new_email='newemail@example.com' ===
+  Before: email=''
+  After:  email='newemail@example.com'
+=== Update Complete ===
+
+=== VSAM UPDATE: key='B0001', new_email='' ===
+  Before: email='newemail@example.com'
+  After:  email=''
+=== Update Complete ===
+```
+
+STEP5 (READ) reads the account dataset sequentially:
+
+```
+=== VSAM READ: First 5 account records (esos API) ===
+  Account: 000000001  Customer: T0001  Type: 1
+  Account: 000000002  Customer: T0001  Type: 2
+  Account: 000000003  Customer: T0001  Type: 3
+  Account: 000000004  Customer: T0001  Type: 4
+  Account: 000000005  Customer: T0001  Type: 5
+  ... (103 more records not shown)
+  Total records: 108
+=== Read Complete ===
+```
+
+The `Before:` line in STEP3 shows the value STEP4 restores. If a previous run ended early, STEP3 may report a non-blank starting email — run the job again to return the record to its original state.
+
 ---
 
 ## <a name="step5"></a>Step 5 - Calling COBOL from Python
@@ -521,6 +706,31 @@ def do_twoscomp(input_text):
 - **Group items = single contiguous buffer** — fields at fixed offsets, matching the COBOL COPY layout
 - **`_mFpyCobcall` raises `RuntimeError`** on failure (error 173 = program not found)
 - **Programs must be in the loadlib** — COBOL subroutines must already be compiled and available
+
+### 5.4 Expected Output
+
+Each step calls a different COBOL subroutine through the bridge:
+
+```
+=== Python -> COBOL: SVERSONP (Version String) ===
+  COBOL returned version: ' V5.99c'
+=== Complete ===
+
+=== Python -> COBOL: UDATECNV (Date Conversion) ===
+  Input: '20260624' (YYYYMMDD)
+  Output date: '24.Jun.2026         '
+  System time: '16:08:59'
+=== Complete ===
+
+=== Python -> COBOL: UTWOSCMP (Two's Complement) ===
+  Input:  'HELLO' (length=5)
+  Input bytes:  [72, 69, 76, 76, 79]
+  Output bytes: [183, 186, 179, 179, 176]
+  Verification: PASSED (255 - input = output for each byte)
+=== Complete ===
+```
+
+The version string and system time reflect your installation, so those two values will differ. The trailing spaces in the converted date are the unused portion of the 20-byte `PIC X(20)` output field.
 
 ---
 
