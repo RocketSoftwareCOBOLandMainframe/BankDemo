@@ -148,11 +148,19 @@ def main(args=None):
     if args is None:
         args = sys.argv[1:]
 
-    print("=== Python Batch Report ===")
-    print(f"  Script: {__file__}")
-    print(f"  Mode: {'module' if args != sys.argv[1:] else 'script'}")
-    print(f"  Arguments: {args}")
-    # ... prints ESPY_* env vars and PYTHONPATH
+    print("=" * 60)
+    print("Python Batch Report (via PYLDM)")
+    print("=" * 60)
+
+    # sys.argv[0] is the script path (script mode) or module name (module mode)
+    print(f"\nScript: {sys.argv[0]}")
+    print(f"Python version: {sys.version}")
+    print(f"Working directory: {os.getcwd()}")
+
+    print(f"\nArguments received: {len(args)}")
+    for i, arg in enumerate(args):
+        print(f"  arg[{i}] = {arg!r}")
+    # ... then prints the ESPY_* environment variables and PYTHONPATH entries
 ```
 
 ### 1.2 The JCL
@@ -177,7 +185,7 @@ set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
 set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 /*
 //MAINARGS DD  *
-extraArg1 extraArg2
+arg3 arg4
 /*
 ```
 
@@ -375,13 +383,18 @@ def do_filter(args):
     except Exception:
         pass  # OUTFILE DD not allocated
 
-    f = zopen("//DD:CUSTDATA", "r", lrecl=250, recfm="KS")
+    f = zopen("//DD:CUSTDATA", "r", lrecl=CUST_LRECL, recfm="KS")
     try:
         f._file.locate(b'', EsosLocateOption.KEY_FIRST)
-        for record in read_vsam_records(f):
+        records = read_vsam_records(f)
+        for record in records:
             pid = field(record, CUST_PID)
             if regex.search(pid):
-                print(f"  {pid}  {name}  {state}  {email}")
+                name = field(record, CUST_NAME)
+                state = field(record, CUST_STATE)
+                email = field(record, CUST_EMAIL)
+                line = f"  {pid}  {name:<25s}  {state}  {email}"
+                print(line)
                 if outfile is not None:
                     outfile.write(line.encode("ascii").ljust(132))
     finally:
@@ -483,18 +496,29 @@ In this step, you perform direct VSAM keyed lookup, sequential browse, record up
 
 `sources/python/vsam_account_ops.py` demonstrates five VSAM operations on two datasets:
 
-**LOOKUP** — exact key match on BNKCUST:
+**LOOKUP** — exact key match on BNKCUST. `open_custdata()` builds the `FileOptions` describing the dataset:
 ```python
-from esos.esos import Esos, FileOptions, EsosLocateOption, EsosFileMode, EsosOpenFlags
+from esos.esos import (
+    Esos, EsosException, EsosFileMode, EsosLocateOption, EsosOpenFlags,
+    EsosDisposition, EsosDsorg, EsosVsamType, FileOptions,
+)
 
-opts = FileOptions()
-opts.mode_flags = EsosFileMode.MODE_TYPE_READ
-opts.open_flags = EsosOpenFlags.OPEN_MODE_BINARY | EsosOpenFlags.OPEN_MODE_RECORD
+def open_custdata(update=False):
+    opts = FileOptions()
+    opts.mode_flags = EsosFileMode.MODE_TYPE_READ
+    opts.open_flags = EsosOpenFlags.OPEN_MODE_RECORD | EsosOpenFlags.OPEN_MODE_BINARY
+    opts.recfm = "KS"                  # Key-Sequenced (VSAM KSDS)
+    opts.lrecl = CUST_LRECL            # 250
+    opts.disposition = EsosDisposition.FLAG_DISP_SHR
+    opts.dsorg = EsosDsorg.VSAM
+    opts.vsam_type = EsosVsamType.CLUSTER
+    opts.vsam_key_length = 5           # Customer ID is 5 bytes
+    return Esos.default.file_open("//DD:CUSTDATA", opts)
 
-with Esos.default.file_open("//DD:CUSTDATA", opts) as f:
+with open_custdata() as f:
     if f.locate(key, EsosLocateOption.KEY_EQ):
-        buf = bytearray(250)
-        f.read(buf, 0, 250)
+        buf = bytearray(CUST_LRECL)
+        f.read(buf, 0, CUST_LRECL)
         # ... extract and display fields
 ```
 
@@ -502,32 +526,31 @@ with Esos.default.file_open("//DD:CUSTDATA", opts) as f:
 ```python
     f.locate(start_key, EsosLocateOption.KEY_GE)
     for i in range(max_records):
-        f.read(buf, 0, 250)
+        f.read(buf, 0, CUST_LRECL)
         # ... display record
 ```
 
-**UPDATE** — locate, read, modify, write back (omitting email clears it):
+**UPDATE** — locate, read, modify, write back (omitting email clears it). Passing `update=True` adds `MODE_FLAG_UPDATE` and `DISP=OLD`:
 ```python
-opts.mode_flags = EsosFileMode.MODE_TYPE_READ | EsosFileMode.MODE_FLAG_UPDATE
-
-with Esos.default.file_open("//DD:CUSTDATA", opts) as f:
+with open_custdata(update=True) as f:
     if f.locate(key, EsosLocateOption.KEY_EQ):
-        buf = bytearray(250)
-        f.read(buf, 0, 250)
-        set_field(buf, CUST_EMAIL, new_email)
-        f.update(bytes(buf), 0, 250)
+        record = read_record(f)
+        set_field(record, CUST_EMAIL, new_email)
+        f.update(bytes(record), 0, CUST_LRECL)
 ```
 
 **READ** — sequential read of the BNKACC (account) dataset:
 ```python
 with open_accdata() as f:
     f.locate(b'', EsosLocateOption.KEY_FIRST)
-    buf = bytearray(200)
+    buf = bytearray(ACC_LRECL)
     while True:
         try:
-            f.read(buf, 0, 200)
+            n = f.read(buf, 0, ACC_LRECL)
+            if n == 0:
+                break
         except EsosException:
-            break  # EOF
+            break  # EOF - see Known Issues
         # ... display record
 ```
 
@@ -536,19 +559,20 @@ with open_accdata() as f:
 `sources/jcl/PYVSAM.jcl` runs five steps: LOOKUP, BROWSE, UPDATE, cleanup (restore), and READ:
 
 ```jcl
-//STEP1    EXEC PROC=PYPROC,ARGS='LOOKUP B0001'
+//STEP1    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='LOOKUP B0001'
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
-//STEP2    EXEC PROC=PYPROC,ARGS='BROWSE B0002 5'
+//STEP2    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='BROWSE B0002 5'
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
 //*
-//STEP3    EXEC PROC=PYPROC,ARGS='UPDATE B0001 newemail@example.com'
+//STEP3    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',
+//             ARGS='UPDATE B0001 newemail@example.com'
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
 //*
-//STEP4    EXEC PROC=PYPROC,ARGS='UPDATE B0001'
+//STEP4    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='UPDATE B0001'
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
 //*
-//STEP5    EXEC PROC=PYPROC,ARGS='READ 5'
+//STEP5    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='READ 5'
 //ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
 ```
 
@@ -642,12 +666,17 @@ In this step, Python calls existing COBOL subroutines via the `_mFpyCobcall` bri
 ```python
 import ctypes
 
-# Must use PyDLL — bridge functions call Python C APIs internally
+# Must use PyDLL — the conversion functions call Python C APIs internally
 bridge = ctypes.PyDLL("cblcpyiapi")
+
+# int _mFpyCobcall(const char *prog_name, int argc, cobchar_t **argv)
 bridge._mFpyCobcall.restype = ctypes.c_int
 bridge._mFpyCobcall.argtypes = [
     ctypes.c_char_p, ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)
 ]
+
+# Returns a Python object, so restype must be py_object
+bridge._mFpyStringFromCOBOL.restype = ctypes.py_object
 
 def cobcall(prog_name, *buffers):
     """Call a COBOL program with LINKAGE SECTION buffers."""
@@ -655,7 +684,7 @@ def cobcall(prog_name, *buffers):
     argv = (ctypes.c_char_p * argc)()
     for i, buf in enumerate(buffers):
         argv[i] = ctypes.cast(buf, ctypes.c_char_p)
-    bridge._mFpyCobcall(prog_name.encode("ascii"), argc, argv)
+    return bridge._mFpyCobcall(prog_name.encode("ascii"), argc, argv)
 ```
 
 **VERSION** — call SVERSONP (simplest: 1 output parameter):
@@ -664,23 +693,28 @@ def do_version():
     lk_version = ctypes.create_string_buffer(7)  # PIC X(7)
     cobcall("SVERSONP", lk_version)
     version = bridge._mFpyStringFromCOBOL(lk_version.raw, COBOL_PIC_X, 7)
-    print(f"  App version: '{version}'")
+    print(f"  COBOL returned version: '{version}'")
 ```
 
-**DATECONV** — call UDATECNV (structured 61-byte group parameter):
+**DATECONV** — call UDATECNV (structured 61-byte group parameter). Field offsets are
+named constants matching the COBOL copybook layout:
 ```python
-def do_dateconv(input_date):
-    buf = ctypes.create_string_buffer(61)
-    buf[19:20] = b'1'                           # Input format: YYYYMMDD
-    buf[20:28] = input_date.encode("ascii")     # Input date
-    buf[40:41] = b'2'                           # Output format: DD.MMM.YYYY
+def do_dateconv(args):
+    input_date = args[0]
+    buf = ctypes.create_string_buffer(CDATED_LEN)          # 61-byte group item
+    buf[CDATED_DDI_TYPE:CDATED_DDI_TYPE + 1] = b'1'        # Input format: YYYYMMDD
+    buf[CDATED_DDI_DATA:CDATED_DDI_DATA + 20] = input_date.encode("ascii").ljust(20)
+    buf[CDATED_DDO_TYPE:CDATED_DDO_TYPE + 1] = b'2'        # Output format: DD.MMM.YYYY
     cobcall("UDATECNV", buf)
-    date_output = bridge._mFpyStringFromCOBOL(buf[41:61], COBOL_PIC_X, 20)
+    date_output = bridge._mFpyStringFromCOBOL(
+        buf[CDATED_DDO_DATA:CDATED_DDO_DATA + 20], COBOL_PIC_X, 20
+    )
 ```
 
 **TWOSCOMP** — call UTWOSCMP (multiple params with COMP binary):
 ```python
-def do_twoscomp(input_text):
+def do_twoscomp(args):
+    input_text = args[0]
     lk_len = ctypes.create_string_buffer(2)
     struct.pack_into('>h', lk_len, 0, len(input_text))  # PIC S9(4) COMP
     lk_input = ctypes.create_string_buffer(256)
@@ -739,12 +773,12 @@ The version string and system time reflect your installation, so those two value
 | File | Description |
 |------|-------------|
 | `sources/python/batch_report.py` | Step 1: PYLDM invocation, argument handling |
-| `sources/python/sequential_file_ops.py` | Step 2: Non-VSAM sequential file read via zoautil_py |
+| `sources/python/sequential_file_ops.py` | Step 2: Non-VSAM sequential write and read via zoautil_py |
 | `sources/python/bank_cust_acct_report.py` | Step 3: Multi-step FILTER + REPORT, COMP-3, dataset write, control cards |
 | `sources/python/vsam_account_ops.py` | Step 4: VSAM LOOKUP / BROWSE / UPDATE / READ via esos |
 | `sources/python/cobol_interop.py` | Step 5: Python→COBOL via _mFpyCobcall |
 | `sources/jcl/PYDEMO.jcl` | JCL for Step 1 (script + module mode) |
-| `sources/jcl/PYREADBNK.jcl` | JCL for Step 2 (sequential write, read, cleanup) |
+| `sources/jcl/PYREADBNK.jcl` | JCL for Step 2 (sequential write, then read) |
 | `sources/jcl/PYMULTI.jcl` | JCL for Step 3 (multi-step filter/report) |
 | `sources/jcl/PYVSAM.jcl` | JCL for Step 4 (VSAM operations) |
 | `sources/jcl/PYCBLCL.jcl` | JCL for Step 5 (COBOL interop) |
@@ -769,9 +803,10 @@ The version string and system time reflect your installation, so those two value
 |----------------|---------|
 | `Esos.default.file_open(path, opts)` | Open with full VSAM control. Returns `EsosFile` (IS a context manager) |
 | `EsosFile.locate(key, option)` | Position for keyed access (returns `bool`) |
-| `EsosFile.read(length)` | Read record at current position |
+| `EsosFile.read(buffer, offset, length)` | Read the record at the current position into `buffer`; returns bytes read |
+| `EsosFile.write(buffer, offset, length)` | Write a new record |
 | `EsosFile.update(buffer, offset, length)` | Update the last-read record |
-| `EsosFile.delete_record()` | Delete the last-read record |
+| `EsosFile.close()` | Close the file (also handled by the `with` block) |
 
 ### Bridge Conversion API (via ctypes.PyDLL)
 
@@ -808,7 +843,7 @@ The version string and system time reflect your installation, so those two value
 | `NotImplementedError` from RecordIO | Used `if outfile:` (triggers `__len__`) | Use `if outfile is not None:` |
 | `AttributeError: no attribute 'writerecord'` | Wrong write method | Use `f.write(data)` not `f.writerecord(data)` |
 | Error 173 from `_mFpyCobcall` | COBOL program not found | Ensure program is compiled and in the loadlib |
-| No output in STDOUT DD | Missing STDENV configuration | Add `ESPY_OUTPUT_ENCODING=ASCII` to STDENV |
+| No output in STDOUT DD | Error before or during STDENV setup | Check the SYSPRINT and SYSOUT DDs. If empty, check console log for RTS145 error |
 
 ### Diagnostic Tips
 
@@ -816,3 +851,38 @@ The version string and system time reflect your installation, so those two value
 - Check SYSPRINT DD for PYLDM initialization messages
 - Check STDERR DD for Python tracebacks
 - PYLDM handles unhandled exceptions safely — no need for try/except in scripts
+
+### If Python or PYLDM Setup Fails
+
+Failures that occur while PYLDM is starting the Python interpreter happen *before* Python's `sys.stdout` and `sys.stderr` are redirected to the STDOUT and STDERR DDs. Those DDs are therefore empty, and the error is reported through the Enterprise Server job log instead.
+
+A setup failure of this kind raises a **fatal RTS 145 error** (COBOL interoperability error) and abends the step:
+
+```
+CASKC0027E Error executing service 'PGM#PYLDM'
+Execution error : file 'pyldm'
+error code: 145, pc=0, call=1, seg=0
+145     COBOL interoperability error (Python: Failed to load python3.dll
+        (Windows error 126). Ensure Python 3 is installed and its directory
+        is on PATH.)
+JCLCM0192S  STEP ABENDED   STEP1.PYLDM - COND CODE RTS0145
+```
+
+Note that this is a **COND CODE of RTS0145**, not RC 0100 or RC 0101 — an important distinction, because it means Python never started rather than your script failing.
+
+Where to look, in order:
+
+1. **The console log and the job log.** The RTS 145 text carries the reason, always prefixed with `Python: `.
+2. **The SYSOUT and SYSPRINT DDs.** PYLDM writes its own messages there via the Enterprise Server logger, independently of the Python stream redirection, so any `ESPY-BL1006I <name> = <value>` lines it managed to emit are still visible.
+3. **STDOUT and STDERR will be empty.** This is expected for this class of failure and is itself a useful signal.
+
+Common causes:
+
+| Message | Cause |
+|---------|-------|
+| `Failed to load python3.dll (Windows error 126)` | Python is not installed, or the directory containing `python3.dll` is not on `PATH` |
+| `Failed to load Python shared library: ...` | On Linux, `libpython3.so` / `libpython3.so.1.0` is not reachable via `LD_LIBRARY_PATH` or `ldconfig` (install `python3-devel`), or set `PYTHON_SHARED_LIB` to an explicit library name |
+| Bitness mismatch | A 32-bit Python with a 64-bit region (or vice versa) — the load fails even though Python is on `PATH` |
+
+Because the region inherits `PATH` from the environment in which Enterprise Server was started, a Python installation that works from your own command prompt is not necessarily visible to the region. If `PATH` was changed after the region started, restart the region so it picks up the new value.
+
