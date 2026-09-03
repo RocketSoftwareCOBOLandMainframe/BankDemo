@@ -39,8 +39,8 @@
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
-set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
@@ -49,10 +49,9 @@ set ESPY_MERGE_SYSOUT=false
 //* Application DDs                                                  *
 //********************************************************************
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
-//* Output dataset for filtered results (FB, lrecl=132)
-//OUTFILE  DD  DSN=MFI01V.MFIDEMO.CUST.FILTER,
-//             DISP=(OLD,CATLG,DELETE),
-//             LRECL=132,RECFM=FB
+//* Output dataset for filtered results (F, lrecl=132).
+//* Cataloged at region provision time - scripts/datasets_ps/CUSTFILT.json
+//OUTFILE  DD  DSN=MFI01V.MFIDEMO.CUST.FILTER,DISP=OLD
 //*
 //* -------------------------------------------------------------------
 //* Step 2: Account balance report with control cards from STDIN
@@ -64,8 +63,8 @@ set ESPY_MERGE_SYSOUT=false
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
-set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false

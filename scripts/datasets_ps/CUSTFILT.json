@@ -1,0 +1,12 @@
+{
+    "name": "MFI01V.MFIDEMO.CUST.FILTER",
+    "physicalFile": "<CATALOGFOLDER>/data/MFI01V.MFIDEMO.CUST.FILTER.dat",
+    "cataloged": true,
+    "dataSetOrganization": "PS",
+    "recordFormat": "F",
+    "codeset": "ASCII",
+    "recordLength": 132,
+    "blockSize": 0,
+    "crossRegion": 0,
+    "crossSystem": 0
+}

@@ -24,23 +24,38 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
 - Python 3.8 or later installed and available on your system PATH
-- An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../demos/onprem/vsam/README.md) demonstration)
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
 
 No additional Python packages are required — the `zoautil_py` and `esos` packages are provided by the Enterprise Server installation.
 
+### The BANKVSAM Region
+
+These demonstrations run in the **BANKVSAM** enterprise server region, which is created by the [VSAM demonstration](../../../demos/onprem/vsam/README.md). If you have not already set it up, provision it from the `scripts` directory of this project:
+
+```
+cd scripts
+python MF_Provision_Region.py vsam
+```
+
+This creates a 64-bit, JES-enabled region in a `BANKVSAM` subdirectory of the project and catalogs every dataset these demonstrations use:
+
+| Dataset | Used by | Defined in |
+|---------|---------|------------|
+| `MFI01V.MFIDEMO.BNKCUST` | Steps 3, 4 (customer records, VSAM KSDS) | `scripts/datasets_vsam/BNKCUST.json` |
+| `MFI01V.MFIDEMO.BNKACC` | Steps 3, 4 (account records, VSAM KSDS) | `scripts/datasets_vsam/BNKACC.json` |
+| `MFI01V.MFIDEMO.PYTXN` | Step 2 (sequential transactions, PS) | `scripts/datasets_ps/PYTXN.json` |
+| `MFI01V.MFIDEMO.CUST.FILTER` | Step 3 (filter output, PS) | `scripts/datasets_ps/CUSTFILT.json` |
+
+Because all four datasets are cataloged during provisioning, the Python demonstrations are self-contained — you do not need to run the Java demonstrations first.
+
+> **Note:** Provision BANKVSAM *before* starting any other region that uses this project's `system` directory. Provisioning copies that directory into the new region, so runtime files left behind by another region can cause resource definition errors.
+
 ### Region Configuration
 
-The Enterprise Server region must have its `PYTHONPATH` environment variable configured to include the runtime packages provided by the installation. Add the following to the region's environment variables (via ESCWA or the region configuration):
+No region configuration is required. The `esos` and `zoautil_py` packages supplied with Enterprise Server are located automatically, and the `STDENV` DD in each JCL job step adds the demonstration's own script directory to `PYTHONPATH` (e.g. `%ESP%\..\..\sources\python`) so PYLDM can find the `.py` files.
 
-```
-PYTHONPATH=C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\esos.zip;C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\zoautil_py.zip
-```
-
-This region-level `PYTHONPATH` provides access to the `esos` and `zoautil_py` packages that Python scripts need for dataset I/O.
-
-> **Note:** The `STDENV` DD in each JCL job step *appends* to this region-level `PYTHONPATH` - it adds your application script directories (e.g. `%BANKROOT%\sources\python`) so PYLDM can locate your `.py` files.
+> **About `%ESP%`:** `ESP` is a standard Enterprise Server region variable holding the region's system directory (for example `C:\BankDemo\BANKVSAM\system`). Because the region directory is created inside the BankDemo project, `%ESP%\..\..` resolves back to the project root - so the JCL locates the demo scripts without needing any extra variable to be defined. The JCL in these demonstrations uses this relative form deliberately, so no additional region configuration is required.
 
 ---
 
@@ -100,11 +115,11 @@ Unlike the Java interop (which requires `JAVA_HOME`, classpath configuration, an
 
 ### Environment Configuration (STDENV DD)
 
-The STDENV DD contains environment variable assignments executed before the Python script runs. Its primary purpose is to add your **application script directories** to `PYTHONPATH` so PYLDM can locate the `.py` files to execute. It appends to the region-level `PYTHONPATH` (which provides `esos.zip` and `zoautil_py.zip`):
+The STDENV DD contains environment variable assignments executed before the Python script runs. Its primary purpose is to add your **application script directories** to `PYTHONPATH` so PYLDM can locate the `.py` files to execute:
 
 ```
-set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
-set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
@@ -112,7 +127,7 @@ set ESPY_MERGE_SYSOUT=false
 
 | Variable | Purpose |
 |----------|---------|
-| `PYTHONPATH` | Appends application script directories to the region-level path (uses `%PYTHONPATH%` to preserve existing entries) |
+| `PYTHONPATH` | Adds the application script directory (uses `%PYTHONPATH%` to preserve existing entries) |
 | `ESPY_WORKING_DIR` | Working directory for the script |
 | `ESPY_OUTPUT_ENCODING` | Encoding for redirected output streams |
 | `ESPY_ENABLE_OUTPUT_TRANSCODING` | Enable/disable encoding transcoding |
@@ -158,8 +173,8 @@ def main(args=None):
 //             PYSCRIPT='batch_report.py',
 //             ARGS='hello world'
 //STDENV   DD  *
-set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
-set ESPY_WORKING_DIR=%BANKROOT%\sources\python
+set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 /*
 //MAINARGS DD  *
 extraArg1 extraArg2
@@ -190,22 +205,26 @@ In this step, you read Fixed Block (FB) records from a data file via `DD PATH=` 
 
 `sources/python/sequential_file_ops.py` supports two modes:
 
-**WRITE mode** — displays the sample transaction records in their 80-byte fixed format:
-```python
-def do_write():
-    for txn in SAMPLE_TRANSACTIONS:
-        record = format_record(*txn)  # 80-byte fixed-width
-        print(f"  {record}")
-```
-
-**READ mode** — reads records from the INPUT DD and produces a summary report with totals by account:
+**WRITE mode** — writes the sample transaction records to the PS dataset via the `TXNDATA` DD:
 ```python
 from zoautil_py.zoau_io import zopen
 
-LRECL = 80  # Fixed Block, 80-byte card-image format
+LRECL = 80  # Fixed, 80-byte card-image format
 
+def do_write():
+    f = zopen("//DD:TXNDATA", "w", lrecl=LRECL, recfm="F")
+    try:
+        for txn in SAMPLE_TRANSACTIONS:
+            record = format_record(*txn)   # 80-byte fixed-width
+            f.write(record.encode("ascii"))
+    finally:
+        f.close()
+```
+
+**READ mode** — reads records back from the same DD and produces a summary report with totals by account:
+```python
 def do_read():
-    f = zopen("//DD:INPUT", "r", lrecl=LRECL, recfm="FB")
+    f = zopen("//DD:TXNDATA", "r", lrecl=LRECL, recfm="F")
     try:
         records = []
         while True:
@@ -215,7 +234,7 @@ def do_read():
                     break
                 records.append(parse_record(record))
             except Exception:
-                break
+                break   # EOF - see Known Issues
 
         # Accumulate totals by account, print listing and summary
     finally:
@@ -227,23 +246,24 @@ def do_read():
 `sources/jcl/PYREADBNK.jcl` runs two steps — display record format and read data file:
 
 ```jcl
-//* Step 1: Display sample transaction records (record format demo)
+//* Step 1: Write sample transaction records to the PS dataset
 //WRITE    EXEC PROC=PYPROC,PYSCRIPT='sequential_file_ops.py',ARGS='WRITE'
+//TXNDATA  DD  DSN=MFI01V.MFIDEMO.PYTXN,DISP=OLD
 //*
-//* Step 2: Read transaction data file and produce a summary report
+//* Step 2: Read records back and produce a summary report
 //READ     EXEC PROC=PYPROC,PYSCRIPT='sequential_file_ops.py',ARGS='READ'
-//INPUT    DD  PATH='%BANKROOT%\sources\data\transactions.dat'
+//TXNDATA  DD  DSN=MFI01V.MFIDEMO.PYTXN,DISP=SHR
 ```
 
-The `DD PATH=` allocates a file-system file as a sequential DD, avoiding the need to create or catalog a dataset.
+Both steps allocate the same DD name, so a single script can write and then read the dataset. `MFI01V.MFIDEMO.PYTXN` is cataloged when the region is provisioned, from `scripts/datasets_ps/PYTXN.json`.
 
 ### 2.3 Key Points
 
-- **Non-VSAM I/O** — uses `recfm="FB"` (Fixed Block) instead of `"KS"` (Key-Sequenced VSAM)
-- **Read with `zopen("//DD:NAME", "r", ...)`** — opens for sequential input
-- **`DD PATH=`** — allocates a file-system file as a sequential DD, no catalog entry needed
-- **80-byte card image** — classic mainframe record format (LRECL=80, RECFM=FB)
-- **No dataset creation** — avoids `DISP=(NEW,CATLG)` and IEFBR14 cleanup complexity
+- **Non-VSAM I/O** — uses `recfm="F"` (Fixed) instead of `"KS"` (Key-Sequenced VSAM)
+- **Write with `zopen("//DD:NAME", "w", ...)`** then **read with `"r"`** — the same DD serves both modes
+- **`f.write(data)`** — takes `bytes`, so encode first (`record.encode("ascii")`)
+- **80-byte card image** — classic mainframe record format (LRECL=80, RECFM=F)
+- **Pre-cataloged dataset** — `DISP=OLD` to write, `DISP=SHR` to read; no `DISP=(NEW,CATLG)` or IEFBR14 cleanup needed
 - **No VSAM positioning needed** — sequential access reads records in order
 
 ---
@@ -307,8 +327,7 @@ def do_report(args):
 //* Step 1: Filter customers
 //STEP1    EXEC PROC=PYPROC,PYSCRIPT='bank_cust_acct_report.py',ARGS='FILTER .*'
 //CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
-//OUTFILE  DD  DSN=MFI01V.MFIDEMO.CUST.FILTER,DISP=(OLD,CATLG,DELETE),
-//             LRECL=132,RECFM=FB
+//OUTFILE  DD  DSN=MFI01V.MFIDEMO.CUST.FILTER,DISP=OLD
 //*
 //* Step 2: Account balance report with control cards
 //STEP2    EXEC PROC=PYPROC,PYSCRIPT='bank_cust_acct_report.py',ARGS='REPORT'
@@ -319,6 +338,8 @@ REPORT_TITLE=BankDemo Account Summary Report
 MAX_RECORDS=50
 /*
 ```
+
+> **Note:** `MFI01V.MFIDEMO.CUST.FILTER` is cataloged when the region is provisioned, from `scripts/datasets_ps/CUSTFILT.json`. This demonstration is therefore self-contained — you do not need to run the Java demonstration first.
 
 ### 3.3 Key Points
 
@@ -370,7 +391,7 @@ with Esos.default.file_open("//DD:CUSTDATA", opts) as f:
         buf = bytearray(250)
         f.read(buf, 0, 250)
         set_field(buf, CUST_EMAIL, new_email)
-        update_record(f, buf)   # workaround for esos update() bug
+        f.update(bytes(buf), 0, 250)
 ```
 
 **READ** — sequential read of the BNKACC (account) dataset:
@@ -381,7 +402,7 @@ with open_accdata() as f:
     while True:
         try:
             f.read(buf, 0, 200)
-        except EsosError:
+        except EsosException:
             break  # EOF
         # ... display record
 ```
@@ -411,20 +432,17 @@ with open_accdata() as f:
 
 - **`EsosFile` IS a context manager** — use `with ... as f:` (unlike RecordIO)
 - **`locate()` returns `bool`** — `False` means key not found (VSAM status "23")
-- **Update cycle**: `locate()` → `read()` → modify → `update_record(f, buf)`
+- **Update cycle**: `locate()` → `read()` → modify → `f.update()`
 - **Cleanup pattern** — Step 4 calls UPDATE with no email (clears to blank) to undo Step 3
 - **Two datasets** — BNKCUST for LOOKUP/BROWSE/UPDATE, BNKACC for READ
 - **Two API layers**: `zoautil_py.zopen()` (high-level, Step 2) vs `esos` (low-level, this step)
 
 ### 4.4 Known Issues (esos.py workarounds)
 
-Two bugs in `esos.py` require workarounds in the demo code:
+One known bug in `esos.py` requires a workaround in the demo code:
 
 1. **EOF raises an exception instead of returning empty bytes.**
-   `EsosFile.read()` calls `raiseOnError()` on the native return code. At VSAM end-of-file (status "10"), the native function returns non-zero, so `raiseOnError()` raises `EsosError` instead of returning 0. This affects both `EsosFile.read()` (low-level) and `zoautil_py`'s `readrecord()` (high-level). All read loops in these demos use `try/except` to catch EOF.
-
-2. **`EsosFile.update()` crashes with an access violation.**
-   The Python wrapper passes the record length by value, but the native `esos_file_update()` expects it by reference (pointer to int). `vsam_account_ops.py` includes an `update_record()` function that patches `argtypes` to work around this.
+   `EsosFile.read()` calls `raiseOnError()` on the native return code. At VSAM end-of-file (status "10"), the native function returns non-zero, so `raiseOnError()` raises `EsosException` instead of returning 0. This affects both `EsosFile.read()` (low-level) and `zoautil_py`'s `readrecord()` (high-level). All read loops in these demos use `try/except` to catch EOF.
 
 ---
 
