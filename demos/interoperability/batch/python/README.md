@@ -194,6 +194,8 @@ set ESPY_MERGE_SYSOUT=false
 | `ESPY_OUTPUT_ENCODING` | Encoding for redirected output streams |
 | `ESPY_ENABLE_OUTPUT_TRANSCODING` | Enable/disable encoding transcoding |
 | `ESPY_MERGE_SYSOUT` | Merge stdout and stderr to SYSOUT DD |
+| `ESPY_MAIN_ARGS` | Additional script arguments, appended after the PARM arguments |
+| `ESPY_MAIN_ARGS_DD` | Name of the DD holding further arguments (defaults to `MAINARGS`) |
 
 > **Linux:** These examples use Windows batch syntax. PYLDM runs the STDENV script with the platform's own shell, so on Linux use `export NAME=value` and `$NAME` - see [Running on Linux](#running-on-linux).
 
@@ -257,7 +259,7 @@ arg3 arg4
 
 - **No compilation needed** — just place `.py` files where `PYTHONPATH` or `ESPY_WORKING_DIR` can find them
 - **No `PYTHON_HOME` required** — PYLDM/cblcpyiapi automatically locates the Python installation
-- **Argument assembly order**: PARM args → `ESPY_MAIN_ARGS` env var → MAINARGS DD content
+- **Argument assembly order**: PARM args → `ESPY_MAIN_ARGS` env var → `ESPY_MAIN_ARGS_DD` DD content (defaults to `MAINARGS`) — STEP1 supplies all three
 - **Stream redirection is automatic** — `print()` writes to the STDOUT DD
 - **Log level**: `+I` (info), `+T` (trace), `+D` (debug) — first character of PARM after the `/`
 
@@ -269,7 +271,7 @@ arg3 arg4
 
 ### 1.5 Expected Output
 
-STEP1 (script mode) writes the following to its STDOUT DD. The PARM arguments (`hello world`) and the MAINARGS DD content (`arg3 arg4`) are concatenated into `sys.argv`:
+STEP1 runs in script mode and supplies arguments from all three sources. They arrive in `sys.argv` in assembly order — the two PARM arguments (`hello world`) first, then the two from `ESPY_MAIN_ARGS`, then the two from the MAINARGS DD:
 
 ```
 ============================================================
@@ -280,14 +282,17 @@ Script: batch_report.py
 Python version: 3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]
 Working directory: C:\dev\BankDemo\sources\python
 
-Arguments received: 4
+Arguments received: 6
   arg[0] = 'hello'
   arg[1] = 'world'
-  arg[2] = 'arg3'
-  arg[3] = 'arg4'
+  arg[2] = 'envArg1'
+  arg[3] = 'envArg2'
+  arg[4] = 'arg3'
+  arg[5] = 'arg4'
 
 PYLDM environment:
   ESPY_ENABLE_OUTPUT_TRANSCODING = false
+  ESPY_MAIN_ARGS = envArg1 envArg2
   ESPY_MERGE_SYSOUT = false
   ESPY_OUTPUT_ENCODING = ASCII
   ESPY_WORKING_DIR = C:\dev\BankDemo\BANKVSAM\system\..\..\sources\python
@@ -301,7 +306,9 @@ Report complete. RC=0
 ============================================================
 ```
 
-STEP2 (module mode) produces the same report with its own arguments. Note that it does not set `ESPY_WORKING_DIR`, so the working directory stays at the region's default:
+Each source is split on whitespace, so `ESPY_MAIN_ARGS=envArg1 envArg2` becomes two arguments rather than one. Use quotes to keep a value containing spaces together.
+
+STEP2 (module mode) passes only PARM arguments. Note that it does not set `ESPY_WORKING_DIR`, so the working directory stays at the region's default:
 
 ```
 Working directory: C:\dev\BankDemo\BANKVSAM\system\loadlib

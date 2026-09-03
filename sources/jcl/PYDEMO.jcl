@@ -29,7 +29,11 @@
 //********************************************************************
 //*
 //* -------------------------------------------------------------------
-//* Step 1: Script mode - run batch_report.py with PARM arguments
+//* Step 1: Script mode - run batch_report.py with arguments from all
+//*         three sources. They are assembled in this order:
+//*           1. PARM      (ARGS= below)
+//*           2. ESPY_MAIN_ARGS      env var (set in STDENV)
+//*           3. ESPY_MAIN_ARGS_DD   DD, defaulting to MAINARGS
 //* -------------------------------------------------------------------
 //STEP1    EXEC PROC=PYPROC,
 //             PYSCRIPT='batch_report.py',
@@ -42,6 +46,7 @@ set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 set ESPY_OUTPUT_ENCODING=ASCII
 set ESPY_ENABLE_OUTPUT_TRANSCODING=false
 set ESPY_MERGE_SYSOUT=false
+set ESPY_MAIN_ARGS=envArg1 envArg2
 /*
 //MAINARGS DD  *
 arg3 arg4
