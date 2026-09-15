@@ -24,7 +24,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
 - A 64-bit Enterprise Server region and 64-bit environment (JVMLDM requires a 64-bit process)
-- The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `%COBDIR%\AdoptOpenJDK`. The supported major version is 21-25. If you prefer to use your own JDK, align to the same major version
+- The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `C:\Program Files (x86)\Micro Focus\Enterprise Developer\AdoptOpenJDK` for the default installation. The supported major version is 21-25. If you prefer to use your own JDK, align to the same major version
 - An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../demos/onprem/vsam/README.md) demonstration)
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
@@ -71,9 +71,9 @@ In this step, you create a simple COBOL program that calls a Java method, and a 
 #### Ensure the region's environment variables include:
 
 **Windows:**
-   - `JAVA_HOME=%COBDIR%\AdoptOpenJDK`
-   - `PATH=%COBDIR%\AdoptOpenJDK\bin\server;%PATH%`
-   - `CLASSPATH=%COBDIR%\bin64\esjos.jar;%ESP%\loadlib`
+   - `JAVA_HOME=C:\Program Files (x86)\Micro Focus\Enterprise Developer\AdoptOpenJDK`
+   - `PATH=C:\Program Files (x86)\Micro Focus\Enterprise Developer\AdoptOpenJDK\bin\server;<existing PATH>`
+   - `CLASSPATH=C:\Program Files (x86)\Micro Focus\Enterprise Developer\bin64\esjos.jar;<expanded ESP>\loadlib`
 
 **Linux:**
    - `JAVA_HOME=/path/to/jdk`
@@ -187,7 +187,7 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS")
 
    **Windows** (Enterprise Developer 64-bit Command Prompt):
    ```
-   javac -cp "%COBDIR%\bin64\esjos.jar" HelloBatch.java
+   javac -cp "C:\Program Files (x86)\Micro Focus\Enterprise Developer\bin64\esjos.jar" HelloBatch.java
    cbllink -D HELLOJAV.cbl
    ```
 
@@ -222,7 +222,7 @@ In this step, you bypass the COBOL bootstrap and invoke a Java class directly fr
 >
 > | | Variable | Value |
 > |---|----------|-------|
-> | **Windows** | `JAVA_HOME` | `%COBDIR%\AdoptOpenJDK` |
+> | **Windows** | `JAVA_HOME` | `C:\Program Files (x86)\Micro Focus\Enterprise Developer\AdoptOpenJDK` |
 > | | `CLASSPATH` | `%ESP%\loadlib` |
 > | **Linux** | `JAVA_HOME` | `/path/to/jdk` |
 > | | `CLASSPATH` | `$ESP/loadlib` |
@@ -341,7 +341,7 @@ Example with JVM options:
 Windows:
 ```jcl
 //STDENV    DD *
-set JAVA_HOME=%COBDIR%\AdoptOpenJDK
+set JAVA_HOME=C:\Program Files (x86)\Micro Focus\Enterprise Developer\AdoptOpenJDK
 set PATH=%JAVA_HOME%\bin\server;%PATH%
 set CLASSPATH=%ESP%\loadlib;%CLASSPATH%
 set JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
@@ -537,7 +537,7 @@ TRAP(ON,NOSPIE)
 
    **Windows** (Enterprise Developer 64-bit Command Prompt):
    ```
-   javac -cp "%COBDIR%\bin64\esjos.jar" ReadBankData.java
+   javac -cp "C:\Program Files (x86)\Micro Focus\Enterprise Developer\bin64\esjos.jar" ReadBankData.java
    cbllink -D READBNKJ.cbl
    ```
 
@@ -859,7 +859,7 @@ REPORT_TITLE=Daily Customer Account Summary - Filtered
 
    **Windows:**
    ```
-   javac -cp "%COBDIR%\bin64\esjos.jar" BankCustAcctReport.java
+   javac -cp "C:\Program Files (x86)\Micro Focus\Enterprise Developer\bin64\esjos.jar" BankCustAcctReport.java
    ```
 
    **Linux:**
@@ -1378,7 +1378,7 @@ vsam.update(record, 0, record.length);
 
    **Windows:**
    ```
-   javac -cp "%COBDIR%\bin64\esjos.jar" VsamAccountOps.java
+   javac -cp "C:\Program Files (x86)\Micro Focus\Enterprise Developer\bin64\esjos.jar" VsamAccountOps.java
    ```
 
    **Linux:**
