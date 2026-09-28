@@ -1191,15 +1191,15 @@ The remaining Java JCL samples invoke Java classes directly via JVMLDM, without 
 To try the first example:
 
 1.  In **Application Explorer**, expand the **jcl** folder.
-2.  Open **JVMDEMO.jcl** and review it. The job passes arguments to `BatchReport` from three sources Ã”Ã‡Ã¶ the `PARM` string, the `STDENV` DD, and the `MAINARGS` DD Ã”Ã‡Ã¶ and all six should appear in **STDOUT**.
+2.  Open **JVMDEMO.jcl** and review it. The job passes arguments to `BatchReport` from three sources — the `PARM` string, the `STDENV` DD, and the `MAINARGS` DD — and all six should appear in **STDOUT**.
 3.  Right-click **JVMDEMO.jcl** and select **Submit JCL to associated Server**.
 4.  Open the spool entry and review the **STDOUT** and **STDERR** DD output.
 
 The following additional JCL samples are also provided in the **jcl** folder and can be submitted in the same way:
 
--   **JVMREADBNK.jcl** Ã”Ã‡Ã¶ reads BankDemo account records from a dataset using the `ZFile` API and prints a summary to **STDOUT**.
--   **JVMMULTI.jcl** Ã”Ã‡Ã¶ a two-step job that filters customer records in the first step and produces a formatted account report in the second, passing data between steps via cataloged datasets.
--   **JVMVSAM.jcl** Ã”Ã‡Ã¶ a three-step job demonstrating keyed VSAM lookup, sequential browse, and record update operations against the `BNKCUST` dataset.
+-   **JVMREADBNK.jcl** — reads BankDemo account records from a dataset using the `ZFile` API and prints a summary to **STDOUT**.
+-   **JVMMULTI.jcl** — a two-step job that filters customer records in the first step and produces a formatted account report in the second, passing data between steps via cataloged datasets.
+-   **JVMVSAM.jcl** — a three-step job demonstrating keyed VSAM lookup, sequential browse, and record update operations against the `BNKCUST` dataset.
 
 ## Debugging the Java Batch Application
 

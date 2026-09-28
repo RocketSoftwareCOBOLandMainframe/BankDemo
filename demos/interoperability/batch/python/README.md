@@ -33,7 +33,9 @@ No additional Python packages are required — the `zoautil_py` and `esos` packa
 
 PYLDM does not run the `python` executable. It loads the Python **shared library** into the Enterprise Server process, so it is that library which must be locatable:
 
-**Windows** — install Python 3 from [python.org](https://www.python.org/downloads/) and tick *Add python.exe to PATH*. PYLDM loads `python3.dll` using the standard DLL search order, so the directory containing it must be on `PATH`.
+**Windows** — install Python 3 from [python.org](https://www.python.org/downloads/). Python versions prior to 3.14 use a simple installer; it is recommended to install Python system-wide and ticking the *Add python.exe to PATH* option so that the `python.exe` is available on the system `PATH`. Python 3.14 introduced a new installation method with no easy "add to path" option so path modifications will need to be done manually.
+
+PYLDM loads `python3.dll` using the standard DLL search order, so the directory containing it must be on `PATH`. The directory containing the `python.exe` is usually the same directory containing the `python3.dll`. You can add Python to the region environment or the user and/ or System `PATH`. **Note:** The default directory server and escwa services are started as System user and will use the System `PATH` unless restarted.
 
 **Linux** — install the Python 3 runtime *and* its development package, which provides the `libpython3.so` linker name:
 
@@ -242,7 +244,7 @@ arg3 arg4
 ### 1.4 Deploy and Run
 
 1. Ensure `batch_report.py` is in the directory referenced by `ESPY_WORKING_DIR` or `PYTHONPATH`
-2. Submit `PYDEMO.jcl` via ESCWA or `casutil`
+2. Submit `PYDEMO.jcl` via ESCWA or `cassub`
 3. Check the job output — STDOUT DD shows the report, SYSPRINT shows PYLDM messages
 
 ### 1.5 Expected Output
@@ -779,10 +781,10 @@ def do_twoscomp(args):
 ### 5.3 Key Points
 
 - **`ctypes.PyDLL` not `ctypes.CDLL`** — the bridge conversion functions call Python C APIs internally (require the GIL)
-- **COMP fields are big-endian** — use `struct.pack('>h', value)` for PIC S9(4) COMP under ENTCOBOL
+- **COMP fields are big-endian** — use `struct.pack('>h', value)` for PIC S9(4) COMP.
 - **Group items = single contiguous buffer** — fields at fixed offsets, matching the COBOL COPY layout
 - **`_mFpyCobcall` raises `RuntimeError`** on failure (error 173 = program not found)
-- **Programs must be in the loadlib** — COBOL subroutines must already be compiled and available
+- **Programs must be in the JES Program Path (BANKVSAM uses loadlib directory)** — COBOL subroutines must already be compiled and available
 
 ### 5.4 Expected Output
 
