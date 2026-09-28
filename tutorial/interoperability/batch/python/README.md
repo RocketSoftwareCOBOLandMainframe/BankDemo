@@ -61,6 +61,9 @@ python MF_Provision_Region.py vsam
 
 This creates a 64-bit, JES-enabled region in a `BANKVSAM` subdirectory of the project and catalogs every dataset these demonstrations use:
 
+Use this **BANKVSAM** region for every tutorial step; do not use the
+BankDemo template region.
+
 | Dataset | Used by | Defined in |
 |---------|---------|------------|
 | `MFI01V.MFIDEMO.BNKCUST` | Steps 3, 4 (customer records, VSAM KSDS) | `scripts/datasets_vsam/BNKCUST.json` |

@@ -29,6 +29,19 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
 
+Use the **BANKVSAM** region created by the VSAM tutorial for all steps. If it
+has not been provisioned yet, run the following from the project's `scripts`
+directory:
+
+```
+cd scripts
+python MF_Provision_Region.py vsam
+```
+
+The provisioning script creates the 64-bit, JES-enabled region and catalogs
+the BankDemo datasets used by these tutorials. Do not use the BankDemo
+template region for these steps.
+
 > **Installation directory variables:** On Windows, `TXDIR` refers to your Rocket Enterprise
 > Developer/Server installation directory (for example, `C:\Program Files (x86)\Rocket
 > Software\Enterprise Developer`). Use `TXDIR` in Windows paths because `COBDIR` may
