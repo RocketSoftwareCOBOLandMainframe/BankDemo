@@ -15,7 +15,7 @@ class HelloBatch {
             System.out.println("Hello from Java in a batch job!");
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
-            System.out.println("Env var (ESOS_TEST_VAR): " + System.getenv("ESOS_TEST_VAR"));
+            System.out.println("Env var (TEST_VAR): " + System.getenv("TEST_VAR"));
         } catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             e.printStackTrace(System.err);

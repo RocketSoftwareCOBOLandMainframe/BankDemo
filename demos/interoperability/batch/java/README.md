@@ -72,10 +72,11 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ---
 ## <a name="step1"></a>Step 1 - Hello World: COBOL Calling Java
 
-In this step, you create a simple COBOL program that calls a Java method, and a JCL job that executes it. In this example, demonstrates how to setup a bare metal JCL, Cobol program invoking a Java function which redirects the standard streams. Allowing usage of System.out, System.err & System.in.
+In this step, use the included COBOL program and JCL job to call a Java
+method. This demonstrates a bare-metal JCL job, a COBOL program invoking a
+Java function, and redirection of `System.out`, `System.err`, and `System.in`.
 
-### Setup
-#### Ensure the region's environment variables include:
+**Setup:** Ensure the region's environment variables include:
 
 The BANKVSAM provisioning process defines `ESP` as the region's system
 directory, so users following this demonstration do not need to set it
@@ -98,9 +99,9 @@ locate the required runtime components without it, while an incorrectly
 expanded `PATH` can prevent JVMLDM from finding utilities such as
 `stdenvhelper`.
 
-### 1.1 Write the Java Class
+### 1.1 The Java Class
 
-Create the file `HelloBatch.java`:
+The Java file `sources/java/HelloBatch.java` prints a formatted report showing some environment variables and the Java version being used.
 
 ```java
 import com.rocketsoftware.jzos.ZUtil;
@@ -120,7 +121,7 @@ class HelloBatch {
             System.out.println("Hello from Java in a batch job!");
             System.out.println("Java version: " + System.getProperty("java.version"));
             System.out.println("Working directory: " + System.getProperty("user.dir"));
-            System.out.println("Env var (ESOS_TEST_VAR): " + System.getenv("ESOS_TEST_VAR"));
+            System.out.println("Env var (TEST_VAR): " + System.getenv("TEST_VAR"));
         } catch (Exception e) {
             System.err.println("ERROR: " + e.getMessage());
             e.printStackTrace(System.err);
@@ -133,9 +134,9 @@ class HelloBatch {
 
 > **Key point:** The method called from COBOL must be `public static`. The COBOL CALL statement uses the format `"Java.<ClassName>.<methodName>"`.
 
-### 1.2 Write the COBOL Bootstrap Program
+### 1.2 The COBOL Bootstrap Program
 
-Create the file `HELLOJAV.cbl`:
+The COBOL file `sources/cobol/core/HELLOJAV.cbl` calls the HelloBatch class defined above.
 
 ```cobol
       $set FCDCAT
@@ -155,22 +156,14 @@ Create the file `HELLOJAV.cbl`:
            .
 ```
 
-The sample is compiled by default in the normal COBOL dialect because `FCDCAT`
-and `OUTDD` provide the required catalog-aware `SYSOUT` behavior. To check the
-program with the mainframe-compatible `entcobol` dialect, temporarily replace
-those two `$set` lines with:
+This sample is intended to be compiled in the Rocket COBOL dialect. `FCDCAT`
+and `OUTDD` provide the required catalog-aware `SYSOUT` behavior.
 
-```cobol
-      $set dialect(entcobol)
-```
+Mainframe dialects (i.e `entcobol`) do not accept the Rocket-dialect `$set` syntax; make sure to remove the two `$set` statements to compile for mainframe. You will need to make sure a mainframe dialect is in effect though command line or using project settings e.g. DIALECT(ENTCOBOL). Mainframe dialects auto-include the `FCDCAT` and `OUTDD` source directives.
 
-Compile the temporary version with the same command, then restore the original
-two lines before deploying it for this tutorial. `entcobol` does not accept the
-normal-dialect `FCDCAT` and `OUTDD` source directives.
+### 1.3 The JCL
 
-### 1.3 Write the JCL
-
-Create the file `HELLOJAV.jcl`:
+`sources/jcl/interoperability/<platform>/HELLOJAV.jcl` invokes the Java class via the COBOL program defined above.
 
 ```jcl
 //HELLOJAV JOB CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
@@ -190,7 +183,7 @@ Create the file `HELLOJAV.jcl`:
 //STDERR   DD  SYSOUT=*
 //SYSOUT   DD  SYSOUT=*
 //CEEOPTS  DD *
-ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
+ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 "JAVA_TOOL_OPTIONS=")
 /*
 //
@@ -214,35 +207,40 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
 >
 > ```jcl
 > //CEEOPTS  DD *
-> ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
+> ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 > "JAVA_TOOL_OPTIONS=")
 > /*
 > ```
 >
-> The Java class retrieves `ESOS_TEST_VAR` with `System.getenv("ESOS_TEST_VAR")` and prints it to STDOUT. You can set or extend any environment variable via `ENVAR()`, including those used by the JVM — avoiding the need to configure them in the region's environment.
+> The Java class retrieves `TEST_VAR` with `System.getenv("TEST_VAR")` and prints it to STDOUT. You can set or extend any environment variable via `ENVAR()`, including those used by the JVM — avoiding the need to configure them in the region's environment.
 > You can verify CEEOPTS is taking effect by checking the step's output - the environment variable value will appear in STDOUT, proving the LE options were applied before the program executed. ENVAR also can take a second parameter to either override (OVR) or not (NONOVR) for the supplied variables.
 
 > **Tip:** Other environment variables can also be set per-step with
 > `CEEOPTS ENVAR()`. This demonstration inherits `JAVA_HOME` and `CLASSPATH`
 > from the region configuration described above.
 
-### 1.4 Compile and Run
+### 1.4 Compile, Deploy, and Run
 
 1. **Compile and deploy:**
 
    **Windows** (Enterprise Developer 64-bit Command Prompt):
    ```
+   cd sources\java
    javac -cp "%TXDIR%\bin64\esjos.jar" HelloBatch.java
+   cd ..\cobol\core
    cbllink -D HELLOJAV.cbl
    ```
 
    **Linux:**
    ```
+   cd sources/java
    javac -cp "$COBDIR/lib/esjos.jar" HelloBatch.java
+   cd ../cobol/core
    cob -z HELLOJAV.cbl
    ```
 
-2. **Deploy** `HelloBatch.class` and the compiled COBOL program (`HELLOJAV.dll` on Windows, `HELLOJAV.so` on Linux) to your Enterprise Server's loadlib directory (`$ESP/loadlib`).
+2. **Deploy** `HelloBatch.class` and the compiled COBOL program
+   (`HELLOJAV.dll` on Windows, `HELLOJAV.so` on Linux) to your regions's JES Program PATH (e.g. BANKVSAM: `$ESP/loadlib`).
 
 3. **Submit the JCL**, such as through ESCWA (JES > Control), `cassub`, or the Python submission scripts provided in the `scripts` directory of this project.
 
@@ -251,7 +249,7 @@ ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
    Hello from Java in a batch job!
    Java version: 21.0.x
    Working directory: /path/to/server
-   Env var (ESOS_TEST_VAR): HELLO_FROM_ESOS
+   Env var (TEST_VAR): HELLO_FROM_CEEOPTS
    ```
 
    COBOL writes to the `SYSOUT` DD:
@@ -282,9 +280,9 @@ In this step, you bypass the COBOL bootstrap and invoke a Java class directly fr
 >
 > Most Java JCL uses `STDENV DD DUMMY` so that JVMLDM inherits these from the region. `JVMDEMO.jcl` includes inline STDENV to demonstrate `JZOS_MAIN_ARGS`.
 
-### 2.1 Write the Java Class
+### 2.1 The Java Class
 
-Create the file `BatchReport.java`:
+`sources/java/BatchReport.java` produces a report containing the arguments it received in order.
 
 ```java
 /**
@@ -305,9 +303,9 @@ public class BatchReport {
 }
 ```
 
-### 2.2 Write the JCL
+### 2.2 The JCL
 
-Create the file `JVMDEMO.jcl`:
+`sources/jcl/interoperability/<platform>/JVMDEMO.jcl` uses the JVMLDM to invoke the BatchReport class.
 
 ```jcl
 //MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
@@ -413,8 +411,10 @@ export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 
 ### 2.6 Compile and Deploy
 
-1. **Compile the Java class** using the JDK bundled with Enterprise Developer:
+1. **Compile the Java class** using the JDK bundled with Enterprise
+   Developer:
    ```
+   cd sources\java
    javac BatchReport.java
    ```
 
@@ -455,9 +455,9 @@ This step demonstrates how a Java program invoked from JCL can read and write En
 
 > **Setup:** Ensure the region's environment includes `JAVA_HOME` and the full `CLASSPATH` described in [Step 2](#step2). The JCL uses `STDENV DD DUMMY` so that JVMLDM inherits these from the region.
 
-### 3.1 Write the Java Class
+### 3.1 The Java Class
 
-Create the file `ReadBankData.java`:
+`sources/java/ReadBankData.java` demonstrates how to use ZFile to perform operations with datasets.
 
 ```java
 import com.rocketsoftware.jzos.*;
@@ -516,9 +516,9 @@ public class ReadBankData {
 }
 ```
 
-### 3.2 Write the JCL
+### 3.2 The JCL
 
-Create the file `JVMREADBNK.jcl`:
+`sources/jcl/interoperability/<platform>/JVMREADBNK.jcl`:
 
 ```jcl
 //MYJOB    JOB 'JCLCOMP',CLASS=A,MSGCLASS=A
@@ -555,7 +555,7 @@ Create the file `JVMREADBNK.jcl`:
 //
 ```
 
-> **Understanding the DDs:**
+### 3.3 DD Allocations
 >
 > The JCL must allocate **two categories** of DDs:
 >
@@ -574,17 +574,19 @@ Create the file `JVMREADBNK.jcl`:
 >
 > If your Java program opens additional datasets (e.g. an output file), add corresponding DD allocations to the JCL.
 
-### 3.4 Compile and Run
+### 3.4 Compile, Deploy, and Run
 
-1. **Compile:**
+1. **Compile the Java class:**
 
    **Windows** (Enterprise Developer 64-bit Command Prompt):
    ```
+   cd sources\java
    javac -cp "%TXDIR%\bin64\esjos.jar" ReadBankData.java
    ```
 
    **Linux:**
    ```
+   cd sources/java
    javac -cp "$COBDIR/lib/esjos.jar" ReadBankData.java
    ```
 
@@ -607,7 +609,12 @@ Create the file `JVMREADBNK.jcl`:
      === Complete ===  
    ```
 
-5.1 *The Java program* is able to accept an integer (which can be passed via ARGS, MAINARGS or JZOS_MAIN_ARGS environmental variable). This will determine how many records will be displayed. Changing this from 5, to a non parsable integer. Should result in an exception which can viewed in the jobs STDERR output.
+### 3.5 Key Points
+
+- The program accepts the number of records to display through `ARGS`,
+  `MAINARGS`, or the `JZOS_MAIN_ARGS` environment variable.
+- Passing a non-parsable value instead of `5` causes an exception, which is
+  shown in the job's `STDERR` output.
 
 ---
 
@@ -617,7 +624,7 @@ This step brings everything together in a realistic multi-step batch job that pr
 
 > **Setup:** Ensure the region's environment includes `JAVA_HOME` and the full `CLASSPATH` described in [Step 2](#step2). The JCL uses `STDENV DD DUMMY` so that JVMLDM inherits these from the region.
 
-### 4.1 Java Class: BankCustAcctReport.java
+### 4.1 The Java Class
 
 ```java
 import com.rocketsoftware.jzos.*;
@@ -830,7 +837,7 @@ public class BankCustAcctReport {
 }
 ```
 
-### 4.2 Multi-Step JCL (JVMMULTI.jcl)
+### 4.2 The JCL
 
 ```jcl
 //JVMMULTI JOB 'CUSTACCT-RPT',CLASS=A,MSGCLASS=A,MSGLEVEL=(1,1)
@@ -891,15 +898,17 @@ REPORT_TITLE=Daily Customer Account Summary - Filtered
 
 ### 4.3 Compile and Deploy
 
-1. **Compile:**
+1. **Compile the Java class:**
 
    **Windows:**
    ```
+   cd sources\java
    javac -cp "%TXDIR%\bin64\esjos.jar" BankCustAcctReport.java
    ```
 
    **Linux:**
    ```
+   cd sources/java
    javac -cp "$COBDIR/lib/esjos.jar" BankCustAcctReport.java
    ```
 
@@ -986,7 +995,7 @@ This step demonstrates direct VSAM KSDS operations from Java - **keyed lookup**,
 
 > **Setup:** Ensure the region's environment includes `JAVA_HOME` and the full `CLASSPATH` described in [Step 2](#step2). The JCL uses `STDENV DD DUMMY` so that JVMLDM inherits these from the region.
 
-### What the program does
+### 5.1 What the Program Does
 
 | Operation | Description |
 |-----------|-------------|
@@ -994,7 +1003,7 @@ This step demonstrates direct VSAM KSDS operations from Java - **keyed lookup**,
 | `BROWSE`  | Positions to a key using `LOCATE_KEY_FIRST` or `LOCATE_KEY_GE` then reads up to *n* records sequentially |
 | `UPDATE`  | Locates a record by key, toggles the SendMail flag (`Y`â†”`N`), and writes it back with `ZFile.update()` |
 
-### BNKCUST Record Layout (CBANKVCS.cpy)
+### 5.2 BNKCUST Record Layout (CBANKVCS.cpy)
 
 | Field | Offset | Length | Type | Description |
 |-------|--------|--------|------|-------------|
@@ -1012,7 +1021,7 @@ This step demonstrates direct VSAM KSDS operations from Java - **keyed lookup**,
 | SendMail | 170 | 1 | PIC X | `Y` or `N` |
 | SendEmail | 171 | 1 | PIC X | `Y` or `N` |
 
-### Java Class: VsamAccountOps.java
+### 5.3 The Java Class
 
 ```java
 import com.rocketsoftware.jzos.*;
@@ -1306,7 +1315,7 @@ public class VsamAccountOps {
 }
 ```
 
-### JCL - `JVMVSAM.jcl`
+### 5.4 The JCL
 
 The job has three steps, each invoking `VsamAccountOps` with a different operation. The operation and key are passed via ARGS in the PARM string:
 
@@ -1369,7 +1378,7 @@ The job has three steps, each invoking `VsamAccountOps` with a different operati
 //
 ```
 
-### DD Allocations
+### 5.5 DD Allocations
 
 | DD Name | Purpose |
 |---------|---------|
@@ -1378,7 +1387,7 @@ The job has three steps, each invoking `VsamAccountOps` with a different operati
 | `STDOUT` | Program output (record displays) |
 | `STDERR` | Diagnostics (VSAM type, key length, locate results) |
 
-### Key VSAM API Calls
+### 5.6 Key VSAM API Calls
 
 ```java
 // Open for read only
@@ -1405,17 +1414,19 @@ vsam.read(record);
 vsam.update(record, 0, record.length);
 ```
 
-### Compile and Deploy
+### 5.7 Compile and Deploy
 
-1. **Compile:**
+1. **Compile the Java class:**
 
    **Windows:**
    ```
+   cd sources\java
    javac -cp "%TXDIR%\bin64\esjos.jar" VsamAccountOps.java
    ```
 
    **Linux:**
    ```
+   cd sources/java
    javac -cp "$COBDIR/lib/esjos.jar" VsamAccountOps.java
    ```
 
@@ -1423,7 +1434,7 @@ vsam.update(record, 0, record.length);
 
 3. **Ensure** dataset `MFI01V.MFIDEMO.BNKCUST` is cataloged (set up by the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
 
-### Running the job
+### 5.8 Running the Job
 
 Submit `JVMVSAM.jcl` in the same way as previous steps. The STDOUT output will show:
 
@@ -1480,7 +1491,7 @@ For the UPDATE step:
  ------------------------------------------------------------
 ```
 
-### Key takeaways
+### 5.9 Key Takeaways
 
 - The open mode string must be `"type=record,rb"` for read-only or `"type=record,rb+"` for read+update
 - `ZFile.locate()` returns a `boolean` - check it before calling `read()`
