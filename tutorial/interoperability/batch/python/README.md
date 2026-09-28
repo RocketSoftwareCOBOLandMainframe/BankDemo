@@ -52,7 +52,7 @@ To confirm which interpreter PYLDM actually loaded, run [Step 1](#step1) — `ba
 
 ### The BANKVSAM Region
 
-These demonstrations run in the **BANKVSAM** enterprise server region, which is created by the [VSAM demonstration](../../../demos/onprem/vsam/README.md). If you have not already set it up, provision it from the `scripts` directory of this project:
+These demonstrations run in the **BANKVSAM** enterprise server region, which is created by the [VSAM demonstration](../../../../demos/onprem/vsam/README.md). If you have not already set it up, provision it from the `scripts` directory of this project:
 
 ```
 cd scripts

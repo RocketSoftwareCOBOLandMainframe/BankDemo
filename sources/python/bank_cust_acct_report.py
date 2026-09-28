@@ -40,7 +40,6 @@ import platform
 from decimal import Decimal
 
 from zoautil_py.zoau_io import zopen
-from esos.esos import EsosLocateOption
 
 
 # =============================================================================
@@ -220,8 +219,6 @@ def do_filter(args):
     # Open BNKCUST via DD name allocated in JCL: //CUSTDATA DD DSN=MFI01V.MFIDEMO.BNKCUST
     f = zopen("//DD:CUSTDATA", "r", lrecl=CUST_LRECL, recfm="KS")
     try:
-        # Position to first record before sequential browse
-        f._file.locate(b'', EsosLocateOption.KEY_FIRST)
         records = read_vsam_records(f)
 
         # Write header to output dataset if open
@@ -320,7 +317,6 @@ def do_report(args):
     # Open BNKACC via DD name: //ACCDATA DD DSN=MFI01V.MFIDEMO.BNKACC
     f = zopen("//DD:ACCDATA", "r", lrecl=ACC_LRECL, recfm="KS")
     try:
-        f._file.locate(b'', EsosLocateOption.KEY_FIRST)
         records = read_vsam_records(f)
 
         total_balance = Decimal(0)

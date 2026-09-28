@@ -25,7 +25,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
 - A 64-bit Enterprise Server region and 64-bit environment (JVMLDM requires a 64-bit process)
 - The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `Enterprise Developer\AdoptOpenJDK` for the default installation. On Linux, use the JDK installed on your system. The supported major version is 21-25. If you prefer to use your own JDK, align to the same major version
-- An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../demos/onprem/vsam/README.md) demonstration)
+- An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../../demos/onprem/vsam/README.md) demonstration)
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
 
@@ -594,7 +594,7 @@ public class ReadBankData {
 
 2. **Deploy** `ReadBankData.class` to your Enterprise Server loadlib.
 
-3. **Ensure** the `MFI01V.MFIDEMO.BNKACC` dataset is cataloged (it is automatically cataloged if you have run the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
+3. **Ensure** the `MFI01V.MFIDEMO.BNKACC` dataset is cataloged (it is automatically cataloged if you have run the [VSAM demonstration](../../../../demos/onprem/vsam/README.md)).
 
 4. **Submit the JCL** and check STDOUT DD:
    ```
@@ -914,7 +914,7 @@ REPORT_TITLE=Daily Customer Account Summary - Filtered
 
 2. **Deploy** `BankCustAcctReport.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
 
-3. **Ensure** datasets `MFI01V.MFIDEMO.BNKCUST` and `MFI01V.MFIDEMO.BNKACC` are cataloged (they are set up by the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
+3. **Ensure** datasets `MFI01V.MFIDEMO.BNKCUST` and `MFI01V.MFIDEMO.BNKACC` are cataloged (they are set up by the [VSAM demonstration](../../../../demos/onprem/vsam/README.md)).
 
 4. **Submit** `JVMMULTI.jcl` and review the output:
 
@@ -1432,7 +1432,7 @@ vsam.update(record, 0, record.length);
 
 2. **Deploy** `VsamAccountOps.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
 
-3. **Ensure** dataset `MFI01V.MFIDEMO.BNKCUST` is cataloged (set up by the [VSAM demonstration](../../../demos/onprem/vsam/README.md)).
+3. **Ensure** dataset `MFI01V.MFIDEMO.BNKCUST` is cataloged (set up by the [VSAM demonstration](../../../../demos/onprem/vsam/README.md)).
 
 ### 5.8 Running the Job
 

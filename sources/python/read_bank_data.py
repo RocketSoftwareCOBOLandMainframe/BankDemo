@@ -8,7 +8,7 @@ the com.rocketsoftware.jzos ZFile class).
 Key concepts demonstrated:
   - Opening a dataset by DD name: zopen("//DD:ACCDATA", ...)
   - VSAM KSDS access: must specify recfm="KS" and provide lrecl
-  - Positioning: locate(KEY_FIRST) before sequential read
+  - Sequential record I/O via readrecord()
   - Record I/O: readrecord() returns bytes; EOF should return empty bytes
     but raises an exception due to esos.py bug (see Known Issues below)
   - Fixed-length record parsing via byte slicing
@@ -31,8 +31,6 @@ import ctypes
 # zopen() returns a RecordIO object for reading/writing dataset records.
 from zoautil_py.zoau_io import zopen, ALL
 
-# EsosLocateOption provides VSAM positioning options (KEY_FIRST, KEY_EQ, etc.)
-from esos.esos import EsosLocateOption
 
 
 # =============================================================================
@@ -115,11 +113,6 @@ def read_account_file(display_n):
     # Python's zopen() requires explicit lrecl and recfm parameters.
     f = zopen("//DD:ACCDATA", "r", lrecl=200, recfm="KS")
     try:
-        # Position to the first record in the dataset.
-        # VSAM KSDS requires an explicit locate/START before sequential reading.
-        # This is equivalent to Java's zFile.locate(key, LOCATE_KEY_FIRST).
-        f._file.locate(b'', EsosLocateOption.KEY_FIRST)
-
         # Read all records. Known issue: esos.py's EsosFile.read() raises
         # EsosException at EOF (VSAM status "10") instead of returning 0 bytes.
         # zoautil_py's readrecord() inherits this behavior, so EOF propagates
