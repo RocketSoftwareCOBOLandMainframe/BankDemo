@@ -1248,7 +1248,7 @@ Enable remote Java debugging in `HELLOJAV.jcl` by setting `JAVA_TOOL_OPTIONS` in
 
 **Set Breakpoints**
 
-1.  In COBOL `sources/cobol/interop/java/HELLOJAV.cbl`, set breakpoints at the Java call and at a display line after Java returns.
+1.  In COBOL `sources/cobol/interoperability/java/HELLOJAV.cbl`, set breakpoints at the Java call and at a display line after Java returns.
 2.  In Java, set a breakpoint in `HelloBatch.java` on a line of code.
 
 **Start the Debuggers and Run the Job**
