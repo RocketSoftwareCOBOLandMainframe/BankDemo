@@ -136,7 +136,7 @@ class HelloBatch {
 
 ### 1.2 The COBOL Bootstrap Program
 
-The COBOL file `sources/cobol/core/HELLOJAV.cbl` calls the HelloBatch class defined above.
+The COBOL file `sources/cobol/interop/java/HELLOJAV.cbl` calls the HelloBatch class defined above.
 
 ```cobol
       $set FCDCAT
@@ -227,7 +227,7 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
    ```
    cd sources\java
    javac -cp "%TXDIR%\bin64\esjos.jar" HelloBatch.java
-   cd ..\cobol\core
+   cd ..\cobol\interop\java
    cbllink -D HELLOJAV.cbl
    ```
 
@@ -235,7 +235,7 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
    ```
    cd sources/java
    javac -cp "$COBDIR/lib/esjos.jar" HelloBatch.java
-   cd ../cobol/core
+   cd ../cobol/interop/java
    cob -z HELLOJAV.cbl
    ```
 
@@ -1508,7 +1508,7 @@ The source files for this demonstration are located in the following directories
 
 | File | Location | Description |
 |------|----------|-------------|
-| `HELLOJAV.cbl` | `sources/cobol/core/` | COBOL bootstrap for Hello World |
+| `HELLOJAV.cbl` | `sources/cobol/interop/java/` | COBOL bootstrap for Hello World |
 | `HelloBatch.java` | `sources/java/` | Hello World Java class |
 | `HELLOJAV.jcl` | `sources/jcl/interoperability/<platform>/` | JCL for Hello World demo |
 | `ReadBankData.java` | `sources/java/` | ZFile dataset reader |
