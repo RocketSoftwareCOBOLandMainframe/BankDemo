@@ -16,7 +16,7 @@ Demonstrations showing how to invoke programs written in other languages from JC
 
 - [Python Batch Interoperability](batch/python/README.md)
     - Invoke Python scripts from JCL using PYLDM (no compilation required)
-    - Access datasets from Python using the zoautil_py and esos APIs
+    - Access datasets from Python using the zoautil_py API
     - Call existing COBOL programs from Python via the cblcpyiapi bridge
 
 ## Prerequisites

@@ -1243,7 +1243,7 @@ Enable remote Java debugging in `HELLOJAV.jcl` by setting `JAVA_TOOL_OPTIONS` in
 > **Note:** Keep the JDWP option names in lower case (`transport`, `server`, `suspend`, `address`) as Java expects this format.
 
 
-    ENVAR("ESOS_TEST_VAR=HELLO_FROM_ESOS",
+    ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
     "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8000")
 
 **Set Breakpoints**

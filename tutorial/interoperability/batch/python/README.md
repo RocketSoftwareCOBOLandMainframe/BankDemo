@@ -12,9 +12,8 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 4. [Step 1 - Using PYLDM Directly from JCL](#step1)
 5. [Step 2 - Sequential File I/O from Python](#step2)
 6. [Step 3 - Multi-Step Batch with Python](#step3)
-7. [Step 4 - VSAM Operations from Python](#step4)
-8. [Step 5 - Calling COBOL from Python](#step5)
-9. [Source Files Reference](#sources)
+7. [Step 4 - Calling COBOL from Python](#step4)
+8. [Source Files Reference](#sources)
 10. [Python API Reference](#api-reference)
 11. [Troubleshooting](#troubleshooting)
 
@@ -27,7 +26,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Ensure that the Directory Server (MFDS) service is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
 
-No additional Python packages are required — the `zoautil_py` and `esos` packages are provided by the Enterprise Server installation.
+No additional Python packages are required — the `zoautil_py` package is provided by the Enterprise Server installation.
 
 ### Installing Python
 
@@ -66,8 +65,8 @@ BankDemo template region.
 
 | Dataset | Used by | Defined in |
 |---------|---------|------------|
-| `MFI01V.MFIDEMO.BNKCUST` | Steps 3, 4 (customer records, VSAM KSDS) | `scripts/datasets_vsam/BNKCUST.json` |
-| `MFI01V.MFIDEMO.BNKACC` | Steps 3, 4 (account records, VSAM KSDS) | `scripts/datasets_vsam/BNKACC.json` |
+| `MFI01V.MFIDEMO.BNKCUST` | Step 3 (customer records, VSAM KSDS) | `scripts/datasets_vsam/BNKCUST.json` |
+| `MFI01V.MFIDEMO.BNKACC` | Step 3 (account records, VSAM KSDS) | `scripts/datasets_vsam/BNKACC.json` |
 | `MFI01V.MFIDEMO.PYTXN` | Step 2 (sequential transactions, PS) | `scripts/datasets_ps/PYTXN.json` |
 | `MFI01V.MFIDEMO.CUST.FILTER` | Step 3 (filter output, PS) | `scripts/datasets_ps/CUSTFILT.json` |
 
@@ -77,8 +76,8 @@ Because all four datasets are cataloged during provisioning, the Python demonstr
 
 ### Region Configuration
 
-No region configuration is required. The `esos` and `zoautil_py` packages
-supplied with Enterprise Server are located automatically. Each JCL step
+No region configuration is required. The `zoautil_py` package,
+supplied with Enterprise Server, is located automatically. Each JCL step
 sets only the lookup variable required by its invocation mode.
 
 > **About `%ESP%`:** BANKVSAM provisioning defines `ESP` as the region's
@@ -91,7 +90,7 @@ sets only the lookup variable required by its invocation mode.
 The Python sources and datasets are portable, but inline `STDENV` scripts use
 the host shell. Select the correct JCL directory and syntax as described in
 the [interoperability overview](../../README.md#platform-specific-jcl). For
-Step 5, `cobol_interop.py` resolves the platform-specific COBOL bridge name.
+Step 4, `cobol_interop.py` resolves the platform-specific COBOL bridge name.
 
 ---
 
@@ -129,7 +128,7 @@ Unlike the Java interop (which requires `JAVA_HOME`, classpath configuration, an
 ┌────────────────────────────────────────┐
 │  Python Runtime                        │
 │  - Executes your .py script            │
-│  - Uses zoautil_py/esos for datasets   │
+│  - Uses zoautil_py for datasets        │
 │  - Uses ctypes for COBOL callbacks     │
 └───────────────────┬────────────────────┘
                     │
@@ -536,178 +535,11 @@ The report title and the 50-record display limit both come from the STDIN contro
 
 ---
 
-## <a name="step4"></a>Step 4 - VSAM Operations from Python
-
-In this step, you perform direct VSAM keyed lookup, sequential browse, record update, and sequential reading using the low-level `esos` API. A cleanup step restores the modified record.
-
-### 4.1 The Python Script
-
-`sources/python/vsam_account_ops.py` demonstrates five VSAM operations on two datasets:
-
-**LOOKUP** — exact key match on BNKCUST. `open_custdata()` builds the `FileOptions` describing the dataset:
-```python
-from esos.esos import (
-    Esos, EsosException, EsosFileMode, EsosLocateOption, EsosOpenFlags,
-    EsosDisposition, EsosDsorg, EsosVsamType, FileOptions,
-)
-
-def open_custdata(update=False):
-    opts = FileOptions()
-    opts.mode_flags = EsosFileMode.MODE_TYPE_READ
-    opts.open_flags = EsosOpenFlags.OPEN_MODE_RECORD | EsosOpenFlags.OPEN_MODE_BINARY
-    opts.recfm = "KS"                  # Key-Sequenced (VSAM KSDS)
-    opts.lrecl = CUST_LRECL            # 250
-    opts.disposition = EsosDisposition.FLAG_DISP_SHR
-    opts.dsorg = EsosDsorg.VSAM
-    opts.vsam_type = EsosVsamType.CLUSTER
-    opts.vsam_key_length = 5           # Customer ID is 5 bytes
-    return Esos.default.file_open("//DD:CUSTDATA", opts)
-
-with open_custdata() as f:
-    if f.locate(key, EsosLocateOption.KEY_EQ):
-        buf = bytearray(CUST_LRECL)
-        f.read(buf, 0, CUST_LRECL)
-        # ... extract and display fields
-```
-
-**BROWSE** — sequential read from a starting position:
-```python
-    f.locate(start_key, EsosLocateOption.KEY_GE)
-    for i in range(max_records):
-        f.read(buf, 0, CUST_LRECL)
-        # ... display record
-```
-
-**UPDATE** — locate, read, modify, write back (omitting email clears it). Passing `update=True` adds `MODE_FLAG_UPDATE` and `DISP=OLD`:
-```python
-with open_custdata(update=True) as f:
-    if f.locate(key, EsosLocateOption.KEY_EQ):
-        record = read_record(f)
-        set_field(record, CUST_EMAIL, new_email)
-        f.update(bytes(record), 0, CUST_LRECL)
-```
-
-**READ** — sequential read of the BNKACC (account) dataset:
-```python
-with open_accdata() as f:
-    f.locate(b'', EsosLocateOption.KEY_FIRST)
-    buf = bytearray(ACC_LRECL)
-    while True:
-        try:
-            n = f.read(buf, 0, ACC_LRECL)
-            if n == 0:
-                break
-        except EsosException:
-            break  # EOF - see Known Issues
-        # ... display record
-```
-
-### 4.2 The JCL
-
-`sources/jcl/interoperability/<platform>/PYVSAM.jcl` runs five steps: LOOKUP, BROWSE, UPDATE, cleanup (restore), and READ:
-
-```jcl
-//STEP1    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='LOOKUP B0001'
-//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
-//*
-//STEP2    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='BROWSE B0002 5'
-//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=SHR
-//*
-//STEP3    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',
-//             ARGS='UPDATE B0001 newemail@example.com'
-//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
-//*
-//STEP4    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='UPDATE B0001'
-//CUSTDATA DD  DSN=MFI01V.MFIDEMO.BNKCUST,DISP=OLD
-//*
-//STEP5    EXEC PROC=PYPROC,PYSCRIPT='vsam_account_ops.py',ARGS='READ 5'
-//ACCDATA  DD  DSN=MFI01V.MFIDEMO.BNKACC,DISP=SHR
-```
-
-### 4.3 Key Points
-
-- **`EsosFile` IS a context manager** — use `with ... as f:` (unlike RecordIO)
-- **`locate()` returns `bool`** — `False` means key not found (VSAM status "23")
-- **Update cycle**: `locate()` → `read()` → modify → `f.update()`
-- **Cleanup pattern** — Step 4 calls UPDATE with no email (clears to blank) to undo Step 3
-- **Two datasets** — BNKCUST for LOOKUP/BROWSE/UPDATE, BNKACC for READ
-- **Two API layers**: `zoautil_py.zopen()` (high-level, Step 2) vs `esos` (low-level, this step)
-
-### 4.4 Known Issues (esos.py workarounds)
-
-One known bug in `esos.py` requires a workaround in the demo code:
-
-1. **EOF raises an exception instead of returning empty bytes.**
-   `EsosFile.read()` calls `raiseOnError()` on the native return code. At VSAM end-of-file (status "10"), the native function returns non-zero, so `raiseOnError()` raises `EsosException` instead of returning 0. This affects both `EsosFile.read()` (low-level) and `zoautil_py`'s `readrecord()` (high-level). All read loops in these demos use `try/except` to catch EOF.
-
-### 4.5 Expected Output
-
-STEP1 (LOOKUP) retrieves a single record by exact key:
-
-```
-=== VSAM LOOKUP: key='B0001' ===
-  PID:    B0001
-  Name:   Fred Bloggs
-  Addr:   722 Parkland Ave
-  State:  ON  Post: L5H3G8
-  Tel:    800-555-1234
-  Email:
-=== Lookup Complete ===
-```
-
-STEP2 (BROWSE) reads forward from a starting key:
-
-```
-=== VSAM BROWSE: start='B0002', max=5 ===
-PID    Name                      State  Email
-----------------------------------------------------------------------
-  B0002 Loretta Morden            AB
-  B0003 Eleanor Rigby             ON
-  B0004 Desmond Jones             BC
-  B0005 Felicity Arkwright        QC
-  B0006 James Tiberius Kirk       QC
-----------------------------------------------------------------------
-  5 records displayed.
-=== Browse Complete ===
-```
-
-STEP3 (UPDATE) sets the email field, and STEP4 clears it again so the job can be re-run:
-
-```
-=== VSAM UPDATE: key='B0001', new_email='newemail@example.com' ===
-  Before: email=''
-  After:  email='newemail@example.com'
-=== Update Complete ===
-
-=== VSAM UPDATE: key='B0001', new_email='' ===
-  Before: email='newemail@example.com'
-  After:  email=''
-=== Update Complete ===
-```
-
-STEP5 (READ) reads the account dataset sequentially:
-
-```
-=== VSAM READ: First 5 account records (esos API) ===
-  Account: 000000001  Customer: T0001  Type: 1
-  Account: 000000002  Customer: T0001  Type: 2
-  Account: 000000003  Customer: T0001  Type: 3
-  Account: 000000004  Customer: T0001  Type: 4
-  Account: 000000005  Customer: T0001  Type: 5
-  ... (103 more records not shown)
-  Total records: 108
-=== Read Complete ===
-```
-
-The `Before:` line in STEP3 shows the value STEP4 restores. If a previous run ended early, STEP3 may report a non-blank starting email — run the job again to return the record to its original state.
-
----
-
-## <a name="step5"></a>Step 5 - Calling COBOL from Python
+## <a name="step4"></a>Step 4 - Calling COBOL from Python
 
 In this step, Python calls existing COBOL subroutines via the `_mFpyCobcall` bridge function — demonstrating bidirectional interoperability.
 
-### 5.1 The Python Script
+### 4.1 The Python Script
 
 `sources/python/cobol_interop.py` calls three COBOL programs:
 
@@ -771,7 +603,7 @@ def do_twoscomp(args):
     cobcall("UTWOSCMP", lk_len, lk_input, lk_output)
 ```
 
-### 5.2 The JCL
+### 4.2 The JCL
 
 `sources/jcl/interoperability/<platform>/PYCBLCL.jcl` runs three steps calling each operation:
 
@@ -781,7 +613,7 @@ def do_twoscomp(args):
 //STEP3    EXEC PROC=PYPROC,PYSCRIPT='cobol_interop.py',ARGS='TWOSCOMP HELLO'
 ```
 
-### 5.3 Key Points
+### 4.3 Key Points
 
 - **`ctypes.PyDLL` not `ctypes.CDLL`** — the bridge conversion functions call Python C APIs internally (require the GIL)
 - **COMP fields are big-endian** — use `struct.pack('>h', value)` for PIC S9(4) COMP.
@@ -789,7 +621,7 @@ def do_twoscomp(args):
 - **`_mFpyCobcall` raises `RuntimeError`** on failure (error 173 = program not found)
 - **Programs must be in the JES Program Path (BANKVSAM uses loadlib directory)** — COBOL subroutines must already be compiled and available
 
-### 5.4 Expected Output
+### 4.4 Expected Output
 
 Each step calls a different COBOL subroutine through the bridge:
 
@@ -823,13 +655,11 @@ The version string and system time reflect your installation, so those two value
 | `sources/python/batch_report.py` | Step 1: PYLDM invocation, argument handling |
 | `sources/python/sequential_file_ops.py` | Step 2: Non-VSAM sequential write and read via zoautil_py |
 | `sources/python/bank_cust_acct_report.py` | Step 3: Multi-step FILTER + REPORT, COMP-3, dataset write, control cards |
-| `sources/python/vsam_account_ops.py` | Step 4: VSAM LOOKUP / BROWSE / UPDATE / READ via esos |
-| `sources/python/cobol_interop.py` | Step 5: Python→COBOL via _mFpyCobcall |
+| `sources/python/cobol_interop.py` | Step 4: Python→COBOL via _mFpyCobcall |
 | `sources/jcl/interoperability/<platform>/PYDEMO.jcl` | JCL for Step 1 (script + module mode) |
 | `sources/jcl/interoperability/<platform>/PYREADBNK.jcl` | JCL for Step 2 (sequential write, then read) |
 | `sources/jcl/interoperability/<platform>/PYMULTI.jcl` | JCL for Step 3 (multi-step filter/report) |
-| `sources/jcl/interoperability/<platform>/PYVSAM.jcl` | JCL for Step 4 (VSAM operations) |
-| `sources/jcl/interoperability/<platform>/PYCBLCL.jcl` | JCL for Step 5 (COBOL interop) |
+| `sources/jcl/interoperability/<platform>/PYCBLCL.jcl` | JCL for Step 4 (COBOL interop) |
 
 ---
 
@@ -844,17 +674,6 @@ The version string and system time reflect your installation, so those two value
 | `RecordIO.readrecords(ALL)` | Read all records (returns `list[bytes]`) |
 | `RecordIO.write(data)` | Write one record |
 | `RecordIO.close()` | Close the file (NOT a context manager) |
-
-### Low-Level: esos
-
-| Function/Class | Purpose |
-|----------------|---------|
-| `Esos.default.file_open(path, opts)` | Open with full VSAM control. Returns `EsosFile` (IS a context manager) |
-| `EsosFile.locate(key, option)` | Position for keyed access (returns `bool`) |
-| `EsosFile.read(buffer, offset, length)` | Read the record at the current position into `buffer`; returns bytes read |
-| `EsosFile.write(buffer, offset, length)` | Write a new record |
-| `EsosFile.update(buffer, offset, length)` | Update the last-read record |
-| `EsosFile.close()` | Close the file (also handled by the `with` block) |
 
 ### Bridge Conversion API (via ctypes.PyDLL)
 

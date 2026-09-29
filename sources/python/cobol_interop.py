@@ -1,5 +1,5 @@
 """
-Step 5 Demo: Calling COBOL Programs from Python (Bidirectional Interop).
+Step 4 Demo: Calling COBOL Programs from Python (Bidirectional Interop).
 
 This demonstrates the REVERSE direction of interoperability: Python calling
 existing COBOL subroutines. The Java demos showed COBOL calling Java

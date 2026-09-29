@@ -10,7 +10,7 @@ Key concepts demonstrated:
   - VSAM KSDS access: must specify recfm="KS" and provide lrecl
   - Sequential record I/O via readrecord()
   - Record I/O: readrecord() returns bytes; EOF should return empty bytes
-    but raises an exception due to esos.py bug (see Known Issues below)
+    but raises an exception instead (see Known Issues below)
   - Fixed-length record parsing via byte slicing
 
 The dataset MFI01V.MFIDEMO.BNKACC is a VSAM Key-Sequenced Data Set:
@@ -113,10 +113,8 @@ def read_account_file(display_n):
     # Python's zopen() requires explicit lrecl and recfm parameters.
     f = zopen("//DD:ACCDATA", "r", lrecl=200, recfm="KS")
     try:
-        # Read all records. Known issue: esos.py's EsosFile.read() raises
-        # EsosException at EOF (VSAM status "10") instead of returning 0 bytes.
-        # zoautil_py's readrecord() inherits this behavior, so EOF propagates
-        # as an exception rather than returning empty bytes (b'').
+        # Read all records. Known issue: readrecord() raises an exception
+        # at EOF (VSAM status "10") instead of returning 0 bytes.
         # We catch the exception here as our EOF signal.
         records = []
         while True:
@@ -126,8 +124,8 @@ def read_account_file(display_n):
                     break
                 records.append(record)
             except Exception:
-                # Workaround: esos.py raises on EOF instead of returning
-                # empty bytes. VSAM status 10 = end of file.
+                # Workaround: readrecord() raises on EOF instead of
+                # returning empty bytes. VSAM status 10 = end of file.
                 break
         count = len(records)
 
