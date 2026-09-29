@@ -1,6 +1,6 @@
-# Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
+﻿# Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
 
-Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customersâ€™ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp.Â Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
 
 ## Overview
@@ -19,9 +19,7 @@ Other tutorials, which are designed for Administrators, are also available.
 * [Unit Testing the Online Application](#unit-testing-the-online-application)
 * [Debugging the Batch Application](#debugging-the-batch-application)
 * [Debugging the Online Application](#debugging-the-online-application)
-* [Compiling Java Sources for Use in ES](#compiling-java-sources-for-use-in-es)
-* [Unit Testing the Java Batch Application](#unit-testing-the-java-batch-application)
-* [Debugging the Java Batch Application](#debugging-the-java-batch-application)
+* [Next Steps](#next-steps)
 
 **Download the Demonstration Application**
 
@@ -492,7 +490,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 3.  In BMS Painter, you can click fields and move them by dragging.
 
-    For example, double-click the data field immediately following the text “User Id”, and move it to a different position on the map.
+    For example, double-click the data field immediately following the text â€œUser Idâ€, and move it to a different position on the map.
 
 4.  To add a field, click in the desired place in the window, and start typing.
 5.  To change a field's properties, right-click it, and select **Properties**.
@@ -1125,133 +1123,16 @@ You use the same features as previously to debug the application.
 
 2. Finally, click the **Team Developer** perspective button, ![](images/88f58bfeb3fd128cb2fe55172b59806e.jpg), to switch back to editing your application.
 
-## Compiling Java Sources for Use in ES
-
-[Back to Top](#overview)
-
-This section describes how to add Java content to the Bankdemo project and compile it in Enterprise Developer for Eclipse.
-
-**Adding Java Source Files**
-
-Add the Java sample folder as a linked resource:
-
-1.  In **Application Explorer** view, right-click the **Bankdemo** project and click **New** \> **Folder\> Folder**.
-2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
-3.  Browse to `C:\MFETDUSER\sources\java` and click **Select Folder**.
-4.  Click **Finish**.
-
-    If errors appear immediately, continue with the classpath configuration steps.
-
-**Configuring Build Path and Java Libraries**
-
-Configure the project so Eclipse can resolve Java dependencies and related sources:
-
-1.  Right-click the **Bankdemo** project and click **Properties**.
-2.  Navigate to **Java Build Path \> Libraries \> Classpath**.
-3.  Click **Add Library** and select **ES Java Support Library**.
-4.  Click **Apply and Close**.
-
-**Compiling Java Code**
-
-After adding the linked `java` folder and the **ES Java Support Library**, Eclipse compiles Java sources as part of the project build.
-
-The Bankdemo template is preconfigured so Java build output is written to `loadlib`, the same folder used by COBOL link output.
-
--   With **Project \> Build Automatically** enabled, Java sources are compiled whenever you save changes.
--   To force a full rebuild, click **Project \> Clean...**, select the **Bankdemo** project, and rebuild.
--   If unresolved imports or missing classes are reported, recheck **Properties \> Java Build Path \> Libraries** and confirm **ES Java Support Library** is present.
--   If the java files fail to build, confirm the folder is assigned as a source in **Properties \> Java Build Path \> Source \> Add Folder \> java**
--   If missing from loadlib check the **Properties \> Java Build Path \> Default output folder \> Bankdemo/loadlib**
-
-## Unit Testing the Java Batch Application
-
-[Back to Top](#overview)
-
-**Running the Java Job and Viewing Spool Output**
-
-To run the Java sample, submit `HELLOJAV.jcl`:
-
-1.  In **Application Explorer**, expand the **jcl** folder.
-2.  Right-click **HELLOJAV.jcl** and select **Submit JCL to associated Server**.
-3.  Open the spool entry for the submitted job to review the output and associated DDs.
-
-    ![](images/06c974b55ef928b64a0cd983b28163b8.png)
-
-    In **DD Entries**, the common Java stream DDs are:
-
-    -   **STDOUT** - redirected output from Java `System.out` calls (for example, `println` output).
-    -   **STDERR** - Java error stream output; this is where exception stack traces are written.
-
-    This mapping occurs because `HelloBatch.java` explicitly redirects Java standard streams to JCL DDs by calling `ZUtil.redirectStandardStreams(...)`, and restores them afterward with `ZUtil.restoreStandardStreams()`.
-
-**Running Java Directly with JVMLDM**
-
-The remaining Java JCL samples invoke Java classes directly via JVMLDM, without an explicit intermediate COBOL program. JVMLDM handles JVM initialisation and stream redirection automatically, so only the Java class and its DD allocations are needed in the JCL.
-
-To try the first example:
-
-1.  In **Application Explorer**, expand the **jcl** folder.
-2.  Open **JVMDEMO.jcl** and review it. The job passes arguments to `BatchReport` from three sources — the `PARM` string, the `STDENV` DD, and the `MAINARGS` DD — and all six should appear in **STDOUT**.
-3.  Right-click **JVMDEMO.jcl** and select **Submit JCL to associated Server**.
-4.  Open the spool entry and review the **STDOUT** and **STDERR** DD output.
-
-The following additional JCL samples are also provided in the **jcl** folder and can be submitted in the same way:
-
--   **JVMREADBNK.jcl** — reads BankDemo account records from a dataset using the `ZFile` API and prints a summary to **STDOUT**.
--   **JVMMULTI.jcl** — a two-step job that filters customer records in the first step and produces a formatted account report in the second, passing data between steps via cataloged datasets.
--   **JVMVSAM.jcl** — a three-step job demonstrating keyed VSAM lookup, sequential browse, and record update operations against the `BNKCUST` dataset.
-
-## Debugging the Java Batch Application
-
-[Back to Top](#overview)
-
-You can debug the COBOL-to-Java-to-COBOL flow in one run by combining the existing JCL Debug configuration with a Remote Java debug configuration.
-
-> **Important:** The `JAVA_TOOL_OPTIONS` value used requires a debugger to attach. If the Remote Java debugger is not active when the job runs, the job will fail.
-
-1.  Open **Run** \> **Debug Configurations...**.
-2.  In the left pane, expand **Remote Java Application**.
-3.  Double-click **Remote Java Application** to create a new launch configuration.
-4.  Set the following values:
-
-    -   **Name:** `ES Java Debug`
-    -   **Project:** `Bankdemo`
-    -   **Host:** `localhost`
-    -   **Port:** `8000`
-    -   **Connection Type:** `Standard (Socket Listen)`
-
-5.  Click **Apply**.
-6.  Open the **Common** tab.
-7.  In **Display in favorites menu**, select **Debug**.
-8.  Click **Apply**, then **Close**.
-
-Enable remote Java debugging in `HELLOJAV.jcl` by setting `JAVA_TOOL_OPTIONS` in `CEEOPTS ENVAR`.
-
-> **Note:** Keep the JDWP option names in lower case (`transport`, `server`, `suspend`, `address`) as Java expects this format.
-
-    ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
-    "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8000")
-
-**Set Breakpoints**
-
-1.  In COBOL `sources/cobol/interoperability/java/HELLOJAV.cbl`, set breakpoints at the Java call and at a display line after Java returns.
-2.  In Java, set a breakpoint in `HelloBatch.java` on a line of code.
-
-**Start the Debuggers and Run the Job**
-
-> **Note:** The JVM can only be initialised once and will have been initialised by previous java job submissions, so it is best to restart the BANKDEMO region in the server explorer before attempting to debug.
-
-1.  Open **Run** \> **Debug Configurations...** and start **COBOL Enterprise Server \> JCL Debug**.
-2.  Open **Run** \> **Debug Configurations...** and start **Remote Java Application \> ES Java Debug**.
-3.  Submit `HELLOJAV.jcl`.
-4.  Execution should stop at the first COBOL breakpoint.
-5.  Press **F8** to continue to the Java breakpoint.
-6.  Press **F8** again to continue back to the COBOL breakpoint after the Java call.
-
-Keep the Java debugger active, as the JVM will not reconnect until re-intialised. With the debugger connection open, any other Java Batch program can be debugged. For example running **JVMDEMO.jcl**, will allow you to debug through **BatchReport.java**.
-
-
 This concludes this set of tutorials that introduce Enterprise Developer.
+
+## Next Steps
+
+[Back to Top](#overview)
+
+The following demonstrations continue from here and use the same workspace, the same Bankdemo project and the same BANKDEMO region:
+
+* [Calling Java from COBOL by Using Enterprise Developer for Eclipse](JavaDemo.md) - run a Java class from a batch job, and debug from COBOL into Java and back.
+* [Open PL/I Development by Using Enterprise Developer for Eclipse](PLIDemo.md) - compile, link and debug the Open PL/I version of the BANK CICS application.
 
 > **Note**: You should re-enable Enterprise Server security if you have not already done so. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security. 
 

@@ -7,16 +7,15 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ## Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Overview](#overview)
-3. [How It Works](#how-it-works)
-4. [Step 1 - Hello World: COBOL Calling Java](#step1)
-5. [Step 2 - Using JVMLDM Directly from JCL](#step2)
-6. [Step 3 - Accessing Datasets from Java with ZFile](#step3)
-7. [Step 4 - Multi-Step Batch with Java](#step4)
-8. [Step 5 - VSAM Operations from Java](#step5)
-9. [Source Files Reference](#sources)
-10. [Exploring the JZOS API](#jzos-api)
-11. [Troubleshooting](#troubleshooting)
+2. [How It Works](#how-it-works)
+3. [Step 1 - Hello World: COBOL Calling Java](#step1)
+4. [Step 2 - Using JVMLDM Directly from JCL](#step2)
+5. [Step 3 - Accessing Datasets from Java with ZFile](#step3)
+6. [Step 4 - Multi-Step Batch with Java](#step4)
+7. [Step 5 - VSAM Operations from Java](#step5)
+8. [Source Files Reference](#sources)
+9. [Exploring the JZOS API](#jzos-api)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -39,8 +38,14 @@ python MF_Provision_Region.py vsam
 ```
 
 The provisioning script creates the 64-bit, JES-enabled region and catalogs
-the BankDemo datasets used by these tutorials. Do not use the BankDemo
-template region for these steps.
+the BankDemo datasets used by these tutorials.
+
+> **Note:** These steps assume use of the **BANKVSAM** region and compilation from
+> the command line. If you would rather work in Eclipse, and continue from the
+> Getting Started tutorial using the BANKDEMO template region, follow
+> [Calling Java from COBOL by Using Enterprise Developer for Eclipse](../../../gettingstarted/eclipse/JavaDemo.md)
+> first. The Java samples below are the same, and run unchanged under either
+> region.
 
 > **Installation directory variables:** On Windows, `TXDIR` refers to your Rocket Enterprise
 > Developer/Server installation directory (for example, `C:\Program Files (x86)\Rocket

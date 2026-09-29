@@ -1,4 +1,8 @@
 *.cpython*
+/sources/java/*.class
+/tutorial/projects/Eclipse/java/BankdemoJava/bin
+/tutorial/workspace/*
+!/tutorial/workspace/README.md
 /scripts/build.txt
 /system/loadlib
 /tutorial/BANKDEMO_*
@@ -32,3 +36,4 @@
 /sources/generated
 .terraform*
 terraform.tfstate*
+/.metadata/
