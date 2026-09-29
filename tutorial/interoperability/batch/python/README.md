@@ -205,7 +205,7 @@ def main(args=None):
     print(f"\nArguments received: {len(args)}")
     for i, arg in enumerate(args):
         print(f"  arg[{i}] = {arg!r}")
-    # ... then prints the ESPY_* environment variables and PYTHONPATH entries
+    # ... then prints the ESPY_* environment variables
 ```
 
 ### 1.2 The JCL
@@ -274,10 +274,6 @@ PYLDM environment:
   ESPY_MAIN_ARGS = envArg1 envArg2
   ESPY_WORKING_DIR = C:\dev\BankDemo\BANKVSAM\system\..\..\sources\python
 
-PYTHONPATH entries:
-  [1] C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\esos.zip
-  [2] C:\Program Files (x86)\Rocket Software\Enterprise Developer\binpy\zoautil_py.zip
-
 Report complete. RC=0
 ============================================================
 ```
@@ -294,7 +290,7 @@ Arguments received: 2
   arg[1] = 'moduleArg2'
 ```
 
-The `esos.zip` and `zoautil_py.zip` entries appear automatically — the JCL only adds entry `[1]`. Both steps end with `RC=0000`, and the STDERR DD is empty.
+Both steps end with `RC=0000`, and the STDERR DD is empty.
 
 ---
 
@@ -432,7 +428,6 @@ def do_filter(args):
 
     f = zopen("//DD:CUSTDATA", "r", lrecl=CUST_LRECL, recfm="KS")
     try:
-        f._file.locate(b'', EsosLocateOption.KEY_FIRST)
         records = read_vsam_records(f)
         for record in records:
             pid = field(record, CUST_PID)

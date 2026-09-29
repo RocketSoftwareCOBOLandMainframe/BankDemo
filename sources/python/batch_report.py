@@ -62,14 +62,6 @@ def main(args=None):
     for key in sorted(k for k in os.environ if k.startswith("ESPY_")):
         print(f"  {key} = {os.environ[key]}")
 
-    # PYTHONPATH tells Python where to find importable modules.
-    # Set in STDENV DD, typically pointing to the sources/python directory.
-    print("\nPYTHONPATH entries:")
-    pythonpath = os.environ.get("PYTHONPATH", "")
-    for i, p in enumerate(pythonpath.split(os.pathsep), 1):
-        if p:
-            print(f"  [{i}] {p}")
-
     print(f"\nReport complete. RC=0")
     print("=" * 60)
     return 0
