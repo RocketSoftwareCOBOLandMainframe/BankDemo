@@ -56,9 +56,6 @@ You will:
 
 1.  Click **File \> New \> Project**.
 2.  Expand **Java**, select **Java Project** and click **Next**.
-
-    If the **Java** category is not listed, click **Window \> Perspective \> Open Perspective \> Other \> Java** and try again.
-
 3.  In the **Project name** field, type `BankdemoJava`.
 4.  Leave **Use default location** selected, so that the project is created in the workspace you specified when you started Eclipse.
 5.  Clear **Create module-info.java file** if it is selected. The sample classes are in the default package and do not declare a module.
@@ -81,7 +78,7 @@ As with the COBOL sources, you link the sample files into the project rather tha
 
 1.  In **Package Explorer**, right-click the **BankdemoJava** project and click **New \> Folder**.
 2.  Click **Advanced** and select **Link to alternate location (Linked Folder)**.
-3.  Click **Browse**, navigate to the `sources/java` folder of the sample - for example, `C:\MFETDUSER\sources\java` on Windows, or `/home/username/MFETDUSER/sources/java` on Linux - and click **Select Folder**.
+3.  Click **Browse**, navigate to the `sources/java` folder of the sample and click **Select Folder**.
 4.  In the **Folder name** field, type `java` and click **Finish**.
 5.  Right-click the linked **java** folder and click **Build Path \> Use as Source Folder**.
 
@@ -105,16 +102,13 @@ The region needs the folder that holds the compiled classes, so confirm where th
 **Package Explorer** presents a Java project as packages rather than as folders, so it never shows the build output. The **Project Explorer** view can show it, once its **Java output folders** filter is turned off:
 
 1.  Click **Window \> Show View \> Project Explorer**.
-
-    If it is not listed, click **Window \> Show View \> Other**, expand **General**, select **Project Explorer** and click **Open**.
-
 2.  Click the **View Menu** button (the three vertical dots) on the **Project Explorer** toolbar and click **Filters and Customization...**.
 3.  On the **Pre-set filters** tab, clear the **Java output folders** check box.
 4.  Click **OK**.
 5.  Expand the **BankdemoJava** project and then expand the **bin** folder.
 6.  Confirm that it contains `HelloBatch.class` along with the other sample classes.
 
-Eclipse builds Java projects as you edit them, so the class files are written as soon as the build path is correct. **Project \> Build Project** is greyed out while **Project \> Build Automatically** is enabled; that is expected and means the build has already run.
+Eclipse builds Java projects as you edit them, so the class files are written as soon as the build path is correct. **Project \> Build Project** is greyed out while **Project \> Build Automatically** is enabled.
 
 If the **bin** folder is missing or empty, the build produced nothing. Check the **Problems** view for build path errors - most often the **ES Java Support Library** is not on the build path, or the linked `java` folder has not been marked as a source folder.
 
@@ -124,8 +118,8 @@ If the **bin** folder is missing or empty, the build produced nothing. Check the
 
 Enterprise Server starts the JVM itself, so it needs to know where the JDK is and where your compiled classes are. Neither value is set by the BANKDEMO template, because both depend on your installation and your workspace.
 
-1.  In the **Server Explorer** view, stop the **BANKDEMO** region if it is running.
-2.  Open the region in ESCWA and click **Properties \> General**.
+1.  In the **Server Explorer** view, right-click the **BANKDEMO** region and click **Stop** if it is running.
+2.  Right-click the **BANKDEMO** region and click **Open Administration Page** to open it in ESCWA, then click **Properties \> General**.
 3.  In the **Configuration Information** field, add the following to the existing `[ES-Environment]` section.
 
     **Windows:**
@@ -253,14 +247,22 @@ The Java debugger listens for a connection, and the JVM connects out to it as th
 
 **Enabling Debugging in the Job**
 
-Edit `HELLOJAV.jcl` and set the `JAVA_TOOL_OPTIONS` value in the `CEEOPTS` DD:
+1.  In **Application Explorer** view, in the `jcl > interoperability > windows` folder of the Bankdemo project - or `jcl > interoperability > linux` on Linux - double-click **HELLOJAV.jcl**.
+2.  Scroll to line 19, the `JAVA_TOOL_OPTIONS` entry in the `CEEOPTS` DD.
+3.  Replace the empty value so that the line reads as follows, then save the file:
 
-```
-//CEEOPTS  DD *
-ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
-"JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8000")
-/*
-```
+    ```
+    "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8000")
+    ```
+
+    The `CEEOPTS` DD now reads:
+
+    ```
+    //CEEOPTS  DD *
+    ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
+    "JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=n,address=8000")
+    /*
+    ```
 
 > **Important:** With `server=n` the JVM connects out to the debugger and waits for it. If the Java debug configuration is not listening when the job runs, the job fails. Clear the value again when you have finished debugging.
 
@@ -281,13 +283,13 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 
     Both debuggers start. The **Debug** view shows the Java listener and the Enterprise Server JCL debug session.
 
-2.  Submit `HELLOJAV.jcl` promptly.
+2.  In **Application Explorer** view, right-click **HELLOJAV.jcl** and click **Submit JCL to associated Server**.
 
-    The Java listener waits only for the debugger timeout - 20 seconds by default - and then gives up. If you need longer, raise **Debugger timeout (ms)** under **Window \> Preferences \> Java \> Debug** before starting the group.
+    Submit the job promptly. The Java listener waits only for the debugger timeout - 20 seconds by default - and then gives up. If you need longer, raise **Debugger timeout (ms)** under **Window \> Preferences \> Java \> Debug** before starting the group.
 
-3.  Execution stops at the COBOL breakpoint on the `call` statement.
-4.  Press **F8**. Execution continues into the Java breakpoint in `HelloBatch.java`.
-5.  Press **F8** again. Execution returns to the COBOL breakpoint after the call.
+3.  Execution stops at the COBOL breakpoint on line 10, the `call` statement.
+4.  Press **F8**. Execution continues into the Java breakpoint on line 15 of `HelloBatch.java`.
+5.  Press **F8** again. Execution returns to the COBOL breakpoint on line 11, after the call.
 
 Leave the Java debugger listening. The JVM is not reinitialised between jobs, so any further Java job you submit while the region is running can be debugged in the same session.
 
@@ -324,7 +326,5 @@ The [Java Batch Interoperability](../../interoperability/batch/java/README.md) t
 | The Java breakpoint is never reached on a second run. | The JVM initialises once per region start. Restart the BANKDEMO region, then start the debuggers again. |
 
 This concludes the Java demonstration.
-
-> **Note**: You should re-enable Enterprise Server security if you have not already done so. See *To Recreate the Default Enterprise Server Security Configuration* in the product documentation for steps on how to re-enable security.
 
 [Back to Top](#overview)
