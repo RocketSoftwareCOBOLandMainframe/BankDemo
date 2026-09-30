@@ -89,9 +89,27 @@ The region needs the folder that holds the compiled classes, so confirm where th
 1.  Right-click the **BankdemoJava** project and click **Properties**.
 2.  Click **Java Build Path** and then click the **Source** tab.
 3.  Note the **Default output folder** value, which is `BankdemoJava/bin`.
-4.  Click **Cancel**.
+4.  Click **Resource**, note the project's **Location**, and then click **Cancel**.
 
-Expand the **bin** folder in **Package Explorer** and confirm that it contains `HelloBatch.class` along with the other sample classes. If **Project \> Build Automatically** is not enabled, click **Project \> Build Project** first.
+    The **Location** is the workspace path you will supply to the region as its `CLASSPATH` in the next section.
+
+**Confirming that the Classes Were Built**
+
+**Package Explorer** presents a Java project as packages rather than as folders, so it never shows the build output. The **Project Explorer** view can show it, once its **Java output folders** filter is turned off:
+
+1.  Click **Window \> Show View \> Project Explorer**.
+
+    If it is not listed, click **Window \> Show View \> Other**, expand **General**, select **Project Explorer** and click **Open**.
+
+2.  Click the **View Menu** button (the three vertical dots) on the **Project Explorer** toolbar and click **Filters and Customization...**.
+3.  On the **Pre-set filters** tab, clear the **Java output folders** check box.
+4.  Click **OK**.
+5.  Expand the **BankdemoJava** project and then expand the **bin** folder.
+6.  Confirm that it contains `HelloBatch.class` along with the other sample classes.
+
+Eclipse builds Java projects as you edit them, so the class files are written as soon as the build path is correct. **Project \> Build Project** is greyed out while **Project \> Build Automatically** is enabled; that is expected and means the build has already run.
+
+If the **bin** folder is missing or empty, the build produced nothing. Check the **Problems** view for build path errors - most often the **ES Java Support Library** is not on the build path, or the linked `java` folder has not been marked as a source folder.
 
 ## Configuring the Region for Java
 
@@ -275,6 +293,7 @@ The [Java Batch Interoperability](../../interoperability/batch/java/README.md) t
 | `Env var (TEST_VAR)` is reported as `null`. | The `CEEOPTS` DD was edited so that `TEST_VAR` is no longer set. Values are supplied through `ENVAR`, not the region environment. |
 | Unresolved `com.rocketsoftware.jzos` imports in the IDE. | The **ES Java Support Library** is missing from **Java Build Path \> Libraries \> Classpath**. |
 | The Java sources are not compiled at all. | The linked `java` folder is not marked as a source folder. Right-click it and click **Build Path \> Use as Source Folder**. |
+| The `bin` folder is not visible in **Package Explorer**. | **Package Explorer** shows packages, not folders, so it never displays build output. Use **Project Explorer** and clear the **Java output folders** filter under **Filters and Customization...**. **Project \> Build Project** being greyed out is normal while **Build Automatically** is enabled. |
 | The **COBOL and Java Debug** launch group is not listed. | It was not created, or the project supplying it is closed. The group also refers to **JCL Debug**, so the Bankdemo project must be in the same workspace. |
 | `HELLOJAV` is not found when the job runs. | The `cobol/interoperability/java` folder is not selected on the **Build Precedence** tab of the Bankdemo project. |
 | The job fails as soon as it starts a Java step. | `JAVA_TOOL_OPTIONS` still requests a debugger. Either start the **ES Java Debug** configuration or clear the option. |

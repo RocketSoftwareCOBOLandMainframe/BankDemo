@@ -668,7 +668,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
 > **Note:** Move the copybook back to its original directory in case other projects are expecting to locate it there.
 
-## Unit Testing the Batch Application
+## Testing the Batch Application
 
 [Back to Top](#overview)
 
@@ -824,7 +824,7 @@ To view the spool:
     -   The **PRINTOUT** is the final printed results created by your job. Double-click **PRINTOUT** in the **DD Entries** section to see the results:
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
 
-## Unit Testing the Online Application
+## Testing the Online Application
 
 [Back to Top](#overview)
 
