@@ -228,6 +228,7 @@ Enterprise Developer debugs the COBOL, and the standard Eclipse Java debugger at
     -   **Project:** `BankdemoJava`
     -   **Connection Type:** `Standard (Socket Listen)`
     -   **Port:** `8000`
+    -   **Connection limit:** `1`
 
 4.  Click **Apply**.
 
@@ -263,7 +264,7 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 
 > **Important:** With `server=n` the JVM connects out to the debugger and waits for it. If the Java debug configuration is not listening when the job runs, the job fails. Clear the value again when you have finished debugging.
 
-> **Note:** Keep the option names in lower case. Java requires `transport`, `server`, `suspend` and `address` exactly as shown.
+> **Important:** `JAVA_TOOL_OPTIONS` is case-sensitive, and the JVM ignores `-AGENTLIB:JDWP=...`, so the job runs without a debug agent and nothing ever connects. After editing, confirm that the option still reads exactly as shown above.
 
 **Setting Breakpoints**
 
@@ -274,11 +275,16 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 
 > **Note:** A region initialises its JVM once. If you have already submitted a Java job since the region started, restart the BANKDEMO region before you begin.
 
+> **Important:** Before each attempt, terminate any previous debug sessions in the **Debug** view. A listening **ES Java Debug** session holds port 8000, and the launch group starts a second listener rather than reusing it, which fails to bind. Terminating does not always release the socket - if the launch still fails to bind, restart Eclipse. Restarting the region makes no difference, as the port belongs to Eclipse.
+
 1.  Click **Run \> Debug Configurations**, select **Launch Group \> COBOL and Java Debug** and click **Debug**.
 
     Both debuggers start. The **Debug** view shows the Java listener and the Enterprise Server JCL debug session.
 
-2.  Submit `HELLOJAV.jcl`.
+2.  Submit `HELLOJAV.jcl` promptly.
+
+    The Java listener waits only for the debugger timeout - 20 seconds by default - and then gives up. If you need longer, raise **Debugger timeout (ms)** under **Window \> Preferences \> Java \> Debug** before starting the group.
+
 3.  Execution stops at the COBOL breakpoint on the `call` statement.
 4.  Press **F8**. Execution continues into the Java breakpoint in `HelloBatch.java`.
 5.  Press **F8** again. Execution returns to the COBOL breakpoint after the call.
@@ -306,6 +312,10 @@ The [Java Batch Interoperability](../../interoperability/batch/java/README.md) t
 | The Java sources are not compiled at all. | The linked `java` folder is not marked as a source folder. Right-click it and click **Build Path \> Use as Source Folder**. |
 | The `bin` folder is not visible in **Package Explorer**. | **Package Explorer** shows packages, not folders, so it never displays build output. Use **Project Explorer** and clear the **Java output folders** filter under **Filters and Customization...**. **Project \> Build Project** being greyed out is normal while **Build Automatically** is enabled. |
 | The **COBOL and Java Debug** launch group is not listed. | It was not created, or was created while a different project was selected. The group also refers to **JCL Debug**, so the Bankdemo project must be open in the same workspace. |
+| `Failed to connect to remote VM. Failed to attach to localhost:8000`. | The **ES Java Debug** configuration is set to **Standard (Socket Attach)**, so Eclipse tried to connect to a JVM that is not running. Change **Connection Type** to **Standard (Socket Listen)**. The job uses `server=n`, so the JVM connects to Eclipse rather than the other way round. |
+| The launch reports that it failed to bind, or that the address is already in use. | An earlier **ES Java Debug** session is still holding port 8000. Terminating it in the **Debug** view does not always release the socket, so restart Eclipse. This is an Eclipse listener, so restarting the region has no effect. Confirm with `netstat -ano \| findstr :8000` on Windows, which reports the owning process ID. If a process other than Eclipse holds the port, change the port in both the launch configuration and the JCL. |
+| The Java listener stops before the job reaches Java. | The debugger timeout elapsed. Submit the job sooner, or raise **Debugger timeout (ms)** under **Window \> Preferences \> Java \> Debug**. |
+| The job runs to completion without stopping in Java. | `JAVA_TOOL_OPTIONS` is not reaching the JVM. The JCL editor upper-cases text as it is typed, and the option is case-sensitive - confirm the `CEEOPTS` DD still reads `-agentlib:jdwp=...` in lower case, and that `//CEEOPTS  DD *` appears only once. |
 | The **Submit JCL to associated Server** option is not available. | You are in **Package Explorer**, which does not provide it, or on a project other than Bankdemo. Submit `HELLOJAV.jcl` from the **Bankdemo** project in **Application Explorer**, or submit through ESCWA or `cassub` instead. |
 | **BankdemoJava** does not appear in **Application Explorer**. | Expected. That view lists only Micro Focus projects belonging to **Enterprise Development Projects**; a plain Java project is not one. Use **Package Explorer** for the Java project. |
 | The build fails with `Cannot open file : HELLOJAV.obj`. | The compile failed, so the link had no object file. If the **Console** view reports `1078-S` against a `$set` line, the source contains Rocket-dialect `$set` directives that `DIALECT"ENTCOBOL"` rejects. Remove them - mainframe dialects imply `FCDCAT` and `OUTDD`. They are added only by the [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial, which compiles standalone in the Rocket dialect. |
