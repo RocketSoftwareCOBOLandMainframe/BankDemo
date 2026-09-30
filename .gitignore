@@ -1,6 +1,5 @@
 *.cpython*
 /sources/java/*.class
-/tutorial/projects/Eclipse/java/BankdemoJava/bin
 /tutorial/workspace/*
 !/tutorial/workspace/README.md
 /RemoteSystemsTempFiles
@@ -33,6 +32,7 @@
 /projects/**/obj
 /projects/**/bin
 /projects/**/.cobolBuild
+/tutorial/projects/**/.cobolBuild
 /projects/**/*.dep
 /BANKDEMO
 /BANKVSAM

@@ -1,6 +1,6 @@
 ﻿# Getting Started with Rocket Enterprise Developer for Eclipse (Linux)
 
-Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customersâ€™ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp.Â Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
 
 ## Overview

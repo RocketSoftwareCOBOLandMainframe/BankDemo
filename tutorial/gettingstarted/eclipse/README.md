@@ -1,6 +1,6 @@
 ﻿# Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
 
-Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customersâ€™ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp.Â Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
+Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 
 
 ## Overview
@@ -490,7 +490,7 @@ A much more suitable and less error-prone way to edit BMS files is to use the BM
 
 3.  In BMS Painter, you can click fields and move them by dragging.
 
-    For example, double-click the data field immediately following the text â€œUser Idâ€, and move it to a different position on the map.
+    For example, double-click the data field immediately following the text “User Id”, and move it to a different position on the map.
 
 4.  To add a field, click in the desired place in the window, and start typing.
 5.  To change a field's properties, right-click it, and select **Properties**.
@@ -668,7 +668,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
 > **Note:** Move the copybook back to its original directory in case other projects are expecting to locate it there.
 
-## Testing the Batch Application
+## Unit Testing the Batch Application
 
 [Back to Top](#overview)
 
@@ -824,7 +824,7 @@ To view the spool:
     -   The **PRINTOUT** is the final printed results created by your job. Double-click **PRINTOUT** in the **DD Entries** section to see the results:
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
 
-## Testing the Online Application
+## Unit Testing the Online Application
 
 [Back to Top](#overview)
 

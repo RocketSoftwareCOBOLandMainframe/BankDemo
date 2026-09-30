@@ -43,8 +43,6 @@ You will:
 
  In the Getting Started tutorial you created the Bankdemo project from a supplied COBOL project template. Eclipse has no equivalent template mechanism for Java projects, so you create this one directly, then link the sample sources into it exactly as you linked the COBOL sources.
 
-> **Tip:** If you would rather not create the project by hand, a preconfigured copy is supplied in `tutorial/projects/Eclipse/java`, together with the debug configurations used later in this demonstration. Click **File \> Import**, expand **General**, select **Existing Projects into Workspace**, browse to that directory, and clear **Copy projects into workspace** so that the project is imported in place. Then skip to [Adding the Enterprise Server Java Library](#adding-the-enterprise-server-java-library), and note the change to the `CLASSPATH` value described in the next section.
-
 **Creating the Project**
 
 1.  Click **File \> New \> Project**.
@@ -71,7 +69,7 @@ As with the COBOL sources, you link the sample files into the project rather tha
 
     Eclipse compiles the sample classes and reports errors, because the Enterprise Server Java API is not yet on the build path.
 
-**<a name="adding-the-enterprise-server-java-library"></a>Adding the Enterprise Server Java Library**
+**Adding the Enterprise Server Java Library**
 
 The samples import `com.rocketsoftware.jzos`, which is supplied with Enterprise Developer:
 
@@ -133,7 +131,7 @@ Enterprise Server starts the JVM itself, so it needs to know where the JDK is an
     CLASSPATH=$COBDIR/lib/esjos.jar:$BANKROOT/tutorial/workspace/BankdemoJava/bin
     ```
 
-    `BANKROOT` is defined by the BANKDEMO template and points at the root of the sample, so these values work unchanged if you used the `tutorial/workspace` directory as your Eclipse workspace, as the Getting Started tutorial suggests. Otherwise, replace the second `CLASSPATH` entry with the full path to your project's `bin` folder, which you can find under **Properties \> Resource**. If you imported the supplied project instead of creating your own, that path is `$BANKROOT/tutorial/projects/Eclipse/java/BankdemoJava/bin`.
+    `BANKROOT` is defined by the BANKDEMO template and points at the root of the sample, so these values work unchanged if you used the `tutorial/workspace` directory as your Eclipse workspace, as the Getting Started tutorial suggests. Otherwise, replace the second `CLASSPATH` entry with the full path to your project's `bin` folder, which you can find under **Properties \> Resource**.
 
 4.  Click **Apply** and start the region.
 
@@ -205,8 +203,6 @@ This mapping of streams to DDs is not automatic for a class called from COBOL. `
 
 Enterprise Developer debugs the COBOL, and the standard Eclipse Java debugger attaches to the JVM that Enterprise Server starts. Both debuggers must be running before the job is submitted, so you create a **launch group** that starts them together in the right order.
 
-> **Tip:** Both configurations described below are also supplied with the preconfigured project in `tutorial/projects/Eclipse/java`. If you imported that project, they already appear in **Run \> Debug Configurations** and you can skip to [Enabling Debugging in the Job](#enabling-debugging-in-the-job).
-
 **Creating the Java Debug Configuration**
 
 1.  Click **Run \> Debug Configurations**.
@@ -239,7 +235,7 @@ The Java debugger listens for a connection, and the JVM connects out to it as th
 
 > **Note:** The launch group refers to **JCL Debug**, so the Bankdemo project from the Getting Started tutorial must be open in the same workspace.
 
-**<a name="enabling-debugging-in-the-job"></a>Enabling Debugging in the Job**
+**Enabling Debugging in the Job**
 
 Edit `HELLOJAV.jcl` and set the `JAVA_TOOL_OPTIONS` value in the `CEEOPTS` DD:
 
@@ -294,7 +290,7 @@ The [Java Batch Interoperability](../../interoperability/batch/java/README.md) t
 | Unresolved `com.rocketsoftware.jzos` imports in the IDE. | The **ES Java Support Library** is missing from **Java Build Path \> Libraries \> Classpath**. |
 | The Java sources are not compiled at all. | The linked `java` folder is not marked as a source folder. Right-click it and click **Build Path \> Use as Source Folder**. |
 | The `bin` folder is not visible in **Package Explorer**. | **Package Explorer** shows packages, not folders, so it never displays build output. Use **Project Explorer** and clear the **Java output folders** filter under **Filters and Customization...**. **Project \> Build Project** being greyed out is normal while **Build Automatically** is enabled. |
-| The **COBOL and Java Debug** launch group is not listed. | It was not created, or the project supplying it is closed. The group also refers to **JCL Debug**, so the Bankdemo project must be in the same workspace. |
+| The **COBOL and Java Debug** launch group is not listed. | It was not created, or was created while a different project was selected. The group also refers to **JCL Debug**, so the Bankdemo project must be open in the same workspace. |
 | `HELLOJAV` is not found when the job runs. | The `cobol/interoperability/java` folder is not selected on the **Build Precedence** tab of the Bankdemo project. |
 | The job fails as soon as it starts a Java step. | `JAVA_TOOL_OPTIONS` still requests a debugger. Either start the **ES Java Debug** configuration or clear the option. |
 | The Java breakpoint is never reached on a second run. | The JVM initialises once per region start. Restart the BANKDEMO region, then start the debuggers again. |
