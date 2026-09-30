@@ -395,7 +395,9 @@ Arguments in MAINARGS are parsed as quoted strings, supporting:
 
 ### 2.5 Inline STDENV Configuration
 
-The `STDENV` DD is an inline script that configures the JVM environment. JVMLDM parses the following variables:
+`STDENV DD *` is an inline script executed by the platform shell before the JVM starts. That is why the content differs by platform.
+
+The samples use it only to set variables, so in practice it holds `set NAME=value` on Windows and `export NAME=value` on Linux. JVMLDM then reads the following variables from the resulting environment:
 
 | Variable | Purpose |
 |----------|---------|
@@ -407,6 +409,8 @@ The `STDENV` DD is an inline script that configures the JVM environment. JVMLDM 
 | `JZOS_OUTPUT_ENCODING` | Output encoding for stream redirection. Must be a charset name supported by the JVM (e.g. `UTF-8`, `ISO-8859-1`, `IBM037`) |
 | `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` - enable/disable output transcoding. Default is `true` |
 | `JZOS_ABEND_EXIT` | If set to an exit code threshold, `System.exit(n)` at or above this level triggers a U3333 abend |
+
+Because it is a script, any command the shell accepts can appear in it. It runs in the region's service account and its exit status is not checked, so keep it short and prefer region-level configuration for anything permanent.
 
 Example with JVM options:
 
@@ -428,13 +432,14 @@ export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 /*
 ```
 
-> **Note:** `STDENV DD *` is a shell script, unlike the region's
-> `[ES-Environment]` configuration. Use `set` and `%VAR%` in a Windows
-> STDENV script, or `export` and `$VAR` in a Linux STDENV script. Using
-> `STDENV DD DUMMY` with region-level environment variables avoids this
-> difference.
+> **Note:** Because `STDENV DD *` is a script and the region's
+> `[ES-Environment]` configuration is not, the two use different syntax. Use
+> `set` and `%VAR%` in a Windows STDENV script, or `export` and `$VAR` in a
+> Linux STDENV script, but `$VAR` on both platforms in the region
+> configuration. Using `STDENV DD DUMMY` with region-level environment
+> variables avoids the difference entirely.
 
-> **Tip:** The STDENV script can also change the current working directory (e.g. `cd /path/to/dir` on Linux or `cd \path\to\dir` on Windows), which affects the JVM's `user.dir` property and any relative paths used by your Java code.
+> **Tip:** The script runs arbitrary commands, not just assignments. It can `cd` to set the JVM's `user.dir` and the base for relative paths, create a working directory, or invoke a tool - for example running `javac` to compile a class immediately before the step that uses it. Anything it writes to stdout appears in the job output, which is useful when checking what the script did.
 
 ### 2.6 Compile and Deploy
 

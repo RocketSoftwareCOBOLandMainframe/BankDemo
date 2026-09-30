@@ -150,8 +150,11 @@ Unlike the Java interop (which requires `JAVA_HOME`, classpath configuration, an
 
 ### Environment Configuration (STDENV DD)
 
-The STDENV DD contains environment variable assignments executed before
-Python runs. Use `ESPY_WORKING_DIR` when invoking a script file:
+`STDENV DD *` is an inline script executed by the platform shell before the JVM starts. That is why the content differs by platform.
+
+The samples use it only to set variables, which PYLDM then reads from the environment.
+
+Use `ESPY_WORKING_DIR` when invoking a script file:
 
 ```
 set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
@@ -177,6 +180,12 @@ The samples use the output defaults and do not override the three output
 variables.
 
 > Use the JCL from `sources/jcl/interoperability/windows/` or `sources/jcl/interoperability/linux/` so the STDENV script matches the platform shell.
+
+> **Tip:** Because STDENV is a script, it can run any command the shell
+> accepts, not just assignments - for example `cd` to set the working
+> directory, or a build or data-preparation step run immediately before the
+> Python step. It runs in the region's service account and its exit status is
+> not checked, so keep it short.
 
 ---
 
