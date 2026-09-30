@@ -15,8 +15,8 @@ Other tutorials, which are designed for Administrators, are also available.
 * [Creating a Project and Adding the Source Files](#creating-a-project-and-adding-the-source-files)
 * [Editing Source Files](#editing-source-files)
 * [Compiling the Source Code](#unit-testing-the-batch-application)
-* [Unit Testing the Batch Application](#unit-testing-the-batch-application)
-* [Unit Testing the Online Application](#unit-testing-the-online-application)
+* [Testing the Batch Application](#unit-testing-the-batch-application)
+* [Testing the Online Application](#unit-testing-the-online-application)
 * [Debugging the Batch Application](#debugging-the-batch-application)
 * [Debugging the Online Application](#debugging-the-online-application)
 * [Next Steps](#next-steps)
@@ -668,7 +668,7 @@ You can introduce some Compiler errors into one of the programs to see how the C
 
 > **Note:** Move the copybook back to its original directory in case other projects are expecting to locate it there.
 
-## Unit Testing the Batch Application
+## Testing the Batch Application
 
 [Back to Top](#overview)
 
@@ -722,7 +722,10 @@ Now you can import the definition of the BANKDEMO logical server (LSER) in Enter
 2.  Right-click **Default [127.0.0.1:86]** and click **Import Server**.
 3.  In the **Import Server** dialog box, click **Browse** for **Import file**.
 4.  Set the file extension field to **.xml**.
-5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, click **Open**, and then click **Finish**.
+5.  Browse to the `C:\MFETDUSER\tutorial` folder, select **BANKDEMO.xml**, and click **Open**.
+6.  Set **Working directory** to `C:\MFETDUSER`, and then click **Finish**.
+
+    This is the folder that BANKROOT resolves to in `BANKDEMO.xml`.
 
     Check the **Console** view for the results of importing the server. 
     
@@ -824,11 +827,11 @@ To view the spool:
     -   The **PRINTOUT** is the final printed results created by your job. Double-click **PRINTOUT** in the **DD Entries** section to see the results:
     ![](images/1f0ec6c73989be4497cb4346c9d4a7b8.png)
 
-## Unit Testing the Online Application
+## Testing the Online Application
 
 [Back to Top](#overview)
 
-In the previous step, Unit Testing the Batch Application, you used the BANKDEMO enterprise server. You will use it again for online testing.
+In the previous step, Testing the Batch Application, you used the BANKDEMO enterprise server. You will use it again for online testing.
 
 As with JCL, execution of the jobs requires a previously configured enterprise server.
 
