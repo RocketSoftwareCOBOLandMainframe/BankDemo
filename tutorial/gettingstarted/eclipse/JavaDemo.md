@@ -66,6 +66,15 @@ You will:
 
     If you are prompted to open the Java perspective, click **Open Perspective**.
 
+**Adding the Enterprise Server Java Library**
+
+The samples import `com.rocketsoftware.jzos`, which is supplied with Enterprise Developer. Add it before linking the sources, so that the classes compile cleanly as soon as they are added:
+
+1.  Right-click the **BankdemoJava** project and click **Properties**.
+2.  Click **Java Build Path** and then click the **Libraries** tab.
+3.  Select **Classpath**, click **Add Library**, select **ES Java Support Library**, click **Next**, then **Finish**.
+4.  Click **Apply and Close**.
+
 **Adding the Java Source Files**
 
 As with the COBOL sources, you link the sample files into the project rather than copying them, so that you are editing the files in the sample directory:
@@ -76,18 +85,9 @@ As with the COBOL sources, you link the sample files into the project rather tha
 4.  In the **Folder name** field, type `java` and click **Finish**.
 5.  Right-click the linked **java** folder and click **Build Path \> Use as Source Folder**.
 
-    Eclipse compiles the sample classes and reports errors, because the Enterprise Server Java API is not yet on the build path.
+    Eclipse compiles the sample classes. The **Problems** view should be clear of errors.
 
-**Adding the Enterprise Server Java Library**
-
-The samples import `com.rocketsoftware.jzos`, which is supplied with Enterprise Developer:
-
-1.  Right-click the **BankdemoJava** project and click **Properties**.
-2.  Click **Java Build Path** and then click the **Libraries** tab.
-3.  Select **Classpath**, click **Add Library**, select **ES Java Support Library**, click **Next**, then **Finish**.
-4.  Click **Apply and Close**.
-
-    Eclipse rebuilds the project. The **Problems** view should now be clear of errors for the Java sources.
+> **Note:** If you add the sources before the library, the **Problems** view reports unresolved `com.rocketsoftware.jzos` imports until the library is added. The errors are transient and clear on the next build.
 
 **Checking the Output Folder**
 
