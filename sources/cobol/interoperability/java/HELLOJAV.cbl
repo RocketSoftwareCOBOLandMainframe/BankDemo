@@ -1,5 +1,3 @@
-      $set FCDCAT
-      $set outdd"SYSOUT"
       *
       * Simple demonstration of calling a Java class from COBOL.
       * The Java class HelloBatch.run() is invoked using the

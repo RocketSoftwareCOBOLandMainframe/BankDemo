@@ -19,6 +19,15 @@ This demonstration continues the [Getting Started with Enterprise Developer for 
 
 The Java code is kept in a separate Eclipse project. The Bankdemo project remains a COBOL project, and the two are connected only by the region configuration, which is how Enterprise Server itself sees them.
 
+This means each project keeps a distinct role throughout the demonstration:
+
+| Project | View | Owns |
+| --- | --- | --- |
+| **BankdemoJava** | **Package Explorer** | The Java sources and the compiled classes in `bin`. |
+| **Bankdemo** | **Application Explorer** | `HELLOJAV.cbl`, the JCL, and the debug configurations. |
+
+Enterprise Server loads the Java class from the `CLASSPATH` you set on the region - a plain filesystem path to the `bin` folder. It has no knowledge of Eclipse projects. The JCL and the COBOL program that calls Java are application artifacts belonging to Bankdemo, so the job is always submitted from there. This mirrors a real deployment, where a Java component is published onto the classpath and the batch application invokes it.
+
 You will:
 
 - Create a Java project and link the sample Java sources into it.
@@ -143,14 +152,16 @@ Enterprise Server starts the JVM itself, so it needs to know where the JDK is an
 
 [Back to Top](#overview)
 
-The job you are about to submit runs a small COBOL program, `HELLOJAV`, which calls the Java class. The program is already in the Bankdemo project, in the `cobol/interoperability/java` folder, but the Getting Started tutorial did not include that folder in the build.
+The job you are about to submit runs a small COBOL program, `HELLOJAV`, which calls the Java class. The program is already in the Bankdemo project, in the `cobol/interoperability/java` folder, but the Getting Started tutorial deselected every folder on the **Build Precedence** tab, so it has not been built.
 
 1.  In **Application Explorer** view, right-click the **Bankdemo** project and click **Properties**.
 2.  Expand **Rocket Software** and click **Build Path**.
 3.  Click the **Build Precedence** tab and select the check box for **Bankdemo/cobol/interoperability/java**.
 4.  Click **Apply and Close**.
 
-    Eclipse compiles `HELLOJAV.cbl` into the project's `loadlib` folder, which the region already searches.
+    Eclipse rebuilds the project, compiling `HELLOJAV.cbl` into the `loadlib` folder, which the region already searches. Confirm that `loadlib` now contains `HELLOJAV.dll`.
+
+The program is written in mainframe COBOL, so it compiles under the project's `DIALECT"ENTCOBOL"` setting without modification.
 
 The program itself is deliberately minimal. The call is resolved by Enterprise Server at run time, using the `Java.` prefix to identify the target as a Java class and method:
 
@@ -163,11 +174,15 @@ display "COBOL: Java call succeeded."
 
 [Back to Top](#overview)
 
-1.  In **Application Explorer**, expand the **jcl** folder and then the **interoperability** folder.
+As set out in the [Overview](#overview), the job belongs to the **Bankdemo** project - the JCL is part of the `jcl` folder you linked in during the Getting Started tutorial.
+
+1.  In **Application Explorer** view, expand the **Bankdemo** project, then expand the **jcl** folder and the **interoperability** folder within it.
 2.  Right-click **HELLOJAV.jcl** - in the `windows` folder on Windows, or the `linux` folder on Linux - and click **Submit JCL to associated Server**.
 3.  Open the spool entry for the job to review its output.
 
     ![](images/06c974b55ef928b64a0cd983b28163b8.png)
+
+> **Tip:** The job can equally be submitted outside the IDE, through **JES \> Control** in ESCWA or with `cassub`, as the [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial describes. The result is the same; only the submission route differs.
 
 The job allocates three output DDs, and each receives a different stream:
 
@@ -291,7 +306,10 @@ The [Java Batch Interoperability](../../interoperability/batch/java/README.md) t
 | The Java sources are not compiled at all. | The linked `java` folder is not marked as a source folder. Right-click it and click **Build Path \> Use as Source Folder**. |
 | The `bin` folder is not visible in **Package Explorer**. | **Package Explorer** shows packages, not folders, so it never displays build output. Use **Project Explorer** and clear the **Java output folders** filter under **Filters and Customization...**. **Project \> Build Project** being greyed out is normal while **Build Automatically** is enabled. |
 | The **COBOL and Java Debug** launch group is not listed. | It was not created, or was created while a different project was selected. The group also refers to **JCL Debug**, so the Bankdemo project must be open in the same workspace. |
-| `HELLOJAV` is not found when the job runs. | The `cobol/interoperability/java` folder is not selected on the **Build Precedence** tab of the Bankdemo project. |
+| The **Submit JCL to associated Server** option is not available. | You are in **Package Explorer**, which does not provide it, or on a project other than Bankdemo. Submit `HELLOJAV.jcl` from the **Bankdemo** project in **Application Explorer**, or submit through ESCWA or `cassub` instead. |
+| **BankdemoJava** does not appear in **Application Explorer**. | Expected. That view lists only Micro Focus projects belonging to **Enterprise Development Projects**; a plain Java project is not one. Use **Package Explorer** for the Java project. |
+| The build fails with `Cannot open file : HELLOJAV.obj`. | The compile failed, so the link had no object file. If the **Console** view reports `1078-S` against a `$set` line, the source contains Rocket-dialect `$set` directives that `DIALECT"ENTCOBOL"` rejects. Remove them - mainframe dialects imply `FCDCAT` and `OUTDD`. They are added only by the [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial, which compiles standalone in the Rocket dialect. |
+| `HELLOJAV` is not found when the job runs. | The `cobol/interoperability/java` folder is not selected on the **Build Precedence** tab of the Bankdemo project, or `loadlib` contains no `HELLOJAV.dll`. |
 | The job fails as soon as it starts a Java step. | `JAVA_TOOL_OPTIONS` still requests a debugger. Either start the **ES Java Debug** configuration or clear the option. |
 | The Java breakpoint is never reached on a second run. | The JVM initialises once per region start. Restart the BANKDEMO region, then start the debuggers again. |
 

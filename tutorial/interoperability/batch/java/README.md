@@ -157,8 +157,6 @@ class HelloBatch {
 The COBOL file `sources/cobol/interoperability/java/HELLOJAV.cbl` calls the HelloBatch class defined above.
 
 ```cobol
-      $set FCDCAT
-      $set outdd"SYSOUT"
       *
       * Simple demonstration of calling a Java class from COBOL.
       * The Java class HelloBatch.run() is invoked using the
@@ -174,10 +172,18 @@ The COBOL file `sources/cobol/interoperability/java/HELLOJAV.cbl` calls the Hell
            .
 ```
 
-This sample is intended to be compiled in the Rocket COBOL dialect. `FCDCAT`
-and `OUTDD` provide the required catalog-aware `SYSOUT` behavior.
+The program ships in mainframe form, so that it compiles unchanged in the Bankdemo project used by the [Eclipse Java demonstration](../../../gettingstarted/eclipse/JavaDemo.md), which sets `DIALECT"ENTCOBOL"`. Mainframe dialects include the `FCDCAT` and `OUTDD` directives automatically.
 
-Mainframe dialects (i.e `entcobol`) do not accept the Rocket-dialect `$set` syntax; make sure to remove the two `$set` statements to compile for mainframe. You will need to make sure a mainframe dialect is in effect though command line or using project settings e.g. DIALECT(ENTCOBOL). Mainframe dialects auto-include the `FCDCAT` and `OUTDD` source directives.
+This tutorial compiles the program standalone, in the default Rocket COBOL dialect, where those directives are not implied. `FCDCAT` and `OUTDD` provide the catalog-aware `SYSOUT` behaviour the sample relies on, so add the two `$set` statements to the top of the file before compiling:
+
+```cobol
+      $set FCDCAT
+      $set outdd"SYSOUT"
+      *
+      * Simple demonstration of calling a Java class from COBOL.
+```
+
+> **Note:** The `$set` syntax is specific to the Rocket dialect - mainframe dialects reject it with `1078-S`. Add these lines for the standalone compile below, and remove them again before building the program inside a project that uses a mainframe dialect. Alternatively, leave the file untouched and pass a mainframe dialect on the command line.
 
 ### 1.3 The JCL
 
@@ -217,7 +223,8 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 >
 > Both compiler directives are required for the COBOL output shown below:
 > compile with `FCDCAT` and `OUTDD"SYSOUT"` to route COBOL `DISPLAY`
-> output to the allocated `SYSOUT` DD when using a non-mainframe dialect.
+> output to the allocated `SYSOUT` DD when using a non-mainframe dialect. See
+> [The COBOL Bootstrap Program](#12-the-cobol-bootstrap-program) for how to set them.
 
 > **Understanding CEEOPTS:**
 >
@@ -240,6 +247,8 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 ### 1.4 Compile, Deploy, and Run
 
 1. **Compile and deploy:**
+
+   Add the two `$set` statements described in [The COBOL Bootstrap Program](#12-the-cobol-bootstrap-program) before compiling, as these commands use the default Rocket dialect.
 
    **Windows** (Enterprise Developer 64-bit Command Prompt):
    ```
