@@ -1,0 +1,12 @@
+{
+    "name": "MFI01V.MFIDEMO.PYTXN",
+    "physicalFile": "<CATALOGFOLDER>/data/MFI01V.MFIDEMO.PYTXN.dat",
+    "cataloged": true,
+    "dataSetOrganization": "PS",
+    "recordFormat": "F",
+    "codeset": "ASCII",
+    "recordLength": 80,
+    "blockSize": 0,
+    "crossRegion": 0,
+    "crossSystem": 0
+}

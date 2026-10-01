@@ -69,6 +69,11 @@
 			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/sources/cobol/core</locationURI>
 		</link>
 		<link>
+			<name>interop/java</name>
+			<type>2</type>
+			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/sources/cobol/interoperability/java</locationURI>
+		</link>
+		<link>
 			<name>jcl</name>
 			<type>2</type>
 			<locationURI>$%7BPARENT-4-PROJECT_LOC%7D/sources/jcl</locationURI>

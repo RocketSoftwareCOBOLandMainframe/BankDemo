@@ -1,7 +1,18 @@
 *.cpython*
+/sources/java/*.class
+/tutorial/workspace/*
+!/tutorial/workspace/README.md
+/RemoteSystemsTempFiles
 /scripts/build.txt
 /system/loadlib
+/system/catalog/*
+!/system/catalog/README.md
+/system/logs/*
+!/system/logs/README.md
+/system/rdef/*
+!/system/rdef/README.md
 /tutorial/BANKDEMO_*
+/tutorial/BANKDEMO.xml
 /tutorial/BANKDEMO.xml.bak
 /tutorial/projects/Studio/cobol/.vs/BankDemo
 /tutorial/projects/Studio/cobol/Bankdemo/obj
@@ -21,6 +32,7 @@
 /projects/**/obj
 /projects/**/bin
 /projects/**/.cobolBuild
+/tutorial/projects/**/.cobolBuild
 /projects/**/*.dep
 /BANKDEMO
 /BANKVSAM
@@ -32,3 +44,4 @@
 /sources/generated
 .terraform*
 terraform.tfstate*
+/.metadata/

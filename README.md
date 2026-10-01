@@ -49,12 +49,18 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
 1. <a name="tutorial"></a> As the basis of the introductory tutorials for the Rocket Enterprise Developer for Eclipse and Visual Studio integrated development environments.
     - Prerequisite software: 
         - Rocket Enterprise Developer for Eclipse or Rocket Enterprise Developer for Visual Studio
+        - For the Java tutorials, a Java Development Kit (JDK). One is supplied with Enterprise Developer on Windows.
+        - For the Python tutorial, Python 3.
     - Available tutorials:
         - [Getting Started with Enterprise Developer for Eclipse (Windows)](tutorial/gettingstarted/eclipse/README.md)
         - [Getting Started with Enterprise Developer for Eclipse (Linux)](tutorial/gettingstarted/eclipseux/readme.md)
         - [Getting Started with Enterprise Developer for Visual Studio](tutorial/gettingstarted/visualstudio/readme.md)
         - [Open PL/I Bankdemo Application in Enterprise Developer for Eclipse](tutorial/gettingstarted/eclipse/PLIDemo.md)
         - [Open PL/I Bankdemo Application in Enterprise Development for Visual Studio](tutorial/gettingstarted/visualstudio/PLIDemo.md)
+        - [Calling Java from COBOL with Enterprise Developer for Eclipse](tutorial/gettingstarted/eclipse/JavaDemo.md) - continues the Eclipse tutorial above
+        - [Language Interoperability Tutorials](tutorial/interoperability/README.md) - run from the command line against the separate BANKVSAM region
+            - [Java Batch Interoperability](tutorial/interoperability/batch/java/README.md)
+            - [Python Batch Interoperability](tutorial/interoperability/batch/python/README.md)
     - Requirements: 
         - Ensure that the Enterprise Directory Service (EDS) is running.
         - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default localhost port - 10086.

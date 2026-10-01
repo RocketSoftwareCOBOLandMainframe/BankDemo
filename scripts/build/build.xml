@@ -79,6 +79,7 @@ WITH THIS SOFTWARE.
 	<!-- cobol_file_set_1 -->
 	<fileset dir="${basedir}" id="cobol_file_set_1">
 		<include name="cobol/core/*.cbl"/>
+		<include name="cobol/interoperability/java/*.cbl"/>
 		<include name="cobol/data/${dataversion}/*.cbl"/>
 	</fileset>
 	
