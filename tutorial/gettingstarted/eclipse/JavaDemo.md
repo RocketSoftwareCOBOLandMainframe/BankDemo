@@ -266,12 +266,12 @@ The Java debugger listens for a connection, and the JVM connects out to it as th
 
 > **Important:** With `server=n` the JVM connects out to the debugger and waits for it. If the Java debug configuration is not listening when the job runs, the job fails. Clear the value again when you have finished debugging.
 
-> **Important:** `JAVA_TOOL_OPTIONS` is case-sensitive, and the JVM ignores `-AGENTLIB:JDWP=...`, so the job runs without a debug agent and nothing ever connects. After editing, confirm that the option still reads exactly as shown above.
+> **Important:** `JAVA_TOOL_OPTIONS` are case-sensitive. The JCL editor converts what you type to upper case as you type it. To turn this off, click **Window \> Preferences**, navigate to **Rocket Software \> JCL \> Editor**, clear **Force capitals**, and click **Apply and Close**. Text that was already upper-cased is not changed, so correct the line after turning the option off.
 
 **Setting Breakpoints**
 
-1.  Open `HELLOJAV.cbl` from the Bankdemo project and set breakpoints on the `call` statement and on the `display` statement that follows it.
-2.  Open `HelloBatch.java` from the BankdemoJava project and set a breakpoint on one of the `System.out.println` lines.
+1.  Double-click `HELLOJAV.cbl` in the Bankdemo project, then double-click in the left margin against **line 10**, the `call "Java.HelloBatch.run"` statement, and against **line 11**, the `display` statement that follows it.
+2.  Double-click `HelloBatch.java` in the BankdemoJava project, then double-click in the left margin against **line 15**, the first `System.out.println` statement.
 
 **Running the Debug Session**
 
@@ -317,7 +317,7 @@ The [Java Batch Interoperability](../../interoperability/batch/java/README.md) t
 | `Failed to connect to remote VM. Failed to attach to localhost:8000`. | The **ES Java Debug** configuration is set to **Standard (Socket Attach)**, so Eclipse tried to connect to a JVM that is not running. Change **Connection Type** to **Standard (Socket Listen)**. The job uses `server=n`, so the JVM connects to Eclipse rather than the other way round. |
 | The launch reports that it failed to bind, or that the address is already in use. | An earlier **ES Java Debug** session is still holding port 8000. Terminating it in the **Debug** view does not always release the socket, so restart Eclipse. This is an Eclipse listener, so restarting the region has no effect. Confirm with `netstat -ano \| findstr :8000` on Windows, which reports the owning process ID. If a process other than Eclipse holds the port, change the port in both the launch configuration and the JCL. |
 | The Java listener stops before the job reaches Java. | The debugger timeout elapsed. Submit the job sooner, or raise **Debugger timeout (ms)** under **Window \> Preferences \> Java \> Debug**. |
-| The job runs to completion without stopping in Java. | `JAVA_TOOL_OPTIONS` is not reaching the JVM. The JCL editor upper-cases text as it is typed, and the option is case-sensitive - confirm the `CEEOPTS` DD still reads `-agentlib:jdwp=...` in lower case, and that `//CEEOPTS  DD *` appears only once. |
+| The job runs to completion without stopping in Java. | `JAVA_TOOL_OPTIONS` is not reaching the JVM. The JCL editor upper-cases text as it is typed unless **Force capitals** is cleared under **Rocket Software \> JCL \> Editor**, and the option is case-sensitive - confirm the `CEEOPTS` DD still reads `-agentlib:jdwp=...` in lower case, and that `//CEEOPTS  DD *` appears only once. |
 | The **Submit JCL to associated Server** option is not available. | You are in **Package Explorer**, which does not provide it, or on a project other than Bankdemo. Submit `HELLOJAV.jcl` from the **Bankdemo** project in **Application Explorer**, or submit through ESCWA or `cassub` instead. |
 | **BankdemoJava** does not appear in **Application Explorer**. | Expected. That view lists only Micro Focus projects belonging to **Enterprise Development Projects**; a plain Java project is not one. Use **Package Explorer** for the Java project. |
 | The build fails with `Cannot open file : HELLOJAV.obj`. | The compile failed, so the link had no object file. If the **Console** view reports `1078-S` against a `$set` line, the source contains Rocket-dialect `$set` directives that `DIALECT"ENTCOBOL"` rejects. Remove them - mainframe dialects imply `FCDCAT` and `OUTDD`. They are added only by the [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial, which compiles standalone in the Rocket dialect. |
