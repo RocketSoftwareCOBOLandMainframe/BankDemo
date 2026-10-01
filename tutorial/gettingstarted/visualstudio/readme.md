@@ -45,9 +45,9 @@ The preconfigured and fully executing application BankDemo is available from the
 
 **Using a Remote Enterprise Server Instance for the Tutorials**
 
-   If you have an active firewall on the system that is running your Enterprise Directory Server and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
+   If you have an active firewall on the system that is running your Enterprise Directory Service (EDS) and enterprise server instances, and you want remote clients to be able to connect to them, you must ensure that the firewall allows access to the ports that you are using.
     
-   For example, Enterprise Directory Server is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
+   For example, Enterprise Directory Service is configured, by default, to use port 86. You must configure your firewall to allow TCP and UDP access to this port. Similarly, the enterprise server instance you create as part of this tutorial, BANKDEMO, has listeners which use ports 9003 and 9023. For remote clients to be able to submit JCL jobs or connect a TN3270 terminal to these listeners, your firewall must allow access to these ports.
 
    If you want remote users to access Enterprise Server functionality through the firewall, you can use fixed port values so that you can control access through them.
 
@@ -741,7 +741,7 @@ If you cannot use the PowerShell script to create the `BANKDEMO.xml` file, you c
 
 Ensure that the default settings are applied to the Directory Sever:
 
-1.  Click the Start menu and open the Services application. Navigate to Directory Server to view its status and set it to **Running** if it is not already started.
+1.  Click the Start menu and open the Services application. Navigate to the Enterprise Directory Service to view its status and set it to **Running** if it is not already started.
 
 2.  In Visual Studio, open the Server Explorer window.
 

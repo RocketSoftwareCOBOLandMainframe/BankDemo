@@ -81,7 +81,7 @@ In this release, the Enterprise Server security features are enabled by default.
 
     You see a series of messages as the script disables default security.
 
-2. Restart the Enterprise Developer Service (EDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. 
+2. Restart the Enterprise Directory Service (EDS) and Enterprise Server Common Web Administration (ESCWA) services to pick up the configuration changes. 
 
     You can now use ESCWA without having to log in.
 
@@ -683,7 +683,7 @@ Next, ensure that the following two services are running on your machine:
         nohup escwa < /dev/null > escwa.out 2>&1 &
         ```
 
-   -   Enterprise Developer Service (EDS) - from a terminal that has the COBOL environment set, run the following as root if you must start this service:
+   -   Enterprise Directory Service (EDS) - from a terminal that has the COBOL environment set, run the following as root if you must start this service:
 
         ```
         mfds64 &

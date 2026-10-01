@@ -23,7 +23,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
 - Python 3.8 or later, installed so that Enterprise Server can load it (see below)
-- Ensure that the Directory Server (MFDS) service is running
+- Ensure that the Enterprise Directory Service (EDS) is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
 
 No additional Python packages are required — the `zoautil_py` package is provided by the Enterprise Server installation.

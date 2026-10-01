@@ -25,7 +25,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - A 64-bit Enterprise Server region and 64-bit environment (JVMLDM requires a 64-bit process)
 - The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `Enterprise Developer\AdoptOpenJDK` for the default installation. On Linux, use the JDK installed on your system. The supported major version is 21-25. If you prefer to use your own JDK, align to the same major version
 - An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../../demos/onprem/vsam/README.md) demonstration)
-- Ensure that the Directory Server (MFDS) service is running
+- Ensure that the Enterprise Directory Service (EDS) is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
 
 Use the **BANKVSAM** region created by the VSAM tutorial for all steps. If it
