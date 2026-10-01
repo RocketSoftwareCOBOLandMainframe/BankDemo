@@ -1,4 +1,4 @@
-﻿# Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
+# Getting Started with Rocket Enterprise Developer for Eclipse (Windows)
 
 Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to enable compatibility for customers’ IBM CICS applications. IBM and CICS are registered trademarks of International Business Machines Corp. Rocket Enterprise Suite products do not include an IBM CICS engine and are not affiliated with IBM. 
 

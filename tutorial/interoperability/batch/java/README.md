@@ -1,4 +1,4 @@
-﻿# Batch Java Interoperability with JVMLDM
+# Batch Java Interoperability with JVMLDM
 
 This demonstration walks you through invoking Java classes from JCL batch jobs using Rocket Enterprise Server's language interoperability features. You will learn how to use the **JVMLDM** (JVM Load Module) launcher and the **COBOL-to-Java CALL** mechanism to execute Java programs that can access Enterprise Server datasets and DD allocations.
 
