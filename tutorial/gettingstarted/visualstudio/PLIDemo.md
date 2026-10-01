@@ -22,7 +22,7 @@ This demonstration requires:
 
 ## Requirements
 
-> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio](..\README.md)" tutorial, and HACloud service is running, you can skip these steps.
+> **Note:** If you have already imported the BANKDEMO enterprise server as part of the "[Getting started with Rocket Enterprise Developer for Visual Studio](readme.md)" tutorial, and HACloud service is running, you can skip these steps.
 
 <!--### Disable the Default Enterprise Server Security
 
