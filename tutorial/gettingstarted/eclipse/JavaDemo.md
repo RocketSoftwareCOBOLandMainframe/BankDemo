@@ -125,7 +125,7 @@ Enterprise Server starts the JVM itself, so it needs to know where the JDK is an
     **Windows:**
     ```
     JAVA_HOME=$TXDIR\AdoptOpenJDK
-    CLASSPATH=$TXDIR\bin64\esjos.jar;$BANKROOT\tutorial\workspace\BankdemoJava\bin
+    CLASSPATH=$BANKROOT\tutorial\workspace\BankdemoJava\bin
     ```
 
     **Linux:**
