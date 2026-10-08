@@ -63,10 +63,10 @@ class EscwaSession:
             return res
         except requests.exceptions.RequestException as exc:
             desc = error_description if len(error_description) > 0 else "POST {} failed".format(uri)
-            raise ESCWAException(desc + str(exc)) from exc
+            raise ESCWAException('{} {}'.format(desc, exc)) from exc
         except HTTPException as exc:
             desc = error_description if len(error_description) > 0 else "POST {} failed".format(uri)
-            raise ESCWAException(desc + str(exc)) from exc
+            raise ESCWAException('{} {}'.format(desc, exc)) from exc
 
     def delete(self, path, error_description=''):
         uri = '{}/{}'.format(self.get_uri_start(), path)

@@ -39,7 +39,7 @@ def add_region(session, region_name, port, template_file, is64bit):
     req_body['mfTN3270ListenerPort'] = port
     if is64bit == True:
         req_body['mfCAS64Bit'] = 1
-    res = session.post(uri, req_body, 'Unable to complete Add Region API request. Region may already be defined')
+    res = session.post(uri, req_body, 'Unable to complete Add Region API request')
     return res
 
 def start_region(session, region_name, ip_address):
