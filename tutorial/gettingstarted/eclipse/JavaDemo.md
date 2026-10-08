@@ -131,7 +131,7 @@ Enterprise Server starts the JVM itself, so it needs to know where the JDK is an
     **Linux:**
     ```
     JAVA_HOME=/path/to/jdk
-    CLASSPATH=$COBDIR/lib/esjos.jar:$BANKROOT/tutorial/workspace/BankdemoJava/bin
+    CLASSPATH=$BANKROOT/tutorial/workspace/BankdemoJava/bin
     ```
 
     `BANKROOT` is defined by the BANKDEMO template and points at the root of the sample, so these values work unchanged if you used the `tutorial/workspace` directory as your Eclipse workspace, as the Getting Started tutorial suggests. Otherwise, replace the second `CLASSPATH` entry with the full path to your project's `bin` folder, which you can find under **Properties \> Resource**.
