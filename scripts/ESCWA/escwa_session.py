@@ -17,6 +17,14 @@ class EscwaSession:
     def get_uri_start(self):
         return '{}://{}:{}'.format(self._protocol, self._hostname, self._port)
 
+    def ping(self):
+        """Checks that ESCWA is reachable without assuming a particular API path."""
+        uri = self.get_uri_start()
+        try:
+            self._session.get(uri, timeout=5)
+        except requests.exceptions.RequestException as exc:
+            raise ESCWAException('Unable to connect to ESCWA at {}'.format(uri)) from exc
+
     #takes a uri path such as native/v1/regions/localhost/86/abc/commsserver
     def get(self, path, error_description='', params=None):
         uri = '{}/{}'.format(self.get_uri_start(), path)

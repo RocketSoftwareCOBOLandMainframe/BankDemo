@@ -115,15 +115,21 @@ def remove_region_definition(session, region_name, reason):
 
 def rollback_region(rollback):
     """ Undoes a partial provision so that the next run starts from a clean state. """
-    write_log('Rolling back partially provisioned region')
-
     session = rollback.get('session')
     region_name = rollback.get('region_name')
-    if rollback.get('region_added') and session is not None and region_name is not None:
+    region_dir = rollback.get('region_dir')
+
+    has_region_definition = rollback.get('region_added') and session is not None and region_name is not None
+    has_region_directory = region_dir is not None and os.path.isdir(region_dir)
+    if not has_region_definition and not has_region_directory:
+        return
+
+    write_log('Rolling back partially provisioned region')
+
+    if has_region_definition:
         remove_region_definition(session, region_name, 'rollback of this run')
 
-    region_dir = rollback.get('region_dir')
-    if region_dir is not None and os.path.isdir(region_dir):
+    if has_region_directory:
         try:
             shutil.rmtree(region_dir)
             write_log('Region directory {} removed'.format(region_dir))
@@ -311,6 +317,14 @@ def provision_region(main_configfile, force, rollback):
     session = EscwaSession("http", ip_address, 10086)
     rollback['session'] = session
     rollback['region_name'] = region_name
+
+    try:
+        write_log('Checking that ESCWA is reachable')
+        session.ping()
+    except ESCWAException as exc:
+        raise ProvisionError(
+            'Unable to contact ESCWA at {}. Make sure ESCWA and EDS are running before '
+            'provisioning this region. Last error: {}'.format(session.get_uri_start(), exc)) from exc
 
     security_enabled = False
     try:
