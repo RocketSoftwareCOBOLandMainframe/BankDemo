@@ -24,28 +24,30 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
 - A 64-bit Enterprise Server region and 64-bit environment (JVMLDM requires a 64-bit process)
 - The Java Development Kit (JDK) bundled with Rocket Enterprise Developer on Windows, located at `Enterprise Developer\AdoptOpenJDK` for the default installation. On Linux, use the JDK installed on your system. The supported major version is 21-25. If you prefer to use your own JDK, align to the same major version
-- An Enterprise Server instance configured for JCL batch processing (e.g. the [BANKVSAM](../../../../demos/onprem/vsam/README.md) demonstration)
+- An Enterprise Server instance configured for JCL batch processing.
 - Ensure that the Enterprise Directory Service (EDS) is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running
 
-Use the **BANKVSAM** region created by the VSAM tutorial for all steps. If it
-has not been provisioned yet, run the following from the project's `scripts`
-directory:
+### Choose an Enterprise Server Region
+
+Use either **BANKDEMO**, imported from the
+[Eclipse Getting Started tutorial](../../../gettingstarted/eclipse/README.md),
+or **BANKVSAM**, created by the
+[VSAM provisioning script](../../../../demos/onprem/vsam/README.md). Both
+regions define `BANKROOT` as the BankDemo project root, so the sample JCL works
+unchanged in either one. The examples below use BANKVSAM.
+
+If you do not already have BANKVSAM, create it from the project's `scripts`
+directory while EDS and ESCWA are running:
 
 ```
 cd scripts
 python MF_Provision_Region.py vsam
 ```
 
-The provisioning script creates the 64-bit, JES-enabled region and catalogs
-the BankDemo datasets used by these tutorials.
-
-> **Note:** These steps assume use of the **BANKVSAM** region and compilation from
-> the command line. If you would rather work in Eclipse, and continue from the
-> Getting Started tutorial using the BANKDEMO template region, follow
-> [Calling Java from COBOL by Using Enterprise Developer for Eclipse](../../../gettingstarted/eclipse/JavaDemo.md)
-> first. The Java samples below are the same, and run unchanged under either
-> region.
+The script creates a 64-bit, JES-enabled region and catalogs the datasets used
+by these tutorials. Stop other demo regions first because their
+TN3270 and JES ports overlap.
 
 > **Installation directory variables:** On Windows, `TXDIR` refers to your Rocket Enterprise
 > Developer/Server installation directory (for example, `C:\Program Files (x86)\Rocket
@@ -96,21 +98,27 @@ Java function, and redirection of `System.out`, `System.err`, and `System.in`.
 
 **Setup:** Ensure the region's environment variables include:
 
-The BANKVSAM provisioning process defines `ESP` as the region's system
-directory, so users following this demonstration do not need to set it
-manually. The values below use `$ESP` to locate the BANKVSAM loadlib.
+Both regions define `BANKROOT` as the root of the BankDemo project. The
+examples below use BANKVSAM's loadlib at
+`BANKROOT\BANKVSAM\system\loadlib` (Windows) or
+`BANKROOT/BANKVSAM/system/loadlib` (Linux).
 
 Enterprise Server expands `$VAR` references in the region's `[ES-Environment]`
 configuration on both Windows and Linux. Do not use Windows command-shell
-syntax such as `%ESP%` or `%PATH%` here.
+syntax such as `%BANKROOT%` or `%PATH%` here.
 
 **Windows:**
    - `JAVA_HOME=$TXDIR\AdoptOpenJDK`
-   - `CLASSPATH=$TXDIR\bin64\esjos.jar;$ESP\loadlib`
+   - `CLASSPATH=$BANKROOT\BANKVSAM\system\loadlib`
 
 **Linux:**
    - `JAVA_HOME=/path/to/jdk`
-   - `CLASSPATH=$COBDIR/lib/esjos.jar:$ESP/loadlib`
+   - `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib`
+
+These classpath values are for the BANKVSAM region. For BANKDEMO, use the Eclipse Java
+project's output folder instead (by default,
+`$BANKROOT\tutorial\workspace\BankdemoJava\bin` on Windows); see
+[Configuring the Region for Java](../../../gettingstarted/eclipse/JavaDemo.md#configuring-the-region-for-java).
 
 Do not add a Java-specific `PATH` value to the region. Enterprise Server can
 locate the required runtime components without it, while an incorrectly
@@ -267,7 +275,8 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
    ```
 
 2. **Deploy** `HelloBatch.class` and the compiled COBOL program
-   (`HELLOJAV.dll` on Windows, `HELLOJAV.so` on Linux) to your regions's JES Program PATH (e.g. BANKVSAM: `$ESP/loadlib`).
+   (`HELLOJAV.dll` on Windows, `HELLOJAV.so` on Linux) to your region's JES
+   Program PATH.
 
 3. **Submit the JCL**, such as through ESCWA (JES > Control), `cassub`, or the Python submission scripts provided in the `scripts` directory of this project.
 
@@ -291,8 +300,7 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 In this step, you bypass the COBOL bootstrap and invoke a Java class directly from JCL using the **JVMLDM** load module. This is useful when Java is the primary language for your batch step. This step also covers argument passing via multiple sources (PARM, JZOS_MAIN_ARGS, MAINARGS DD) and inline STDENV configuration.
 
 > **Setup:** Ensure the region's environment includes `JAVA_HOME` and the full
-> `CLASSPATH` shown below. The classpath must contain both `esjos.jar` and the
-> region loadlib; JVMLDM does not add `esjos.jar` when `CLASSPATH` is explicitly configured.
+> `CLASSPATH` shown below, pointing to the region loadlib.
 >
 > Use the JCL directory matching your platform. See the
 > [interoperability overview](../../README.md#platform-specific-jcl) for the
@@ -301,9 +309,9 @@ In this step, you bypass the COBOL bootstrap and invoke a Java class directly fr
 > | | Variable | Value |
 > |---|----------|-------|
 > | **Windows** | `JAVA_HOME` | `$TXDIR\AdoptOpenJDK` |
-> | | `CLASSPATH` | `$TXDIR\bin64\esjos.jar;$ESP\loadlib` |
+> | | `CLASSPATH` | `$BANKROOT\BANKVSAM\system\loadlib` |
 > | **Linux** | `JAVA_HOME` | `/path/to/jdk` |
-> | | `CLASSPATH` | `$COBDIR/lib/esjos.jar:$ESP/loadlib` |
+> | | `CLASSPATH` | `$BANKROOT/BANKVSAM/system/loadlib` |
 >
 > Most Java JCL uses `STDENV DD DUMMY` so that JVMLDM inherits these from the region. `JVMDEMO.jcl` includes inline STDENV to demonstrate `JZOS_MAIN_ARGS`.
 
@@ -418,7 +426,7 @@ Windows:
 ```jcl
 //STDENV    DD *
 set JAVA_HOME=%TXDIR%\AdoptOpenJDK
-set CLASSPATH=%TXDIR%\bin64\esjos.jar;%ESP%\loadlib
+set CLASSPATH=%BANKROOT%\BANKVSAM\system\loadlib
 set JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 /*
 ```
@@ -427,7 +435,7 @@ Linux:
 ```jcl
 //STDENV    DD *
 export JAVA_HOME=/path/to/jdk
-export CLASSPATH=$COBDIR/lib/esjos.jar:$ESP/loadlib
+export CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib
 export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 /*
 ```
@@ -450,7 +458,7 @@ export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
    javac BatchReport.java
    ```
 
-2. **Deploy** `BatchReport.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
+2. **Deploy** `BatchReport.class` to your CLASSPATH directory.
 
 3. **Ensure JVMLDM** `JVMLDM` (64-bit) is provided with Enterprise Server on both Windows and Linux.
 
@@ -467,7 +475,7 @@ export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
      Report complete. RC=0                                                                                                                 
    ```
 
-> **Note:** The arguments are assembled in the order **ARGS → JZOS_MAIN_ARGS → MAINARGS**. JVMLDM manages stream redirection automatically; `esjos.jar` must already be present in `CLASSPATH`.
+> **Note:** The arguments are assembled in the order **ARGS → JZOS_MAIN_ARGS → MAINARGS**. JVMLDM manages stream redirection automatically.
 
 > **Tip: Using `-jar` with JVMLDM**
 >
@@ -944,7 +952,7 @@ REPORT_TITLE=Daily Customer Account Summary - Filtered
    javac -cp "$COBDIR/lib/esjos.jar" BankCustAcctReport.java
    ```
 
-2. **Deploy** `BankCustAcctReport.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
+2. **Deploy** `BankCustAcctReport.class` to your CLASSPATH directory.
 
 3. **Ensure** datasets `MFI01V.MFIDEMO.BNKCUST` and `MFI01V.MFIDEMO.BNKACC` are cataloged (they are set up by the [VSAM demonstration](../../../../demos/onprem/vsam/README.md)).
 
@@ -1462,7 +1470,7 @@ vsam.update(record, 0, record.length);
    javac -cp "$COBDIR/lib/esjos.jar" VsamAccountOps.java
    ```
 
-2. **Deploy** `VsamAccountOps.class` to your CLASSPATH directory (e.g. `$ESP/loadlib`).
+2. **Deploy** `VsamAccountOps.class` to your CLASSPATH directory.
 
 3. **Ensure** dataset `MFI01V.MFIDEMO.BNKCUST` is cataloged (set up by the [VSAM demonstration](../../../../demos/onprem/vsam/README.md)).
 
@@ -1567,6 +1575,20 @@ The source files for this demonstration are located in the following directories
 | JVMLDM auto-redirects streams | Calling `ZUtil.redirectStandardStreams()` under JVMLDM | JVMLDM handles stream redirection automatically. Do not call it yourself when using JVMLDM. |
 | Dataset creation via ZFile | Opening a non-existent dataset in write/append mode | Opens in `"wb"` or `"ab"` mode will create the dataset. Use `lrecl=N` to set record length (where N is an integer) and `recfm=[*+]\|[fvu][abms]` (FB, VS, *, +, etc),  to set record format (e.g. `"wb,type=record,lrecl=132,recfm=FB"`). VSAM datasets cannot be implicitly created — define the cluster first (e.g. via IDCAMS DEFINE CLUSTER). |
 | `ZFile.exists()` vs `ZFile.ddExists()` | Checking dataset/DD existence | `exists()` checks both DD and DSN. `ddExists()` only checks if a DD is allocated in the current step. `dsExists()` only checks the catalog. |
+
+### Region Provisioning
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| `%BANKROOT%` appears unexpanded, or files are not found | The region does not define `BANKROOT` | For BANKDEMO, add `BANKROOT` with the BankDemo project root to the region's `[ES-Environment]` and restart it. For BANKVSAM, re-provision with `python MF_Provision_Region.py vsam --force` if needed; this deletes the existing region data |
+| `ERROR: Region directory already exists` | A `BANKVSAM` directory is already present | Re-run with `--force` to rebuild the region from scratch, or delete the directory yourself |
+| `Region BANKVSAM is already defined in ESCWA` | The region definition still exists | Re-run with `--force`, or delete the region in ESCWA under **Directory Servers > Default** |
+| `Unable to remove ... used by another process` | The region is still running and holds its catalog files open | Stop the region, then re-run. `--force` stops it for you |
+| `Unable to logon to ESCWA` | ESCWA is not running, or the default password has not been changed | Start ESCWA and log on at `http://localhost:10086` once to set the password |
+| `The ... listener did not start` | The region started but its listener did not come up | Check whether another region is already using port 9023 or 8001 |
+
+Provisioning rolls back automatically when a step fails, so a failed run leaves
+nothing behind - fix the cause and run the same command again.
 
 ### Exception and System.exit Behavior
 

@@ -446,7 +446,7 @@ def provision_region(main_configfile, force, rollback):
     if database_type == 'VSAM_Postgres_PAC':
         catalog_file="sql://BankPAC/VSAM/catalog.dat?folder=/"
     step('Region {} being updated with requested settings'.format(region_name),
-         update_region, session, region_name, update_config, env_config, 'Test Region', sys_base, catalog_file)
+         update_region, session, region_name, update_config, env_config, 'Test Region', sys_base, catalog_file, parentdir)
 
     step('Communications Server set to localhost', set_commsserver_local, session, region_name, ip_address)
 

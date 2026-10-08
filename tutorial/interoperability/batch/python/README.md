@@ -49,19 +49,27 @@ PYLDM tries `libpython3.so` first, then `libpython3.so.1.0`. The library must be
 
 To confirm which interpreter PYLDM actually loaded, run [Step 1](#step1) — `batch_report.py` prints the running Python version.
 
-### The BANKVSAM Region
+### Choose an Enterprise Server Region
 
-These demonstrations run in the **BANKVSAM** enterprise server region, which is created by the [VSAM demonstration](../../../../demos/onprem/vsam/README.md). If you have not already set it up, provision it from the `scripts` directory of this project:
+Use either **BANKDEMO**, imported from the
+[Eclipse Getting Started tutorial](../../../gettingstarted/eclipse/README.md),
+or **BANKVSAM**, created by the
+[VSAM provisioning script](../../../../demos/onprem/vsam/README.md). Both
+regions define `BANKROOT` as the BankDemo project root, so the sample JCL works
+unchanged in either one. The examples below use BANKVSAM.
+
+If you do not already have BANKVSAM, create it from the project's `scripts`
+directory:
 
 ```
 cd scripts
 python MF_Provision_Region.py vsam
 ```
 
-This creates a 64-bit, JES-enabled region in a `BANKVSAM` subdirectory of the project and catalogs every dataset these demonstrations use:
-
-Use this **BANKVSAM** region for every tutorial step; do not use the
-BankDemo template region.
+The script needs EDS and ESCWA running and an ESCWA login stored in the
+product vault. It creates a 64-bit, JES-enabled region and catalogs the
+datasets used by these demonstrations. Stop other demonstration regions first
+because their TN3270 and JES ports overlap.
 
 | Dataset | Used by | Defined in |
 |---------|---------|------------|
@@ -70,9 +78,9 @@ BankDemo template region.
 | `MFI01V.MFIDEMO.PYTXN` | Step 2 (sequential transactions, PS) | `scripts/datasets_ps/PYTXN.json` |
 | `MFI01V.MFIDEMO.CUST.FILTER` | Step 3 (filter output, PS) | `scripts/datasets_ps/CUSTFILT.json` |
 
-Because all four datasets are cataloged during provisioning, the Python demonstrations are self-contained — you do not need to run the Java demonstrations first.
-
-> **Note:** Provision BANKVSAM *before* starting any other region that uses this project's `system` directory. Provisioning copies that directory into the new region, so runtime files left behind by another region can cause resource definition errors.
+Because all four datasets are cataloged during provisioning, the Python
+demonstrations are self-contained - you do not need to run the Java
+demonstrations first. BANKDEMO's template also catalogs these dataset names.
 
 ### Region Configuration
 
@@ -80,10 +88,9 @@ No region configuration is required. The `zoautil_py` package,
 supplied with Enterprise Server, is located automatically. Each JCL step
 sets only the lookup variable required by its invocation mode.
 
-> **About `%ESP%`:** BANKVSAM provisioning defines `ESP` as the region's
-> system directory (for example `C:\BankDemo\BANKVSAM\system`), so users do
-> not need to set it manually. Because the region directory is created inside
-> the BankDemo project, `%ESP%\..\..` resolves back to the project root.
+`BANKROOT` is already defined in both regions as the root of the BankDemo
+project. The JCL uses it to locate `sources\python`, independent of the
+region's own directory.
 
 ### Platform-specific JCL
 
@@ -157,13 +164,13 @@ The samples use it only to set variables, which PYLDM then reads from the enviro
 Use `ESPY_WORKING_DIR` when invoking a script file:
 
 ```
-set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
 ```
 
 Use `PYTHONPATH` instead when invoking a module with `-m`:
 
 ```
-set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
 ```
 
 | Variable | Purpose |
@@ -237,7 +244,7 @@ def main(args=None):
 //             PYSCRIPT='batch_report.py',
 //             ARGS='hello world'
 //STDENV   DD  *
-set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
 /*
 //MAINARGS DD  *
 arg3 arg4
@@ -281,7 +288,7 @@ Arguments received: 6
 
 PYLDM environment:
   ESPY_MAIN_ARGS = envArg1 envArg2
-  ESPY_WORKING_DIR = C:\dev\BankDemo\BANKVSAM\system\..\..\sources\python
+  ESPY_WORKING_DIR = C:\dev\BankDemo\sources\python
 
 Report complete. RC=0
 ============================================================
@@ -710,11 +717,26 @@ The version string and system time reflect your installation, so those two value
 |---------|-------|----------|
 | RC 0100, traceback in STDERR | Python exception | Check STDERR DD for the traceback |
 | `ModuleNotFoundError` | Script not on PYTHONPATH | Add directory to PYTHONPATH in STDENV |
+| `ModuleNotFoundError`, or working directory looks wrong | `BANKROOT` is not defined | For BANKDEMO, add `BANKROOT` with the BankDemo project root to the region's `[ES-Environment]` and restart it. For BANKVSAM, re-provision with `python MF_Provision_Region.py vsam --force` if needed; this deletes the existing region data. See [Region Provisioning](#region-provisioning) below |
 | `OSError: access violation reading 0x...` | Used `ctypes.CDLL` instead of `ctypes.PyDLL` | Change to `ctypes.PyDLL("cblcpyiapi")` |
 | `NotImplementedError` from RecordIO | Used `if outfile:` (triggers `__len__`) | Use `if outfile is not None:` |
 | `AttributeError: no attribute 'writerecord'` | Wrong write method | Use `f.write(data)` not `f.writerecord(data)` |
 | Error 173 from `_mFpyCobcall` | COBOL program not found | Ensure program is compiled and in the loadlib |
 | No output in STDOUT DD | Error before or during STDENV setup | Check the SYSPRINT and SYSOUT DDs. If empty, check console log for RTS145 error |
+
+### <a name="region-provisioning"></a>Region Provisioning
+
+| Symptom | Cause | Solution |
+|---------|-------|----------|
+| `%BANKROOT%` appears unexpanded, or Python files are not found | The region does not define `BANKROOT` | Add `BANKROOT` with the BankDemo project root to the region's `[ES-Environment]`, then restart the region |
+| `ERROR: Region directory already exists` | A `BANKVSAM` directory is already present | Re-run with `--force` to rebuild the region from scratch, or delete the directory yourself |
+| `Region BANKVSAM is already defined in ESCWA` | The region definition still exists | Re-run with `--force`, or delete the region in ESCWA under **Directory Servers > Default** |
+| `Unable to remove ... used by another process` | The region is still running and holds its catalog files open | Stop the region, then re-run. `--force` stops it for you |
+| `Unable to logon to ESCWA` | ESCWA is not running, or the default password has not been changed | Start ESCWA and log on at `http://localhost:10086` once to set the password |
+| `The ... listener did not start` | The region started but its listener did not come up | Check whether another region is already using port 9023 or 8001 |
+
+Provisioning rolls back automatically when a step fails, so a failed run leaves
+nothing behind - fix the cause and run the same command again.
 
 ### Diagnostic Tips
 

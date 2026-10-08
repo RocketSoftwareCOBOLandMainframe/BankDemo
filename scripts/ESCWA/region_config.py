@@ -26,7 +26,7 @@ from utilities.input import read_json, read_txt
 from utilities.session import get_session, save_cookies
 from utilities.exceptions import ESCWAException, InputException, HTTPException
 
-def update_region(session, region_name, template_file, env_file, region_description, region_base, catalog_file):
+def update_region(session, region_name, template_file, env_file, region_description, region_base, catalog_file, bank_root):
     """ Updates the settings of a previously created region on the  server region. """
     uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', get_eds_port(), region_name)
     esp_alias = '$ESP'
@@ -59,8 +59,11 @@ def update_region(session, region_name, template_file, env_file, region_descript
         raise ESCWAException('Unable to read env file: {}.'.format(env_file)) from exc
 
     # Flatten and format environment json into flat text
+    # ESP and BANKROOT are stored as absolute paths, as the BANKDEMO template does,
+    # so that neither depends on where the region sits relative to the project.
     env_key = next(iter(env_json))
     env_json[env_key]['ESP'] = region_base
+    env_json[env_key]['BANKROOT'] = bank_root
     env_list = [key + '=' + val for key, val in env_json[env_key].items()]
 
     req_body['CN'] = region_name
