@@ -75,7 +75,11 @@ class EscwaSession:
             raise ESCWAException(desc) from exc
             
     def logon(self, mfsecretsadmin, location):
-        """ Logs on to ESCWA. """
+        """ Logs on to ESCWA.
+
+            Uses the credentials held in the product vault.
+            Uses backup SYSAD/SYSAD credentials if the vault credentials fail.
+        """
         uri = 'logon'
         try:
             creds_body = subprocess.check_output([mfsecretsadmin, 'read', location]).decode()
@@ -83,5 +87,19 @@ class EscwaSession:
         except (subprocess.SubprocessError, OSError, json.JSONDecodeError, InputException) as exc:
             raise ESCWAException('Unable to get logon credentials.') from exc
 
-        res = self.post(uri, req_body, 'Unable to logon')
-        return res
+        try:
+            return self.post(uri, req_body, 'Unable to logon')
+        except ESCWAException as exc:
+            write_log('Logon with the vault credentials failed: {}'.format(exc))
+            write_log('Retrying with the default demo credentials SYSAD/SYSAD')
+            fallback_body = {'mfUser': 'SYSAD', 'mfPassword': 'SYSAD'}
+            try:
+                res = self.post(uri, fallback_body, 'Unable to logon')
+            except ESCWAException as fallback_exc:
+                raise ESCWAException(
+                    'Unable to logon to ESCWA with the vault credentials or with SYSAD/SYSAD. '
+                    'If this is a new install, log on to http://{}:{} and change the default '
+                    'password first. Last error: {}'.format(
+                        self._hostname, self._port, fallback_exc)) from fallback_exc
+            write_log('Logged on to ESCWA with the default demo credentials')
+            return res
