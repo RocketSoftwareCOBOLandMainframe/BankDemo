@@ -19,7 +19,45 @@ Description:  Functions to setup JES and RFA listeners on the server region.
 
 from utilities.input import read_json, read_txt
 from utilities.misc import get_elem_with_prop
+from utilities.output import write_log
+from utilities.exceptions import ESCWAException
 import os
+import time
+
+def get_listeners(session, region_name, ip_address):
+    """ Returns the list of listeners defined on the region's comms server.
+    """
+
+    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    res = session.get(uri, 'Unable to get Comm Server information.')
+    comm_server = res.json()
+    uri += '/{}/listener'.format(comm_server[0]['mfServerUID'])
+    res = session.get(uri, 'Unable to get Comm Server Listener information.')
+    return res.json()
+
+def confirm_listener_started(session, region_name, ip_address, listener_name, secs_allowed=120):
+    """ Waits for a named listener to report Started.
+
+        A region reports Started as soon as its control process is up, but the
+        listeners come up asynchronously a little later. Requests that depend on
+        a listener fail with 503 until it is ready, so callers must wait for it.
+    """
+    deadline = time.time() + secs_allowed
+    status = None
+    while True:
+        try:
+            listener = get_elem_with_prop(get_listeners(session, region_name, ip_address), 'CN', listener_name)
+        except ESCWAException:
+            listener = None
+        if listener is not None:
+            status = listener.get('mfListenerStatus')
+            if status == 'Started':
+                return True
+        if time.time() >= deadline:
+            write_log('Listener "{}" did not start within {} seconds (last status: {})'.format(
+                listener_name, secs_allowed, status))
+            return False
+        time.sleep(5)
 
 def set_jes_listener(session, region_name, ip_address, port):
     """ Sets a JES listener on the server region. """
