@@ -158,6 +158,7 @@ def provision_region(main_configfile, force, rollback):
     #set current working directory
     cwd = os.getcwd()
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_dir = str(Path(script_dir).parent)
     
     #determine where the product has been installed
     if sys.platform.startswith('win32'):
@@ -243,7 +244,7 @@ def provision_region(main_configfile, force, rollback):
         dataversion = 'vsam'
     else:
         database_type= main_config["database"]
-        sql_folder= os.path.join(cwd, 'config', 'database', database_type)
+        sql_folder= os.path.join(repo_dir, 'scripts', 'config', 'database', database_type)
         if database_type.split('_')[0] == 'VSAM':
             dataversion = 'vsam'
         else:
@@ -423,8 +424,11 @@ def provision_region(main_configfile, force, rollback):
         rdef = os.path.join(sys_base, 'rdef')
 
         def create_dfhdrdat():
-            completed = subprocess.run([caspcrd, '/c', '/dp=' + rdef])
+            completed = subprocess.run([caspcrd, '/c', '/dp=' + rdef], capture_output=True, text=True)
             if completed.returncode != 0:
+                detail = completed.stderr.strip() or completed.stdout.strip()
+                if detail:
+                    raise RuntimeError('{} returned rc={}: {}'.format(caspcrd, completed.returncode, detail))
                 raise RuntimeError('{} returned rc={}'.format(caspcrd, completed.returncode))
 
         step('Creating resource definition file in {}'.format(rdef), create_dfhdrdat)
@@ -574,7 +578,7 @@ def provision_region(main_configfile, force, rollback):
 
     ## The following code deploys the application
     step('Deploying the application', deploy_application_option,
-         session, database_type, os_type, main_config, cwd, mfdbfh_config, esuid)
+         session, database_type, os_type, main_config, script_dir, mfdbfh_config, esuid)
 
     if len(pac_name) > 0 and pac_config is None:
         write_log ('No PAC config, skipping additional catalog datasets')
@@ -584,7 +588,7 @@ def provision_region(main_configfile, force, rollback):
         catalog_dir = os.path.join(sys_base, 'catalog')
         for data_dir in ('data_dir_1', 'data_dir_3', 'data_dir_4'):
             step('Cataloguing datasets from {}'.format(data_dir), catalog_datasets,
-                 session, cwd, region_name, ip_address, configuration_files, data_dir, None, catalog_dir)
+                 session, script_dir, region_name, ip_address, configuration_files, data_dir, None, catalog_dir)
 
     if  database_type == 'SQL_Postgres':
         loadlibDir = 'SQL_Postgres'
@@ -617,7 +621,7 @@ def provision_region(main_configfile, force, rollback):
             write_log('ANT_HOME not set. Precompiled executables therefore being deployed')
             step('Deploying precompiled executables', deploy_application, parentdir, sys_base, os_type, is64bit, loadlibDir)
         else:
-            build_file = os.path.join(cwd, 'build', 'build.xml')
+            build_file = os.path.join(repo_dir, 'build', 'build.xml')
             source_dir = os.path.join(parentdir, 'sources')
             load_dir = os.path.join(sys_base, 'loadlib')
             full_build = True
