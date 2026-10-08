@@ -151,6 +151,7 @@ def create_region(main_configfile, force=False):
 def provision_region(main_configfile, force, rollback):
     #set current working directory
     cwd = os.getcwd()
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     
     #determine where the product has been installed
     if sys.platform.startswith('win32'):
@@ -179,8 +180,8 @@ def provision_region(main_configfile, force, rollback):
     write_log('COBDIR={}'.format(cobdir))
     write_log('Provision Process starting')
    
-    config_dir = os.path.join(cwd, 'config')
-    options_dir = os.path.join(cwd, 'options')
+    config_dir = os.path.join(script_dir, 'config')
+    options_dir = os.path.join(script_dir, 'options')
 
     #read demo configuration file
     write_log('Reading deployment config file {}'.format(main_configfile))
@@ -655,15 +656,16 @@ def provision_region(main_configfile, force, rollback):
 if __name__ == '__main__':
 
     cwd = os.getcwd()
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     args = sys.argv[1:]
     force = '--force' in args
     args = [arg for arg in args if arg != '--force']
 
     if len(args) < 1:
-        config_dir = os.path.join(cwd, 'config')
+        config_dir = os.path.join(script_dir, 'config')
         config_fullpath = os.path.join(config_dir, "demo.json")
     else:
-        options_dir = os.path.join(cwd, 'options')
+        options_dir = os.path.join(script_dir, 'options')
         config_file = args[0] + '.json'
         config_fullpath = os.path.join(options_dir, config_file)
         if os.path.isfile(config_fullpath) == False:
