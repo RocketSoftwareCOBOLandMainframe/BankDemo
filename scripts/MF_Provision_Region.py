@@ -31,9 +31,9 @@ from utilities.filesystem import create_new_system, deploy_application, deploy_s
 from utilities.resource import add_postgresxa, catalog_datasets, write_secret
 from utilities.deploy import deploy_application_option, deploy_dfhdrdat_postgres_pac, create_db_vault_secrets, catalog_pac_datasets
 from database.odbc import check_odbc_driver_installed
-from ESCWA.region_control import add_region, start_region, del_region, confirm_region_status, stop_region
+from ESCWA.region_control import add_region, start_region, del_region, confirm_region_status, stop_region, get_region_status
 from ESCWA.region_config import update_region, update_region_attribute, update_alias, add_initiator, check_security
-from ESCWA.comm_control import set_jes_listener, set_commsserver_local, add_listener
+from ESCWA.comm_control import set_jes_listener, set_commsserver_local, add_listener, confirm_listener_started
 from utilities.exceptions import ESCWAException, InputException
 from ESCWA.resourcedef import  add_sit, add_Startup_list, add_groups, add_fct, add_ppt, add_pct, update_sit_in_use
 from ESCWA.mq_config import add_mq_listener
@@ -74,7 +74,81 @@ def createWindowsDSN(database_connection, is_64bit, dsn_name, database_name):
 def find_owner(filename):
     return getpwuid(stat(filename,follow_symlinks=False).st_uid).pw_name
 
-def create_region(main_configfile):
+
+class ProvisionError(Exception):
+    """ Raised when a provisioning step fails. """
+
+
+def step(description, func, *args, **kwargs):
+    """ Logs and runs a single provisioning step, turning any failure into a
+        ProvisionError so that the caller can roll back and report consistently.
+    """
+    write_log(description)
+    try:
+        return func(*args, **kwargs)
+    except Exception as exc:
+        raise ProvisionError('{} - FAILED: {}'.format(description, exc)) from exc
+
+
+def region_exists(session, region_name):
+    """ Returns True if ESCWA already holds a definition for the named region. """
+    try:
+        get_region_status(session, region_name)
+        return True
+    except ESCWAException:
+        return False
+
+
+def remove_region_definition(session, region_name, reason):
+    """ Best effort removal of an ESCWA region definition, stopping it first. """
+    try:
+        stop_region(session, region_name)
+        confirm_region_status(session, region_name, 1, 'Stopped')
+    except ESCWAException as exc:
+        write_log('Region {} could not be stopped (it may already be stopped): {}'.format(region_name, exc))
+    try:
+        del_region(session, region_name)
+        write_log('Region definition {} deleted ({})'.format(region_name, reason))
+    except ESCWAException as exc:
+        write_log('Unable to delete region definition {}: {}'.format(region_name, exc))
+
+
+def rollback_region(rollback):
+    """ Undoes a partial provision so that the next run starts from a clean state. """
+    write_log('Rolling back partially provisioned region')
+
+    session = rollback.get('session')
+    region_name = rollback.get('region_name')
+    if rollback.get('region_added') and session is not None and region_name is not None:
+        remove_region_definition(session, region_name, 'rollback of this run')
+
+    region_dir = rollback.get('region_dir')
+    if region_dir is not None and os.path.isdir(region_dir):
+        try:
+            shutil.rmtree(region_dir)
+            write_log('Region directory {} removed'.format(region_dir))
+        except OSError as exc:
+            write_log('Unable to remove region directory {}: {}'.format(region_dir, exc))
+            write_log('Delete it manually before provisioning again.')
+
+
+def create_region(main_configfile, force=False):
+    """ Provisions a region, rolling back any partial work if a step fails. """
+    rollback = {}
+    try:
+        provision_region(main_configfile, force, rollback)
+    except ProvisionError as exc:
+        write_log('ERROR: {}'.format(exc))
+        rollback_region(rollback)
+        write_log('Provisioning failed. No changes have been left behind; correct the error above and run the script again.')
+        sys.exit(1)
+    except Exception as exc:
+        write_log('ERROR: Unexpected failure during provisioning: {}'.format(exc))
+        rollback_region(rollback)
+        raise
+
+
+def provision_region(main_configfile, force, rollback):
     #set current working directory
     cwd = os.getcwd()
     
@@ -221,53 +295,7 @@ def create_region(main_configfile):
     region_port = main_config['regionPort']
     jes_port = main_config['jesPort']
 
-    #start the provision of the region
-    parentdir = str(Path(cwd).parents[0])
-    template_base = os.path.join(parentdir, 'system')
-    sys_base = os.path.join(parentdir, region_name, 'system')
-
-    create_new_system(template_base,sys_base)
-    
-    mfdbfh_config=''
-    # Update the mfdbfh.cfg file with the database user id
-    if 'mfdbfh_config' in main_config:
-        mfdbfh_config = os.path.join(sys_base, 'config', main_config['mfdbfh_config'])
-        if 'database_connection' in main_config:
-            database_connection = main_config['database_connection']
-
-            # Set the user id mfdbfh.cfg
-            f_in = open(mfdbfh_config, "rt")
-            data = f_in.read()
-            f_in.close()
-            new_data = data.replace('$$user$$', database_connection['user'])
-            f_out = open(mfdbfh_config, "wt")
-            f_out.write(new_data)
-            f_out.close()
-
-    if len(pac_name) > 0 and 'PAC' in main_config:
-        pac_config = main_config['PAC']
-    else:
-        pac_config = None
-
-    if len(pac_name) > 0 and pac_config is None:
-        write_log ('No PAC config, skipping resource definition file creation')
-    else:
-        #create an empty resource definition file
-        caspcrd = os.path.join(install_dir, 'caspcrd')
-        rdef = os.path.join(sys_base, 'rdef')
-        create_dfhdrdat =  '\"' +caspcrd + '\" /c /dp=' + rdef
-        write_log ('Create resource definition file {}'.format(create_dfhdrdat))
-        caspcrd_process = os.system(create_dfhdrdat)
-        if caspcrd_process != 0:
-            write_log('Unable to create resource definition file, rc={}'.format(caspcrd_process))
-            sys.exit(1)
-        #change ownership to match ES user
-        if os_type == 'Linux':
-            dfhdrdat = os.path.join(rdef, 'dfhdrdat')
-            shutil.chown(dfhdrdat, esuid, esuid)
-            write_log ('Set owner of {} to {}'.format(dfhdrdat, esuid))
-        create_db_vault_secrets(os_type, main_config, esuid)
-    
+    #resolve the component configuration file paths
     base_config = os.path.join(config_dir, base_config)
     update_config = os.path.join(config_dir, update_config)
     if  alias_config != 'none':
@@ -280,7 +308,9 @@ def create_region(main_configfile):
         rfa_config = os.path.join(config_dir, rfa_config)
 
     session = EscwaSession("http", ip_address, 10086)
-        
+    rollback['session'] = session
+    rollback['region_name'] = region_name
+
     security_enabled = False
     try:
         write_log ('check if VSAM ESM is enabled')
@@ -301,53 +331,102 @@ def create_region(main_configfile):
             session.logon(mfsecretsadmin, login_secrets_location)
             security_enabled = True
         except ESCWAException as exc:
-            write_log('Unable to logon to ESCWA.')
-            write_log(exc)
+            raise ProvisionError('Unable to logon to ESCWA: {}'.format(exc)) from exc
+
+    # The ESCWA region is removed before the directory, because a running region
+    # holds its catalog files open and would block the directory from being deleted.
+    if region_exists(session, region_name):
+        if not force:
+            raise ProvisionError(
+                'Region {} is already defined in ESCWA. Delete it first, or re-run this '
+                'script with --force to have it removed automatically.'.format(region_name))
+        write_log('--force specified, removing existing region definition {}'.format(region_name))
+        remove_region_definition(session, region_name, 'pre-existing, removed by --force')
+        if region_exists(session, region_name):
+            raise ProvisionError('Region {} could not be removed from ESCWA.'.format(region_name))
+
+    #start the provision of the region
+    parentdir = str(Path(cwd).parents[0])
+    template_base = os.path.join(parentdir, 'system')
+    region_dir = os.path.join(parentdir, region_name)
+    sys_base = os.path.join(region_dir, 'system')
+
+    if os.path.exists(region_dir):
+        if not force:
+            write_log('ERROR: Region directory already exists: {}'.format(region_dir))
+            write_log('A region must be provisioned into a clean directory. Either delete it,')
+            write_log('or re-run this script with --force to have it removed automatically.')
+            sys.exit(1)
+        write_log('--force specified, removing existing region directory {}'.format(region_dir))
+        try:
+            shutil.rmtree(region_dir)
+        except OSError as exc:
+            write_log('ERROR: Unable to remove {}: {}'.format(region_dir, exc))
+            write_log('Make sure the region is stopped and no files are open, then try again.')
             sys.exit(1)
 
-    try:
-        write_log ('Region \033[1m{}\033[0m being added'.format(region_name))
-        add_region(session, region_name, region_port, base_config, is64bit)
-    except ESCWAException as exc:
-        write_log('Unable to create region.')
-        write_log(exc)
-        sys.exit(1)
+    rollback['region_dir'] = region_dir
+    step('Creating region directory {}'.format(region_dir), create_new_system, template_base, sys_base)
 
-    try:
-        write_log ('Region {} being updated with requested settings'.format(region_name))
-        catalog_file=None
-        if database_type == 'VSAM_Postgres_PAC': 
-            catalog_file="sql://BankPAC/VSAM/catalog.dat?folder=/"
-        update_region(session, region_name, update_config, env_config, 'Test Region', sys_base, catalog_file)
-    except ESCWAException as exc:
-        write_log('Unable to update region.')
-        write_log(exc)
-        sys.exit(1)
+    mfdbfh_config=''
+    database_connection = None
+    # Update the mfdbfh.cfg file with the database user id
+    if 'mfdbfh_config' in main_config:
+        mfdbfh_config = os.path.join(sys_base, 'config', main_config['mfdbfh_config'])
+        if 'database_connection' in main_config:
+            database_connection = main_config['database_connection']
 
-    try:
-        write_log ('Communications Server set to localhost')
-        set_commsserver_local(session, region_name, ip_address)
-    except ESCWAException as exc:
-        write_log('Unable to set update Comms Server.')
-        write_log(exc)
-        sys.exit(1)
+            def set_mfdbfh_user():
+                with open(mfdbfh_config, 'rt') as f_in:
+                    data = f_in.read()
+                with open(mfdbfh_config, 'wt') as f_out:
+                    f_out.write(data.replace('$$user$$', database_connection['user']))
 
-    try:
-        write_log ('Web Services and J2EE listener port set to {}'.format(jes_port))
-        set_jes_listener(session, region_name, ip_address, jes_port)
-    except ESCWAException as exc:
-        write_log('Unable to set JES listener.')
-        write_log(exc)
-        sys.exit(1)
+            step('Setting the database user in {}'.format(mfdbfh_config), set_mfdbfh_user)
+
+    if len(pac_name) > 0 and 'PAC' in main_config:
+        pac_config = main_config['PAC']
+    else:
+        pac_config = None
+
+    if len(pac_name) > 0 and pac_config is None:
+        write_log ('No PAC config, skipping resource definition file creation')
+    else:
+        #create an empty resource definition file
+        caspcrd = os.path.join(install_dir, 'caspcrd')
+        rdef = os.path.join(sys_base, 'rdef')
+
+        def create_dfhdrdat():
+            completed = subprocess.run([caspcrd, '/c', '/dp=' + rdef])
+            if completed.returncode != 0:
+                raise RuntimeError('{} returned rc={}'.format(caspcrd, completed.returncode))
+
+        step('Creating resource definition file in {}'.format(rdef), create_dfhdrdat)
+
+        #change ownership to match ES user
+        if os_type == 'Linux':
+            dfhdrdat = os.path.join(rdef, 'dfhdrdat')
+            step('Setting owner of {} to {}'.format(dfhdrdat, esuid), shutil.chown, dfhdrdat, esuid, esuid)
+        step('Creating database vault secrets', create_db_vault_secrets, os_type, main_config, esuid)
+
+    step('Region \033[1m{}\033[0m being added'.format(region_name),
+         add_region, session, region_name, region_port, base_config, is64bit)
+    rollback['region_added'] = True
+
+    catalog_file=None
+    if database_type == 'VSAM_Postgres_PAC':
+        catalog_file="sql://BankPAC/VSAM/catalog.dat?folder=/"
+    step('Region {} being updated with requested settings'.format(region_name),
+         update_region, session, region_name, update_config, env_config, 'Test Region', sys_base, catalog_file)
+
+    step('Communications Server set to localhost', set_commsserver_local, session, region_name, ip_address)
+
+    step('Web Services and J2EE listener port set to {}'.format(jes_port),
+         set_jes_listener, session, region_name, ip_address, jes_port)
 
     if security_enabled == True and rfa_config != 'none':
-        write_log ('RFA listener configuration found. Listener being added')
-        try:
-            add_listener(session, region_name, ip_address, rfa_config)
-        except ESCWAException as exc:
-            write_log('Unable to add RFA listener.')
-            write_log(exc)
-            sys.exit(1)
+        step('RFA listener configuration found. Listener being added',
+             add_listener, session, region_name, ip_address, rfa_config)
 
     if len(pac_name) > 0:
         if database_connection is None:
@@ -355,17 +434,11 @@ def create_region(main_configfile):
         else:
             create_regiondb = database_connection['create_regiondb'] 
             if create_regiondb == True:
-                write_log ('Creating database')
-                create_region_database(main_config)
+                step('Creating database', create_region_database, main_config)
 
     if  init_config != 'none':
-        write_log('JES initiator configuration found. Initiators being added')
-        try:
-            add_initiator(session, region_name, ip_address, init_config)
-        except ESCWAException as exc:
-            write_log('Unable to add initiator.')
-            write_log(exc)
-            sys.exit(1)
+        step('JES initiator configuration found. Initiators being added',
+             add_initiator, session, region_name, ip_address, init_config)
 
     rdef_sit = os.path.join(resourcedef_dir, 'rdef_sit.json')
 
@@ -379,100 +452,82 @@ def create_region(main_configfile):
     if len(pac_name) > 0 and pac_config is None:
         write_log ('No PAC config, skipping catalog datasets and resource file updates')
     else:
-        try:
-            write_log('Region {} being started before further configuration'.format(region_name))
-            start_region(session, region_name, ip_address)
-        except ESCWAException as exc:
-            write_log('Unable to start region.')
-            write_log(exc)
-            sys.exit(1)
-    
-        try:
-            write_log('Checking region {} started successfully'.format(region_name))
-            confirmed = confirm_region_status(session, region_name, 1, 'Started')
-        except ESCWAException as exc:
-            write_log('Unable to check region status.')
-            write_log(exc)
-            sys.exit(1)
-    
+        step('Region {} being started before further configuration'.format(region_name),
+             start_region, session, region_name, ip_address)
+
+        confirmed = step('Checking region {} started successfully'.format(region_name),
+                         confirm_region_status, session, region_name, 1, 'Started')
+
         if not confirmed:
-            write_log('Region Failed to start. Environment being rewound')
-    
-            del_res = del_region(session, region_name)
-    
-            if del_res.status_code == 204:
-                write_log('Environment cleaned successfully')
-            
-            sys.exit(1)
-        else:
-            write_log('Region {} started successfully'.format(region_name))
+            raise ProvisionError('Region {} failed to start.'.format(region_name))
+        write_log('Region {} started successfully'.format(region_name))
+
+        # The region reports Started before its listeners are accepting requests;
+        # the configuration calls below fail with 503 until this one is up.
+        if not step('Waiting for the Web Services and J2EE listener to start',
+                    confirm_listener_started, session, region_name, ip_address, 'Web Services and J2EE'):
+            raise ProvisionError(
+                'The Web Services and J2EE listener for region {} did not start.'.format(region_name))
 
         if  alias_config != 'none':
-            write_log ('JES Alias configuration found. Aliases being added')
-            try:
-                update_alias(session, region_name, ip_address, alias_config)
-            except ESCWAException as exc:
-                write_log('Unable to update aliases.')
-                write_log(exc)
-                sys.exit(1)
+            step('JES Alias configuration found. Aliases being added',
+                 update_alias, session, region_name, ip_address, alias_config)
 
         ## The following code updates the CICS Resource Definitions
         rdef_startup = os.path.join(resourcedef_dir, 'rdef_startup.json')
 
         if os.path.isfile(rdef_startup):
             startup_details = read_json(rdef_startup)
-            write_log('Adding Startup List {}'.format(startup_details["resNm"]))
-            add_Startup_list(session, region_name,ip_address,startup_details)
-
-        rdef_sit = os.path.join(resourcedef_dir, 'rdef_sit.json')
+            step('Adding Startup List {}'.format(startup_details["resNm"]),
+                 add_Startup_list, session, region_name, ip_address, startup_details)
 
         if sit_details is not None:
-            write_log('Adding SIT {}'.format(sit_details["resNm"]))
-            add_sit(session, region_name,ip_address,sit_details)
+            step('Adding SIT {}'.format(sit_details["resNm"]),
+                 add_sit, session, region_name, ip_address, sit_details)
 
         rdef_group = os.path.join(resourcedef_dir, 'rdef_groups.json')
 
         if os.path.isfile(rdef_group):
-                group_details = read_json(rdef_group)
-                add_groups(session, region_name,ip_address,group_details)  
-                
+            group_details = read_json(rdef_group)
+            step('Adding CICS resource groups', add_groups, session, region_name, ip_address, group_details)
+
         #The FCT entries are only required if the VSAM version of the application is in use
         if dataversion == 'vsam':
+            fct_filelist = glob.glob(os.path.join(resourcedef_dir, 'rdef_fct_*.json'))
 
-            write_log ('VSAM version selected - FCT entries being added')
-            fct_match_pattern = os.path.join(resourcedef_dir, 'rdef_fct_*.json')
-            fct_filelist = glob.glob(fct_match_pattern)
-
-            if fct_filelist != '':
+            if fct_filelist:
+                write_log ('VSAM version selected - FCT entries being added')
                 for filename in fct_filelist:
                     fct_details = read_json(filename)
-                    add_fct(session, region_name,ip_address,fct_details)
+                    step('Adding FCT from {}'.format(os.path.basename(filename)),
+                         add_fct, session, region_name, ip_address, fct_details)
             else:
-                write_log('fct match pattern failed')
-        ppt_match_pattern = os.path.join(resourcedef_dir, 'rdef_ppt_*.json')
-        ppt_filelist = glob.glob(ppt_match_pattern)
+                raise ProvisionError('No FCT resource definitions (rdef_fct_*.json) found in {}'.format(resourcedef_dir))
 
-        if ppt_filelist != '':
-           write_log ('CICS Resource PPT definitions found - being added') 
-           for filename in ppt_filelist:
-               ppt_details = read_json(filename)
-               add_ppt(session, region_name,ip_address, ppt_details)
-        else:
-            write_log('ppt match pattern failed')
-        pct_match_pattern = os.path.join(resourcedef_dir, 'rdef_pct_*.json')
-        pct_filelist = glob.glob(pct_match_pattern)
+        ppt_filelist = glob.glob(os.path.join(resourcedef_dir, 'rdef_ppt_*.json'))
 
-        if pct_filelist != '':
-           write_log ('CICS Resource PCT definitions found - being added')  
-           for filename in pct_filelist:
-               pct_details = read_json(filename)
-               add_pct(session, region_name,ip_address,pct_details)
+        if ppt_filelist:
+            write_log ('CICS Resource PPT definitions found - being added')
+            for filename in ppt_filelist:
+                ppt_details = read_json(filename)
+                step('Adding PPT from {}'.format(os.path.basename(filename)),
+                     add_ppt, session, region_name, ip_address, ppt_details)
         else:
-            write_log('pct match pattern failed')
+            raise ProvisionError('No PPT resource definitions (rdef_ppt_*.json) found in {}'.format(resourcedef_dir))
+
+        pct_filelist = glob.glob(os.path.join(resourcedef_dir, 'rdef_pct_*.json'))
+
+        if pct_filelist:
+            write_log ('CICS Resource PCT definitions found - being added')
+            for filename in pct_filelist:
+                pct_details = read_json(filename)
+                step('Adding PCT from {}'.format(os.path.basename(filename)),
+                     add_pct, session, region_name, ip_address, pct_details)
+        else:
+            raise ProvisionError('No PCT resource definitions (rdef_pct_*.json) found in {}'.format(resourcedef_dir))
 
         ## The following code adds MQ listeners as defined in mq.json
         if  main_config['MQ'] == True:
-            write_log('Region requires MQ settings - being added')
             mq_config = os.path.join(config_dir, 'mq.json')
 
             mq_details = read_json(mq_config)
@@ -480,37 +535,30 @@ def create_region(main_configfile):
             mq_details["mfMQTrigger"] = 'MQ_Q_' + region_name
             mq_details["mfMQManager"] = 'MQ_QM_' + region_name
 
-            try: 
-                add_mq_listener(session, region_name, ip_address, mq_details)
-            except ESCWAException as exc:
-                print('Unable to add MQ Listener.')
-                write_log(exc)
-                sys.exit(1)
-        write_log ('Partitioned datasets being deployed')
-        deploy_partitioned_data(parentdir,sys_base, esuid)
+            step('Region requires MQ settings - being added',
+                 add_mq_listener, session, region_name, ip_address, mq_details)
+
+        step('Partitioned datasets being deployed', deploy_partitioned_data, parentdir, sys_base, esuid)
 
     ## Update the SIT setting for this region
     if new_sit_name != '': 
-        write_log ('SIT {} previously added - setting this as the default for region {}'.format(new_sit_name, region_name))
-        update_sit_in_use(session, region_name, ip_address, new_sit_name)
+        step('SIT {} previously added - setting this as the default for region {}'.format(new_sit_name, region_name),
+             update_sit_in_use, session, region_name, ip_address, new_sit_name)
         write_log ('Region restart now required')
 
-    
     ## The following code deploys the application
-    deploy_application_option(session, database_type, os_type, main_config, cwd, mfdbfh_config, esuid)
+    step('Deploying the application', deploy_application_option,
+         session, database_type, os_type, main_config, cwd, mfdbfh_config, esuid)
 
     if len(pac_name) > 0 and pac_config is None:
         write_log ('No PAC config, skipping additional catalog datasets')
     else:
         #data_dir_1 hold the directory name, under the cwd that contains definitions of any datasets to be catalogued - this setting is optional
+        #data_dir_3 holds extra datasets, data_dir_4 holds PS (sequential) datasets - these settings are optional
         catalog_dir = os.path.join(sys_base, 'catalog')
-        catalog_datasets(session, cwd, region_name, ip_address, configuration_files, 'data_dir_1', None, catalog_dir)
-
-        #data_dir_3 hold the directory name, under the cwd that contains definitions of extra datasets to be catalogued - this setting is optional
-        catalog_datasets(session, cwd, region_name, ip_address, configuration_files, 'data_dir_3', None, catalog_dir)
-
-        #data_dir_4 hold the directory name for PS (sequential) datasets - this setting is optional
-        catalog_datasets(session, cwd, region_name, ip_address, configuration_files, 'data_dir_4', None, catalog_dir)
+        for data_dir in ('data_dir_1', 'data_dir_3', 'data_dir_4'):
+            step('Cataloguing datasets from {}'.format(data_dir), catalog_datasets,
+                 session, cwd, region_name, ip_address, configuration_files, data_dir, None, catalog_dir)
 
     if  database_type == 'SQL_Postgres':
         loadlibDir = 'SQL_Postgres'
@@ -519,7 +567,7 @@ def create_region(main_configfile):
 
     if mf_product != 'EDz':
         write_log('The Rocket {} product does not contain a compiler. Precompiled executables therefore being deployed'.format(mf_product))
-        deploy_application(parentdir, sys_base, os_type, is64bit, loadlibDir)
+        step('Deploying precompiled executables', deploy_application, parentdir, sys_base, os_type, is64bit, loadlibDir)
     else:
         ant_home = None
         if 'ant_home' in main_config:
@@ -537,47 +585,32 @@ def create_region(main_configfile):
                 if antdir is not None:
                     for file in os.listdir(antdir):
                         if file.startswith("apache-ant-"):
-                            ant_home = os.path.join(eclipsInstallDir, file)
+                            ant_home = os.path.join(antdir, file)
 
         if ant_home is None:
             write_log('ANT_HOME not set. Precompiled executables therefore being deployed')
-            deploy_application(parentdir, sys_base, os_type, is64bit, loadlibDir)
+            step('Deploying precompiled executables', deploy_application, parentdir, sys_base, os_type, is64bit, loadlibDir)
         else:
-            write_log('Application being built')
-
             build_file = os.path.join(cwd, 'build', 'build.xml')
-            parentdir = str(Path(cwd).parents[0])
             source_dir = os.path.join(parentdir, 'sources')
-            load_dir = os.path.join(parentdir, region_name,'system','loadlib')
+            load_dir = os.path.join(sys_base, 'loadlib')
             full_build = True
 
-            run_ant_file(build_file,source_dir,load_dir,ant_home, full_build, dataversion, is64bit)
+            step('Application being built', run_ant_file,
+                 build_file, source_dir, load_dir, ant_home, full_build, dataversion, is64bit)
 
-    write_log('Precompiled system executables being deployed'.format(mf_product))
-    deploy_system_modules(parentdir, sys_base, os_type, is64bit, loadlibDir)
+    step('Precompiled system executables being deployed', deploy_system_modules,
+         parentdir, sys_base, os_type, is64bit, loadlibDir)
 
     ## Following the update of the SIT and other attributes, the region must be restarted
-    try:
-        write_log('Stopping region {}'.format(region_name))
-        stop_region(session, region_name)
-    except ESCWAException as exc:
-        write_log('Unable to execute stop request for region.')
-        write_log(exc)
-        sys.exit(1)
+    step('Stopping region {}'.format(region_name), stop_region, session, region_name)
 
-    try:
-        write_log('Checking region {} stopped successfully'.format(region_name))
-        confirmed = confirm_region_status(session, region_name, 1, 'Stopped')
-    except ESCWAException as exc:
-        write_log('Unable to check region status.')
-        write_log(exc)
-        sys.exit(1)
+    confirmed = step('Checking region {} stopped successfully'.format(region_name),
+                     confirm_region_status, session, region_name, 1, 'Stopped')
 
     if not confirmed:
-        print('Region Failed to stop.')
-        sys.exit(1)
-    else:
-        write_log ('Region stopped successfully')
+        raise ProvisionError('Region {} failed to stop.'.format(region_name))
+    write_log ('Region stopped successfully')
 
     ## The following code sets the region to be part of a PAC
     if len(pac_name) > 0:
@@ -587,56 +620,51 @@ def create_region(main_configfile):
                 psor_type=pac_config['PSOR_type']
                 psor_connection=pac_config['PSOR_connection']
                 pac_description=pac_config['description']
-                create_pac(session, config_dir, pac_name, psor_connection, pac_description, psor_type)
-                deploy_dfhdrdat_postgres_pac(session, os_type, main_config, mfdbfh_config, rdef)
+                step('Creating PAC {}'.format(pac_name), create_pac,
+                     session, config_dir, pac_name, psor_connection, pac_description, psor_type)
+                step('Deploying resource definition file to the PAC', deploy_dfhdrdat_postgres_pac,
+                     session, os_type, main_config, mfdbfh_config, rdef)
 
-        update_region_attribute(session, region_name, {"mfCASTXRDTP": "sql://BankPAC/VSAM?type=folder;folder=/system"})
-        update_region_attribute(session, region_name, {"mfCASJCLALLOCLOC": "sql://BankPAC/VSAM?type=folder;folder=/data"})
+        step('Setting PAC region attributes', update_region_attribute,
+             session, region_name, {"mfCASTXRDTP": "sql://BankPAC/VSAM?type=folder;folder=/system"})
+        step('Setting PAC JCL allocation attributes', update_region_attribute,
+             session, region_name, {"mfCASJCLALLOCLOC": "sql://BankPAC/VSAM?type=folder;folder=/data"})
 
-        install_region_into_pac_by_name(session, ip_address, region_name, pac_name, config_dir)
+        step('Installing region {} into PAC {}'.format(region_name, pac_name),
+             install_region_into_pac_by_name, session, ip_address, region_name, pac_name, config_dir)
     else:
         write_log('Not using PAC.')
 
-    try:
-        write_log('Restarting region {}'.format(region_name))
-        start_region(session, region_name, ip_address)
-    except ESCWAException as exc:
-        write_log('Unable to start region.')
-        write_log(exc)
-        sys.exit(1)
+    step('Restarting region {}'.format(region_name), start_region, session, region_name, ip_address)
 
-    try:
-        write_log('Checking region {} restarted successfully'.format(region_name))
-        confirmed = confirm_region_status(session, region_name, 1, 'Started')
-    except ESCWAException as exc:
-        write_log('Unable to check region status.')
-        write_log(exc)
-        sys.exit(1)
+    confirmed = step('Checking region {} restarted successfully'.format(region_name),
+                     confirm_region_status, session, region_name, 1, 'Started')
 
     if not confirmed:
-        print('Region Failed to start. Environment being rewound')
-        sys.exit(1)
+        raise ProvisionError('Region {} failed to restart.'.format(region_name))
+    write_log('Region {} restarted successfully'.format(region_name))
 
-        del_res = del_region(session, region_name)
-
-        if del_res.status_code == 204:
-            print('Environment cleaned successfully')
-        
-        sys.exit(1)
-    else:
-        write_log('Region {} restarted successfully'.format(region_name))
+    # Wait for the listener so that the region is actually usable, not merely running.
+    if not step('Waiting for the Web Services and J2EE listener to start',
+                confirm_listener_started, session, region_name, ip_address, 'Web Services and J2EE'):
+        raise ProvisionError(
+            'The Web Services and J2EE listener for region {} did not start.'.format(region_name))
 
     write_log('Rocket Demo environment has been provisioned')
 
 if __name__ == '__main__':
 
     cwd = os.getcwd()
-    if len(sys.argv) < 2:
+    args = sys.argv[1:]
+    force = '--force' in args
+    args = [arg for arg in args if arg != '--force']
+
+    if len(args) < 1:
         config_dir = os.path.join(cwd, 'config')
         config_fullpath = os.path.join(config_dir, "demo.json")
     else:
         options_dir = os.path.join(cwd, 'options')
-        config_file = sys.argv[1] + '.json'
+        config_file = args[0] + '.json'
         config_fullpath = os.path.join(options_dir, config_file)
         if os.path.isfile(config_fullpath) == False:
             write_log('File {} could not be found'.format(config_fullpath))
@@ -646,4 +674,4 @@ if __name__ == '__main__':
                     write_log('    {}'.format(f))
             sys.exit(1)
 
-    create_region(config_fullpath)
+    create_region(config_fullpath, force)
