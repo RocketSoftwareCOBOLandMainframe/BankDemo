@@ -22,6 +22,7 @@ Description:  A script to create a server region.
 import os
 import sys
 import glob
+import socket
 from ESCWA.escwa_session import EscwaSession
 from utilities.pac import install_region_into_pac_by_name, create_crossregion_database, create_region_database
 from utilities.misc import parse_args, set_MF_environment, get_EclipsePluginsDir, get_CobdirAntDir, check_elevation, check_esuid
@@ -73,6 +74,16 @@ def createWindowsDSN(database_connection, is_64bit, dsn_name, database_name):
 
 def find_owner(filename):
     return getpwuid(stat(filename,follow_symlinks=False).st_uid).pw_name
+
+
+def check_eds_reachable(host, port, timeout=5):
+    """Fails fast if the local EDS/directory server is not accepting connections."""
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return
+    except OSError as exc:
+        raise ESCWAException(
+            'Unable to connect to EDS at {}:{}.'.format(host, port)) from exc
 
 
 class ProvisionError(Exception):
@@ -325,6 +336,15 @@ def provision_region(main_configfile, force, rollback):
         raise ProvisionError(
             'Unable to contact ESCWA at {}. Make sure ESCWA and EDS are running before '
             'provisioning this region. Last error: {}'.format(session.get_uri_start(), exc)) from exc
+
+    eds_port = int(os.getenv('CCITCP2_PORT', '86'))
+    try:
+        write_log('Checking that EDS is reachable')
+        check_eds_reachable('127.0.0.1', eds_port)
+    except ESCWAException as exc:
+        raise ProvisionError(
+            'Unable to contact EDS at 127.0.0.1:{}. Make sure EDS is running before '
+            'provisioning this region. Last error: {}'.format(eds_port, exc)) from exc
 
     security_enabled = False
     try:
