@@ -24,7 +24,7 @@ import sys
 import glob
 from ESCWA.escwa_session import EscwaSession
 from utilities.pac import install_region_into_pac_by_name, create_crossregion_database, create_region_database
-from utilities.misc import parse_args, set_MF_environment, get_EclipsePluginsDir, get_CobdirAntDir, check_elevation, check_esuid
+from utilities.misc import parse_args, set_MF_environment, get_EclipsePluginsDir, get_CobdirAntDir, check_elevation, check_esuid, get_eds_port
 from utilities.input import read_json, read_txt
 from utilities.output import write_json, write_log 
 from utilities.filesystem import create_new_system, deploy_application, deploy_system_modules, deploy_partitioned_data
@@ -347,6 +347,17 @@ def provision_region(main_configfile, force, rollback):
             security_enabled = True
         except ESCWAException as exc:
             raise ProvisionError('Unable to logon to ESCWA: {}'.format(exc)) from exc
+
+    # Checked after logon because the directory server query needs an authenticated
+    # session, and before anything is created so a wrong port costs nothing.
+    try:
+        write_log('Checking that EDS is reachable')
+        session.ping_eds(ip_address)
+    except ESCWAException as exc:
+        raise ProvisionError(
+            'Unable to contact EDS on port {}. Make sure EDS is running, and that '
+            'CCITCP2_PORT names the directory server you want to provision into. '
+            'Last error: {}'.format(get_eds_port(), exc)) from exc
 
     # The ESCWA region is removed before the directory, because a running region
     # holds its catalog files open and would block the directory from being deleted.

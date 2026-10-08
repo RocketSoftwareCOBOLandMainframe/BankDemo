@@ -18,7 +18,7 @@ Description:  Functions to setup JES and RFA listeners on the server region.
 """
 
 from utilities.input import read_json, read_txt
-from utilities.misc import get_elem_with_prop
+from utilities.misc import get_elem_with_prop, get_eds_port
 from utilities.output import write_log
 from utilities.exceptions import ESCWAException
 import os
@@ -28,7 +28,7 @@ def get_listeners(session, region_name, ip_address):
     """ Returns the list of listeners defined on the region's comms server.
     """
 
-    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, get_eds_port(), region_name)
     res = session.get(uri, 'Unable to get Comm Server information.')
     comm_server = res.json()
     uri += '/{}/listener'.format(comm_server[0]['mfServerUID'])
@@ -61,7 +61,7 @@ def confirm_listener_started(session, region_name, ip_address, listener_name, se
 
 def set_jes_listener(session, region_name, ip_address, port):
     """ Sets a JES listener on the server region. """
-    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, get_eds_port(), region_name)
     res = session.get(uri, 'Unable to get Comm Server information.')
     comm_server = res.json()
     uri += '/{}/listener'.format(comm_server[0]['mfServerUID'])
@@ -75,7 +75,7 @@ def set_jes_listener(session, region_name, ip_address, port):
 
 def add_listener(session, region_name, ip_address, listener_config):
     """ Adds a listener to the server region. """
-    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, get_eds_port(), region_name)
     res = session.get(uri, 'Unable to get Comm Server information.')
     comm_server = res.json()
     req_body = read_json(listener_config)
@@ -86,7 +86,7 @@ def add_listener(session, region_name, ip_address, listener_config):
 def set_commsserver_local(session, region_name, ip_address):
     """ Sets a Communications Server to localhost. """
 
-    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/commsserver'.format(ip_address, get_eds_port(), region_name)
     res = session.get(uri, 'Unable to get Comm Server information.')
 
     comm_server = res.json()

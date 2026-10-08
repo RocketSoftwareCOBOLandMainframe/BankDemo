@@ -21,14 +21,14 @@ import os
 import sys
 import requests
 from utilities.output import write_log 
-from utilities.misc import create_headers, check_http_error
+from utilities.misc import create_headers, check_http_error, get_eds_port
 from utilities.input import read_json, read_txt
 from utilities.session import get_session, save_cookies
 from utilities.exceptions import ESCWAException, InputException, HTTPException
 
 def update_region(session, region_name, template_file, env_file, region_description, region_base, catalog_file):
     """ Updates the settings of a previously created region on the  server region. """
-    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', get_eds_port(), region_name)
     esp_alias = '$ESP'
     if sys.platform.startswith('win32'):
         path_sep = ';'
@@ -78,14 +78,14 @@ def update_region(session, region_name, template_file, env_file, region_descript
     return res
 
 def update_region_attribute(session, region_name, attribute_details):
-    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', get_eds_port(), region_name)
     req_body=attribute_details
     res = session.put(uri, req_body, 'Unable to complete Update Region API request.')
     return res
     
 def update_alias(session, region_name, ip_address, alias_file):
     """ Updates the aliases on a server region. """
-    uri = 'native/v1/regions/{}/{}/{}/alias'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/alias'.format(ip_address, get_eds_port(), region_name)
     try:
         req_body = read_json(alias_file)
     except InputException as exc:
@@ -95,7 +95,7 @@ def update_alias(session, region_name, ip_address, alias_file):
 
 def add_initiator(session, region_name, ip_address, template_file):
     """ Adds an initiator to a server region. """
-    uri = 'native/v1/regions/{}/{}/{}/initiator'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/initiator'.format(ip_address, get_eds_port(), region_name)
     try:
         req_body = read_json(template_file)
     except InputException as exc:
@@ -113,7 +113,7 @@ def add_datasets(session, region_name, ip_address, datafile_list, mfdbfh_locatio
         raise ESCWAException('Unable to read dataset files')
     responses = []
     for dataset in dataset_list:
-        uri = 'v2/native/regions/{}/{}/{}/catalog'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+        uri = 'v2/native/regions/{}/{}/{}/catalog'.format(ip_address, get_eds_port(), region_name)
         if mfdbfh_location is not None:
             # sql://bank_mfdbfh/VSAM/{}?folder=/data
             physicalFile = os.path.basename(dataset['physicalFile'])

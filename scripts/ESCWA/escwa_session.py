@@ -1,5 +1,5 @@
 import requests
-from utilities.misc import create_headers, check_http_error
+from utilities.misc import create_headers, check_http_error, get_eds_port
 from utilities.exceptions import ESCWAException, HTTPException, InputException
 from utilities.output import write_json, write_log 
 import subprocess
@@ -24,6 +24,19 @@ class EscwaSession:
             self._session.get(uri, timeout=5)
         except requests.exceptions.RequestException as exc:
             raise ESCWAException('Unable to connect to ESCWA at {}'.format(uri)) from exc
+
+    def ping_eds(self, ip_address, timeout=15):
+        """Checks that the directory server selected by CCITCP2_PORT is usable. """
+        eds_port = get_eds_port()
+        uri = '{}/native/v1/regions/{}/{}'.format(self.get_uri_start(), ip_address, eds_port)
+        req_headers = create_headers('CreateRegion', self._hostname)
+        try:
+            res = self._session.get(uri, headers=req_headers, timeout=timeout)
+            check_http_error(res)
+        except (requests.exceptions.RequestException, HTTPException) as exc:
+            raise ESCWAException(
+                'No directory server responded on port {} (CCITCP2_PORT). Last error: {}'.format(
+                    eds_port, exc)) from exc
 
     #takes a uri path such as native/v1/regions/localhost/86/abc/commsserver
     def get(self, path, error_description='', params=None):

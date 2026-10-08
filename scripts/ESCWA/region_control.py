@@ -22,14 +22,14 @@ import requests
 import os
 
 from utilities.session import get_session, save_cookies
-from utilities.misc import create_headers, check_http_error
+from utilities.misc import create_headers, check_http_error, get_eds_port
 from utilities.input import read_json
 from utilities.exceptions import ESCWAException, InputException, HTTPException
 from utilities.output import write_log 
 
 def add_region(session, region_name, port, template_file, is64bit):
     """ Adds a region to the server region. """
-    uri = 'native/v1/regions/{}/{}'.format('127.0.0.1',os.getenv("CCITCP2_PORT","86"))
+    uri = 'native/v1/regions/{}/{}'.format('127.0.0.1',get_eds_port())
     try:
         req_body = read_json(template_file)
     except InputException as exc:
@@ -52,7 +52,7 @@ def add_region(session, region_name, port, template_file, is64bit):
 
 def start_region(session, region_name, ip_address):
     """ Starts a previously created region on the server region. """
-    uri = 'native/v1/regions/{}/{}/{}/start'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/start'.format('127.0.0.1', get_eds_port(), region_name)
     req_body = {
         'mfUser': 'SYSAD',
         'mfPassword': 'SYSAD',
@@ -64,7 +64,7 @@ def start_region(session, region_name, ip_address):
 
 def stop_region(session, region_name):
     """ Stops a previously created region on the server region. """
-    uri = 'native/v1/regions/{}/{}/{}/stop'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/stop'.format('127.0.0.1', get_eds_port(), region_name)
     req_body = {
         'mfUser': 'SYSAD',
         'mfPassword': 'SYSAD',
@@ -77,7 +77,7 @@ def stop_region(session, region_name):
 
 def mark_region_stopped(session, region_name):
     """ Marks a previously created region as stopped on the server region. """
-    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', get_eds_port(), region_name)
     req_body = {
         'mfServerStatus': 'Stopped'
     }
@@ -87,13 +87,13 @@ def mark_region_stopped(session, region_name):
 
 def del_region(session, region_name):
     """ Deletes a region from the server region. """
-    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}'.format('127.0.0.1', get_eds_port(), region_name)
     res = session.delete(uri, 'Unable to complete Delete Region API request.')
     return res
 
 def get_region_status(session, region_name):
     """ Checks a previously created region's status on the server region. """
-    uri = 'native/v1/regions/{}/{}/{}/status'.format('127.0.0.1', os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/status'.format('127.0.0.1', get_eds_port(), region_name)
     res = session.get(uri, 'Unable to complete Region Check API request.')
     return res
 

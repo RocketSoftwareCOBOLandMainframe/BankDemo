@@ -34,6 +34,16 @@ def get_elem_with_prop(arr, key, value):
             return elem
 
 
+def get_eds_port():
+    """ Returns the port of the Enterprise Directory Server to work with.
+
+        A machine can run several directory servers, so CCITCP2_PORT selects
+        which one the scripts use. It forms part of the path of every region
+        API request, so the default matches the product default of 86.
+    """
+    return os.getenv('CCITCP2_PORT', '86')
+
+
 def create_headers(requested_with, ip_address):
     """ Creates headers for sending API requests to the server region. """
 
