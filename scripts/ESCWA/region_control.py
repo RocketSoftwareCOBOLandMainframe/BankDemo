@@ -39,7 +39,15 @@ def add_region(session, region_name, port, template_file, is64bit):
     req_body['mfTN3270ListenerPort'] = port
     if is64bit == True:
         req_body['mfCAS64Bit'] = 1
-    res = session.post(uri, req_body, 'Unable to complete Add Region API request')
+    try:
+        res = session.post(uri, req_body, 'Unable to complete Add Region API request')
+    except ESCWAException as exc:
+        message = str(exc)
+        if '504 Gateway Timeout' in message or 'Directory server unavailable' in message or 'Error Code: 81' in message:
+            raise ESCWAException(
+                'Unable to complete Add Region API request. EDS does not appear to be running '
+                'or reachable. Last error: {}'.format(exc)) from exc
+        raise
     return res
 
 def start_region(session, region_name, ip_address):
