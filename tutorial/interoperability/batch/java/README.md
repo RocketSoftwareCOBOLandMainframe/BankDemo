@@ -107,17 +107,14 @@ Enterprise Server expands `$VAR` references in the region's `[ES-Environment]`
 configuration on both Windows and Linux. Do not use Windows command-shell
 syntax such as `%BANKROOT%` or `%PATH%` here.
 
-**Windows:**
-   - `JAVA_HOME=$TXDIR\AdoptOpenJDK`
-   - `CLASSPATH=$BANKROOT\BANKVSAM\system\loadlib`
-
-**Linux:**
    - `JAVA_HOME=/path/to/jdk`
-   - `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib`
+   - `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib;$CLASSPATH`
 
-These classpath values are for the BANKVSAM region. For BANKDEMO, use the Eclipse Java
-project's output folder instead (by default,
-`$BANKROOT\tutorial\workspace\BankdemoJava\bin` on Windows); see
+Append `$CLASSPATH` as shown. Enterprise Server already sets a classpath of its
+own, and omitting the existing value replaces it instead of adding to it.
+
+These classpath values are for the BANKVSAM region. For BANKDEMO, use its application
+loadlib instead (`$BANKROOT/tutorial/workspace/Bankdemo/loadlib;$CLASSPATH`). That folder is already on the region's JES Program PATH, so the Java classes and the compiled COBOL program can live together in one place. See
 [Configuring the Region for Java](../../../gettingstarted/eclipse/JavaDemo.md#configuring-the-region-for-java).
 
 Do not add a Java-specific `PATH` value to the region. Enterprise Server can
@@ -299,19 +296,12 @@ ENVAR("TEST_VAR=HELLO_FROM_CEEOPTS",
 
 In this step, you bypass the COBOL bootstrap and invoke a Java class directly from JCL using the **JVMLDM** load module. This is useful when Java is the primary language for your batch step. This step also covers argument passing via multiple sources (PARM, JZOS_MAIN_ARGS, MAINARGS DD) and inline STDENV configuration.
 
-> **Setup:** Ensure the region's environment includes `JAVA_HOME` and the full
-> `CLASSPATH` shown below, pointing to the region loadlib.
+> **Setup:** This step needs the same region environment as Step 1 — see
+> [Step 1](#step1) for the `JAVA_HOME` and `CLASSPATH` values.
 >
 > Use the JCL directory matching your platform. See the
 > [interoperability overview](../../README.md#platform-specific-jcl) for the
 > Windows and Linux `STDENV` syntax differences.
->
-> | | Variable | Value |
-> |---|----------|-------|
-> | **Windows** | `JAVA_HOME` | `$TXDIR\AdoptOpenJDK` |
-> | | `CLASSPATH` | `$BANKROOT\BANKVSAM\system\loadlib` |
-> | **Linux** | `JAVA_HOME` | `/path/to/jdk` |
-> | | `CLASSPATH` | `$BANKROOT/BANKVSAM/system/loadlib` |
 >
 > Most Java JCL uses `STDENV DD DUMMY` so that JVMLDM inherits these from the region. `JVMDEMO.jcl` includes inline STDENV to demonstrate `JZOS_MAIN_ARGS`.
 
@@ -426,7 +416,7 @@ Windows:
 ```jcl
 //STDENV    DD *
 set JAVA_HOME=%TXDIR%\AdoptOpenJDK
-set CLASSPATH=%BANKROOT%\BANKVSAM\system\loadlib
+set CLASSPATH=%BANKROOT%\BANKVSAM\system\loadlib;%CLASSPATH%
 set JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 /*
 ```
@@ -435,7 +425,7 @@ Linux:
 ```jcl
 //STDENV    DD *
 export JAVA_HOME=/path/to/jdk
-export CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib
+export CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib:$CLASSPATH
 export JZOS_JVM_OPTIONS=-Djzos.merge.sysout=true
 /*
 ```
