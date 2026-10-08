@@ -25,14 +25,42 @@ from utilities.output import write_log
 from pathlib import Path
 import shutil
 
-def create_new_system(template_base, sys_base):
+# Directories under system/ that hold runtime artifacts rather than template content.
+# These match the /system/... entries in the repository .gitignore; if a new runtime
+# directory is added to system/, it must be added to both places.
+RUNTIME_DIRS = ('catalog', 'logs', 'rdef', 'loadlib')
 
-    parentdir = str(Path(sys_base).parents[0])
-    os.mkdir(parentdir)
-    os.mkdir(sys_base)
-    
-    shutil.copytree(template_base, sys_base, dirs_exist_ok=True)
-    
+def create_new_system(template_base, sys_base):
+    """ Copies the system template into a new region, always producing the same
+        pristine state as a freshly cloned repository.
+
+        The shared system/ folder is used directly by other demos, so its catalog,
+        logs, rdef and loadlib directories accumulate runtime artifacts such as
+        dfhdrdat and CATALOG.DAT. Copying those into a new region makes provisioning
+        apply the same resources twice, so they are recreated empty instead.
+    """
+
+    os.makedirs(sys_base, exist_ok=True)
+
+    def ignore_runtime_dirs(directory, names):
+        # Only the top level of the template is filtered, so a nested directory
+        # that happens to share a name is still copied.
+        if os.path.abspath(directory) != os.path.abspath(template_base):
+            return []
+        return [name for name in names if name in RUNTIME_DIRS]
+
+    shutil.copytree(template_base, sys_base, dirs_exist_ok=True,
+                    ignore=ignore_runtime_dirs)
+    write_log('System template copied from {} to {}'.format(template_base, sys_base))
+
+    for dirname in RUNTIME_DIRS:
+        target_dir = os.path.join(sys_base, dirname)
+        os.makedirs(target_dir, exist_ok=True)
+        template_readme = os.path.join(template_base, dirname, 'README.md')
+        if os.path.isfile(template_readme):
+            shutil.copy2(template_readme, os.path.join(target_dir, 'README.md'))
+    write_log('Runtime directories {} created empty'.format(', '.join(RUNTIME_DIRS)))
+
 
 def deploy_application (repo_dir, sys_base, os_type, is64bit, database_type):
 
