@@ -361,7 +361,7 @@ def provision_region(main_configfile, force, rollback):
             raise ProvisionError('Region {} could not be removed from ESCWA.'.format(region_name))
 
     #start the provision of the region
-    parentdir = str(Path(cwd).parents[0])
+    parentdir = str(Path(script_dir).parent)
     template_base = os.path.join(parentdir, 'system')
     region_dir = os.path.join(parentdir, region_name)
     sys_base = os.path.join(region_dir, 'system')
