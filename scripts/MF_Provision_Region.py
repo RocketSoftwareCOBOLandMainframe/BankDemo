@@ -155,8 +155,7 @@ def create_region(main_configfile, force=False):
 
 
 def provision_region(main_configfile, force, rollback):
-    #set current working directory
-    cwd = os.getcwd()
+    #all paths are derived from the script location, not the working directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_dir = str(Path(script_dir).parent)
     
@@ -621,7 +620,7 @@ def provision_region(main_configfile, force, rollback):
             write_log('ANT_HOME not set. Precompiled executables therefore being deployed')
             step('Deploying precompiled executables', deploy_application, parentdir, sys_base, os_type, is64bit, loadlibDir)
         else:
-            build_file = os.path.join(repo_dir, 'build', 'build.xml')
+            build_file = os.path.join(script_dir, 'build', 'build.xml')
             source_dir = os.path.join(parentdir, 'sources')
             load_dir = os.path.join(sys_base, 'loadlib')
             full_build = True
@@ -684,7 +683,6 @@ def provision_region(main_configfile, force, rollback):
 
 if __name__ == '__main__':
 
-    cwd = os.getcwd()
     script_dir = os.path.dirname(os.path.abspath(__file__))
     args = sys.argv[1:]
     force = '--force' in args

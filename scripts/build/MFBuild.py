@@ -66,6 +66,15 @@ def run_ant_file(build_file, source_dir, load_dir, ant_home, full_build,datavers
     #write_log(ant_cmd)
     
 
-    with open('build.txt', "w") as outfile:
-        subprocess.run(ant_cmd, stdout=outfile, stderr=outfile, shell=useShell, check=True)
+    #write the ant log beside the scripts directory so it lands in the same
+    #place regardless of the working directory the script was invoked from
+    log_file = os.path.join(str(Path(build_file).parents[1]), 'build.txt')
+
+    with open(log_file, "w") as outfile:
+        result = subprocess.run(ant_cmd, stdout=outfile, stderr=outfile, shell=useShell)
+
+    if result.returncode != 0:
+        with open(log_file) as infile:
+            tail = infile.read().strip().splitlines()[-5:]
+        raise RuntimeError('ant build failed, see {}\n{}'.format(log_file, '\n'.join(tail)))
 
