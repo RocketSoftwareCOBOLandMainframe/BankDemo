@@ -38,4 +38,5 @@ uses `set NAME=value`, `%NAME%`, `\`, and `;`, while Linux uses
 `export NAME=value`, `$NAME`, `/`, and `:`.
 
 These shell rules apply only inside `STDENV`. Enterprise Server region
-configuration uses `$NAME` references on both platforms.
+configuration uses `$NAME` references on both platforms; use `;` between path
+entries on Windows and `:` on Linux when setting values such as `CLASSPATH`.

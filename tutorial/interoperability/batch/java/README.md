@@ -104,17 +104,22 @@ examples below use BANKVSAM's loadlib at
 `BANKROOT/BANKVSAM/system/loadlib` (Linux).
 
 Enterprise Server expands `$VAR` references in the region's `[ES-Environment]`
-configuration on both Windows and Linux. Do not use Windows command-shell
-syntax such as `%BANKROOT%` or `%PATH%` here.
+configuration on both Windows and Linux. Use `;` to separate path entries on
+Windows and `:` on Linux. Do not use Windows command-shell syntax such as
+`%BANKROOT%` or `%PATH%` here.
 
    - `JAVA_HOME=/path/to/jdk`
-   - `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib;$CLASSPATH`
+    - Windows: `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib;$CLASSPATH`
+    - Linux: `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib:$CLASSPATH`
 
 Append `$CLASSPATH` as shown. Enterprise Server already sets a classpath of its
 own, and omitting the existing value replaces it instead of adding to it.
 
 These classpath values are for the BANKVSAM region. For BANKDEMO, use its application
-loadlib instead (`$BANKROOT/tutorial/workspace/Bankdemo/loadlib;$CLASSPATH`). That folder is already on the region's JES Program PATH, so the Java classes and the compiled COBOL program can live together in one place. See
+loadlib instead (`$BANKROOT/tutorial/workspace/Bankdemo/loadlib;$CLASSPATH` on
+Windows or `$BANKROOT/tutorial/workspace/Bankdemo/loadlib:$CLASSPATH` on
+Linux). That folder is already on the region's JES Program PATH, so the Java
+classes and the compiled COBOL program can live together in one place. See
 [Configuring the Region for Java](../../../gettingstarted/eclipse/JavaDemo.md#configuring-the-region-for-java).
 
 > **Note:** `HELLOJAV` (Step 1) does not run on BANKDEMO unless you change the
