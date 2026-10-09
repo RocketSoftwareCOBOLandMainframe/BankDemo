@@ -22,7 +22,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
    - RedHat: run `sudo yum install unixODBC postgresql-odbc`
    - Amazon Linux 2: run `sudo yum install unixODBC postgresql-odbc`
    - SUSE: run `sudo zypper install unixODBC psqlODBC`
-- Python 3.*n* and the `requests psycopg2-binary` packages. You can install the packages after installing Python with the following command: 
+- Python 3.12 or later and the `requests psycopg2-binary` packages. You can install the packages after installing Python with the following command: 
   ```
   python -m pip install requests psycopg2-binary
   ```

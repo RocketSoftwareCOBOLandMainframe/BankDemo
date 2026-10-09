@@ -1,7 +1,7 @@
 # Demonstrations of Rocket Enterprise Server Capabilities On Premises
 - Prerequisite software: 
     - Rocket&reg; Enterprise Server or Rocket&reg; Enterprise Developer
-    - Python 3 with `requests` and for the PostgreSQL demonstration `psycopg2-binary` packages (e.g. `python3 -m pip install requests psycopg2-binary`)
+    - Python 3.12 or later with `requests` and for the PostgreSQL demonstration `psycopg2-binary` packages (e.g. `python3 -m pip install requests psycopg2-binary`)
     - See specific demonstration instructions for any additional requirements
 - Prerequisites: 
     - Ensure that the Enterprise Directory Service (EDS) is running

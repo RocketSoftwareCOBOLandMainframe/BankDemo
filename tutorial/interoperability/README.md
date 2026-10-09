@@ -23,7 +23,7 @@ Demonstrations showing how to invoke programs written in other languages from JC
 
 - Rocket&reg; Enterprise Developer or Rocket&reg; Enterprise Server
 - A Java Development Kit (JDK) 21-25 (for Java demonstrations)
-- Python 3.8 or later (for Python demonstrations)
+- Python 3.12 or later (for Python demonstrations)
 - See specific demonstration instructions for additional requirements
 
 ## Platform-specific JCL

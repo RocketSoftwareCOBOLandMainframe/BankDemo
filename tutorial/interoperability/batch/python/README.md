@@ -22,7 +22,7 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 ## <a name="prerequisites"></a>Prerequisites
 
 - Rocket&reg; Enterprise Developer (to compile COBOL programs) or Rocket&reg; Enterprise Server (to run pre-built programs)
-- Python 3.8 or later, installed so that Enterprise Server can load it (see below)
+- Python 3.12 or later, installed so that Enterprise Server can load it (see below)
 - Ensure that the Enterprise Directory Service (EDS) is running
 - Ensure that the Enterprise Server Common Web Administration (ESCWA) service is running and listening on the default port (10086)
 
@@ -32,7 +32,7 @@ No additional Python packages are required — the `zoautil_py` package is provi
 
 PYLDM does not run the `python` executable. It loads the Python **shared library** into the Enterprise Server process, so it is that library which must be locatable:
 
-**Windows** — install Python 3 from [python.org](https://www.python.org/downloads/). Python versions prior to 3.14 use a simple installer; it is recommended to install Python system-wide and ticking the *Add python.exe to PATH* option so that the `python.exe` is available on the system `PATH`. Python 3.14 introduced a new installation method with no easy "add to path" option so path modifications will need to be done manually.
+**Windows** — install Python 3.12 or later from [python.org](https://www.python.org/downloads/). Python versions prior to 3.14 use a simple installer; it is recommended to install Python system-wide and ticking the *Add python.exe to PATH* option so that the `python.exe` is available on the system `PATH`. Python 3.14 introduced a new installation method with no easy "add to path" option so path modifications will need to be done manually.
 
 PYLDM loads `python3.dll` using the standard DLL search order, so the directory containing it must be on `PATH`. The directory containing the `python.exe` is usually the same directory containing the `python3.dll`. You can add Python to the region environment or the user and/ or System `PATH`. **Note:** The default directory server and escwa services are started as System user and will use the System `PATH` unless restarted.
 
@@ -756,7 +756,7 @@ CASKC0027E Error executing service 'PGM#PYLDM'
 Execution error : file 'pyldm'
 error code: 145, pc=0, call=1, seg=0
 145     COBOL interoperability error (Python: Failed to load python3.dll
-        (Windows error 126). Ensure Python 3 is installed and its directory
+        (Windows error 126). Ensure Python 3.12 or later is installed and its directory
         is on PATH.)
 JCLCM0192S  STEP ABENDED   STEP1.PYLDM - COND CODE RTS0145
 ```
