@@ -117,6 +117,15 @@ These classpath values are for the BANKVSAM region. For BANKDEMO, use its applic
 loadlib instead (`$BANKROOT/tutorial/workspace/Bankdemo/loadlib;$CLASSPATH`). That folder is already on the region's JES Program PATH, so the Java classes and the compiled COBOL program can live together in one place. See
 [Configuring the Region for Java](../../../gettingstarted/eclipse/JavaDemo.md#configuring-the-region-for-java).
 
+> **Note:** `HELLOJAV` (Step 1) does not run on BANKDEMO unless you change the
+> region's JES program path.
+> `$IDE_LOADLIB` is only defined when Eclipse starts the region associated with the
+> Bankdemo project.
+> Either add `IDE_LOADLIB=$BANKROOT\tutorial\workspace\Bankdemo\loadlib` to
+> `[ES-Environment]`, or run Step 1 through the
+> [Eclipse Java demo](../../../gettingstarted/eclipse/JavaDemo.md), which covers it. Steps 2
+> onwards use `JVMLDM` and only need the `CLASSPATH`.
+
 Do not add a Java-specific `PATH` value to the region. Enterprise Server can
 locate the required runtime components without it, while an incorrectly
 expanded `PATH` can prevent JVMLDM from finding utilities such as
