@@ -18,9 +18,10 @@ Description:  A series of utility functions for updating MQ Listeners.
 """
 
 import os
+from utilities.misc import get_eds_port
 
 def add_mq_listener(session, region_name, ip_address, mq_details):
-    uri = 'native/v1/regions/{}/{}/{}/mqlistener'.format(ip_address, os.getenv("CCITCP2_PORT","86"), region_name)
+    uri = 'native/v1/regions/{}/{}/{}/mqlistener'.format(ip_address, get_eds_port(), region_name)
     req_body = mq_details
     res = session.post(uri, req_body, 'Unable to complete Update Startup API request.')
     return res

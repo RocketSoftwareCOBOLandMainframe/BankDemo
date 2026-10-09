@@ -34,6 +34,16 @@ def get_elem_with_prop(arr, key, value):
             return elem
 
 
+def get_eds_port():
+    """ Returns the port of the Enterprise Directory Server to work with.
+
+        A machine can run several directory servers, so CCITCP2_PORT selects
+        which one the scripts use. It forms part of the path of every region
+        API request, so the default matches the product default of 86.
+    """
+    return os.getenv('CCITCP2_PORT', '86')
+
+
 def create_headers(requested_with, ip_address):
     """ Creates headers for sending API requests to the server region. """
 
@@ -50,10 +60,16 @@ def create_headers(requested_with, ip_address):
 
 def check_http_error(res):
     """ Error handling for HTTP status codes. """
-    if res.status_code >= 400 and res.status_code < 500:
-        raise HTTPException('A general Client Error occured.')
-    if res.status_code >= 500 and res.status_code < 600:
-        raise HTTPException('A general Server Error occured.')
+    if res.status_code >= 400 and res.status_code < 600:
+        # The response body carries the reason the request was rejected, so it is
+        # included (collapsed onto one line) rather than discarded.
+        detail = ' '.join(res.text.split()) if res.text else ''
+        if len(detail) > 300:
+            detail = detail[:300] + '...'
+        message = 'HTTP {} {}'.format(res.status_code, res.reason)
+        if detail:
+            message = '{} - {}'.format(message, detail)
+        raise HTTPException(message)
 
 
 def parse_args(arg_list, short_map, long_map):
