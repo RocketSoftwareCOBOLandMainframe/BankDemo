@@ -98,9 +98,9 @@ def deploy_vsam_data (repo_dir, sys_base, os_type, esuid):
 
     shutil.copytree(source_load, target_load, dirs_exist_ok=True)
     if esuid != '':
-        shutil.chown(target_load, esuid, esuid)
+        shutil.chown(target_load, esuid)
         for file in os.scandir(target_load):
-            shutil.chown(file, esuid, esuid)
+            shutil.chown(file, esuid)
 
 def deploy_partitioned_data (repo_dir, sys_base, esuid):
 
@@ -108,17 +108,17 @@ def deploy_partitioned_data (repo_dir, sys_base, esuid):
     source_load = os.path.join(repo_dir, 'sources', 'proclib')
     shutil.copytree(source_load, target_load, dirs_exist_ok=True)
     if esuid != '':
-        shutil.chown(target_load, esuid, esuid)
+        shutil.chown(target_load, esuid)
         for file in os.scandir(target_load):
-            shutil.chown(file, esuid, esuid)
+            shutil.chown(file, esuid)
 
     target_load = os.path.join(sys_base, 'catalog', 'data', 'ctlcards')
     source_load = os.path.join(repo_dir, 'sources', 'ctlcards')
     shutil.copytree(source_load, target_load, dirs_exist_ok=True)
     if esuid != '':
-        shutil.chown(target_load, esuid, esuid)
+        shutil.chown(target_load, esuid)
         for file in os.scandir(target_load):
-            shutil.chown(file, esuid, esuid)
+            shutil.chown(file, esuid)
 
 def dbfhdeploy_vsam_data (repo_dir, os_type, is64Bit, configuration_files, mfdbfh_location):
     dataset_dir = os.path.join(repo_dir, 'datafiles')

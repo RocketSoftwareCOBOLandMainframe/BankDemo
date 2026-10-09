@@ -435,7 +435,7 @@ def provision_region(main_configfile, force, rollback):
         #change ownership to match ES user
         if os_type == 'Linux':
             dfhdrdat = os.path.join(rdef, 'dfhdrdat')
-            step('Setting owner of {} to {}'.format(dfhdrdat, esuid), shutil.chown, dfhdrdat, esuid, esuid)
+            step('Setting owner of {} to {}'.format(dfhdrdat, esuid), shutil.chown, dfhdrdat, esuid)
         step('Creating database vault secrets', create_db_vault_secrets, os_type, main_config, esuid)
 
     step('Region \033[1m{}\033[0m being added'.format(region_name),
