@@ -14,8 +14,8 @@ Rocket&reg; Enterprise Suite products provide a proprietary runtime engine to en
 6. [Step 3 - Multi-Step Batch with Python](#step3)
 7. [Step 4 - Calling COBOL from Python](#step4)
 8. [Source Files Reference](#sources)
-10. [Python API Reference](#api-reference)
-11. [Troubleshooting](#troubleshooting)
+9. [Python API Reference](#api-reference)
+10. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -630,7 +630,7 @@ def do_twoscomp(args):
 - **COMP fields are big-endian** — use `struct.pack('>h', value)` for PIC S9(4) COMP.
 - **Group items = single contiguous buffer** — fields at fixed offsets, matching the COBOL COPY layout
 - **`_mFpyCobcall` raises `RuntimeError`** on failure (error 173 = program not found)
-- **Programs must be in the JES Program Path (BANKVSAM uses loadlib directory)** — COBOL subroutines must already be compiled and available
+- **Programs must be in the JES Program Path (BANKVSAM uses its `system/loadlib` directory)** — COBOL subroutines must already be compiled and available
 
 ### 4.4 Expected Output
 
@@ -728,7 +728,7 @@ The version string and system time reflect your installation, so those two value
 
 | Symptom | Cause | Solution |
 |---------|-------|----------|
-| `%BANKROOT%` appears unexpanded, or Python files are not found | The region does not define `BANKROOT` | Add `BANKROOT` with the BankDemo project root to the region's `[ES-Environment]`, then restart the region |
+| `%BANKROOT%` appears unexpanded | The region does not define `BANKROOT` | For BANKVSAM, re-provision with `python MF_Provision_Region.py vsam --force`; this deletes the existing region data |
 | `ERROR: Region directory already exists` | A `BANKVSAM` directory is already present | Re-run with `--force` to rebuild the region from scratch, or delete the directory yourself |
 | `Region BANKVSAM is already defined in ESCWA` | The region definition still exists | Re-run with `--force`, or delete the region in ESCWA under **Directory Servers > Default** |
 | `Unable to remove ... used by another process` | The region is still running and holds its catalog files open | Stop the region, then re-run. `--force` stops it for you |

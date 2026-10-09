@@ -131,7 +131,7 @@ Enterprise Server starts the JVM itself, so it needs to know where the JDK is an
     **Linux:**
     ```
     JAVA_HOME=/path/to/jdk
-    CLASSPATH=$BANKROOT/tutorial/workspace/BankdemoJava/bin;$CLASSPATH
+    CLASSPATH=$BANKROOT/tutorial/workspace/BankdemoJava/bin:$CLASSPATH
     ```
 
     Append `$CLASSPATH` as shown. Enterprise Server already sets a classpath of its own, and omitting the existing value replaces it instead of adding to it.
@@ -301,7 +301,7 @@ Leave the Java debugger listening. The JVM is not reinitialised between jobs, so
 
 `HELLOJAV` uses a COBOL program as the entry point. The remaining samples are started directly by the JVM load module, JVMLDM, which initialises the JVM and redirects the standard streams for you.
 
-The [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial describes each of these in detail, including the Java code and the JCL. It is written for the BANKVSAM region and compiles from the command line, but the samples themselves are the same, and they run unchanged under the BANKDEMO region you have configured here.
+The [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial describes each of these in detail, including the Java code and the JCL. It compiles from the command line and uses the BANKVSAM region in its examples, but the samples themselves are the same, and they run unchanged under the BANKDEMO region you have configured here.
 
 ## Troubleshooting
 

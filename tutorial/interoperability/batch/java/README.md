@@ -96,7 +96,7 @@ In this step, use the included COBOL program and JCL job to call a Java
 method. This demonstrates a bare-metal JCL job, a COBOL program invoking a
 Java function, and redirection of `System.out`, `System.err`, and `System.in`.
 
-**Setup:** Ensure the region's environment variables include:
+**Setup:** Ensure the region's environment variables include the following:
 
 Both regions define `BANKROOT` as the root of the BankDemo project. The
 examples below use BANKVSAM's loadlib at
@@ -108,9 +108,13 @@ configuration on both Windows and Linux. Use `;` to separate path entries on
 Windows and `:` on Linux. Do not use Windows command-shell syntax such as
 `%BANKROOT%` or `%PATH%` here.
 
+**Windows:**
+   - `JAVA_HOME=$TXDIR\AdoptOpenJDK`
+   - `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib;$CLASSPATH`
+
+**Linux:**
    - `JAVA_HOME=/path/to/jdk`
-    - Windows: `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib;$CLASSPATH`
-    - Linux: `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib:$CLASSPATH`
+   - `CLASSPATH=$BANKROOT/BANKVSAM/system/loadlib:$CLASSPATH`
 
 Append `$CLASSPATH` as shown. Enterprise Server already sets a classpath of its
 own, and omitting the existing value replaces it instead of adding to it.
@@ -118,14 +122,17 @@ own, and omitting the existing value replaces it instead of adding to it.
 These classpath values are for the BANKVSAM region. For BANKDEMO, use its application
 loadlib instead (`$BANKROOT/tutorial/workspace/Bankdemo/loadlib;$CLASSPATH` on
 Windows or `$BANKROOT/tutorial/workspace/Bankdemo/loadlib:$CLASSPATH` on
-Linux). See
-[Configuring the Region for Java](../../../gettingstarted/eclipse/JavaDemo.md#configuring-the-region-for-java).
+Linux).If you have already configured BANKDEMO as described in the
+[Eclipse Java demo](../../../gettingstarted/eclipse/JavaDemo.md#configuring-the-region-for-java),
+its `BankdemoJava/bin` classpath works too and needs no deployment.
 
 > **Note:** `HELLOJAV` (Step 1) does not run on BANKDEMO unless you change the
-> region's JES program path.
-> `$IDE_LOADLIB` is only defined when Eclipse starts the region associated with the
-> Bankdemo project.
-> [Eclipse Java demo](../../../gettingstarted/eclipse/JavaDemo.md), already covers it.
+> region's JES program path. `HELLOJAV` is not one of the precompiled modules in the
+> template's `executables` folders, and `$IDE_LOADLIB` is only defined when Eclipse
+> starts the region associated with the Bankdemo project. Without it, the job fails with
+> `PROGRAM NOT LOADED - HELLOJAV. RTS CODE: 173`. Either alter the JES program path or
+> run Step 1 through the [Eclipse Java demo](../../../gettingstarted/eclipse/JavaDemo.md),
+> which covers this first sample. Steps 2 onwards use `JVMLDM` and only need the `CLASSPATH`.
 
 Do not add a Java-specific `PATH` value to the region. Enterprise Server can
 locate the required runtime components without it, while an incorrectly
