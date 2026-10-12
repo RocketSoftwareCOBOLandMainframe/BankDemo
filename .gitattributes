@@ -10,6 +10,15 @@
 *.sln text eol=crlf
 *.cblproj text eol=crlf
 
+# Shell scripts must keep LF endings. A Windows checkout would otherwise give
+# them CRLF, and the copy then fails on Linux with a bad interpreter error.
+*.sh text eol=lf
+
+# Pinned so that the provisioning scripts are byte identical on both platforms,
+# which keeps them stable when a working copy is shared between Windows and
+# Linux by means other than git, such as a file copy.
+*.py text eol=lf
+
 # Denote all files that are truly binary and should not be modified.
 *.dat binary
 *.so binary

@@ -35,7 +35,7 @@
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-export ESPY_WORKING_DIR=$ESP/../../sources/python
+export ESPY_WORKING_DIR=$BANKROOT/sources/python
 /*
 //********************************************************************
 //* Application DDs                                                  *
@@ -55,7 +55,7 @@ export ESPY_WORKING_DIR=$ESP/../../sources/python
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-export ESPY_WORKING_DIR=$ESP/../../sources/python
+export ESPY_WORKING_DIR=$BANKROOT/sources/python
 /*
 //********************************************************************
 //* Application DDs                                                  *

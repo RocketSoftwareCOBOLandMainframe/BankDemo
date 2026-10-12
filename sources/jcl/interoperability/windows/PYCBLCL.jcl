@@ -35,7 +35,7 @@
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
 /*
 //*
 //* -------------------------------------------------------------------
@@ -47,7 +47,7 @@ set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
 /*
 //*
 //* -------------------------------------------------------------------
@@ -59,6 +59,6 @@ set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
 /*
 //

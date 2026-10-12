@@ -37,7 +37,7 @@
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set ESPY_WORKING_DIR=%ESP%\..\..\sources\python
+set ESPY_WORKING_DIR=%BANKROOT%\sources\python
 set ESPY_MAIN_ARGS=envArg1 envArg2
 /*
 //MAINARGS DD  *
@@ -53,7 +53,7 @@ arg3 arg4
 //STDOUT   DD  SYSOUT=*
 //STDERR   DD  SYSOUT=*
 //STDENV   DD  *
-set PYTHONPATH=%ESP%\..\..\sources\python;%PYTHONPATH%
+set PYTHONPATH=%BANKROOT%\sources\python;%PYTHONPATH%
 /*
 //MAINARGS DD  *
 //

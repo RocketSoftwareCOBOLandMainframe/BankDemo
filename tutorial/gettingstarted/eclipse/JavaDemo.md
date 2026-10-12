@@ -125,16 +125,18 @@ Enterprise Server starts the JVM itself, so it needs to know where the JDK is an
     **Windows:**
     ```
     JAVA_HOME=$TXDIR\AdoptOpenJDK
-    CLASSPATH=$TXDIR\bin64\esjos.jar;$BANKROOT\tutorial\workspace\BankdemoJava\bin
+    CLASSPATH=$BANKROOT\tutorial\workspace\BankdemoJava\bin;$CLASSPATH
     ```
 
     **Linux:**
     ```
     JAVA_HOME=/path/to/jdk
-    CLASSPATH=$COBDIR/lib/esjos.jar:$BANKROOT/tutorial/workspace/BankdemoJava/bin
+    CLASSPATH=$BANKROOT/tutorial/workspace/BankdemoJava/bin:$CLASSPATH
     ```
 
-    `BANKROOT` is defined by the BANKDEMO template and points at the root of the sample, so these values work unchanged if you used the `tutorial/workspace` directory as your Eclipse workspace, as the Getting Started tutorial suggests. Otherwise, replace the second `CLASSPATH` entry with the full path to your project's `bin` folder, which you can find under **Properties \> Resource**.
+    Append `$CLASSPATH` as shown. Enterprise Server already sets a classpath of its own, and omitting the existing value replaces it instead of adding to it.
+
+    `BANKROOT` is defined by the BANKDEMO template and points at the root of the sample, so these values work unchanged if you used the `tutorial/workspace` directory as your Eclipse workspace, as the Getting Started tutorial suggests. Otherwise, replace the project path with the full path to your project's `bin` folder, which you can find under **Properties \> Resource**.
 
 4.  Click **Apply** and start the region.
 
@@ -299,7 +301,7 @@ Leave the Java debugger listening. The JVM is not reinitialised between jobs, so
 
 `HELLOJAV` uses a COBOL program as the entry point. The remaining samples are started directly by the JVM load module, JVMLDM, which initialises the JVM and redirects the standard streams for you.
 
-The [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial describes each of these in detail, including the Java code and the JCL. It is written for the BANKVSAM region and compiles from the command line, but the samples themselves are the same, and they run unchanged under the BANKDEMO region you have configured here.
+The [Java Batch Interoperability](../../interoperability/batch/java/README.md) tutorial describes each of these in detail, including the Java code and the JCL. It compiles from the command line and uses the BANKVSAM region in its examples, but the samples themselves are the same, and they run unchanged under the BANKDEMO region you have configured here.
 
 ## Troubleshooting
 

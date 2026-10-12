@@ -50,7 +50,7 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
     - Prerequisite software: 
         - Rocket Enterprise Developer for Eclipse or Rocket Enterprise Developer for Visual Studio
         - For the Java tutorials, a Java Development Kit (JDK). One is supplied with Enterprise Developer on Windows.
-        - For the Python tutorial, Python 3.
+        - For the Python tutorial, Python 3.12 or later.
     - Available tutorials:
         - [Getting Started with Enterprise Developer for Eclipse (Windows)](tutorial/gettingstarted/eclipse/README.md)
         - [Getting Started with Enterprise Developer for Eclipse (Linux)](tutorial/gettingstarted/eclipseux/readme.md)
@@ -68,7 +68,7 @@ To use the project, download the **source.zip** or **source.tar.gz** from the [r
 2. <a name="onprem"></a> Demonstrations of the Rocket Enterprise Server capabilities in "on premises" scenarios:
     - Prerequisite software: 
         - Rocket Enterprise Server or Enterprise Developer on Windows or on a supported Linux distribution.
-        - Python 3 with the `requests` and for the PostgreSQL demo `psycopg2-binary` packages (use the following command to install the packages: `python -m pip install requests psycopg2-binary`)
+        - Python 3.12 or later with the `requests` and for the PostgreSQL demo `psycopg2-binary` packages (use the following command to install the packages: `python -m pip install requests psycopg2-binary`)
         - Check the tutorial or demonstration instruction for any additional requirements
     - Available demonstrations:
         - [Deploying and Running Bankdemo with VSAM Data](demos/onprem/vsam/README.md) 

@@ -1,6 +1,7 @@
 {
     "[ES-Environment]": {
         "ESP": "",
+        "BANKROOT": "",
         "MFJ_RELOAD_IEASYM00": "Y",
         "MF_CHARSET": "A",
         "MFDBFH_CONFIG": "$ESP/config/MFDBFH_PG_PAC.cfg",

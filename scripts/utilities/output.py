@@ -29,4 +29,5 @@ def write_json(file_path, json_obj):
         raise InputException from exc
 
 def write_log(log_message):
-    print (log_message)
+    # Flushed so that log lines stay in order with output from sub-processes.
+    print (log_message, flush=True)
