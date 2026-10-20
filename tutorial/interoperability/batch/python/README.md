@@ -191,8 +191,8 @@ variables.
 > **Tip:** Because STDENV is a script, it can run any command the shell
 > accepts, not just assignments - for example `cd` to set the working
 > directory, or a build or data-preparation step run immediately before the
-> Python step. It runs in the region's service account and its exit status is
-> not checked, so keep it short.
+> Python step. It runs in the region's service account. Bad exit status
+> codes are picked up by PYLDM and will terminate with a config error.
 
 ---
 
