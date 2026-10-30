@@ -717,17 +717,19 @@ To execute the JCL, you must run the application in an instance of the Rocket En
 
 1.  Open Windows PowerShell and navigate to the `C:\MFETDUSER\tutorial` folder.
 2.  Run `set-ExecutionPolicy RemoteSigned -Scope CurrentUser`.
-3.  (Optional) Unblock the script.
+3.  Check whether the script is blocked and unblock it if necessary.
 
-    At times, for security reasons, when you have downloaded files by using a browser, the files can be blocked and you might not be able to run the script. To unblock the script:
+    At times, for security reasons, when you have downloaded files by using a browser, the files can be blocked and you might not be able to run the script. To check whether the script is blocked and optionally unblock it:
 
     a. Open File Explorer and navigate to the `C:\MFETDUSER\tutorial` folder.
 
-    b. Right-click the **createdefinition.ps1** file and select **Properties**.
+    b. Right-click the **createdefinition.ps1** file, click **Show more options** and select **Properties**.
 
-    c. Select the **Unblock** check box and click **Apply**. 
+    c. At the bottom of the **General** tab, check whether you have a security message that the file came from another computer and migt be blocked. If so, select the **Unblock** check box and click **Apply**.  
 
-4.  Run the PowerShell script provided with the sample: `.\createdefinition.ps1`. 
+    d. Click **OK**.
+
+4.  In the PowerShell console, run the PowerShell script provided with the sample: `.\createdefinition.ps1`. 
 
 This runs the script and creates the Enterprise Server region definition file, `BANKDEMO.xml`, in the same folder. The file is configured for the location in which you saved the sample files.
 
@@ -735,9 +737,9 @@ If you cannot use the PowerShell script to create the `BANKDEMO.xml` file, you c
 
 1. Create an empty `BANKDEMO.xml` file.
 2. Open the file in a text editor and copy the contents from the `BANKDEMO.template` file to the `BANKDEMO.xml` file.
-3. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, manually edit `_IMPORT_FILE_DIR` and replace it with the path to the `tutorial` directory. 
+3. In the `BANKROOT=__IMPORT_FILE_DIR__/..` value pair, replace the value pair with the parent directory of the `tutorial` directory. 
 
-   If you imported the tutorial files to the `MFETDUSER` folder, the directory name would be `C:\MFETDUSER\tutorial/..`. 
+   If you imported the tutorial files to the `MFETDUSER` folder, that would be `BANKROOT=C:\MFETDUSER`.   
 
 Ensure that the default settings are applied to the Directory Sever:
 
