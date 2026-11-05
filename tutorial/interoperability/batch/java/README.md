@@ -425,7 +425,7 @@ The samples use it only to set variables, so in practice it holds `set NAME=valu
 | `JZOS_ENABLE_OUTPUT_TRANSCODING` | `true`/`false` - enable/disable output transcoding. Default is `true` |
 | `JZOS_ABEND_EXIT` | If set to an exit code threshold, `System.exit(n)` at or above this level triggers a U3333 abend |
 
-Because it is a script, any command the shell accepts can appear in it. It runs in the region's service account and its exit status is not checked, so keep it short and prefer region-level configuration for anything permanent.
+Because it is a script, any command the shell accepts can appear in it. It runs in the region's service account. Bad exit status codes are picked up by JVMLDM and will terminate with a config error.
 
 Example with JVM options:
 
