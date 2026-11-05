@@ -110,7 +110,11 @@ The region needs the folder that holds the compiled classes, so confirm where th
 
 Eclipse builds Java projects as you edit them, so the class files are written as soon as the build path is correct. **Project \> Build Project** is greyed out while **Project \> Build Automatically** is enabled.
 
-If the **bin** folder is missing or empty, the build produced nothing. Check the **Problems** view for build path errors - most often the **ES Java Support Library** is not on the build path, or the linked `java` folder has not been marked as a source folder.
+If the **bin** folder is missing or empty, the build produced nothing. Check the **Problems** view for build path errors, commonly:
+
+- The **ES Java Support Library** is not on the build path
+- Linked `java` folder has not been marked as a source folder.
+- A `module-info.java` file is present in the `src` folder, and it is included in the build path. If this is the case, delete the module-info file
 
 ## Configuring the Region for Java
 
