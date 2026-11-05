@@ -725,7 +725,7 @@ To execute the JCL, you must run the application in an instance of the Rocket En
 
     b. Right-click the **createdefinition.ps1** file, click **Show more options** and select **Properties**.
 
-    c. At the bottom of the **General** tab, check whether you have a security message that the file came from another computer and migt be blocked. If so, select the **Unblock** check box and click **Apply**.  
+    c. At the bottom of the **General** tab, check whether you have a security message that the file came from another computer and might be blocked. If so, select the **Unblock** check box and click **Apply**.  
 
     d. Click **OK**.
 
