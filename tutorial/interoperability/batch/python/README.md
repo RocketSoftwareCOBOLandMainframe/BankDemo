@@ -155,6 +155,10 @@ Unlike the Java interop (which requires `JAVA_HOME`, classpath configuration, an
 | **Script mode** | `'script.py arg1 arg2'` | Module-level code / `if __name__ == "__main__":` |
 | **Module mode** | `'-m module_name arg1 arg2'` | `def main(args=None)` function |
 
+To set a PYLDM log level, put `/+<char>` before the script or module in PARM:
+for example, `/+T` for trace or `/+I` for info. Do not use a bare `/` prefix;
+it can cause misleading `CEE3611I` warnings.
+
 ### Environment Configuration (STDENV DD)
 
 `STDENV DD *` is an inline script executed by the platform shell before the JVM starts. That is why the content differs by platform.
@@ -231,7 +235,7 @@ def main(args=None):
 ```jcl
 //PYPROC  PROC PYSCRIPT=,     < Python script or -m module (required)
 //             ARGS=,         < Arguments to Python script
-//             LOGLVL=''      < +T(trace) +D(debug) +I(info) +W(warn)
+//             LOGLVL=''      < /+T(trace) /+D(debug) /+I(info) /+W(warn)
 //PYLDM    EXEC PGM=PYLDM,
 //             PARM='&LOGLVL &PYSCRIPT &ARGS'
 //SYSPRINT DD SYSOUT=*          < System stdout
@@ -257,7 +261,7 @@ arg3 arg4
 - **No `PYTHON_HOME` required** — PYLDM/cblcpyiapi automatically locates the Python installation
 - **Argument assembly order**: PARM args → `ESPY_MAIN_ARGS` env var → `ESPY_MAIN_ARGS_DD` DD content (defaults to `MAINARGS`) — STEP1 supplies all three
 - **Stream redirection is automatic** — `print()` writes to the STDOUT DD
-- **Log level**: `+I` (info), `+T` (trace), `+D` (debug) — first character of PARM after the `/`
+- **Log level**: Set `LOGLVL='/+I'` (info), `LOGLVL='/+T'` (trace), `LOGLVL='/+D'` (debug), or `LOGLVL='/+W'` (warn). The `/+<char>` value goes before the script name in PARM.
 
 ### 1.4 Deploy and Run
 
@@ -740,7 +744,7 @@ nothing behind - fix the cause and run the same command again.
 
 ### Diagnostic Tips
 
-- Set log level to `+T` (trace) in the JCL PARM for detailed PYLDM diagnostics in SYSPRINT
+- Set `LOGLVL='/+T'` (trace) for detailed PYLDM diagnostics in SYSPRINT
 - Check SYSPRINT DD for PYLDM initialization messages
 - Check STDERR DD for Python tracebacks
 - PYLDM handles unhandled exceptions safely — no need for try/except in scripts

@@ -357,7 +357,7 @@ public class BatchReport {
 //******************************************************************** 
 //JVMPROC PROC JAVACLS=,      < Fully qualified Java class (required)
 //             ARGS=,         < Arguments to Java class
-//             LOGLVL=''      < +T(trace) +D(debug) +I(info) +W(warn)
+//             LOGLVL=''      < /+T(trace) /+D(debug) /+I(info) /+W(warn)
 //JAVAJVM  EXEC PGM=JVMLDM,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*          < System stdout
@@ -382,6 +382,10 @@ arg5 arg6
 /*
 //
 ```
+
+To enable a log level, set `LOGLVL='/+T'` (trace), `LOGLVL='/+D'` (debug),
+`LOGLVL='/+I'` (info), or `LOGLVL='/+W'` (warn) on the PROC invocation. The
+`/+<char>` value goes before the Java class in PARM.
 
 ### 2.3 DD Allocations
 
@@ -575,7 +579,7 @@ public class ReadBankData {
 //******************************************************************** 
 //JVMPROC PROC JAVACLS=,      < Fully qualified Java class (required)
 //             ARGS=,         < Arguments to Java class
-//             LOGLVL=''      < +T(trace) +D(debug) +I(info) +W(warn)
+//             LOGLVL=''      < /+T(trace) /+D(debug) /+I(info) /+W(warn)
 //JAVAJVM  EXEC PGM=JVMLDM,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD SYSOUT=*          < System stdout
@@ -894,7 +898,7 @@ public class BankCustAcctReport {
 //*-------------------------------------------------------------------*
 //JVMPROC PROC JAVACLS=,      < Fully qualified Java class (required)
 //             ARGS=,         < Arguments to Java class
-//             LOGLVL=''      < +T(trace) +D(debug) +I(info) +W(warn)
+//             LOGLVL=''      < /+T(trace) /+D(debug) /+I(info) /+W(warn)
 //JAVAJVM  EXEC PGM=JVMLDM,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD  SYSOUT=*
@@ -1374,7 +1378,7 @@ The job has three steps, each invoking `VsamAccountOps` with a different operati
 //*-------------------------------------------------------------------*
 //JVMPROC PROC JAVACLS=,      < Fully qualified Java class (required)
 //             ARGS=,         < Arguments to Java class
-//             LOGLVL=''      < +T(trace) +D(debug) +I(info) +W(warn)
+//             LOGLVL=''      < /+T(trace) /+D(debug) /+I(info) /+W(warn)
 //JAVAJVM  EXEC PGM=JVMLDM,
 //             PARM='&LOGLVL &JAVACLS &ARGS'
 //SYSPRINT DD  SYSOUT=*
