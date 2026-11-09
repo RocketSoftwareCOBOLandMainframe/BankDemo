@@ -14,7 +14,7 @@
 //             ARGS=,         < Arguments to Python script
 //             LOGLVL=''      < +T(trace) +D(debug) +I(info) +W(warn)
 //PYLDM    EXEC PGM=PYLDM,
-//             PARM='/&LOGLVL &PYSCRIPT &ARGS'
+//             PARM='&LOGLVL &PYSCRIPT &ARGS'
 //SYSPRINT DD SYSOUT=*          < System stdout
 //SYSOUT   DD SYSOUT=*          < System stderr / COBOL DISPLAY
 //STDOUT   DD SYSOUT=*          < Python sys.stdout
